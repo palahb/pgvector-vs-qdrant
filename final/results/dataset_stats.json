@@ -1,0 +1,11 @@
+{
+  "total_passages": 100000,
+  "embedding_dimension": 1024,
+  "embedding_model": "Cohere embed-english-v3.0",
+  "source_dataset": "MS MARCO v2.1",
+  "avg_words_per_passage": 162.41,
+  "median_words_per_passage": 157.0,
+  "min_words": 1,
+  "max_words": 2113,
+  "std_words": 79.76
+}

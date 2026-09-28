@@ -1,0 +1,56 @@
+[
+  {
+    "system": "pgvector",
+    "dimensions": 384,
+    "ef": 64,
+    "build_time_s": 168.42,
+    "mean_latency_ms": 2.222,
+    "p99_latency_ms": 4.524,
+    "recall_at_10": 0.9899
+  },
+  {
+    "system": "qdrant",
+    "dimensions": 384,
+    "ef": 64,
+    "build_time_s": 79.72,
+    "mean_latency_ms": 11.406,
+    "p99_latency_ms": 30.252,
+    "recall_at_10": 0.998
+  },
+  {
+    "system": "pgvector",
+    "dimensions": 512,
+    "ef": 64,
+    "build_time_s": 273.79,
+    "mean_latency_ms": 2.288,
+    "p99_latency_ms": 4.27,
+    "recall_at_10": 0.9916
+  },
+  {
+    "system": "qdrant",
+    "dimensions": 512,
+    "ef": 64,
+    "build_time_s": 50.05,
+    "mean_latency_ms": 5.871,
+    "p99_latency_ms": 12.866,
+    "recall_at_10": 0.9969
+  },
+  {
+    "system": "pgvector",
+    "dimensions": 1024,
+    "ef": 64,
+    "build_time_s": 510.41,
+    "mean_latency_ms": 3.171,
+    "p99_latency_ms": 9.928,
+    "recall_at_10": 0.9924
+  },
+  {
+    "system": "qdrant",
+    "dimensions": 1024,
+    "ef": 64,
+    "build_time_s": 99.26,
+    "mean_latency_ms": 6.979,
+    "p99_latency_ms": 16.184,
+    "recall_at_10": 0.9965
+  }
+]

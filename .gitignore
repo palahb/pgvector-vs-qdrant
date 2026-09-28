@@ -1,0 +1,14 @@
+.venv*/
+venv/
+
+embeddings_*.npy
+texts_*.json
+checkpoint_*.json
+
+__pycache__/
+*.pyc
+*.pyo
+
+.DS_Store
+
+.ipynb_checkpoints/

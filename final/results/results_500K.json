@@ -1,0 +1,83 @@
+{
+  "scale": 500000,
+  "build_times": {
+    "pgvector_insert_s": 1604.43,
+    "pgvector_index_s": 527.02,
+    "pgvector_total_s": 2131.45,
+    "qdrant_total_s": 608.9
+  },
+  "benchmarks": [
+    {
+      "system": "pgvector",
+      "ef": 16,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 38.863,
+      "p99_latency_ms": 291.665,
+      "recall_at_10": 0.8898
+    },
+    {
+      "system": "pgvector",
+      "ef": 32,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 11.323,
+      "p99_latency_ms": 64.79,
+      "recall_at_10": 0.9454
+    },
+    {
+      "system": "pgvector",
+      "ef": 64,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 15.063,
+      "p99_latency_ms": 72.908,
+      "recall_at_10": 0.9733
+    },
+    {
+      "system": "pgvector",
+      "ef": 128,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 19.452,
+      "p99_latency_ms": 87.868,
+      "recall_at_10": 0.9835
+    },
+    {
+      "system": "qdrant",
+      "ef": 16,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 8.41,
+      "p99_latency_ms": 31.527,
+      "recall_at_10": 0.913
+    },
+    {
+      "system": "qdrant",
+      "ef": 32,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 5.834,
+      "p99_latency_ms": 9.655,
+      "recall_at_10": 0.9474
+    },
+    {
+      "system": "qdrant",
+      "ef": 64,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 6.187,
+      "p99_latency_ms": 9.252,
+      "recall_at_10": 0.9741
+    },
+    {
+      "system": "qdrant",
+      "ef": 128,
+      "dataset_size": 500000,
+      "dimensions": 1024,
+      "mean_latency_ms": 8.482,
+      "p99_latency_ms": 18.925,
+      "recall_at_10": 0.985
+    }
+  ]
+}

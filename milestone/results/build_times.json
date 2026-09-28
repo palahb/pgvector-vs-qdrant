@@ -1,0 +1,8 @@
+{
+  "dataset_size": 100000,
+  "dimensions": 1024,
+  "pgvector_insert_time_s": 295.1,
+  "pgvector_index_time_s": 83.9,
+  "pgvector_total_build_time_s": 379.0,
+  "qdrant_total_build_time_s": 145.6
+}

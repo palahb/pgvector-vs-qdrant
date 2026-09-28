@@ -1,0 +1,9 @@
+# Tested together on Python 3.11 (see README). qdrant-client is pinned to the server version.
+numpy==2.4.6
+psycopg[binary]==3.3.6
+pgvector==0.5.0
+qdrant-client==1.19.1
+grpcio==1.84.0
+psutil==7.2.2
+datasets==4.8.5
+matplotlib==3.10.9
