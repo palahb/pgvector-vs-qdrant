@@ -75,10 +75,15 @@ the official REST client, so REST users would find pgvector faster at moderate r
 Under concurrent load both systems are limited by CPU. Qdrant's throughput plateau is
 19--68\% higher, and its tail latency stays near the mean while pgvector's grows once
 there are more clients than cores. With build parallelism configured, pgvector
-builds its index faster at 500K and 1M vectors and slightly slower at 100K. We also report the measurement pitfalls
-we ran into, including a gap in pgvector's cost model for TOASTed vectors that can
-silently replace an index scan with an exact scan about 250$\times$ slower.
-\todo{Memory-pressure findings (E4).}
+builds its index faster at 500K and 1M vectors and slightly slower at 100K. PostgreSQL's
+buffer pool has a large effect. With the default 128\,MB of shared buffers, pgvector's
+engine time at 1M vectors is 2.7$\times$ longer and its throughput about 3$\times$
+lower than with the index held in shared buffers, although the whole index is in the
+operating system's page cache in both cases. When memory is capped and the data has to
+come from disk, pgvector's index takes about twice the space of Qdrant's storage, and
+Qdrant keeps in-memory performance under a tighter limit. We also report the measurement
+pitfalls we ran into, including a gap in pgvector's cost model for TOASTed vectors that
+can silently replace an index scan with an exact scan about 250$\times$ slower.
 \end{abstract}
 
 \keywords{vector databases, approximate nearest neighbor search, HNSW, pgvector,
@@ -135,14 +140,14 @@ This paper makes the following contributions.
     configuration.
   \item A list of measurement confounders for vector database benchmarks, with the
     size of each one's effect: the query set, asynchronous index construction,
-    indexing thresholds, build memory and parallelism, the client stack and protocol,
-    and client-side saturation (Section~\ref{sec:confounders}).
+    indexing thresholds, build memory and parallelism, buffer pool size, the client
+    stack and protocol, and client-side saturation (Section~\ref{sec:confounders}).
   \item A concurrency analysis using closed-loop multi-process clients, per-query engine
     time, server CPU accounting and PostgreSQL wait-event sampling, which shows what
     limits each system's throughput.
   \item A memory-pressure study that separates the effect of PostgreSQL's buffer pool
-    from that of the operating system's page cache, using per-query buffer statistics
-    and cgroup memory limits. \todo{E4.}
+    from that of the operating system's page cache, using per-query buffer statistics,
+    and that compares both systems under cgroup memory limits with a cold cache.
   \item Measurements of sensitivity to HNSW construction parameters and to embedding
     dimensionality (Matryoshka truncation).
   \item An open harness for Slurm clusters, with container images pinned by digest, so
@@ -322,10 +327,20 @@ CPU time from \texttt{/proc}, voluntary and involuntary context switches, and us
 hardware counters from \texttt{perf stat}. For PostgreSQL we also sample the wait events
 of active backends every 10\,ms.
 
-\textbf{Memory pressure.} To force out-of-core behavior, we restart the server as a
-separate Slurm step with a cgroup memory limit, after evicting its data files from the
-page cache with \texttt{posix\_fadvise} and checking the result with \texttt{fincore}.
-\todo{E4 details.}
+\textbf{Memory pressure.} This experiment has two parts, both at 1M vectors. In the
+first, PostgreSQL runs with \texttt{shared\_buffers} of 128\,MB (the PostgreSQL
+default), 1\,GB, 4\,GB and 32\,GB and no memory limit, so the whole index stays in the
+operating system's page cache. Each setting gets the full latency sweep and concurrency
+runs with $C\in\{1,8,32\}$. In the second part, pgvector (with 1\,GB of shared
+buffers) and Qdrant (with vectors and HNSW graph memory-mapped from disk) are measured
+without a limit and then under cgroup limits of 16, 8, 4 and 2\,GB. Before each limited
+run we stop the server, evict its data files from the page cache with
+\texttt{posix\_fadvise}, check with \texttt{fincore} that nothing is left resident, and
+restart the server as a separate Slurm step with the memory limit. Because the
+node-local disk is a spinning drive, a query that reads from disk can take seconds, so
+these runs are shorter: 100 warm-up queries, then one pass over the first 300 queries at
+$ef=64$ and at $ef=128$, then 30\,s concurrency windows at $ef=64$ with $C=1$, 8 and 32,
+in that order.
 
 %% =============================================================
 \section{Measurement Confounders}
@@ -380,6 +395,12 @@ introduce by accident, and each one changes a result.
       excludes the TOASTed vectors &
       100K: 53.4\,s index build with planner-chosen workers, 13.9\,s with the table's
       \texttt{parallel\_workers} set to 7 \\
+    Buffer pool size &
+      With PostgreSQL's default \texttt{shared\_buffers} (128\,MB), most index pages are
+      copied from the operating system's page cache on every query &
+      1M, $ef=64$, whole index in the page cache: engine time 3.82\,ms vs.\ 1.41\,ms with
+      32\,GB of shared buffers; 1{,}648 vs.\ 4{,}954\,qps at $C=8$
+      (Section~\ref{sec:memory}) \\
     Client stack and protocol &
       Serialization and client-library work is timed as query latency &
       Same engine time (0.45\,ms, 100K, $ef=64$): 0.79\,ms gRPC-lean, 1.61\,ms official
@@ -401,6 +422,7 @@ introduce by accident, and each one changes a result.
 %% =============================================================
 
 \subsection{Build Time}
+\label{sec:build}
 
 Build times turned out to depend on the node as much as on the system. In the scale
 runs each engine was built on whichever node the scheduler assigned, and the same
@@ -613,14 +635,105 @@ does not explain it.
 \end{figure*}
 
 \subsection{Memory Pressure}
-\todo{E4: pgvector with \texttt{shared\_buffers} from 128\,MB to 32\,GB; pgvector and
-Qdrant (memory-mapped) under 16/8/4/2\,GB cgroup limits at 1M, cold cache.}
+\label{sec:memory}
+
+\textbf{Buffer pool.} Table~\ref{tab:sb} shows pgvector at 1M vectors with four sizes of
+shared buffers. Nothing in these runs is read from disk. The machine has far more memory
+than the data, and a page that is not in shared buffers is copied from the operating
+system's page cache. Even so, the buffer pool size changes the results considerably.
+With 32\,GB the whole index is in shared buffers, every block access is a hit, and the
+sampled backends spend all their time on CPU. With the default 128\,MB, 82\% of the
+block accesses miss and are read from the page cache, the engine time at $ef=64$ rises
+from 1.41 to 3.82\,ms (2.7$\times$), and throughput at $C=8$ falls from 4{,}954 to
+1{,}648\,qps (3.0$\times$). At $ef=512$, which reaches Recall@10 = 0.956, the effect is
+the same: 7.52 against 20.50\,ms and 978 against 307\,qps.
+
+Each read from the page cache costs about 3\,$\mu$s per 8\,KiB block in every
+configuration, and the read time that PostgreSQL records accounts for 86--108\% of the
+extra engine time. The copies are also CPU work, which is why throughput falls along
+with latency. The server CPU time per query at $C=8$ grows from 1.52\,ms with 32\,GB to
+4.68\,ms with 128\,MB. With 32 clients, backends also wait on the buffer mapping lock
+(\texttt{LWLock:BufferMapping}, 41\% of samples with 128\,MB), and p99 latency at
+$ef=64$ grows from 15.7 to 65.9\,ms. A 4\,GB buffer pool, about half the index, recovers
+part of the loss: 77\% of the accesses hit and the engine time is 2.33\,ms.
+
+This confirms, with direct measurement, the buffer-pool explanation that we could only
+suggest in our first measurements. It also means that the size of the gap between the
+two systems depends on how PostgreSQL is configured. Our main results use 32\,GB of
+shared buffers. With PostgreSQL's default, pgvector's engine time would be about
+2.7$\times$ longer, and Qdrant's engine advantage at matched recall correspondingly
+larger.
+
+\begin{table}[h]
+  \caption{pgvector at 1M vectors with different \texttt{shared\_buffers}, no memory limit
+  (whole index in the OS page cache). Hit ratio and blocks read per query at $ef=64$;
+  engine time (ms) and throughput at $C=8$ (qps) at $ef=64$ (Recall@10 = 0.84) and
+  $ef=512$ (0.956).}
+  \label{tab:sb}
+  \small
+  \begin{tabular}{r|rr|rr|rr}
+    \toprule
+     & & & \multicolumn{2}{c|}{$ef=64$} & \multicolumn{2}{c}{$ef=512$} \\
+    shared buffers & hit & reads & eng. & qps & eng. & qps \\
+    \midrule
+    32\,GB & 1.00 & 0 & 1.41 & 4954 & 7.52 & 978 \\
+    4\,GB & 0.77 & 273 & 2.33 & 2456 & 12.99 & 506 \\
+    1\,GB & 0.34 & 758 & 3.73 & 1771 & 20.06 & 329 \\
+    128\,MB & 0.18 & 939 & 3.82 & 1648 & 20.50 & 307 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\textbf{Memory limits.} Table~\ref{tab:caps} shows both systems after their files are
+evicted from the page cache and the server is restarted under a memory limit. The data
+on disk differs in size. pgvector's index takes 7.61\,GiB, while Qdrant's whole storage,
+vectors and graph together, takes 3.94\,GiB. A 1024-dimensional vector fills about half
+of an 8\,KiB page, and pgvector stores one graph element per page
+(Section~\ref{sec:build}), so it reads and caches about twice as many bytes for the same
+vectors.
+
+The first pass after a cold start is slow for both systems because each query waits for
+random reads from the spinning disk. pgvector needs 1.7--1.9\,s per query at $ef=64$,
+reading about 750 blocks per query, and Qdrant needs 1.0--1.2\,s. After this pass the
+300 measured queries have touched only part of the data, and that part fits in the
+larger limits. With 8\,GB or more, both systems are back to their in-memory latency by
+the first concurrency window. With 4\,GB, Qdrant is also back to 0.86\,ms, but pgvector
+is still reading from disk at 327\,ms per query with one client, and reaches in-memory
+throughput only during the 32-client window. With 2\,GB, neither system stops reading
+from disk. pgvector serves 3\,qps with 32 clients and Qdrant 20\,qps, with mean latencies
+of 9.7 and 1.6\,s. Part of pgvector's disadvantage at this limit is that its 1\,GB of
+shared buffers counts against the same limit, which leaves less memory for the page
+cache.
+
+Without a limit, Qdrant's memory-mapped files were also not in the page cache after the
+build, so its first pass was as slow as under the limits. pgvector's files were still
+cached from the build. This is why the two ``none'' rows differ.
+
+\begin{table}[h]
+  \caption{Cold start under cgroup memory limits, 1M vectors, $ef=64$, first 300 queries.
+  ``First pass'': mean latency of the first measured pass after a restart with an
+  evicted cache (ms). $C=1$: mean latency in the first concurrency window (ms). $C=32$:
+  throughput in the last window (qps). pgvector uses 1\,GB of shared buffers; Qdrant
+  memory-maps vectors and graph.}
+  \label{tab:caps}
+  \small
+  \begin{tabular}{r|rrr|rrr}
+    \toprule
+     & \multicolumn{3}{c|}{pgvector} & \multicolumn{3}{c}{Qdrant} \\
+    limit & first pass & $C=1$ & $C=32$ & first pass & $C=1$ & $C=32$ \\
+    \midrule
+    none & 3.91 & 3.63 & 5552 & 1042 & 0.85 & 5867 \\
+    16\,GB & 1725 & 3.62 & 5087 & 1040 & 0.86 & 5868 \\
+    8\,GB & 1698 & 3.63 & 5592 & 1042 & 0.86 & 5862 \\
+    4\,GB & 1698 & 327 & 5000 & 1039 & 0.86 & 5866 \\
+    2\,GB & 1865 & 1436 & 3 & 1209 & 866 & 20 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 %% =============================================================
 \section{Discussion}
 %% =============================================================
-
-\todo{Final version after E4.}
 
 When the working set fits in memory, Qdrant's engine answers queries 3--4$\times$ faster
 than pgvector's at equal recall, from 100K to 1M vectors and for every HNSW configuration
@@ -639,6 +752,16 @@ pgvector built its index faster than Qdrant at 500K and 1M on the same node, whi
 reverses the large build-time advantage for Qdrant that our first measurements showed.
 Build times also varied considerably between nodes, so single build measurements on a
 shared cluster should be treated with care.
+
+Memory configuration matters as much as the choice of system. With PostgreSQL's
+default buffer pool, pgvector reads most index pages from the operating system's page
+cache, and this alone made it 2.7$\times$ slower in our runs, with no disk access at all.
+Anyone deploying pgvector, or benchmarking it, should size \texttt{shared\_buffers} to
+hold the HNSW index. When the index does not fit in memory at all, pgvector is at a
+disadvantage at 1024 dimensions, because its page layout roughly doubles the size of the
+data it has to read and cache. On our spinning disks a cold query took one to two
+seconds in both systems, so neither is usable out of core on such hardware. Qdrant
+recovered with a smaller memory limit and stayed faster under the tightest one.
 
 On methodology, the confounders in Table~\ref{tab:confounders} reversed all three main
 results of our first measurements. The planner fallback is worth noting separately,
@@ -661,7 +784,16 @@ are, so all build times we report come from a single node.
 
 \textbf{Configuration.} We tune PostgreSQL's memory settings for an in-memory working
 set and leave Qdrant at its defaults, apart from $ef_{construction}$. Experiments E2 and
-E4 vary the parameters most likely to change the conclusions.
+E4 vary the parameters most likely to change the conclusions. E4 shows that with
+PostgreSQL's default \texttt{shared\_buffers}, pgvector would compare considerably worse
+than in our main results.
+
+\textbf{Memory-limit runs.} The memory-limit runs use a spinning disk, one pass over 300
+queries and a single repetition, and they measure a warm-up path from a cold cache
+rather than a steady state. The results show how each system starts from a cold cache
+and which limits its working set fits in. They do not show performance on SSDs, where
+a random read takes a small fraction of the 4.8\,ms we measured. pgvector's shared buffers count against its
+memory limit, while Qdrant has no equivalent fixed allocation.
 
 \textbf{Single embedding model and corpus.} All experiments use Cohere v3 embeddings of
 MS MARCO. Matryoshka truncation is only an approximation of models that natively produce
@@ -675,7 +807,27 @@ down latency only at $C=1$.
 \section{Conclusion}
 %% =============================================================
 
-\todo{Write after E1--E4.}
+We compared pgvector and Qdrant, two systems built on the same HNSW index, under
+conditions designed to remove the usual sources of bias: dedicated nodes, real queries,
+comparison at matched recall, separate engine and client times, and builds measured to
+completion. With the data in memory, Qdrant's engine is 3--4$\times$ faster at equal
+recall across scales, HNSW settings and dimensions, and it keeps tail latency under
+control when overloaded. The advantage an application actually sees, however, depends on
+the client path. Through the official REST client it disappears at moderate recall.
+pgvector builds its index faster than Qdrant at 500K and 1M once build parallelism is
+set, and its performance depends strongly on the buffer pool. With the default setting it is
+2.7$\times$ slower even when nothing is read from disk. Under memory limits, pgvector's
+one-page-per-vector layout doubles the data it has to read, and Qdrant tolerates tighter
+limits.
+
+Several of these results reverse what a simpler benchmark of the same two systems
+showed, and some of the reasons are easy to miss: an indexing threshold that leaves
+data unindexed while the collection reports ready, a planner cost model that abandons
+the index without a warning, and client libraries that cost more time than the search
+itself. We hope the list of confounders and the open harness make future comparisons of
+vector stores easier to trust. Natural next steps are filtered (hybrid) search,
+workloads that mix reads and writes, SSD-backed out-of-core runs, and clients in compiled
+languages.
 
 \begin{acks}
 The numerical calculations reported in this paper were fully performed at TÜBİTAK

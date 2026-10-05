@@ -163,9 +163,45 @@ def e5(root):
                   f"% reps {p['n_reps']}/{q['n_reps']}, pg/qdrant total {p['total_s'][0] / q['total_s'][0]:.2f}")
 
 
+def e4(root):
+    print("\n% ---- E4a: shared_buffers (Table sb)")
+    base = None
+    for sb in ("32GB", "4GB", "1GB", "128MB"):
+        r = load(os.path.join(root, "e4_memory", "n1000000", f"pg_sb{sb}", "result.json"))
+        if not r:
+            continue
+        run = r["runs"][0]
+        lat = lambda ef, k: st.mean(x[k] for x in run["latency"] if x["ef"] == ef and x["rep"] > 0)
+        qps = {(c["ef"], c["clients"]): c for c in run["concurrency"]}
+        cells = []
+        for ef in (64, 512):
+            eng = lat(ef, "server_mean_ms")
+            base = base or {}
+            base.setdefault(ef, eng)
+            share = lat(ef, "read_time_ms_per_query") / (eng - base[ef]) if eng > base[ef] else float("nan")
+            cells.append((eng, qps[(ef, 8)]["throughput_qps"], share))
+        print(f"    {sb} & {lat(64, 'buffer_hit_ratio'):.2f} & {lat(64, 'blks_read_per_query'):.0f} & "
+              f"{cells[0][0]:.2f} & {cells[0][1]:.0f} & {cells[1][0]:.2f} & {cells[1][1]:.0f} \\\\   "
+              f"% read time / extra engine time {cells[0][2]:.2f} (ef64), {cells[1][2]:.2f} (ef512)")
+
+    print("\n% ---- E4b: memory limits, cold start (Table caps)")
+    rows = {}
+    for name in ("pg_capped", "qdrant_capped_ondisk"):
+        r = load(os.path.join(root, "e4_memory", "n1000000", name, "result.json"))
+        if not r:
+            continue
+        for run in r["runs"]:
+            first = next(x for x in run["latency"] if x["ef"] == 64)
+            conc = {c["clients"]: c for c in run.get("concurrency", []) if c["ef"] == 64}
+            rows.setdefault(run["mem_limit"], []).append((first["mean_ms"], conc[1]["mean_ms"], conc[32]["throughput_qps"]))
+    for lim, v in rows.items():
+        print("    " + lim + " & " + " & ".join(f"{a:.2f} & {b:.2f} & {c:.0f}" for a, b, c in v) + " \\\\")
+
+
 if __name__ == "__main__":
     root = sys.argv[1] if len(sys.argv) > 1 else "."
     e1(root)
     e2(root)
     e3(root)
     e5(root)
+    e4(root)
