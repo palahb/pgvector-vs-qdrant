@@ -1,6 +1,9 @@
 # bench: pgvector vs Qdrant on ARF (TRUBA)
 
-The v2 harness for the journal version. The course scripts in `milestone/` and `final/` stay as they were, for the record. Everything here runs on a bare-metal ARF compute node. Servers run from Apptainer images and the client runs from a Python 3.11 venv.
+The v2 harness for the journal version. The course scripts under
+`../legacy/course-project/milestone/` and `../legacy/course-project/final/` stay as they
+were, for the record. Everything here runs on a bare-metal ARF compute node. Servers run
+from Apptainer images and the client runs from a Python 3.11 venv.
 
 ## What changed from the course harness, and why
 
@@ -38,7 +41,8 @@ source env.sh
 nohup $VENV/bin/python prepare_data.py > logs/prepare_data.log 2>&1 &   # ~1 h, 1M passages + queries
 ```
 
-The probe answers everything that must be true before real runs. Send its output back before launching E1-E4:
+The probe answers everything that must be true before real runs. Validate its output
+before launching E1-E5:
 - is `/tmp` a local SSD, not tmpfs? (the out-of-core experiment depends on it)
 - does `srun --mem` actually cap a step? (look for the OOM kill)
 - `perf_event_paranoid` and whether `perf stat` counts anything
@@ -68,7 +72,7 @@ $VENV/bin/python summarize.py $BENCH_RESULTS/e1_scale
 Paper figures come straight from the result files (never from hand-copied numbers):
 
 ```bash
-$VENV/bin/python make_figures.py $BENCH_RESULTS paper/figures
+$VENV/bin/python make_figures.py $BENCH_RESULTS ../paper/figures
 $VENV/bin/python paper_numbers.py $BENCH_RESULTS      # every table row and headline range
 ```
 
