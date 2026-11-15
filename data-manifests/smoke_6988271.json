@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6988271",
+  "purpose": "Commit-specific smoke gate for E7 perf pilot (code identical to 8677b23 bench; adds E6 full analysis)",
+  "slurm": {
+    "job_id": "6988271",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:38",
+    "node": "hamsi25"
+  },
+  "code_commit": "3a9e727f936d15b12861889729bc0294fe780de2",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/3a9e727f936d_6988271",
+  "workspace_path": "../artifacts/truba-smoke/6988271",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6988271_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "4e43c9470a6dd4f86b32039dfb8077387f649fc3353db22fbe40acf5617d49e1",
+    "pg/raw.npz": "6da39f100e1b7cf499db266f9468c5c81862edc16b0abd7673a82ba533d05a27",
+    "qdrant/result.json": "cba4d6b374bfeb58250ada6dccca278ac5a3f41b5aa23b5eff588615a544c2e8",
+    "qdrant/raw.npz": "f778a861d73009b78ef7b6b636b8429f904ca4593b5d422b2d94e06746598773"
+  }
+}
