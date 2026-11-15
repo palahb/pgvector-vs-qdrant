@@ -628,7 +628,21 @@ request time includes the wait for a free search thread, while a PostgreSQL back
 waits in the operating system's run queue before its statement starts, which the
 statement time does not include. For this reason we compare engine-side times only at
 $C=1$ and use end-to-end latency under load.
-\todo{Hardware counters per client path.}
+
+Hardware counters measured on the server processes during the 8-client windows give a
+view that does not depend on either system's own timing. They count user-space events
+only, because the nodes restrict kernel-side counting, and they are normalized by the
+queries completed in the window. At matched recall (Recall@10 of 0.95--0.96), pgvector
+executes 5.2, 10.0 and 12.7 million instructions per query at 100K, 500K and 1M, and
+Qdrant over lean gRPC executes 2.3, 6.8 and 6.7 million, a ratio of 2.2, 1.5 and
+1.9$\times$. The cycle ratio is smaller (1.6, 1.2 and 1.5$\times$) because Qdrant runs
+at a lower IPC (0.48--0.55 against 0.59--0.75 for pgvector), which is consistent with a
+search that spends more time waiting on memory. The client path changes the work done in
+the server only for REST. The official gRPC client matches lean gRPC (within 1\% in
+instructions per query), whereas REST adds 2.5 million instructions per query at every
+scale, 37\% at 500K and 1M and 106\% at 100K, which is the JSON handling that lowers its
+plateau above. These counters come from a single build per scale, so we use them to
+support the direction and rough size of the differences and not exact ratios.
 
 \subsection{HNSW Parameters}
 
