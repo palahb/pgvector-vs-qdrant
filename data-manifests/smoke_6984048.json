@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6984048",
+  "purpose": "Final E6 pilot commit validation with bounded array concurrency",
+  "slurm": {
+    "job_id": "6984048",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:27",
+    "node": "hamsi51"
+  },
+  "code_commit": "66c01ae34d1823e1389a80644c345c07ecb5e616",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/66c01ae34d18_6984048",
+  "workspace_path": "../artifacts/truba-smoke/6984048",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6984048_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "4757b33319c42858f503f90a94d480f1b354fd877e5b721baf9673684e6aaebd",
+    "pg/raw.npz": "74aa8b36d42bb1ee8bdf404731fb7516d9d24471f445186d86016d527850745f",
+    "qdrant/result.json": "0146be562fb7af8dc59af444bf6d9341562af722dcccd7d77e9761bfd65ef3d1",
+    "qdrant/raw.npz": "c6b38c79b3ddff7bef5b2c64e99778be433be72bb5e0a2ad1234f5f4cd095a6a"
+  }
+}
