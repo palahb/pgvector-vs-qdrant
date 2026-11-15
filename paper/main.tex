@@ -210,8 +210,12 @@ with a specialized system under a database-level protocol. Pan et al.~\cite{pan2
 designs and treat the recall--latency tradeoff as the central issue. Aumüller et
 al.~\cite{aumuller2020} define the usual methodology for comparing ANN algorithms, with
 recall--throughput curves and exact ground truth. We follow the same methodology and
-apply it at the database level. \todo{Add benchmark suites that do include full
-databases, e.g.\ VectorDBBench, and position against them.}
+apply it at the database level. Suites that do benchmark full database systems exist,
+for example VectorDBBench~\cite{vectordbbench}, an open-source tool maintained by the
+vendor of Milvus that includes pgvector and Qdrant clients and reports throughput,
+latency and cost-normalized scores. Such suites rank systems under their own default
+configurations and client libraries. We instead ask which measurement choices change the
+ranking, and we hold the protocol, recall level and hardware fixed while varying them.
 
 %% =============================================================
 \section{Methodology}
@@ -258,7 +262,7 @@ summarizes the data.
     Embedding model & Cohere embed-english-v3.0 \\
     Dimensions & 1024 (truncated for E3) \\
     Queries & 1{,}677 (TREC DL 2021--2023) \\
-    Words per passage (mean/median) & \todo{stats} \\
+    Words per passage (mean/median) & 161.7 / 155 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -837,7 +841,6 @@ languages.
 \begin{acks}
 The numerical calculations reported in this paper were fully performed at TÜBİTAK
 ULAKBİM, High Performance and Grid Computing Center (TRUBA resources).
-\todo{Check the exact acknowledgement text required by TRUBA.}
 \end{acks}
 
 \begin{thebibliography}{00}
@@ -876,6 +879,10 @@ PostgreSQL Global Development Group, ``PostgreSQL 17 Documentation.''
 \bibitem{cohere2024}
 Cohere, ``Introducing Embed v3,'' Cohere Blog, 2023.
 \url{https://cohere.com/blog/introducing-embed-v3}
+
+\bibitem{vectordbbench}
+Zilliz, ``VectorDBBench: open-source benchmark for vector databases,'' accessed
+November 2026. \url{https://github.com/zilliztech/VectorDBBench}
 
 \bibitem{msmarco}
 P.~Bajaj et al., ``MS MARCO: A human generated machine reading comprehension
