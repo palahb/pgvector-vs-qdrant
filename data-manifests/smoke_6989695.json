@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6989695",
+  "purpose": "Commit-specific smoke gate for E8 HNSW variance deployment",
+  "slurm": {
+    "job_id": "6989695",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:38",
+    "node": "hamsi39"
+  },
+  "code_commit": "4aae971814198b74b2b87d58e7d30c1304df6dae",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/4aae97181419_6989695",
+  "workspace_path": "../artifacts/truba-smoke/6989695",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6989695_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "fd90b278c76e2de0e96578a5aef98e864d6bfd19838eb81cb04b53677c39f33f",
+    "pg/raw.npz": "2eeb8aeb45e2f6cba646e302fed2a4a38b1f80c9a74e31b4a0fdd7cc04f799f5",
+    "qdrant/result.json": "8112f9163e6384bb3c72a4b4d155e02d7260c06a0371e1cc39a6b38684d0585e",
+    "qdrant/raw.npz": "be607a5570cad85079203548dc0e02592b41bf75f4e306b7e6c309232fe8b615"
+  }
+}
