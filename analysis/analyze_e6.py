@@ -45,6 +45,7 @@ def run_rows(result: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[st
 def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
     results = [json.loads(path.read_text()) for path in sorted(root.glob("**/result.json"))]
     issues: list[dict[str, Any]] = []
+    observations: list[dict[str, Any]] = []
     matched: dict[tuple[Any, ...], dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
     control_cells: dict[tuple[Any, ...], set[str]] = defaultdict(set)
 
@@ -57,7 +58,11 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
             requested = args.get("qdrant_segments", 0)
             actual = build.get("actual_segments")
             if requested and actual != requested:
-                issues.append({"experiment_id": result.get("experiment_id"), "problem": "segment_mismatch", "requested": requested, "actual": actual})
+                observations.append({
+                    "experiment_id": result.get("experiment_id"),
+                    "observation": "actual_segment_count_differs_from_optimizer_target",
+                    "requested": requested, "actual": actual,
+                })
             if args.get("qdrant_require_indexed") and not build.get("fully_indexed"):
                 issues.append({"experiment_id": result.get("experiment_id"), "problem": "not_fully_indexed"})
             segments = requested or "auto"
@@ -115,6 +120,7 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
         "result_count": len(results),
         "control_cells": cells,
         "matched_recall_aggregates": aggregates,
+        "observations": observations,
         "issues": issues,
     }
 

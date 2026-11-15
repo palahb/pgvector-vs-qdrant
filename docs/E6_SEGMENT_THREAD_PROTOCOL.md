@@ -17,9 +17,11 @@ computational cost.
 - Primary client: persistent lean gRPC, with payload and vectors disabled.
 - Server allocation: eight isolated server cores; clients use a disjoint NUMA/core set.
 
-`default_segment_number` is a target rather than an assumption. Every result records the
-requested and actual segment counts, indexed/total vectors and collection configuration;
-the run fails if the requested target is not reached or all vectors are not indexed.
+`default_segment_number` is an optimizer target rather than an exact public count contract.
+Every result records the requested target, public actual count, indexed/total vectors,
+collection configuration and level-10 per-segment telemetry. A difference is retained as
+an observation (Qdrant may keep an additional appendable segment), not silently relabeled.
+The run fails if all vectors are not indexed.
 
 The single-search-thread arm is applied at process startup through
 `QDRANT__STORAGE__PERFORMANCE__MAX_SEARCH_THREADS=1`. Qdrant documents environment
@@ -34,8 +36,8 @@ as the parallel search pool size:
 1. Unit tests must show the exact environment key and optimizer config emitted by the
    harness.
 2. A real synthetic ARF smoke must pass for the exact commit.
-3. The 100K pilot must have three valid builds per cell, exact segment targets, fully
-   indexed vectors, no schema/provenance warnings and no node anomaly.
+3. The 100K pilot must have three valid builds per cell, verified actual segment telemetry,
+   fully indexed vectors, no schema/provenance warnings and no node anomaly.
 4. Only then may the 500K/1M full deployment be rendered and submitted.
 
 The pgvector one-graph reference is a separate three-build deployment so it is not

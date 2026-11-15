@@ -396,10 +396,10 @@ class Qdrant(Server):
                 last = st
             if st["status"] == "grey":
                 c.update_collection(COLL, optimizers_config=qm.OptimizersConfigDiff())
-            controls_met = (
-                (not a.qdrant_segments or st["segments"] == a.qdrant_segments)
-                and (not a.qdrant_require_indexed or st["indexed"] >= st["points"])
-            )
+            # default_segment_number is an optimizer target, not an exact public
+            # segment-count contract. Qdrant may retain an additional appendable segment.
+            # We record the actual count/telemetry but gate only on complete indexing.
+            controls_met = not a.qdrant_require_indexed or st["indexed"] >= st["points"]
             greens = greens + 1 if st["status"] == "green" and controls_met else 0
             if st["status"] == "green" and not controls_met:
                 unresolved_since = unresolved_since or time.perf_counter()
@@ -418,11 +418,6 @@ class Qdrant(Server):
         log(f"qdrant: indexing wait {index_s:.1f}s, state {final}")
         segment_target_met = not a.qdrant_segments or final["segments"] == a.qdrant_segments
         fully_indexed = final["indexed"] >= final["points"]
-        if not segment_target_met:
-            raise RuntimeError(
-                f"qdrant segment target not met: requested={a.qdrant_segments} "
-                f"actual={final['segments']}"
-            )
         if a.qdrant_require_indexed and not fully_indexed:
             raise RuntimeError(
                 f"qdrant collection is not fully indexed: {final['indexed']}/{final['points']}"
@@ -443,8 +438,10 @@ class Qdrant(Server):
         c = self.client("rest")
         cfg = c.get_collection(COLL).config
         tel = self._get("/telemetry?details_level=1").get("result", {})
+        detailed = self._get("/telemetry?details_level=10&per_collection=true").get("result", {})
         return {"version": self._get("/").get("version"), "collection_config": cfg.model_dump(),
                 "app": tel.get("app"), "image": QDRANT_SIF,
+                "collection_segment_telemetry": detailed.get("collections"),
                 "runtime_controls": {
                     "requested_search_threads": self.args.qdrant_search_threads or "auto",
                     "search_threads_environment": self._env().get(

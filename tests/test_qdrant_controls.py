@@ -68,6 +68,21 @@ class QdrantControlTests(unittest.TestCase):
             self.assertTrue(result["fully_indexed"])
             self.assertEqual(result["requested_search_threads"], 1)
 
+    def test_optimizer_target_may_have_an_extra_public_segment(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            server = Qdrant(directory, [0], arguments(qdrant_segments=1))
+            client = FakeClient()
+            server.client = lambda _proto="grpc": client
+            server.collection_state = lambda _client=None: {
+                "status": "green", "points": 4, "indexed": 4, "segments": 2
+            }
+            server.storage = directory
+            with patch("time.sleep", return_value=None):
+                result = server.build(np.ones((4, 3), dtype=np.float32), 16, 64)
+            self.assertFalse(result["segment_target_met"])
+            self.assertEqual(result["requested_segments"], 1)
+            self.assertEqual(result["actual_segments"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -42,7 +42,7 @@ class E6AnalysisTests(unittest.TestCase):
         self.assertEqual(report["control_cells"][0]["build_count"], 3)
         self.assertEqual(len(report["matched_recall_aggregates"]), 2)
 
-    def test_segment_mismatch_is_invalid(self) -> None:
+    def test_segment_target_difference_is_recorded_not_hidden(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for index in range(3):
@@ -50,8 +50,11 @@ class E6AnalysisTests(unittest.TestCase):
                 path.parent.mkdir()
                 path.write_text(json.dumps(result(f"rep{index + 1}", actual_segments=3 if index == 0 else 2)))
             report = analyze(root, [0.90])
-        self.assertEqual(report["verdict"], "incomplete_or_invalid")
-        self.assertTrue(any(issue["problem"] == "segment_mismatch" for issue in report["issues"]))
+        self.assertEqual(report["verdict"], "valid")
+        self.assertTrue(any(
+            item["observation"] == "actual_segment_count_differs_from_optimizer_target"
+            for item in report["observations"]
+        ))
 
 
 if __name__ == "__main__":
