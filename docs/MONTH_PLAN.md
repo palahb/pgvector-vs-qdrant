@@ -35,6 +35,8 @@ reference for everything beyond this scope.
   (`data-manifests/e7_pilot_3a9e727.json`). Synthetic data only; the real-data perf run
   against E1 configurations is still to do (closes the "hardware counters per client
   path" TODO in the paper).
-- Paper: sections 1-3 have no `\todo`. Three remain in Results and are tied to E7 (real
-  data), E8 (graph variance) and E9 (build I/O).
+- Paper: sections 1-3 have no `\todo`. The "hardware counters per client path" TODO is
+  closed with per-query user-space counters recomputed from the E1 baseline (single build
+  per scale, so direction and rough size only). Two remain in Results: graph-quality
+  variance (E8) and build I/O (E9; the baseline stores no WAL or checkpoint volume).
 - Not done: LaTeX compile check (no TeX installed on this machine); push to GitHub.

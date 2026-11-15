@@ -640,7 +640,7 @@ at a lower IPC (0.48--0.55 against 0.59--0.75 for pgvector), which is consistent
 search that spends more time waiting on memory. The client path changes the work done in
 the server only for REST. The official gRPC client matches lean gRPC (within 1\% in
 instructions per query), whereas REST adds 2.5 million instructions per query at every
-scale, 37\% at 500K and 1M and 106\% at 100K, which is the JSON handling that lowers its
+scale, 37\% at 500K and 1M and 107\% at 100K, which is the JSON handling that lowers its
 plateau above. These counters come from a single build per scale, so we use them to
 support the direction and rough size of the differences and not exact ratios.
 
