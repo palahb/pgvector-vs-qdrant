@@ -47,7 +47,9 @@ def render_sbatch(deployment: dict[str, Any], deployment_path: Path) -> str:
         f"#SBATCH -c {resources['cpus']}",
         f"#SBATCH --mem={resources['memory']}",
         f"#SBATCH -t {resources['time']}",
-        f"#SBATCH --array=0-{count - 1}",
+        f"#SBATCH --array=0-{count - 1}" + (
+            f"%{resources['array_concurrency']}" if resources.get("array_concurrency") else ""
+        ),
         "#SBATCH -o bench/logs/orchestration_%A_%a.out",
     ]
     if exclude:

@@ -3,6 +3,8 @@
 The orchestration layer turns a reviewed JSON configuration into an immutable Slurm
 array deployment. It keeps PostgreSQL/pgvector and Qdrant runs for one matrix point on
 the same node and executes them sequentially, preserving the paired comparison.
+`resources.array_concurrency` optionally caps simultaneously running array elements so
+large pilots do not create an uncontrolled storage or scheduler burst.
 
 ## Safety gates
 

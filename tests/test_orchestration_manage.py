@@ -28,7 +28,7 @@ class OrchestrationManageTests(unittest.TestCase):
             "registry_root": str(self.registry),
             "requires_smoke": True,
             "max_retries": 2,
-            "resources": {"partition": "debug", "cpus": 2, "memory": "2G", "time": "00:10:00", "exclude": []},
+            "resources": {"partition": "debug", "cpus": 2, "memory": "2G", "time": "00:10:00", "array_concurrency": 2, "exclude": []},
             "storage": {"min_free_gb": 0, "min_inode_free_percent": 0},
             "base_args": {"synthetic": True, "n": 10},
             "stages": {
@@ -64,7 +64,7 @@ class OrchestrationManageTests(unittest.TestCase):
         deployment = json.loads((deployment_dir / "deployment.json").read_text())
         self.assertEqual(deployment["task_count"], 2)
         script = (deployment_dir / "submit.sbatch").read_text()
-        self.assertIn("#SBATCH --array=0-1", script)
+        self.assertIn("#SBATCH --array=0-1%2", script)
         self.assertIn("git rev-parse --show-toplevel", script)
         rejected = self.run_manage("submit", str(deployment_dir / "deployment.json"), "--dry-run", ok=False)
         self.assertNotEqual(rejected.returncode, 0)

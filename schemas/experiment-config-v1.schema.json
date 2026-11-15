@@ -21,6 +21,7 @@
         "cpus": {"type": "integer", "minimum": 1},
         "memory": {"type": "string", "pattern": "^[0-9]+[GM]$"},
         "time": {"type": "string", "pattern": "^[0-9]{2,3}:[0-9]{2}:[0-9]{2}$"},
+        "array_concurrency": {"type": "integer", "minimum": 1},
         "exclude": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
       }
     },

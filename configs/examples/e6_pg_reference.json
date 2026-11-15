@@ -10,6 +10,7 @@
     "cpus": 56,
     "memory": "170G",
     "time": "08:00:00",
+    "array_concurrency": 2,
     "exclude": ["hamsi20", "hamsi65"]
   },
   "storage": {"min_free_gb": 200, "min_inode_free_percent": 10},
