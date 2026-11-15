@@ -38,7 +38,9 @@ def parse_json_lines(text: str) -> list[dict]:
 
 def git_state(repo: Path) -> tuple[str, bool]:
     commit = command_output(["git", "-C", str(repo), "rev-parse", "HEAD"]).strip()
-    dirty = bool(command_output(["git", "-C", str(repo), "status", "--porcelain"]).strip())
+    dirty = bool(command_output([
+        "git", "-C", str(repo), "status", "--porcelain", "--untracked-files=no"
+    ]).strip())
     return commit, dirty
 
 

@@ -24,7 +24,7 @@ test "$actual" = "$EXPECTED_COMMIT" || {
     echo "commit mismatch: expected $EXPECTED_COMMIT, found $actual" >&2
     exit 2
 }
-test -z "$(git -C "$repo" status --porcelain)" || {
+test -z "$(git -C "$repo" status --porcelain --untracked-files=no)" || {
     echo "tracked worktree is dirty" >&2
     exit 2
 }
