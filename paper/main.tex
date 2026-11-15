@@ -537,6 +537,56 @@ adds work on the server. At the same $ef$, Qdrant's engine-side time over REST i
 0.4--0.5\,ms higher than over gRPC, which we attribute to JSON parsing and
 serialization.
 
+\subsection{Latency Versus CPU Cost}
+\label{sec:cpu}
+
+Single-client latency at matched recall does not separate how much work a query costs
+from how many cores work on it. Qdrant searches the segments of a collection in
+parallel, so a configuration with more segments finishes sooner while spending more
+CPU time. We therefore ran Qdrant with 1, 2, 4 and 8 target segments and with the
+search thread pool limited to one thread or left on its automatic setting, built each
+configuration three times, and measured server CPU time per query next to latency at
+Recall@10 of 0.95 (Table~\ref{tab:cpu}). The segment counts are optimizer targets. A
+target of one yields a single non-empty indexed segment plus an empty appendable
+segment, and all vectors were indexed in every run.
+
+\begin{table}[t]
+  \caption{Matched recall 0.95, one client, lean gRPC. Latency and server CPU time per
+  query in ms (mean of three builds); ratios are pgvector divided by Qdrant, so values
+  above 1 favor Qdrant. 95\% intervals are in the analysis files.}
+  \label{tab:cpu}
+  \small
+  \begin{tabular}{llrrrr}
+    \toprule
+    $N$ & Configuration & Latency & CPU & Lat.\ ratio & CPU ratio \\
+    \midrule
+    500K & pgvector              & 5.64 & 5.55 & --- & --- \\
+         & Qdrant, 1 seg., auto  & 2.60 & 2.36 & 2.2 & 2.4 \\
+         & Qdrant, 4 seg., auto  & 1.79 & 3.86 & 3.1 & 1.4 \\
+         & Qdrant, 4 seg., 1 thr.& 3.93 & 3.68 & 1.4 & 1.5 \\
+         & Qdrant, 8 seg., auto  & 1.49 & 6.00 & 3.8 & 0.9 \\
+    \midrule
+    1M   & pgvector              & 7.63 & 7.53 & --- & --- \\
+         & Qdrant, 1 seg., auto  & 2.62 & 4.32 & 2.9 & 1.7 \\
+         & Qdrant, 4 seg., auto  & 2.25 & 5.20 & 3.4 & 1.4 \\
+         & Qdrant, 4 seg., 1 thr.& 5.12 & 4.87 & 1.5 & 1.5 \\
+         & Qdrant, 8 seg., auto  & 1.72 & 7.43 & 4.4 & 1.0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Two findings stand out. First, the latency advantage grows with the number of segments
+(up to 3.8$\times$ at 500K and 4.4$\times$ at 1M with eight segments), while the CPU
+advantage shrinks and disappears at eight segments (0.9$\times$ and 1.0$\times$). The
+latency ratio is therefore largely a measure of intra-query parallelism. Second, Qdrant
+is still cheaper per query than pgvector with one segment (2.4$\times$ at 500K and
+1.7$\times$ at 1M) and with the search pool limited to one thread (1.4--1.5$\times$ at
+four segments), so the gap is not only parallelism. At the default of four segments the
+work ratio is 1.4--1.5$\times$, much lower than the 3.1--3.4$\times$ latency ratio. The
+intervals are wide for some Qdrant configurations because the matched-recall $ef$ varies
+between builds, so we report these ratios as ranges and do not treat differences of
+about ten percent as meaningful.
+
 \subsection{Concurrency}
 
 Figure~\ref{fig:throughput} shows closed-loop throughput at matched recall, that is, at
