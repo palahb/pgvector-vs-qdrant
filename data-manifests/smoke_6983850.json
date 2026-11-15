@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6983850",
+  "purpose": "End-to-end ARF validation of both engines and result provenance",
+  "slurm": {
+    "job_id": "6983850",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:32",
+    "node": "hamsi61"
+  },
+  "code_commit": "91bb290ea94ad769099e6ff0e66c46cbef6a97f4",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/91bb290ea94a_6983850",
+  "workspace_path": "../artifacts/truba-smoke/6983850",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6983850_audit.json"
+  },
+  "files": {
+    "pg/result.json": "6c886b5d25ddf7d1f8bacaf240eeee51ce277e00dd48e6e89772118154a94605",
+    "pg/raw.npz": "3df022ceed268ebec11e5398ad07dab1c543123e8d2104c8e09cff8de90e8ae3",
+    "qdrant/result.json": "1b44f3cbb9b1a3982a1d2f68f3d853d27a6d7bf2b726ffcee3e870fc36a4cc38",
+    "qdrant/raw.npz": "5bcbaf52ade2051c06096489cd84599731a03e57ac3487ff67e764c63147207a"
+  }
+}
