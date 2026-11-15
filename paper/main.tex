@@ -149,7 +149,7 @@ This paper makes the following contributions.
     from that of the operating system's page cache, using per-query buffer statistics,
     and that compares both systems under cgroup memory limits with a cold cache.
   \item Measurements of sensitivity to HNSW construction parameters and to embedding
-    dimensionality (Matryoshka truncation).
+    dimensionality (prefix truncation of a single model).
   \item An open harness for Slurm clusters, with container images pinned by digest, so
     that the experiments can be repeated.
 \end{itemize}
@@ -247,8 +247,9 @@ corpora are prefixes of the 1M corpus. As queries we use the 1{,}677 TREC Deep L
 2021--2023 queries that come with the same collection, embedded with the query input
 type of the same model. None of the queries appears in the corpus. For the
 dimensionality experiments we truncate corpus and query vectors to their first $d$
-components and normalize them again (Matryoshka truncation). Table~\ref{tab:dataset}
-summarizes the data.
+components and normalize them again. To our knowledge, Cohere embed-v3 was not trained with a
+Matryoshka objective, so these truncated vectors need not behave like native low-dimensional
+embeddings. Table~\ref{tab:dataset} summarizes the data.
 
 \begin{table}[h]
   \caption{Dataset}
@@ -805,8 +806,10 @@ a random read takes a small fraction of the 4.8\,ms we measured. pgvector's shar
 memory limit, while Qdrant has no equivalent fixed allocation.
 
 \textbf{Single embedding model and corpus.} All experiments use Cohere v3 embeddings of
-MS MARCO. Matryoshka truncation is only an approximation of models that natively produce
-lower-dimensional embeddings.
+MS MARCO. Prefix truncation of a model that was, to our knowledge, not trained for it is
+only a rough stand-in for models that natively produce lower-dimensional embeddings, so
+the dimensionality results describe index behavior on truncated vectors and do not carry
+over to native 384- or 768-dimensional models.
 
 \textbf{Engine-side timing.} The two systems measure engine time at different points
 (statement execution in PostgreSQL, request handling in Qdrant), so we use it to break
