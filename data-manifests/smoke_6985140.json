@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6985140",
+  "purpose": "E6 optimizer-target versus actual segment telemetry fix validation",
+  "slurm": {
+    "job_id": "6985140",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:37",
+    "node": "hamsi29"
+  },
+  "code_commit": "9050d65ffb9937b0414989376526ff1ad3b550e6",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/9050d65ffb99_6985140",
+  "workspace_path": "../artifacts/truba-smoke/6985140",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6985140_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "c4bfcb323743d29a39f795b797df6bef507949742d93b3afd68384632d0b093b",
+    "pg/raw.npz": "410d95ef3ae09d223efbc51c0983e63e4b33a417af22cc5b75882fcc4513ac92",
+    "qdrant/result.json": "30718af6c7d45ef9423b02f80faa8f9464863ae8ebef9e22d1f60eb1cfe545be",
+    "qdrant/raw.npz": "5b44063a98d7e3594194078573c6cc5bb7ad4f990d9b6efd61a3b7c51bc302ac"
+  }
+}
