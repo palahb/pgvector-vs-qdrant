@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6983902",
+  "purpose": "Post-Phase-3 end-to-end validation of immutable schema-v2 provenance",
+  "slurm": {
+    "job_id": "6983902",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:37",
+    "node": "hamsi84"
+  },
+  "code_commit": "906d7eb9a88bf0d569ca48c1f9a0f1190214a2a4",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/906d7eb9a88b_6983902",
+  "workspace_path": "../artifacts/truba-smoke/6983902",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6983902_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "1f6770b364856fe4a2d1927a22b1dd6e003f5040fc69cd8407a51e482bdada54",
+    "pg/raw.npz": "b8beff3b8e7920ce8c4d824252124d7c8f4c80856b58eff39fd2f0c7d4e65ecc",
+    "qdrant/result.json": "4e65d8c8f64d61a087af029659d84f9705429327bc575bd9d5a10e0d14c6021e",
+    "qdrant/raw.npz": "8b881391e4f9070c2cc4c4e07b8282a3f7f2ecdb68863625b3d65192768a648f"
+  }
+}

@@ -14,3 +14,7 @@ gaps are preserved as findings; the raw files are not rewritten.
 `smoke_6983850_audit.json` is the first schema-v2 result audit. It covers a real
 two-engine ARF/Apptainer smoke job at commit `91bb290`, and passes strict validation
 with zero errors and zero warnings.
+
+`smoke_6983902_audit.json` validates the completed Phase-3 pipeline at commit
+`906d7eb`: both native schema-v2 results contain unique experiment/config IDs, the full
+clean commit, explicit seeds and container digests, again with zero errors or warnings.
