@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E7_perf_counter_probe_pilot",
+  "code_commit": "3a9e727f936d15b12861889729bc0294fe780de2",
+  "slurm_job": "6989672",
+  "submission": "E7_perf_counter_probe-pilot-3a9e727f-c9a6dbdc",
+  "smoke_gate": "smoke_6988271",
+  "node": "hamsi25",
+  "elapsed": "00:00:27",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E7_perf_counter_probe/pilot/E7_perf_counter_probe-pilot-3a9e727f-c9a6dbdc",
+  "workspace_root": "../artifacts/truba-experiments/E7/3a9e727",
+  "artifact_tree": {
+    "file_count": 11,
+    "sorted_file_sha256_manifest_sha256": "282b226be1e7bb2e4744ade51271ef4183f3b8cf6eb1db2e442892649a7d38e0"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e7_pilot_3a9e727_audit.json"
+  },
+  "perf_validation": {
+    "verdict": "validated",
+    "tracked_json": "results/derived/e7_pilot_3a9e727_perf_validation.json",
+    "events": [
+      "branch-misses",
+      "branches",
+      "cache-misses",
+      "cache-references",
+      "cycles",
+      "instructions",
+      "page-faults",
+      "task-clock"
+    ],
+    "unsupported_events": []
+  },
+  "analysis": {
+    "tracked_json": "results/derived/e7_pilot_3a9e727_perf_analysis.json",
+    "tracked_summary": "results/derived/e7_pilot_3a9e727_perf_summary.md"
+  },
+  "scope": "synthetic plumbing pilot (5K x 64-d); proves counters work, not paper evidence",
+  "distance_kernel_probe": {
+    "job": "6985664",
+    "result_dir": "/arf/scratch/endemir/rag_bench/results/e7_kernel/8677b2345c84_6985664",
+    "checksum_consistent": true,
+    "repetitions": 3
+  }
+}

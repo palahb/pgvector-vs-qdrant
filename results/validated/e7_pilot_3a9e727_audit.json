@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-15T20:59:54.016263+00:00",
+  "root": "../artifacts/truba-experiments/E7/3a9e727/pilot",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "task_0000_6989672": 2
+    },
+    "engines": {
+      "pg": 1,
+      "qdrant": 1
+    },
+    "statuses": {
+      "ok": 2
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "task_0000_6989672/pg_probe/result.json",
+      "sha256": "e5a27a69b03af91327d683488c2654477bc4ed22ebc878db220dc97ef29a49be",
+      "experiment_id": "E7_perf_counter_probe-pilot-3a9e727f-c9a6dbdc-t0000-a1-r00-pg",
+      "experiment": "task_0000_6989672",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6989672",
+      "raw_npz_size_bytes": 438684,
+      "raw_array_count": 4
+    },
+    {
+      "path": "task_0000_6989672/qdrant_probe/result.json",
+      "sha256": "0d0fe7d588c8ba1520505722b62f404ad3f6b8d8b6a9910b0aa6cd5b3c966fe6",
+      "experiment_id": "E7_perf_counter_probe-pilot-3a9e727f-c9a6dbdc-t0000-a1-r01-qdrant",
+      "experiment": "task_0000_6989672",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6989672",
+      "raw_npz_size_bytes": 270728,
+      "raw_array_count": 4
+    }
+  ]
+}

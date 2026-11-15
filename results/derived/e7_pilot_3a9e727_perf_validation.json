@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "verdict": "validated",
+  "engines": {
+    "pg": {
+      "result": "../artifacts/truba-experiments/E7/3a9e727/pilot/task_0000_6989672/pg_probe/result.json",
+      "perf_rows": 1,
+      "numeric_events": [
+        "branch-misses",
+        "branches",
+        "cache-misses",
+        "cache-references",
+        "cycles",
+        "instructions",
+        "page-faults",
+        "task-clock"
+      ],
+      "unsupported_events": [],
+      "missing_desired_events": [],
+      "derived_metrics_present": 1
+    },
+    "qdrant": {
+      "result": "../artifacts/truba-experiments/E7/3a9e727/pilot/task_0000_6989672/qdrant_probe/result.json",
+      "perf_rows": 1,
+      "numeric_events": [
+        "branch-misses",
+        "branches",
+        "cache-misses",
+        "cache-references",
+        "cycles",
+        "instructions",
+        "page-faults",
+        "task-clock"
+      ],
+      "unsupported_events": [],
+      "missing_desired_events": [],
+      "derived_metrics_present": 1
+    }
+  },
+  "issues": [],
+  "interpretation": "perf counters are external process-level on-CPU attribution; they are not semantically identical to pg_stat_statements or Qdrant request telemetry spans"
+}

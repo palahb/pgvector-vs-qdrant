@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "verdict": "valid",
+  "rows": [
+    {
+      "engine": "pg",
+      "result": "../artifacts/truba-experiments/E7/3a9e727/pilot/task_0000_6989672/pg_probe/result.json",
+      "ef": 32,
+      "clients": 4,
+      "query_count": 66029,
+      "server_mean_ms": 0.204,
+      "proc_server_cpu_ms_per_query": 0.231262,
+      "perf_task_clock_ms_per_query": 0.21231,
+      "task_clock_to_proc_cpu_ratio": 0.91805,
+      "cycles_per_query": 532404.994926,
+      "instructions_per_query": 715801.42657,
+      "instructions_per_cycle": 1.344468,
+      "cache_references_per_query": 4770.749716,
+      "cache_misses_per_query": 0.367641,
+      "cache_miss_ratio": 7.7e-05,
+      "branches_per_query": 128709.832786,
+      "branch_misses_per_query": 1780.097321,
+      "branch_miss_ratio": 0.01383
+    },
+    {
+      "engine": "qdrant",
+      "result": "../artifacts/truba-experiments/E7/3a9e727/pilot/task_0000_6989672/qdrant_probe/result.json",
+      "ef": 32,
+      "clients": 4,
+      "query_count": 38845,
+      "server_mean_ms": 0.1903,
+      "proc_server_cpu_ms_per_query": 0.504055,
+      "perf_task_clock_ms_per_query": 0.484315,
+      "task_clock_to_proc_cpu_ratio": 0.960838,
+      "cycles_per_query": 1036706.775183,
+      "instructions_per_query": 1473615.572995,
+      "instructions_per_cycle": 1.421439,
+      "cache_references_per_query": 33359.23375,
+      "cache_misses_per_query": 2.711134,
+      "cache_miss_ratio": 8.1e-05,
+      "branches_per_query": 262824.06719,
+      "branch_misses_per_query": 3338.168001,
+      "branch_miss_ratio": 0.012701
+    }
+  ],
+  "issues": [],
+  "measurement_boundaries": {
+    "server_mean_ms": "engine self-reported request/execution span; definitions differ by engine",
+    "proc_server_cpu_ms_per_query": "delta of server-process CPU time from /proc over the wall-clock window",
+    "perf_task_clock_ms_per_query": "external perf process attribution over the same window",
+    "hardware_events": "user-space process-level perf events divided by completed queries"
+  }
+}

@@ -22,3 +22,19 @@ reference for everything beyond this scope.
 - Every new experiment passes smoke, pilot, then full (see `ORCHESTRATION.md`).
 - Wording "3-4x faster engine" stays out of the paper until E6 and CPU-ms/query are in.
 - Nothing is sent outside (upstream issue, submission, release) without the author's approval.
+
+## Progress log
+
+### Week 1 (2026-11-15)
+
+- E6 500K/1M full matrix: Qdrant array 6985667 (48/48) and pgvector array 6985669 (6/6),
+  one attempt each, strict audit 54 results with zero errors and zero warnings
+  (`data-manifests/e6_full_9050d65.json`). Latency ratio grows with segment count while
+  the CPU-per-query ratio shrinks (see paper section "Latency Versus CPU Cost").
+- E7 perf pilot: smoke 6988271, pilot 6989672, all eight counters usable on both engines
+  (`data-manifests/e7_pilot_3a9e727.json`). Synthetic data only; the real-data perf run
+  against E1 configurations is still to do (closes the "hardware counters per client
+  path" TODO in the paper).
+- Paper: sections 1-3 have no `\todo`. Three remain in Results and are tied to E7 (real
+  data), E8 (graph variance) and E9 (build I/O).
+- Not done: LaTeX compile check (no TeX installed on this machine); push to GitHub.
