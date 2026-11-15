@@ -42,6 +42,28 @@ def run_rows(result: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[st
     return latency, concurrency
 
 
+def segment_summary(result: dict[str, Any]) -> dict[str, int]:
+    existing = result.get("server_info", {}).get("segment_summary")
+    if existing:
+        return existing
+    telemetry = result.get("server_info", {}).get("collection_segment_telemetry") or {}
+    segments = []
+    for collection in telemetry.get("collections", []):
+        for shard in collection.get("shards", []):
+            segments.extend((shard.get("local") or {}).get("segments", []))
+    infos = [segment.get("info", {}) for segment in segments]
+    return {
+        "public_segment_count": len(infos),
+        "nonempty_segment_count": sum(info.get("num_vectors", 0) > 0 for info in infos),
+        "indexed_nonempty_segment_count": sum(
+            info.get("num_vectors", 0) > 0 and info.get("segment_type") == "indexed" for info in infos
+        ),
+        "empty_appendable_segment_count": sum(
+            info.get("num_vectors", 0) == 0 and info.get("is_appendable") is True for info in infos
+        ),
+    }
+
+
 def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
     results = [json.loads(path.read_text()) for path in sorted(root.glob("**/result.json"))]
     issues: list[dict[str, Any]] = []
@@ -58,11 +80,12 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
         if engine == "qdrant":
             requested = args.get("qdrant_segments", 0)
             actual = build.get("actual_segments")
+            segment_counts = segment_summary(result)
             if requested and actual != requested:
                 observations.append({
                     "experiment_id": result.get("experiment_id"),
                     "observation": "actual_segment_count_differs_from_optimizer_target",
-                    "requested": requested, "actual": actual,
+                    "requested": requested, "actual": actual, **segment_counts,
                 })
             if args.get("qdrant_require_indexed") and not build.get("fully_indexed"):
                 issues.append({"experiment_id": result.get("experiment_id"), "problem": "not_fully_indexed"})
@@ -153,15 +176,88 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
     }
 
 
+def metric_text(metric: dict[str, Any] | None) -> str:
+    if not metric:
+        return "—"
+    if metric.get("ci95_low") is None:
+        return f"{metric['mean']:.3f}"
+    return f"{metric['mean']:.3f} [{metric['ci95_low']:.3f}, {metric['ci95_high']:.3f}]"
+
+
+def markdown_report(report: dict[str, Any], target: float = 0.95) -> str:
+    lines = [
+        "# E6 100K pilot summary",
+        "",
+        f"Verdict: **{report['verdict']}**; results: {report['result_count']}; "
+        f"issues: {len(report['issues'])}.",
+        "",
+        "Values are means with 95% t-intervals across three independent clean builds.",
+        "Segment values are Qdrant optimizer targets; public and non-empty actual counts are audited separately.",
+        "",
+        "## Matched-recall single-client latency and efficiency",
+        "",
+        "| Engine | Segment target | Search threads | ef | Recall | Mean latency ms | Server CPU ms/query |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    for item in report["matched_recall_aggregates"]:
+        if item["recall_target"] != target:
+            continue
+        metrics = item["metrics"]
+        lines.append(
+            f"| {item['engine']} | {item['segments']} | {item['search_threads']} | "
+            f"{metric_text(metrics.get('ef'))} | {metric_text(metrics.get('recall_at_k'))} | "
+            f"{metric_text(metrics.get('mean_ms'))} | {metric_text(metrics.get('server_cpu_ms_per_query'))} |"
+        )
+    lines += [
+        "",
+        "## Matched-recall concurrency endpoints",
+        "",
+        "| Engine | Segment target | Search threads | Clients | QPS | Mean latency ms | Server CPU ms/query |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    for item in report["matched_concurrency_aggregates"]:
+        if item["recall_target"] != target or item["clients"] not in {1, 32}:
+            continue
+        metrics = item["metrics"]
+        lines.append(
+            f"| {item['engine']} | {item['segments']} | {item['search_threads']} | {item['clients']} | "
+            f"{metric_text(metrics.get('throughput_qps'))} | {metric_text(metrics.get('mean_ms'))} | "
+            f"{metric_text(metrics.get('server_cpu_ms_per_query'))} |"
+        )
+    differing = [item for item in report["observations"] if item.get("observation") == "actual_segment_count_differs_from_optimizer_target"]
+    if differing:
+        exemplar = differing[0]
+        lines += [
+            "",
+            "## Segment telemetry observation",
+            "",
+            f"All {len(differing)} builds with optimizer target 1 reported "
+            f"{exemplar.get('public_segment_count')} public segments: "
+            f"{exemplar.get('indexed_nonempty_segment_count')} non-empty indexed segment and "
+            f"{exemplar.get('empty_appendable_segment_count')} empty appendable segment. "
+            "The experiment therefore reports both target and actual composition and does not relabel the public count.",
+        ]
+    lines += [
+        "",
+        "This is pilot evidence only. The 500K/1M gate remains closed until the full deployment is separately validated.",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path)
     parser.add_argument("--targets", default="0.90,0.95")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--markdown", type=Path)
     args = parser.parse_args()
     report = analyze(args.root, [float(value) for value in args.targets.split(",")])
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
+    if args.markdown:
+        args.markdown.parent.mkdir(parents=True, exist_ok=True)
+        args.markdown.write_text(markdown_report(report))
     print(f"verdict={report['verdict']} results={report['result_count']} issues={len(report['issues'])}")
     return 0 if report["verdict"] == "valid" else 1
 

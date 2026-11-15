@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E6_100K_segment_thread_pilot",
+  "code_commit": "9050d65ffb9937b0414989376526ff1ad3b550e6",
+  "slurm_jobs": {
+    "qdrant_array": "6985152",
+    "pgvector_array": "6985153"
+  },
+  "submissions": {
+    "qdrant": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25",
+    "pgvector": "E6_pg_reference-pilot-9050d65f-a9e1d09b"
+  },
+  "remote_roots": {
+    "qdrant": "/arf/scratch/endemir/rag_bench/results/E6_qdrant_segment_threads/pilot/E6_qdrant_segment_threads-pilot-9050d65f-9889be25",
+    "pgvector": "/arf/scratch/endemir/rag_bench/results/E6_pg_reference/pilot/E6_pg_reference-pilot-9050d65f-a9e1d09b"
+  },
+  "workspace_root": "../artifacts/truba-experiments/E6/9050d65",
+  "artifact_tree": {
+    "file_count": 139,
+    "qdrant_kib": 28032,
+    "pgvector_kib": 4140,
+    "registry_kib": 124,
+    "sorted_file_sha256_manifest_sha256": "17d3383aa3a26982ca0319d7d333431b55e7f20416de4684295a54aecbc5ee45"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 27,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/e6_pilot_9050d65_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "control_cells": 9,
+    "independent_builds_per_cell": 3,
+    "issues": 0,
+    "tracked_json": "results/derived/e6_pilot_9050d65_analysis.json",
+    "tracked_summary": "results/derived/e6_pilot_9050d65_summary.md"
+  },
+  "registry": {
+    "qdrant": {
+      "verdict": "complete",
+      "completed_tasks": 24,
+      "median_task_duration_s": 154.5795,
+      "slow_nodes": [],
+      "consistency_issues": []
+    },
+    "pgvector": {
+      "verdict": "complete",
+      "completed_tasks": 3,
+      "median_task_duration_s": 169.416,
+      "slow_nodes": [],
+      "consistency_issues": []
+    }
+  }
+}

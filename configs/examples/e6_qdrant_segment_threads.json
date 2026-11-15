@@ -53,7 +53,10 @@
         "qdrant_search_threads": [1, 0],
         "tag": ["rep1", "rep2", "rep3"]
       },
-      "engines": ["qdrant"]
+      "engines": ["qdrant"],
+      "base_args": {
+        "ef": [48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256, 288, 320, 384, 512]
+      }
     }
   }
 }

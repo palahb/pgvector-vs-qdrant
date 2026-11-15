@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-15T09:45:57.376716+00:00",
+  "root": "../artifacts/truba-experiments/E6/9050d65",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 27,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "pg-pilot": 3,
+      "qdrant-pilot": 24
+    },
+    "engines": {
+      "pg": 3,
+      "qdrant": 24
+    },
+    "statuses": {
+      "ok": 27
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "pg-pilot/task_0000_6985432/pg_rep1/result.json",
+      "sha256": "4e0972e36f116b1f82f85db7586b237f2ef422282f25d547f13afb7d94e3596a",
+      "experiment_id": "E6_pg_reference-pilot-9050d65f-a9e1d09b-t0000-a1-r00-pg",
+      "experiment": "pg-pilot",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6985432",
+      "raw_npz_size_bytes": 1371058,
+      "raw_array_count": 28
+    },
+    {
+      "path": "pg-pilot/task_0001_6985435/pg_rep2/result.json",
+      "sha256": "9a42fe5e5de94589ee4fc437a7a08f4709ce30d9f8109de5c0a315bc63c0eed3",
+      "experiment_id": "E6_pg_reference-pilot-9050d65f-a9e1d09b-t0001-a1-r00-pg",
+      "experiment": "pg-pilot",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6985435",
+      "raw_npz_size_bytes": 1370832,
+      "raw_array_count": 28
+    },
+    {
+      "path": "pg-pilot/task_0002_6985153/pg_rep3/result.json",
+      "sha256": "9a9f6c253f20e5133d516b8e6c50006edf41dc6017d76b83fd1870a12bdb306a",
+      "experiment_id": "E6_pg_reference-pilot-9050d65f-a9e1d09b-t0002-a1-r00-pg",
+      "experiment": "pg-pilot",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6985153",
+      "raw_npz_size_bytes": 1370193,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0000_6985155/qdrant_rep1/result.json",
+      "sha256": "6c03ca24d6b0b61532add0903740ae0258bfddd01f403c135f244fe04dad9ddd",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0000-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985155",
+      "raw_npz_size_bytes": 738977,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0001_6985156/qdrant_rep2/result.json",
+      "sha256": "8fc64176c9a49b7f560661d2878d0f4ea2ca7742e3b700a6eebe352b813f14fa",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0001-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985156",
+      "raw_npz_size_bytes": 784187,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0002_6985163/qdrant_rep3/result.json",
+      "sha256": "902a74f2e86a95c71b0cbe03a39810af8e9dc0f011ee3a74fba81d6f03877eb8",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0002-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985163",
+      "raw_npz_size_bytes": 737897,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0003_6985183/qdrant_rep1/result.json",
+      "sha256": "b13344bc7fc071f653d342b73ac1ce61901ade0ad3f3d004cc644d8521048cd3",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0003-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985183",
+      "raw_npz_size_bytes": 2321464,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0004_6985184/qdrant_rep2/result.json",
+      "sha256": "ce55be7c7e10e53a176ac8f58a61486c9cf19e3f8dd51d9c69941bd8ee2a44a1",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0004-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985184",
+      "raw_npz_size_bytes": 2443104,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0005_6985189/qdrant_rep3/result.json",
+      "sha256": "14459d7b74ac499c1835b996ea3eb07d601e9badfeb9c4a734cb2c0cd6e0c0be",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0005-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985189",
+      "raw_npz_size_bytes": 2328118,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0006_6985201/qdrant_rep1/result.json",
+      "sha256": "c8983f1b57d777a59e51198ef865b286e5d21dc864322363b42ee3b958eda6c2",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0006-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985201",
+      "raw_npz_size_bytes": 743879,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0007_6985202/qdrant_rep2/result.json",
+      "sha256": "801754164284b43e5e0aeea328b394848c65edffd0f0b3af5d47ae1622e1381e",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0007-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985202",
+      "raw_npz_size_bytes": 780975,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0008_6985204/qdrant_rep3/result.json",
+      "sha256": "cde015aff9f3e4baf0887d82d3a9584eb9fd0fdc6cdd2b6b05b703c2571f0e44",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0008-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985204",
+      "raw_npz_size_bytes": 742195,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0009_6985222/qdrant_rep1/result.json",
+      "sha256": "9e8ae8336b4e1876026e1c3933ae6cad0251e9ad1e59fe78a8dbb8f42227cd11",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0009-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985222",
+      "raw_npz_size_bytes": 2310441,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0010_6985223/qdrant_rep2/result.json",
+      "sha256": "e6d5ff2e706433b283509910fd3f111d8e4a14900cc349fd261de863e516b7f0",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0010-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985223",
+      "raw_npz_size_bytes": 2309413,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0011_6985235/qdrant_rep3/result.json",
+      "sha256": "8489fdedc44a9352df5209e6ef608cbcd251715ac59bedff3e4e2e71ff92c8d7",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0011-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985235",
+      "raw_npz_size_bytes": 2330472,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0012_6985269/qdrant_rep1/result.json",
+      "sha256": "de40599ff20f0aaaf64e57491aa7b9d38c79e842808e138d336986b20bfb04ab",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0012-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985269",
+      "raw_npz_size_bytes": 384407,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0013_6985270/qdrant_rep2/result.json",
+      "sha256": "e9e6d4cf54de1d6e1669c02e4287df414c8cc14123949c0639c54f6167064909",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0013-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985270",
+      "raw_npz_size_bytes": 420875,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0014_6985279/qdrant_rep3/result.json",
+      "sha256": "b36ee7d2d757a3a88d8fba2dc52735f4e6102c877be9416f534982e1fbcbef59",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0014-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985279",
+      "raw_npz_size_bytes": 383230,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0015_6985339/qdrant_rep1/result.json",
+      "sha256": "431953ac70b9b03d155e1a21935176f3265ab58074f53057fa4afe280de706c1",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0015-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985339",
+      "raw_npz_size_bytes": 1592839,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0016_6985340/qdrant_rep2/result.json",
+      "sha256": "9f75a09c6b47ddf9a601d1912ee1712a878141570e5bfb41cb4d9c55500f4076",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0016-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985340",
+      "raw_npz_size_bytes": 1690686,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0017_6985344/qdrant_rep3/result.json",
+      "sha256": "fbaca29bd22637f3ca26e334213cfba3c9aba511437f81b8807bbb97341ae4af",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0017-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985344",
+      "raw_npz_size_bytes": 1578273,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0018_6985379/qdrant_rep1/result.json",
+      "sha256": "c4544667132d4771d81173f93cd0902c95f9c1644367db84b848b91654e75a8e",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0018-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985379",
+      "raw_npz_size_bytes": 232713,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0019_6985380/qdrant_rep2/result.json",
+      "sha256": "096d63301e9d422075cd8460f2d697a7c0a54521a10b713827336e243786cc63",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0019-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985380",
+      "raw_npz_size_bytes": 154973,
+      "raw_array_count": 18
+    },
+    {
+      "path": "qdrant-pilot/task_0020_6985382/qdrant_rep3/result.json",
+      "sha256": "ea1d9578947d418d55dba5436cbf594a257c662ccbd36452f3cc729bf6e75089",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0020-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985382",
+      "raw_npz_size_bytes": 153577,
+      "raw_array_count": 18
+    },
+    {
+      "path": "qdrant-pilot/task_0021_6985385/qdrant_rep1/result.json",
+      "sha256": "f2fc8fbc449960f6358676119e49a8704a4e567b98dd03587a38c8c1c2b1af6f",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0021-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985385",
+      "raw_npz_size_bytes": 576556,
+      "raw_array_count": 18
+    },
+    {
+      "path": "qdrant-pilot/task_0022_6985412/qdrant_rep2/result.json",
+      "sha256": "93f5918a02f8fa35c1dbc10a819687e1271175b5a1e3c8f28468e4555af9b327",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0022-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985412",
+      "raw_npz_size_bytes": 988508,
+      "raw_array_count": 28
+    },
+    {
+      "path": "qdrant-pilot/task_0023_6985152/qdrant_rep3/result.json",
+      "sha256": "e59d9a3c68a44bc894b4724f4792dda2556998eef58a467efd645dc09071604b",
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0023-a1-r00-qdrant",
+      "experiment": "qdrant-pilot",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6985152",
+      "raw_npz_size_bytes": 574366,
+      "raw_array_count": 18
+    }
+  ]
+}

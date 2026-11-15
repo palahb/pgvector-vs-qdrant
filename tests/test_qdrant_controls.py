@@ -12,7 +12,7 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "bench"))
 
-from engines import Qdrant  # noqa: E402
+from engines import Qdrant, qdrant_segment_summary  # noqa: E402
 
 
 def arguments(**overrides):
@@ -43,6 +43,17 @@ class FakeClient:
 
 
 class QdrantControlTests(unittest.TestCase):
+    def test_segment_summary_distinguishes_empty_appendable_segment(self) -> None:
+        telemetry = {"collections": [{"shards": [{"local": {"segments": [
+            {"info": {"segment_type": "plain", "num_vectors": 0, "num_indexed_vectors": 0, "is_appendable": True}},
+            {"info": {"segment_type": "indexed", "num_vectors": 100, "num_indexed_vectors": 100, "is_appendable": False}},
+        ]}}]}]}
+        summary = qdrant_segment_summary(telemetry)
+        self.assertEqual(summary["public_segment_count"], 2)
+        self.assertEqual(summary["nonempty_segment_count"], 1)
+        self.assertEqual(summary["indexed_nonempty_segment_count"], 1)
+        self.assertEqual(summary["empty_appendable_segment_count"], 1)
+
     def test_search_threads_are_injected_as_documented_environment_key(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             server = Qdrant(directory, [0], arguments(qdrant_search_threads=1))

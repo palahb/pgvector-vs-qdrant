@@ -9,7 +9,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
-from analysis.analyze_e6 import analyze, interval  # noqa: E402
+from analysis.analyze_e6 import analyze, interval, markdown_report  # noqa: E402
 
 
 def result(tag: str, actual_segments: int = 2) -> dict:
@@ -47,6 +47,9 @@ class E6AnalysisTests(unittest.TestCase):
         self.assertEqual(report["control_cells"][0]["build_count"], 3)
         self.assertEqual(len(report["matched_recall_aggregates"]), 2)
         self.assertEqual(len(report["matched_concurrency_aggregates"]), 1)
+        rendered = markdown_report(report)
+        self.assertIn("Matched-recall single-client", rendered)
+        self.assertIn("Server CPU ms/query", rendered)
 
     def test_segment_target_difference_is_recorded_not_hidden(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

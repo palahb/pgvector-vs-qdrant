@@ -285,6 +285,33 @@ class Pg(Server):
         }
 
 
+def qdrant_segment_summary(collections_telemetry):
+    """Summarize level-10 telemetry without equating empty appendable segments to graphs."""
+    segments = []
+    for collection in (collections_telemetry or {}).get("collections", []):
+        for shard in collection.get("shards", []):
+            local = shard.get("local") or {}
+            for segment in local.get("segments", []):
+                info = segment.get("info", {})
+                segments.append({
+                    "segment_type": info.get("segment_type"),
+                    "num_vectors": info.get("num_vectors", 0),
+                    "num_indexed_vectors": info.get("num_indexed_vectors", 0),
+                    "is_appendable": info.get("is_appendable"),
+                })
+    return {
+        "public_segment_count": len(segments),
+        "nonempty_segment_count": sum(item["num_vectors"] > 0 for item in segments),
+        "indexed_nonempty_segment_count": sum(
+            item["num_vectors"] > 0 and item["segment_type"] == "indexed" for item in segments
+        ),
+        "empty_appendable_segment_count": sum(
+            item["num_vectors"] == 0 and item["is_appendable"] is True for item in segments
+        ),
+        "segments": segments,
+    }
+
+
 class Qdrant(Server):
     name = "qdrant"
 
@@ -439,9 +466,11 @@ class Qdrant(Server):
         cfg = c.get_collection(COLL).config
         tel = self._get("/telemetry?details_level=1").get("result", {})
         detailed = self._get("/telemetry?details_level=10&per_collection=true").get("result", {})
+        collections = detailed.get("collections")
         return {"version": self._get("/").get("version"), "collection_config": cfg.model_dump(),
                 "app": tel.get("app"), "image": QDRANT_SIF,
-                "collection_segment_telemetry": detailed.get("collections"),
+                "collection_segment_telemetry": collections,
+                "segment_summary": qdrant_segment_summary(collections),
                 "runtime_controls": {
                     "requested_search_threads": self.args.qdrant_search_threads or "auto",
                     "search_threads_environment": self._env().get(

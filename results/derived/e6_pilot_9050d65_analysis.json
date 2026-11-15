@@ -1,0 +1,4387 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-15T09:47:28.168786+00:00",
+  "root": "../artifacts/truba-experiments/E6/9050d65",
+  "verdict": "valid",
+  "result_count": 27,
+  "control_cells": [
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "independent_build_tags": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "build_count": 3
+    }
+  ],
+  "matched_recall_aggregates": [
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.073544,
+          "sd": 0.003443,
+          "ci95_low": 0.064991,
+          "ci95_high": 0.082097
+        },
+        "ef": {
+          "n": 3,
+          "mean": 96.0,
+          "sd": 0.0,
+          "ci95_low": 96.0,
+          "ci95_high": 96.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.506367,
+          "sd": 0.025765,
+          "ci95_low": 1.442357,
+          "ci95_high": 1.570376
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 2.415467,
+          "sd": 0.024191,
+          "ci95_low": 2.355367,
+          "ci95_high": 2.475566
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.921587,
+          "sd": 0.000744,
+          "ci95_low": 0.919739,
+          "ci95_high": 0.923435
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.431127,
+          "sd": 0.025992,
+          "ci95_low": 1.366554,
+          "ci95_high": 1.4957
+        }
+      }
+    },
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.073544,
+          "sd": 0.003443,
+          "ci95_low": 0.064991,
+          "ci95_high": 0.082097
+        },
+        "ef": {
+          "n": 3,
+          "mean": 192.0,
+          "sd": 0.0,
+          "ci95_low": 192.0,
+          "ci95_high": 192.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.509867,
+          "sd": 0.025108,
+          "ci95_low": 2.44749,
+          "ci95_high": 2.572243
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.723267,
+          "sd": 0.047624,
+          "ci95_low": 3.604953,
+          "ci95_high": 3.84158
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95953,
+          "sd": 0.002079,
+          "ci95_low": 0.954366,
+          "ci95_high": 0.964694
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.430928,
+          "sd": 0.026889,
+          "ci95_low": 2.364128,
+          "ci95_high": 2.497729
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.300139,
+          "sd": 0.003443,
+          "ci95_low": 0.291586,
+          "ci95_high": 0.308692
+        },
+        "ef": {
+          "n": 3,
+          "mean": 96.0,
+          "sd": 0.0,
+          "ci95_low": 96.0,
+          "ci95_high": 96.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.875867,
+          "sd": 0.000929,
+          "ci95_low": 0.873558,
+          "ci95_high": 0.878175
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.143667,
+          "sd": 0.029186,
+          "ci95_low": 1.071159,
+          "ci95_high": 1.216175
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.910733,
+          "sd": 0.002191,
+          "ci95_low": 0.905289,
+          "ci95_high": 0.916178
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.632081,
+          "sd": 0.005963,
+          "ci95_low": 0.617267,
+          "ci95_high": 0.646895
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.302126,
+          "sd": 0.003443,
+          "ci95_low": 0.293573,
+          "ci95_high": 0.310679
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.342733,
+          "sd": 0.117661,
+          "ci95_low": 1.050423,
+          "ci95_high": 1.635044
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.761067,
+          "sd": 0.151202,
+          "ci95_low": 1.385429,
+          "ci95_high": 2.136704
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956887,
+          "sd": 0.005709,
+          "ci95_low": 0.942703,
+          "ci95_high": 0.971071
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.091235,
+          "sd": 0.113767,
+          "ci95_low": 0.808598,
+          "ci95_high": 1.373871
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.300139,
+          "sd": 0.006885,
+          "ci95_low": 0.283033,
+          "ci95_high": 0.317245
+        },
+        "ef": {
+          "n": 3,
+          "mean": 106.666667,
+          "sd": 18.475209,
+          "ci95_low": 60.768,
+          "ci95_high": 152.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.900833,
+          "sd": 0.062336,
+          "ci95_low": 0.745971,
+          "ci95_high": 1.055696
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.184333,
+          "sd": 0.079129,
+          "ci95_low": 0.987749,
+          "ci95_high": 1.380917
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.910397,
+          "sd": 0.006145,
+          "ci95_low": 0.89513,
+          "ci95_high": 0.925663
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.673822,
+          "sd": 0.06197,
+          "ci95_low": 0.519868,
+          "ci95_high": 0.827777
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.300139,
+          "sd": 0.003443,
+          "ci95_low": 0.291586,
+          "ci95_high": 0.308692
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.3284,
+          "sd": 0.115089,
+          "ci95_low": 1.042481,
+          "ci95_high": 1.614319
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.773833,
+          "sd": 0.135489,
+          "ci95_low": 1.437232,
+          "ci95_high": 2.110435
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.954267,
+          "sd": 0.003778,
+          "ci95_low": 0.944882,
+          "ci95_high": 0.963652
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.091235,
+          "sd": 0.113767,
+          "ci95_low": 0.808598,
+          "ci95_high": 1.373871
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.302126,
+          "sd": 0.003443,
+          "ci95_low": 0.293573,
+          "ci95_high": 0.310679
+        },
+        "ef": {
+          "n": 3,
+          "mean": 96.0,
+          "sd": 0.0,
+          "ci95_low": 96.0,
+          "ci95_high": 96.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.8733,
+          "sd": 0.002506,
+          "ci95_low": 0.867074,
+          "ci95_high": 0.879526
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.1386,
+          "sd": 0.030486,
+          "ci95_low": 1.062864,
+          "ci95_high": 1.214336
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.910593,
+          "sd": 0.000631,
+          "ci95_low": 0.909025,
+          "ci95_high": 0.912162
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.626118,
+          "sd": 0.005963,
+          "ci95_low": 0.611304,
+          "ci95_high": 0.640932
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.300139,
+          "sd": 0.009109,
+          "ci95_low": 0.277509,
+          "ci95_high": 0.322769
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.3401,
+          "sd": 0.123961,
+          "ci95_low": 1.032139,
+          "ci95_high": 1.648061
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.755733,
+          "sd": 0.149264,
+          "ci95_low": 1.38491,
+          "ci95_high": 2.126556
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95625,
+          "sd": 0.005223,
+          "ci95_low": 0.943275,
+          "ci95_high": 0.969225
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.091235,
+          "sd": 0.118813,
+          "ci95_low": 0.796064,
+          "ci95_high": 1.386405
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.300139,
+          "sd": 0.003443,
+          "ci95_low": 0.291586,
+          "ci95_high": 0.308692
+        },
+        "ef": {
+          "n": 3,
+          "mean": 96.0,
+          "sd": 0.0,
+          "ci95_low": 96.0,
+          "ci95_high": 96.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.8637,
+          "sd": 0.0008,
+          "ci95_low": 0.861713,
+          "ci95_high": 0.865687
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.1391,
+          "sd": 0.026703,
+          "ci95_low": 1.07276,
+          "ci95_high": 1.20544
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.910833,
+          "sd": 0.002118,
+          "ci95_low": 0.905573,
+          "ci95_high": 0.916094
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.634069,
+          "sd": 0.003443,
+          "ci95_low": 0.625516,
+          "ci95_high": 0.642622
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.306102,
+          "sd": 0.003443,
+          "ci95_low": 0.297548,
+          "ci95_high": 0.314656
+        },
+        "ef": {
+          "n": 3,
+          "mean": 256.0,
+          "sd": 0.0,
+          "ci95_low": 256.0,
+          "ci95_high": 256.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.399133,
+          "sd": 0.007447,
+          "ci95_low": 1.380632,
+          "ci95_high": 1.417635
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.816533,
+          "sd": 0.012335,
+          "ci95_low": 1.78589,
+          "ci95_high": 1.847177
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95987,
+          "sd": 0.001673,
+          "ci95_low": 0.955713,
+          "ci95_high": 0.964027
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.156828,
+          "sd": 0.005963,
+          "ci95_low": 1.142014,
+          "ci95_high": 1.171642
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.306102,
+          "sd": 0.003443,
+          "ci95_low": 0.297548,
+          "ci95_high": 0.314656
+        },
+        "ef": {
+          "n": 3,
+          "mean": 64.0,
+          "sd": 0.0,
+          "ci95_low": 64.0,
+          "ci95_high": 64.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.368233,
+          "sd": 0.000611,
+          "ci95_low": 1.366715,
+          "ci95_high": 1.369751
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.745167,
+          "sd": 0.007419,
+          "ci95_low": 1.726735,
+          "ci95_high": 1.763598
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.923373,
+          "sd": 0.003844,
+          "ci95_low": 0.913823,
+          "ci95_high": 0.932924
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.244286,
+          "sd": 0.117811,
+          "ci95_low": 0.951604,
+          "ci95_high": 1.536967
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.300139,
+          "sd": 0.003443,
+          "ci95_low": 0.291586,
+          "ci95_high": 0.308692
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.889533,
+          "sd": 0.176445,
+          "ci95_low": 1.451184,
+          "ci95_high": 2.327882
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 2.408133,
+          "sd": 0.207607,
+          "ci95_low": 1.892367,
+          "ci95_high": 2.9239
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959033,
+          "sd": 0.006692,
+          "ci95_low": 0.942407,
+          "ci95_high": 0.975659
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.655735,
+          "sd": 0.174497,
+          "ci95_low": 1.222224,
+          "ci95_high": 2.089245
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.30809,
+          "sd": 0.003443,
+          "ci95_low": 0.299536,
+          "ci95_high": 0.316644
+        },
+        "ef": {
+          "n": 3,
+          "mean": 64.0,
+          "sd": 0.0,
+          "ci95_low": 64.0,
+          "ci95_high": 64.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.7924,
+          "sd": 0.002982,
+          "ci95_low": 0.784993,
+          "ci95_high": 0.799807
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 0.982267,
+          "sd": 0.008088,
+          "ci95_low": 0.962172,
+          "ci95_high": 1.002361
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.919897,
+          "sd": 0.005103,
+          "ci95_low": 0.907218,
+          "ci95_high": 0.932575
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.15484,
+          "sd": 0.006885,
+          "ci95_low": 1.137734,
+          "ci95_high": 1.171946
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.302126,
+          "sd": 0.003443,
+          "ci95_low": 0.293573,
+          "ci95_high": 0.310679
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.9817,
+          "sd": 0.066978,
+          "ci95_low": 0.815303,
+          "ci95_high": 1.148097
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.2302,
+          "sd": 0.091672,
+          "ci95_low": 1.002457,
+          "ci95_high": 1.457943
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.955833,
+          "sd": 0.00407,
+          "ci95_low": 0.945722,
+          "ci95_high": 0.965945
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.679587,
+          "sd": 0.184405,
+          "ci95_low": 1.221463,
+          "ci95_high": 2.137711
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.306102,
+          "sd": 0.009109,
+          "ci95_low": 0.283472,
+          "ci95_high": 0.328732
+        },
+        "ef": {
+          "n": 3,
+          "mean": 32.0,
+          "sd": 0.0,
+          "ci95_low": 32.0,
+          "ci95_high": 32.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.7122,
+          "sd": 0.005897,
+          "ci95_low": 1.697551,
+          "ci95_high": 1.726849
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 2.0744,
+          "sd": 0.008229,
+          "ci95_low": 2.053957,
+          "ci95_high": 2.094843
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.905307,
+          "sd": 0.002081,
+          "ci95_low": 0.900137,
+          "ci95_high": 0.910476
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.639833,
+          "sd": 0.181946,
+          "ci95_low": 1.187818,
+          "ci95_high": 2.091848
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.306102,
+          "sd": 0.006886,
+          "ci95_low": 0.288995,
+          "ci95_high": 0.32321
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.688833,
+          "sd": 0.397566,
+          "ci95_low": 1.701144,
+          "ci95_high": 3.676522
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.290667,
+          "sd": 0.487299,
+          "ci95_low": 2.080052,
+          "ci95_high": 4.501282
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.957087,
+          "sd": 0.009494,
+          "ci95_low": 0.933499,
+          "ci95_high": 0.980674
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.492546,
+          "sd": 0.402802,
+          "ci95_low": 1.491849,
+          "ci95_high": 3.493243
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "recall_target": 0.9,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.298151,
+          "sd": 0.005963,
+          "ci95_low": 0.283337,
+          "ci95_high": 0.312965
+        },
+        "ef": {
+          "n": 3,
+          "mean": 32.0,
+          "sd": 0.0,
+          "ci95_low": 32.0,
+          "ci95_high": 32.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.738967,
+          "sd": 0.00347,
+          "ci95_low": 0.730345,
+          "ci95_high": 0.747588
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 0.864333,
+          "sd": 0.004455,
+          "ci95_low": 0.853267,
+          "ci95_high": 0.8754
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.90479,
+          "sd": 0.001805,
+          "ci95_low": 0.900306,
+          "ci95_high": 0.909274
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.631882,
+          "sd": 0.003443,
+          "ci95_low": 1.623329,
+          "ci95_high": 1.640435
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "metrics": {
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.296163,
+          "sd": 0.003443,
+          "ci95_low": 0.28761,
+          "ci95_high": 0.304716
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.9276,
+          "sd": 0.068768,
+          "ci95_low": 0.756758,
+          "ci95_high": 1.098442
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.164067,
+          "sd": 0.089969,
+          "ci95_low": 0.940554,
+          "ci95_high": 1.387579
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.957563,
+          "sd": 0.007155,
+          "ci95_low": 0.939788,
+          "ci95_high": 0.975338
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.764858,
+          "sd": 0.39362,
+          "ci95_low": 1.786972,
+          "ci95_high": 3.742744
+        }
+      }
+    }
+  ],
+  "matched_concurrency_aggregates": [
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.028,
+          "sd": 0.0,
+          "ci95_low": 0.028,
+          "ci95_high": 0.028
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.070094,
+          "sd": 0.000298,
+          "ci95_low": 0.069354,
+          "ci95_high": 0.070835
+        },
+        "ef": {
+          "n": 3,
+          "mean": 192.0,
+          "sd": 0.0,
+          "ci95_low": 192.0,
+          "ci95_high": 192.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.4951,
+          "sd": 0.01065,
+          "ci95_low": 2.468641,
+          "ci95_high": 2.521559
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.734367,
+          "sd": 0.054466,
+          "ci95_low": 3.599056,
+          "ci95_high": 3.869677
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959027,
+          "sd": 0.002076,
+          "ci95_low": 0.953869,
+          "ci95_high": 0.964184
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 0.971333,
+          "sd": 0.002309,
+          "ci95_low": 0.965596,
+          "ci95_high": 0.977071
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.43159,
+          "sd": 0.005925,
+          "ci95_low": 2.416871,
+          "ci95_high": 2.44631
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 399.46,
+          "sd": 1.706077,
+          "ci95_low": 395.221527,
+          "ci95_high": 403.698473
+        }
+      }
+    },
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.201333,
+          "sd": 0.001155,
+          "ci95_low": 0.198465,
+          "ci95_high": 0.204202
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.069007,
+          "sd": 0.000478,
+          "ci95_low": 0.067819,
+          "ci95_high": 0.070195
+        },
+        "ef": {
+          "n": 3,
+          "mean": 192.0,
+          "sd": 0.0,
+          "ci95_low": 192.0,
+          "ci95_high": 192.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 5.475,
+          "sd": 0.010237,
+          "ci95_low": 5.449569,
+          "ci95_high": 5.500431
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 8.7352,
+          "sd": 0.124625,
+          "ci95_low": 8.425588,
+          "ci95_high": 9.044812
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959367,
+          "sd": 0.002206,
+          "ci95_low": 0.953887,
+          "ci95_high": 0.964846
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.962667,
+          "sd": 0.004163,
+          "ci95_low": 7.952324,
+          "ci95_high": 7.97301
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.729191,
+          "sd": 0.0058,
+          "ci95_low": 2.714783,
+          "ci95_high": 2.743599
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 2917.56,
+          "sd": 5.54617,
+          "ci95_low": 2903.781438,
+          "ci95_high": 2931.338562
+        }
+      }
+    },
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.216667,
+          "sd": 0.007024,
+          "ci95_low": 0.199217,
+          "ci95_high": 0.234116
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.076485,
+          "sd": 0.002344,
+          "ci95_low": 0.070662,
+          "ci95_high": 0.082307
+        },
+        "ef": {
+          "n": 3,
+          "mean": 192.0,
+          "sd": 0.0,
+          "ci95_low": 192.0,
+          "ci95_high": 192.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 11.285133,
+          "sd": 0.050486,
+          "ci95_low": 11.159708,
+          "ci95_high": 11.410558
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 35.307833,
+          "sd": 10.388229,
+          "ci95_low": 9.499958,
+          "ci95_high": 61.115708
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959667,
+          "sd": 0.000292,
+          "ci95_low": 0.958941,
+          "ci95_high": 0.960392
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.97,
+          "sd": 0.008718,
+          "ci95_low": 7.948342,
+          "ci95_high": 7.991658
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.813578,
+          "sd": 0.014395,
+          "ci95_low": 2.777815,
+          "ci95_high": 2.84934
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 2832.693333,
+          "sd": 12.108399,
+          "ci95_low": 2802.611974,
+          "ci95_high": 2862.774692
+        }
+      }
+    },
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.105333,
+          "sd": 0.003055,
+          "ci95_low": 0.097744,
+          "ci95_high": 0.112923
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.068519,
+          "sd": 0.002106,
+          "ci95_low": 0.063288,
+          "ci95_high": 0.073751
+        },
+        "ef": {
+          "n": 3,
+          "mean": 192.0,
+          "sd": 0.0,
+          "ci95_low": 192.0,
+          "ci95_high": 192.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.593767,
+          "sd": 0.008792,
+          "ci95_low": 2.571924,
+          "ci95_high": 2.61561
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.853367,
+          "sd": 0.047518,
+          "ci95_low": 3.735316,
+          "ci95_high": 3.971418
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959267,
+          "sd": 0.001912,
+          "ci95_low": 0.954517,
+          "ci95_high": 0.964016
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 3.875333,
+          "sd": 0.001155,
+          "ci95_low": 3.872465,
+          "ci95_high": 3.878202
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.520834,
+          "sd": 0.008604,
+          "ci95_low": 2.49946,
+          "ci95_high": 2.542208
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1537.313333,
+          "sd": 5.154933,
+          "ci95_low": 1524.506737,
+          "ci95_high": 1550.11993
+        }
+      }
+    },
+    {
+      "engine": "pg",
+      "n": 100000,
+      "segments": "one_graph",
+      "search_threads": "n/a",
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.204,
+          "sd": 0.0,
+          "ci95_low": 0.204,
+          "ci95_high": 0.204
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.069089,
+          "sd": 0.000119,
+          "ci95_low": 0.068792,
+          "ci95_high": 0.069386
+        },
+        "ef": {
+          "n": 3,
+          "mean": 192.0,
+          "sd": 0.0,
+          "ci95_low": 192.0,
+          "ci95_high": 192.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.701367,
+          "sd": 0.004441,
+          "ci95_low": 2.690333,
+          "ci95_high": 2.7124
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 4.039833,
+          "sd": 0.034602,
+          "ci95_low": 3.95387,
+          "ci95_high": 4.125797
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959467,
+          "sd": 0.002112,
+          "ci95_low": 0.954219,
+          "ci95_high": 0.964714
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.741333,
+          "sd": 0.003055,
+          "ci95_low": 7.733744,
+          "ci95_high": 7.748923
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.621756,
+          "sd": 0.00351,
+          "ci95_low": 2.613036,
+          "ci95_high": 2.630475
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 2952.693333,
+          "sd": 5.108163,
+          "ci95_low": 2940.002928,
+          "ci95_high": 2965.383739
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.202667,
+          "sd": 0.018583,
+          "ci95_low": 0.1565,
+          "ci95_high": 0.248833
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.271692,
+          "sd": 0.002408,
+          "ci95_low": 0.265711,
+          "ci95_high": 0.277673
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.337167,
+          "sd": 0.11656,
+          "ci95_low": 1.047593,
+          "ci95_high": 1.626741
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.7597,
+          "sd": 0.153672,
+          "ci95_low": 1.377928,
+          "ci95_high": 2.141472
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.957083,
+          "sd": 0.006544,
+          "ci95_low": 0.940825,
+          "ci95_high": 0.973342
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 0.818667,
+          "sd": 0.019732,
+          "ci95_low": 0.769647,
+          "ci95_high": 0.867686
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.104837,
+          "sd": 0.120715,
+          "ci95_low": 0.80494,
+          "ci95_high": 1.404734
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 745.923333,
+          "sd": 67.963029,
+          "ci95_low": 577.080183,
+          "ci95_high": 914.766483
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.39,
+          "sd": 0.046861,
+          "ci95_low": 0.27358,
+          "ci95_high": 0.50642
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.354324,
+          "sd": 0.005702,
+          "ci95_low": 0.340158,
+          "ci95_high": 0.36849
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 14.674667,
+          "sd": 1.859808,
+          "ci95_low": 10.054275,
+          "ci95_high": 19.295059
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 16.9336,
+          "sd": 2.383033,
+          "ci95_low": 11.013339,
+          "ci95_high": 22.853861
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95664,
+          "sd": 0.006027,
+          "ci95_low": 0.941667,
+          "ci95_high": 0.971613
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.204,
+          "sd": 0.022539,
+          "ci95_low": 1.148006,
+          "ci95_high": 1.259994
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.103346,
+          "sd": 0.121096,
+          "ci95_low": 0.802502,
+          "ci95_high": 1.404191
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1102.253333,
+          "sd": 150.894771,
+          "ci95_low": 727.379687,
+          "ci95_high": 1477.126979
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.432,
+          "sd": 0.051884,
+          "ci95_low": 0.303101,
+          "ci95_high": 0.560899
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.392908,
+          "sd": 0.012757,
+          "ci95_low": 0.361215,
+          "ci95_high": 0.424601
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 29.3773,
+          "sd": 3.703568,
+          "ci95_low": 20.176386,
+          "ci95_high": 38.578214
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 33.072367,
+          "sd": 4.598076,
+          "ci95_low": 21.649192,
+          "ci95_high": 44.495542
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956963,
+          "sd": 0.005632,
+          "ci95_low": 0.942971,
+          "ci95_high": 0.970956
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.206,
+          "sd": 0.026458,
+          "ci95_low": 1.140271,
+          "ci95_high": 1.271729
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.105791,
+          "sd": 0.117329,
+          "ci95_low": 0.814307,
+          "ci95_high": 1.397275
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1101.186667,
+          "sd": 149.578856,
+          "ci95_low": 729.582201,
+          "ci95_high": 1472.791133
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.322667,
+          "sd": 0.044557,
+          "ci95_low": 0.211972,
+          "ci95_high": 0.433362
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.293567,
+          "sd": 0.00149,
+          "ci95_low": 0.289865,
+          "ci95_high": 0.297269
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 3.6712,
+          "sd": 0.469208,
+          "ci95_low": 2.505528,
+          "ci95_high": 4.836872
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 5.3946,
+          "sd": 0.723781,
+          "ci95_low": 3.596483,
+          "ci95_high": 7.192717
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956887,
+          "sd": 0.005556,
+          "ci95_low": 0.943082,
+          "ci95_high": 0.970691
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.203333,
+          "sd": 0.024846,
+          "ci95_low": 1.141607,
+          "ci95_high": 1.26506
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.105858,
+          "sd": 0.119932,
+          "ci95_low": 0.807905,
+          "ci95_high": 1.40381
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1099.053333,
+          "sd": 151.05744,
+          "ci95_low": 723.775565,
+          "ci95_high": 1474.331102
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.344667,
+          "sd": 0.046361,
+          "ci95_low": 0.229491,
+          "ci95_high": 0.459843
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.312428,
+          "sd": 0.00245,
+          "ci95_low": 0.30634,
+          "ci95_high": 0.318516
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 7.323733,
+          "sd": 0.929652,
+          "ci95_low": 5.014162,
+          "ci95_high": 9.633304
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 9.3565,
+          "sd": 1.125593,
+          "ci95_low": 6.560147,
+          "ci95_high": 12.152853
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956797,
+          "sd": 0.005702,
+          "ci95_low": 0.942632,
+          "ci95_high": 0.970962
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.200667,
+          "sd": 0.02203,
+          "ci95_low": 1.145936,
+          "ci95_high": 1.255397
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.099155,
+          "sd": 0.120785,
+          "ci95_low": 0.799085,
+          "ci95_high": 1.399225
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1103.386667,
+          "sd": 150.772345,
+          "ci95_low": 728.817169,
+          "ci95_high": 1477.956164
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.199333,
+          "sd": 0.017926,
+          "ci95_low": 0.1548,
+          "ci95_high": 0.243867
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.267856,
+          "sd": 0.000902,
+          "ci95_low": 0.265614,
+          "ci95_high": 0.270098
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.340467,
+          "sd": 0.117725,
+          "ci95_low": 1.047997,
+          "ci95_high": 1.632936
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.7667,
+          "sd": 0.168233,
+          "ci95_low": 1.348752,
+          "ci95_high": 2.184648
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.954567,
+          "sd": 0.00475,
+          "ci95_low": 0.942766,
+          "ci95_high": 0.966368
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 0.833333,
+          "sd": 0.015144,
+          "ci95_low": 0.795711,
+          "ci95_high": 0.870956
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.126871,
+          "sd": 0.117596,
+          "ci95_low": 0.834724,
+          "ci95_high": 1.419019
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 744.256667,
+          "sd": 68.381966,
+          "ci95_low": 574.372735,
+          "ci95_high": 914.140599
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.94,
+          "sd": 0.199309,
+          "ci95_low": 1.44485,
+          "ci95_high": 2.43515
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.33027,
+          "sd": 0.000282,
+          "ci95_low": 0.329569,
+          "ci95_high": 0.330971
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.7299,
+          "sd": 0.267248,
+          "ci95_low": 2.065967,
+          "ci95_high": 3.393833
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 5.4637,
+          "sd": 0.793972,
+          "ci95_low": 3.491204,
+          "ci95_high": 7.436196
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95432,
+          "sd": 0.003891,
+          "ci95_low": 0.944653,
+          "ci95_high": 0.963987
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 6.998,
+          "sd": 0.042332,
+          "ci95_low": 6.892833,
+          "ci95_high": 7.103167
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.199825,
+          "sd": 0.123632,
+          "ci95_low": 0.892682,
+          "ci95_high": 1.506969
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 5874.116667,
+          "sd": 606.813708,
+          "ci95_low": 4366.586187,
+          "ci95_high": 7381.647146
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 2.489333,
+          "sd": 0.238078,
+          "ci95_low": 1.897866,
+          "ci95_high": 3.080801
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.358092,
+          "sd": 0.003409,
+          "ci95_low": 0.349622,
+          "ci95_high": 0.366561
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 4.619167,
+          "sd": 0.455501,
+          "ci95_low": 3.487548,
+          "ci95_high": 5.750785
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 9.905167,
+          "sd": 0.817036,
+          "ci95_low": 7.875373,
+          "ci95_high": 11.93496
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.954373,
+          "sd": 0.00377,
+          "ci95_low": 0.945006,
+          "ci95_high": 0.963741
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.820667,
+          "sd": 0.09065,
+          "ci95_low": 7.595463,
+          "ci95_high": 8.045871
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.132967,
+          "sd": 0.123842,
+          "ci95_low": 0.825302,
+          "ci95_high": 1.440633
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 6955.636667,
+          "sd": 726.123436,
+          "ci95_low": 5151.700471,
+          "ci95_high": 8759.572862
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.802,
+          "sd": 0.076236,
+          "ci95_low": 0.612603,
+          "ci95_high": 0.991397
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.280693,
+          "sd": 0.002055,
+          "ci95_low": 0.275587,
+          "ci95_high": 0.285798
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.396633,
+          "sd": 0.117161,
+          "ci95_low": 1.105567,
+          "ci95_high": 1.6877
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.867633,
+          "sd": 0.164752,
+          "ci95_low": 1.458333,
+          "ci95_high": 2.276933
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.954247,
+          "sd": 0.003661,
+          "ci95_low": 0.945152,
+          "ci95_high": 0.963341
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 3.303333,
+          "sd": 0.06877,
+          "ci95_low": 3.132485,
+          "ci95_high": 3.474182
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.163609,
+          "sd": 0.119769,
+          "ci95_low": 0.866061,
+          "ci95_high": 1.461156
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 2855.96,
+          "sd": 249.658246,
+          "ci95_low": 2235.724479,
+          "ci95_high": 3476.195521
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 1,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.392667,
+          "sd": 0.114094,
+          "ci95_low": 1.10922,
+          "ci95_high": 1.676114
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.299316,
+          "sd": 0.002038,
+          "ci95_low": 0.294253,
+          "ci95_high": 0.304379
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.715533,
+          "sd": 0.137902,
+          "ci95_low": 1.372939,
+          "ci95_high": 2.058128
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.089267,
+          "sd": 0.280106,
+          "ci95_low": 2.393388,
+          "ci95_high": 3.785145
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.954273,
+          "sd": 0.003683,
+          "ci95_low": 0.945124,
+          "ci95_high": 0.963423
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 5.581333,
+          "sd": 0.145332,
+          "ci95_low": 5.22028,
+          "ci95_high": 5.942387
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.206463,
+          "sd": 0.126091,
+          "ci95_low": 0.893211,
+          "ci95_high": 1.519715
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 4653.27,
+          "sd": 389.592036,
+          "ci95_low": 3685.391619,
+          "ci95_high": 5621.148381
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.2,
+          "sd": 0.019079,
+          "ci95_low": 0.152602,
+          "ci95_high": 0.247398
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.26827,
+          "sd": 0.003264,
+          "ci95_low": 0.260162,
+          "ci95_high": 0.276378
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.3378,
+          "sd": 0.110221,
+          "ci95_low": 1.063975,
+          "ci95_high": 1.611625
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.752233,
+          "sd": 0.134448,
+          "ci95_low": 1.41822,
+          "ci95_high": 2.086247
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956613,
+          "sd": 0.006025,
+          "ci95_low": 0.941644,
+          "ci95_high": 0.971582
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 0.818667,
+          "sd": 0.017926,
+          "ci95_low": 0.774133,
+          "ci95_high": 0.8632
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.105146,
+          "sd": 0.11315,
+          "ci95_low": 0.824042,
+          "ci95_high": 1.38625
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 745.123333,
+          "sd": 63.825491,
+          "ci95_low": 586.559227,
+          "ci95_high": 903.68744
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.389333,
+          "sd": 0.05116,
+          "ci95_low": 0.262235,
+          "ci95_high": 0.516432
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.354169,
+          "sd": 0.005126,
+          "ci95_low": 0.341434,
+          "ci95_high": 0.366904
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 14.702333,
+          "sd": 1.816493,
+          "ci95_low": 10.189551,
+          "ci95_high": 19.215116
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 17.968067,
+          "sd": 3.023884,
+          "ci95_low": 10.455716,
+          "ci95_high": 25.480417
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95613,
+          "sd": 0.005239,
+          "ci95_low": 0.943115,
+          "ci95_high": 0.969145
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.204667,
+          "sd": 0.02203,
+          "ci95_low": 1.149936,
+          "ci95_high": 1.259397
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.106114,
+          "sd": 0.117853,
+          "ci95_low": 0.813327,
+          "ci95_high": 1.398901
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1099.453333,
+          "sd": 145.968106,
+          "ci95_low": 736.81919,
+          "ci95_high": 1462.087477
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.424667,
+          "sd": 0.053454,
+          "ci95_low": 0.291869,
+          "ci95_high": 0.557465
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.385861,
+          "sd": 0.004721,
+          "ci95_low": 0.374132,
+          "ci95_high": 0.397591
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 29.3641,
+          "sd": 3.597828,
+          "ci95_low": 20.425878,
+          "ci95_high": 38.302322
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 33.619833,
+          "sd": 4.977176,
+          "ci95_low": 21.254844,
+          "ci95_high": 45.984822
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95644,
+          "sd": 0.005115,
+          "ci95_low": 0.943734,
+          "ci95_high": 0.969146
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.205333,
+          "sd": 0.02318,
+          "ci95_low": 1.147745,
+          "ci95_high": 1.262921
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.104804,
+          "sd": 0.115803,
+          "ci95_low": 0.81711,
+          "ci95_high": 1.392498
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1101.12,
+          "sd": 145.104027,
+          "ci95_low": 740.632521,
+          "ci95_high": 1461.607479
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.321333,
+          "sd": 0.040612,
+          "ci95_low": 0.220439,
+          "ci95_high": 0.422227
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.29299,
+          "sd": 0.003821,
+          "ci95_low": 0.283496,
+          "ci95_high": 0.302483
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 3.673867,
+          "sd": 0.449052,
+          "ci95_low": 2.558269,
+          "ci95_high": 4.789465
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 5.344267,
+          "sd": 0.617342,
+          "ci95_low": 3.810581,
+          "ci95_high": 6.877952
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95632,
+          "sd": 0.005368,
+          "ci95_low": 0.942983,
+          "ci95_high": 0.969657
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.202667,
+          "sd": 0.02203,
+          "ci95_low": 1.147936,
+          "ci95_high": 1.257397
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.10627,
+          "sd": 0.116166,
+          "ci95_low": 0.817675,
+          "ci95_high": 1.394865
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1097.186667,
+          "sd": 143.761261,
+          "ci95_low": 740.035074,
+          "ci95_high": 1454.338259
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.348,
+          "sd": 0.045738,
+          "ci95_low": 0.23437,
+          "ci95_high": 0.46163
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.316092,
+          "sd": 0.007212,
+          "ci95_low": 0.298176,
+          "ci95_high": 0.334008
+        },
+        "ef": {
+          "n": 3,
+          "mean": 234.666667,
+          "sd": 36.950417,
+          "ci95_low": 142.869333,
+          "ci95_high": 326.464
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 7.333633,
+          "sd": 0.904784,
+          "ci95_low": 5.085845,
+          "ci95_high": 9.581422
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 9.213067,
+          "sd": 1.012649,
+          "ci95_low": 6.697303,
+          "ci95_high": 11.72883
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956157,
+          "sd": 0.00535,
+          "ci95_low": 0.942865,
+          "ci95_high": 0.969448
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.200667,
+          "sd": 0.021939,
+          "ci95_low": 1.146162,
+          "ci95_high": 1.255171
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.100677,
+          "sd": 0.117091,
+          "ci95_low": 0.809783,
+          "ci95_high": 1.391571
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1101.186667,
+          "sd": 146.024224,
+          "ci95_low": 738.413107,
+          "ci95_high": 1463.960226
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.191333,
+          "sd": 0.002309,
+          "ci95_low": 0.185596,
+          "ci95_high": 0.197071
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.272112,
+          "sd": 0.00287,
+          "ci95_low": 0.264982,
+          "ci95_high": 0.279243
+        },
+        "ef": {
+          "n": 3,
+          "mean": 256.0,
+          "sd": 0.0,
+          "ci95_low": 256.0,
+          "ci95_high": 256.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.411733,
+          "sd": 0.00265,
+          "ci95_low": 1.405149,
+          "ci95_high": 1.418317
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.825933,
+          "sd": 0.012722,
+          "ci95_low": 1.794327,
+          "ci95_high": 1.857539
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.96054,
+          "sd": 0.001696,
+          "ci95_low": 0.956328,
+          "ci95_high": 0.964752
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 0.841333,
+          "sd": 0.003055,
+          "ci95_low": 0.833744,
+          "ci95_high": 0.848923
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.196555,
+          "sd": 0.005971,
+          "ci95_low": 1.18172,
+          "ci95_high": 1.21139
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 703.123333,
+          "sd": 1.301281,
+          "ci95_low": 699.89051,
+          "ci95_high": 706.356156
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.828,
+          "sd": 0.010583,
+          "ci95_low": 1.801708,
+          "ci95_high": 1.854292
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.330927,
+          "sd": 0.000242,
+          "ci95_low": 0.330325,
+          "ci95_high": 0.331528
+        },
+        "ef": {
+          "n": 3,
+          "mean": 256.0,
+          "sd": 0.0,
+          "ci95_low": 256.0,
+          "ci95_high": 256.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.884167,
+          "sd": 0.014514,
+          "ci95_low": 2.848109,
+          "ci95_high": 2.920224
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 5.8362,
+          "sd": 0.084307,
+          "ci95_low": 5.626753,
+          "ci95_high": 6.045647
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959923,
+          "sd": 0.001684,
+          "ci95_low": 0.955741,
+          "ci95_high": 0.964106
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.027333,
+          "sd": 0.012055,
+          "ci95_low": 6.997384,
+          "ci95_high": 7.057283
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.272191,
+          "sd": 0.004373,
+          "ci95_low": 1.261327,
+          "ci95_high": 1.283055
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 5523.786667,
+          "sd": 28.018803,
+          "ci95_low": 5454.178483,
+          "ci95_high": 5593.39485
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 2.343333,
+          "sd": 0.021939,
+          "ci95_low": 2.288829,
+          "ci95_high": 2.397838
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.359427,
+          "sd": 0.002244,
+          "ci95_low": 0.353852,
+          "ci95_high": 0.365002
+        },
+        "ef": {
+          "n": 3,
+          "mean": 256.0,
+          "sd": 0.0,
+          "ci95_low": 256.0,
+          "ci95_high": 256.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 4.895067,
+          "sd": 0.027422,
+          "ci95_low": 4.826941,
+          "ci95_high": 4.963192
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 10.6614,
+          "sd": 0.469722,
+          "ci95_low": 9.494451,
+          "ci95_high": 11.828349
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959943,
+          "sd": 0.001618,
+          "ci95_low": 0.955923,
+          "ci95_high": 0.963963
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.861333,
+          "sd": 0.020429,
+          "ci95_low": 7.810581,
+          "ci95_high": 7.912085
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.205818,
+          "sd": 0.005304,
+          "ci95_low": 1.19264,
+          "ci95_high": 1.218996
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 6519.51,
+          "sd": 36.990269,
+          "ci95_low": 6427.613661,
+          "ci95_high": 6611.406339
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.756667,
+          "sd": 0.005033,
+          "ci95_low": 0.744162,
+          "ci95_high": 0.769171
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.279647,
+          "sd": 0.002823,
+          "ci95_low": 0.272634,
+          "ci95_high": 0.286659
+        },
+        "ef": {
+          "n": 3,
+          "mean": 256.0,
+          "sd": 0.0,
+          "ci95_low": 256.0,
+          "ci95_high": 256.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.4675,
+          "sd": 0.006011,
+          "ci95_low": 1.452567,
+          "ci95_high": 1.482433
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.9405,
+          "sd": 0.007051,
+          "ci95_low": 1.922984,
+          "ci95_high": 1.958016
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959867,
+          "sd": 0.001745,
+          "ci95_low": 0.955531,
+          "ci95_high": 0.964202
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 3.342667,
+          "sd": 0.004163,
+          "ci95_low": 3.332324,
+          "ci95_high": 3.35301
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.235354,
+          "sd": 0.005099,
+          "ci95_low": 1.222687,
+          "ci95_high": 1.248021
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 2705.826667,
+          "sd": 11.264694,
+          "ci95_low": 2677.841357,
+          "ci95_high": 2733.811977
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 2,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.318667,
+          "sd": 0.012858,
+          "ci95_low": 1.286723,
+          "ci95_high": 1.350611
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.299649,
+          "sd": 0.003058,
+          "ci95_low": 0.292052,
+          "ci95_high": 0.307246
+        },
+        "ef": {
+          "n": 3,
+          "mean": 256.0,
+          "sd": 0.0,
+          "ci95_low": 256.0,
+          "ci95_high": 256.0
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.8066,
+          "sd": 0.006678,
+          "ci95_low": 1.790011,
+          "ci95_high": 1.823189
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.2569,
+          "sd": 0.013583,
+          "ci95_low": 3.223154,
+          "ci95_high": 3.290646
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959827,
+          "sd": 0.001685,
+          "ci95_low": 0.95564,
+          "ci95_high": 0.964013
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 5.638667,
+          "sd": 0.044106,
+          "ci95_low": 5.529093,
+          "ci95_high": 5.748241
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.281289,
+          "sd": 0.005349,
+          "ci95_low": 1.268,
+          "ci95_high": 1.294578
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 4400.673333,
+          "sd": 16.363781,
+          "ci95_low": 4360.020167,
+          "ci95_high": 4441.3265
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.142667,
+          "sd": 0.013317,
+          "ci95_low": 0.109584,
+          "ci95_high": 0.17575
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.267016,
+          "sd": 0.005046,
+          "ci95_low": 0.254481,
+          "ci95_high": 0.27955
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.8736,
+          "sd": 0.197543,
+          "ci95_low": 1.382836,
+          "ci95_high": 2.364364
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 2.3704,
+          "sd": 0.239948,
+          "ci95_low": 1.774289,
+          "ci95_high": 2.966511
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.960313,
+          "sd": 0.007405,
+          "ci95_low": 0.941916,
+          "ci95_high": 0.978711
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 0.886,
+          "sd": 0.012166,
+          "ci95_low": 0.855777,
+          "ci95_high": 0.916223
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.670715,
+          "sd": 0.196617,
+          "ci95_low": 1.182253,
+          "ci95_high": 2.159177
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 534.99,
+          "sd": 59.756506,
+          "ci95_low": 386.534629,
+          "ci95_high": 683.445371
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.257333,
+          "sd": 0.03177,
+          "ci95_low": 0.178406,
+          "ci95_high": 0.336261
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.367386,
+          "sd": 0.007418,
+          "ci95_low": 0.348958,
+          "ci95_high": 0.385815
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 23.084733,
+          "sd": 3.087956,
+          "ci95_low": 15.413205,
+          "ci95_high": 30.756262
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 26.033067,
+          "sd": 3.742548,
+          "ci95_low": 16.735313,
+          "ci95_high": 35.330821
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95941,
+          "sd": 0.006338,
+          "ci95_low": 0.943665,
+          "ci95_high": 0.975155
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.164667,
+          "sd": 0.02203,
+          "ci95_low": 1.109936,
+          "ci95_high": 1.219397
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.678428,
+          "sd": 0.19554,
+          "ci95_low": 1.192639,
+          "ci95_high": 2.164216
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 701.79,
+          "sd": 101.677333,
+          "ci95_low": 449.189117,
+          "ci95_high": 954.390883
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.285333,
+          "sd": 0.031896,
+          "ci95_low": 0.206094,
+          "ci95_high": 0.364573
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.408253,
+          "sd": 0.013756,
+          "ci95_low": 0.374079,
+          "ci95_high": 0.442427
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 46.228733,
+          "sd": 6.232078,
+          "ci95_low": 30.746144,
+          "ci95_high": 61.711322
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 49.6821,
+          "sd": 6.649416,
+          "ci95_low": 33.162702,
+          "ci95_high": 66.201498
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959663,
+          "sd": 0.006701,
+          "ci95_low": 0.943016,
+          "ci95_high": 0.976311
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.168667,
+          "sd": 0.018475,
+          "ci95_low": 1.122768,
+          "ci95_high": 1.214565
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.686666,
+          "sd": 0.203359,
+          "ci95_low": 1.181453,
+          "ci95_high": 2.191879
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 701.123333,
+          "sd": 102.612735,
+          "ci95_low": 446.198596,
+          "ci95_high": 956.048071
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.213333,
+          "sd": 0.029687,
+          "ci95_low": 0.13958,
+          "ci95_high": 0.287087
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.303865,
+          "sd": 0.013968,
+          "ci95_low": 0.269163,
+          "ci95_high": 0.338567
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 5.7543,
+          "sd": 0.768915,
+          "ci95_low": 3.844056,
+          "ci95_high": 7.664544
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 7.6634,
+          "sd": 0.769773,
+          "ci95_low": 5.751023,
+          "ci95_high": 9.575777
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.958653,
+          "sd": 0.006644,
+          "ci95_low": 0.942147,
+          "ci95_high": 0.97516
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.16,
+          "sd": 0.022539,
+          "ci95_low": 1.104006,
+          "ci95_high": 1.215994
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.669183,
+          "sd": 0.193294,
+          "ci95_low": 1.188975,
+          "ci95_high": 2.149392
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 702.79,
+          "sd": 101.675366,
+          "ci95_low": 450.194004,
+          "ci95_high": 955.385996
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.227333,
+          "sd": 0.031896,
+          "ci95_low": 0.148094,
+          "ci95_high": 0.306573
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.323832,
+          "sd": 0.004481,
+          "ci95_low": 0.312699,
+          "ci95_high": 0.334965
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 11.5291,
+          "sd": 1.552889,
+          "ci95_low": 7.671197,
+          "ci95_high": 15.387003
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 13.624633,
+          "sd": 2.444698,
+          "ci95_low": 7.551176,
+          "ci95_high": 19.698091
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.959613,
+          "sd": 0.005564,
+          "ci95_low": 0.94579,
+          "ci95_high": 0.973436
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.164,
+          "sd": 0.019079,
+          "ci95_low": 1.116602,
+          "ci95_high": 1.211398
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.676713,
+          "sd": 0.200736,
+          "ci95_low": 1.178017,
+          "ci95_high": 2.175409
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 702.39,
+          "sd": 102.544429,
+          "ci95_low": 447.634956,
+          "ci95_high": 957.145044
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.263333,
+          "sd": 0.018148,
+          "ci95_low": 0.218249,
+          "ci95_high": 0.308418
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.268523,
+          "sd": 0.001675,
+          "ci95_low": 0.264361,
+          "ci95_high": 0.272684
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.012367,
+          "sd": 0.066167,
+          "ci95_low": 0.847986,
+          "ci95_high": 1.176747
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.253933,
+          "sd": 0.088987,
+          "ci95_low": 1.032859,
+          "ci95_high": 1.475008
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.955943,
+          "sd": 0.004223,
+          "ci95_low": 0.945451,
+          "ci95_high": 0.966436
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.723333,
+          "sd": 0.073928,
+          "ci95_low": 1.539671,
+          "ci95_high": 1.906995
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.765759,
+          "sd": 0.186566,
+          "ci95_low": 1.302266,
+          "ci95_high": 2.229253
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 980.59,
+          "sd": 65.693835,
+          "ci95_low": 817.384295,
+          "ci95_high": 1143.795705
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.488,
+          "sd": 0.172522,
+          "ci95_low": 1.059396,
+          "ci95_high": 1.916604
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.324903,
+          "sd": 0.003017,
+          "ci95_low": 0.317408,
+          "ci95_high": 0.332399
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 3.5127,
+          "sd": 0.400943,
+          "ci95_low": 2.516623,
+          "ci95_high": 4.508777
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 5.559233,
+          "sd": 0.520214,
+          "ci95_low": 4.266846,
+          "ci95_high": 6.851621
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95588,
+          "sd": 0.003933,
+          "ci95_low": 0.94611,
+          "ci95_high": 0.96565
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.972,
+          "sd": 0.017436,
+          "ci95_low": 7.928684,
+          "ci95_high": 8.015316
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.756387,
+          "sd": 0.203296,
+          "ci95_low": 1.251329,
+          "ci95_high": 2.261444
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 4581.803333,
+          "sd": 557.306438,
+          "ci95_low": 3197.265655,
+          "ci95_high": 5966.341011
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.67,
+          "sd": 0.185656,
+          "ci95_low": 1.208769,
+          "ci95_high": 2.131231
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.364869,
+          "sd": 0.003684,
+          "ci95_low": 0.355718,
+          "ci95_high": 0.374021
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 7.036733,
+          "sd": 0.802792,
+          "ci95_low": 5.042328,
+          "ci95_high": 9.031139
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 16.9941,
+          "sd": 4.189849,
+          "ci95_low": 6.585097,
+          "ci95_high": 27.403103
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.955667,
+          "sd": 0.004071,
+          "ci95_low": 0.945553,
+          "ci95_high": 0.965781
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.964667,
+          "sd": 0.023438,
+          "ci95_low": 7.906439,
+          "ci95_high": 8.022894
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.755362,
+          "sd": 0.2047,
+          "ci95_low": 1.246817,
+          "ci95_high": 2.263907
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 4580.67,
+          "sd": 558.216568,
+          "ci95_low": 3193.871252,
+          "ci95_high": 5967.468748
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.845333,
+          "sd": 0.080407,
+          "ci95_low": 0.645574,
+          "ci95_high": 1.045092
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.280237,
+          "sd": 0.000539,
+          "ci95_low": 0.278899,
+          "ci95_high": 0.281575
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.322833,
+          "sd": 0.122707,
+          "ci95_low": 1.017987,
+          "ci95_high": 1.627679
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 2.1357,
+          "sd": 0.224393,
+          "ci95_low": 1.578231,
+          "ci95_high": 2.693169
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.955733,
+          "sd": 0.004078,
+          "ci95_low": 0.945601,
+          "ci95_high": 0.965865
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 5.451333,
+          "sd": 0.086031,
+          "ci95_low": 5.237603,
+          "ci95_high": 5.665063
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.819545,
+          "sd": 0.194486,
+          "ci95_low": 1.336377,
+          "ci95_high": 2.302713
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 3016.823333,
+          "sd": 293.008935,
+          "ci95_low": 2288.890041,
+          "ci95_high": 3744.756626
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 4,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.227333,
+          "sd": 0.07788,
+          "ci95_low": 1.033852,
+          "ci95_high": 1.420814
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.291485,
+          "sd": 0.003798,
+          "ci95_low": 0.28205,
+          "ci95_high": 0.30092
+        },
+        "ef": {
+          "n": 3,
+          "mean": 117.333333,
+          "sd": 18.475209,
+          "ci95_low": 71.434667,
+          "ci95_high": 163.232
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.8928,
+          "sd": 0.093326,
+          "ci95_low": 1.660947,
+          "ci95_high": 2.124653
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.531133,
+          "sd": 0.126056,
+          "ci95_low": 3.217967,
+          "ci95_high": 3.8443
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95586,
+          "sd": 0.004094,
+          "ci95_low": 0.945689,
+          "ci95_high": 0.966031
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.59,
+          "sd": 0.320468,
+          "ci95_low": 6.793848,
+          "ci95_high": 8.386152
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 1.808782,
+          "sd": 0.162029,
+          "ci95_low": 1.406247,
+          "ci95_high": 2.211316
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 4208.743333,
+          "sd": 211.497078,
+          "ci95_low": 3683.313061,
+          "ci95_high": 4734.173605
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.103333,
+          "sd": 0.013317,
+          "ci95_low": 0.07025,
+          "ci95_high": 0.136416
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.273065,
+          "sd": 0.005425,
+          "ci95_low": 0.259587,
+          "ci95_high": 0.286544
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.666933,
+          "sd": 0.410675,
+          "ci95_low": 1.646679,
+          "ci95_high": 3.687188
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 3.270967,
+          "sd": 0.495846,
+          "ci95_low": 2.039117,
+          "ci95_high": 4.502816
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956137,
+          "sd": 0.011704,
+          "ci95_low": 0.927061,
+          "ci95_high": 0.985212
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 0.932667,
+          "sd": 0.009866,
+          "ci95_low": 0.908157,
+          "ci95_high": 0.957177
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.500118,
+          "sd": 0.412418,
+          "ci95_low": 1.475532,
+          "ci95_high": 3.524705
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 378.93,
+          "sd": 53.504791,
+          "ci95_low": 246.006002,
+          "ci95_high": 511.853998
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.173333,
+          "sd": 0.02203,
+          "ci95_low": 0.118603,
+          "ci95_high": 0.228064
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.378253,
+          "sd": 0.015004,
+          "ci95_low": 0.340979,
+          "ci95_high": 0.415528
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 35.445,
+          "sd": 6.337186,
+          "ci95_low": 19.701286,
+          "ci95_high": 51.188714
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 39.056733,
+          "sd": 7.316647,
+          "ci95_low": 20.879707,
+          "ci95_high": 57.23376
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95641,
+          "sd": 0.010016,
+          "ci95_low": 0.931526,
+          "ci95_high": 0.981294
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.137333,
+          "sd": 0.018475,
+          "ci95_low": 1.091435,
+          "ci95_high": 1.183232
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.515131,
+          "sd": 0.404963,
+          "ci95_low": 1.509066,
+          "ci95_high": 3.521196
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 460.19,
+          "sd": 74.565139,
+          "ci95_low": 274.944975,
+          "ci95_high": 645.435025
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.196,
+          "sd": 0.031749,
+          "ci95_low": 0.117125,
+          "ci95_high": 0.274875
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.426327,
+          "sd": 0.015016,
+          "ci95_low": 0.389021,
+          "ci95_high": 0.463633
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 70.954867,
+          "sd": 12.80077,
+          "ci95_low": 39.153426,
+          "ci95_high": 102.756308
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 74.831333,
+          "sd": 13.414152,
+          "ci95_low": 41.506044,
+          "ci95_high": 108.156623
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95657,
+          "sd": 0.01023,
+          "ci95_low": 0.931155,
+          "ci95_high": 0.981985
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.146667,
+          "sd": 0.021385,
+          "ci95_low": 1.093538,
+          "ci95_high": 1.199795
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.5368,
+          "sd": 0.406954,
+          "ci95_low": 1.525788,
+          "ci95_high": 3.547811
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 460.06,
+          "sd": 75.304347,
+          "ci95_low": 272.978533,
+          "ci95_high": 647.141467
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.142,
+          "sd": 0.023065,
+          "ci95_low": 0.084698,
+          "ci95_high": 0.199302
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.308076,
+          "sd": 0.007776,
+          "ci95_low": 0.288759,
+          "ci95_high": 0.327394
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 8.838467,
+          "sd": 1.595374,
+          "ci95_low": 4.875018,
+          "ci95_high": 12.801916
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 11.700433,
+          "sd": 1.752404,
+          "ci95_low": 7.346868,
+          "ci95_high": 16.053998
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.956983,
+          "sd": 0.008972,
+          "ci95_low": 0.934693,
+          "ci95_high": 0.979274
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.134667,
+          "sd": 0.01963,
+          "ci95_low": 1.085899,
+          "ci95_high": 1.183434
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.504714,
+          "sd": 0.40476,
+          "ci95_low": 1.499155,
+          "ci95_high": 3.510274
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 461.126667,
+          "sd": 75.376548,
+          "ci95_low": 273.865828,
+          "ci95_high": 648.387506
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": 1,
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.156667,
+          "sd": 0.025007,
+          "ci95_low": 0.094542,
+          "ci95_high": 0.218792
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.339913,
+          "sd": 0.008793,
+          "ci95_low": 0.318068,
+          "ci95_high": 0.361759
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 17.6837,
+          "sd": 3.2083,
+          "ci95_low": 9.713198,
+          "ci95_high": 25.654202
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 20.7831,
+          "sd": 3.918242,
+          "ci95_low": 11.048862,
+          "ci95_high": 30.517338
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.957033,
+          "sd": 0.010313,
+          "ci95_low": 0.931412,
+          "ci95_high": 0.982655
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 1.136,
+          "sd": 0.019079,
+          "ci95_low": 1.088602,
+          "ci95_high": 1.183398
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.507441,
+          "sd": 0.408341,
+          "ci95_low": 1.492984,
+          "ci95_high": 3.521898
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 461.26,
+          "sd": 75.669946,
+          "ci95_low": 273.270262,
+          "ci95_high": 649.249738
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 1,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.295333,
+          "sd": 0.021939,
+          "ci95_low": 0.240829,
+          "ci95_high": 0.349838
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.269528,
+          "sd": 0.002392,
+          "ci95_low": 0.263585,
+          "ci95_high": 0.275472
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 0.906333,
+          "sd": 0.079568,
+          "ci95_low": 0.70866,
+          "ci95_high": 1.104007
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 1.078267,
+          "sd": 0.111354,
+          "ci95_low": 0.801627,
+          "ci95_high": 1.354907
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.957627,
+          "sd": 0.007302,
+          "ci95_low": 0.939487,
+          "ci95_high": 0.975766
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 2.939333,
+          "sd": 0.232674,
+          "ci95_low": 2.361292,
+          "ci95_high": 3.517375
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.70639,
+          "sd": 0.457391,
+          "ci95_low": 1.570076,
+          "ci95_high": 3.842704
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 1096.256667,
+          "sd": 90.495156,
+          "ci95_low": 871.436092,
+          "ci95_high": 1321.077241
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 16,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.014667,
+          "sd": 0.151385,
+          "ci95_low": 0.638576,
+          "ci95_high": 1.390758
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.332598,
+          "sd": 0.002425,
+          "ci95_low": 0.326574,
+          "ci95_high": 0.338623
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 5.323133,
+          "sd": 0.909491,
+          "ci95_low": 3.063651,
+          "ci95_high": 7.582616
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 7.7785,
+          "sd": 0.572902,
+          "ci95_low": 6.355217,
+          "ci95_high": 9.201783
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95744,
+          "sd": 0.007158,
+          "ci95_low": 0.939657,
+          "ci95_high": 0.975223
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 8.003333,
+          "sd": 0.011015,
+          "ci95_low": 7.975968,
+          "ci95_high": 8.030699
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.669073,
+          "sd": 0.458968,
+          "ci95_low": 1.528842,
+          "ci95_high": 3.809305
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 3052.826667,
+          "sd": 473.862123,
+          "ci95_low": 1875.592889,
+          "ci95_high": 4230.060444
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 32,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 1.133333,
+          "sd": 0.162239,
+          "ci95_low": 0.730278,
+          "ci95_high": 1.536389
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.37203,
+          "sd": 0.004932,
+          "ci95_low": 0.359777,
+          "ci95_high": 0.384283
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 10.659467,
+          "sd": 1.805174,
+          "ci95_low": 6.174805,
+          "ci95_high": 15.144128
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 28.812567,
+          "sd": 2.009268,
+          "ci95_low": 23.820864,
+          "ci95_high": 33.804269
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.957373,
+          "sd": 0.007008,
+          "ci95_low": 0.939963,
+          "ci95_high": 0.974784
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.998,
+          "sd": 0.013115,
+          "ci95_low": 7.965418,
+          "ci95_high": 8.030582
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.669062,
+          "sd": 0.456925,
+          "ci95_low": 1.533905,
+          "ci95_high": 3.804218
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 3050.296667,
+          "sd": 471.189828,
+          "ci95_low": 1879.701774,
+          "ci95_high": 4220.89156
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 4,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.715333,
+          "sd": 0.08631,
+          "ci95_low": 0.500911,
+          "ci95_high": 0.929755
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.283706,
+          "sd": 0.003031,
+          "ci95_low": 0.276175,
+          "ci95_high": 0.291236
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 1.593433,
+          "sd": 0.222865,
+          "ci95_low": 1.039762,
+          "ci95_high": 2.147105
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 2.760333,
+          "sd": 0.520211,
+          "ci95_low": 1.467953,
+          "ci95_high": 4.052713
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.957517,
+          "sd": 0.006958,
+          "ci95_low": 0.94023,
+          "ci95_high": 0.974804
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 6.919333,
+          "sd": 0.19457,
+          "ci95_low": 6.435957,
+          "ci95_high": 7.40271
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.782445,
+          "sd": 0.469907,
+          "ci95_low": 1.615037,
+          "ci95_high": 3.949853
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 2523.296667,
+          "sd": 324.667747,
+          "ci95_low": 1716.712177,
+          "ci95_high": 3329.881156
+        }
+      }
+    },
+    {
+      "engine": "qdrant",
+      "n": 100000,
+      "segments": 8,
+      "search_threads": "auto",
+      "recall_target": 0.95,
+      "clients": 8,
+      "metrics": {
+        "client_cores_busy": {
+          "n": 3,
+          "mean": 0.888667,
+          "sd": 0.127159,
+          "ci95_low": 0.572761,
+          "ci95_high": 1.204572
+        },
+        "client_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 0.296967,
+          "sd": 0.003535,
+          "ci95_low": 0.288185,
+          "ci95_high": 0.30575
+        },
+        "ef": {
+          "n": 3,
+          "mean": 74.666667,
+          "sd": 18.475209,
+          "ci95_low": 28.768,
+          "ci95_high": 120.565333
+        },
+        "mean_ms": {
+          "n": 3,
+          "mean": 2.7045,
+          "sd": 0.446739,
+          "ci95_low": 1.594649,
+          "ci95_high": 3.814351
+        },
+        "p99_ms": {
+          "n": 3,
+          "mean": 4.97,
+          "sd": 0.910891,
+          "ci95_low": 2.707038,
+          "ci95_high": 7.232962
+        },
+        "recall_at_k": {
+          "n": 3,
+          "mean": 0.95758,
+          "sd": 0.007139,
+          "ci95_low": 0.939843,
+          "ci95_high": 0.975317
+        },
+        "server_cores_busy": {
+          "n": 3,
+          "mean": 7.890667,
+          "sd": 0.039311,
+          "ci95_low": 7.793006,
+          "ci95_high": 7.988328
+        },
+        "server_cpu_ms_per_query": {
+          "n": 3,
+          "mean": 2.680242,
+          "sd": 0.455101,
+          "ci95_low": 1.549617,
+          "ci95_high": 3.810867
+        },
+        "throughput_qps": {
+          "n": 3,
+          "mean": 2994.896667,
+          "sd": 449.828523,
+          "ci95_low": 1877.37048,
+          "ci95_high": 4112.422853
+        }
+      }
+    }
+  ],
+  "observations": [
+    {
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0000-a1-r00-qdrant",
+      "observation": "actual_segment_count_differs_from_optimizer_target",
+      "requested": 1,
+      "actual": 2,
+      "public_segment_count": 2,
+      "nonempty_segment_count": 1,
+      "indexed_nonempty_segment_count": 1,
+      "empty_appendable_segment_count": 1
+    },
+    {
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0001-a1-r00-qdrant",
+      "observation": "actual_segment_count_differs_from_optimizer_target",
+      "requested": 1,
+      "actual": 2,
+      "public_segment_count": 2,
+      "nonempty_segment_count": 1,
+      "indexed_nonempty_segment_count": 1,
+      "empty_appendable_segment_count": 1
+    },
+    {
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0002-a1-r00-qdrant",
+      "observation": "actual_segment_count_differs_from_optimizer_target",
+      "requested": 1,
+      "actual": 2,
+      "public_segment_count": 2,
+      "nonempty_segment_count": 1,
+      "indexed_nonempty_segment_count": 1,
+      "empty_appendable_segment_count": 1
+    },
+    {
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0003-a1-r00-qdrant",
+      "observation": "actual_segment_count_differs_from_optimizer_target",
+      "requested": 1,
+      "actual": 2,
+      "public_segment_count": 2,
+      "nonempty_segment_count": 1,
+      "indexed_nonempty_segment_count": 1,
+      "empty_appendable_segment_count": 1
+    },
+    {
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0004-a1-r00-qdrant",
+      "observation": "actual_segment_count_differs_from_optimizer_target",
+      "requested": 1,
+      "actual": 2,
+      "public_segment_count": 2,
+      "nonempty_segment_count": 1,
+      "indexed_nonempty_segment_count": 1,
+      "empty_appendable_segment_count": 1
+    },
+    {
+      "experiment_id": "E6_qdrant_segment_threads-pilot-9050d65f-9889be25-t0005-a1-r00-qdrant",
+      "observation": "actual_segment_count_differs_from_optimizer_target",
+      "requested": 1,
+      "actual": 2,
+      "public_segment_count": 2,
+      "nonempty_segment_count": 1,
+      "indexed_nonempty_segment_count": 1,
+      "empty_appendable_segment_count": 1
+    }
+  ],
+  "issues": []
+}
