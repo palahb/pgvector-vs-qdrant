@@ -184,9 +184,17 @@ def metric_text(metric: dict[str, Any] | None) -> str:
     return f"{metric['mean']:.3f} [{metric['ci95_low']:.3f}, {metric['ci95_high']:.3f}]"
 
 
-def markdown_report(report: dict[str, Any], target: float = 0.95) -> str:
+PILOT_NOTE = "This is pilot evidence only. The 500K/1M gate remains closed until the full deployment is separately validated."
+
+
+def markdown_report(
+    report: dict[str, Any],
+    target: float = 0.95,
+    title: str = "E6 100K pilot summary",
+    note: str = PILOT_NOTE,
+) -> str:
     lines = [
-        "# E6 100K pilot summary",
+        f"# {title}",
         "",
         f"Verdict: **{report['verdict']}**; results: {report['result_count']}; "
         f"issues: {len(report['issues'])}.",
@@ -196,15 +204,15 @@ def markdown_report(report: dict[str, Any], target: float = 0.95) -> str:
         "",
         "## Matched-recall single-client latency and efficiency",
         "",
-        "| Engine | Segment target | Search threads | ef | Recall | Mean latency ms | Server CPU ms/query |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+        "| N | Engine | Segment target | Search threads | ef | Recall | Mean latency ms | Server CPU ms/query |",
+        "|---:|---|---:|---:|---:|---:|---:|---:|",
     ]
     for item in report["matched_recall_aggregates"]:
         if item["recall_target"] != target:
             continue
         metrics = item["metrics"]
         lines.append(
-            f"| {item['engine']} | {item['segments']} | {item['search_threads']} | "
+            f"| {item['n']} | {item['engine']} | {item['segments']} | {item['search_threads']} | "
             f"{metric_text(metrics.get('ef'))} | {metric_text(metrics.get('recall_at_k'))} | "
             f"{metric_text(metrics.get('mean_ms'))} | {metric_text(metrics.get('server_cpu_ms_per_query'))} |"
         )
@@ -212,15 +220,15 @@ def markdown_report(report: dict[str, Any], target: float = 0.95) -> str:
         "",
         "## Matched-recall concurrency endpoints",
         "",
-        "| Engine | Segment target | Search threads | Clients | QPS | Mean latency ms | Server CPU ms/query |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+        "| N | Engine | Segment target | Search threads | Clients | QPS | Mean latency ms | Server CPU ms/query |",
+        "|---:|---|---:|---:|---:|---:|---:|---:|",
     ]
     for item in report["matched_concurrency_aggregates"]:
         if item["recall_target"] != target or item["clients"] not in {1, 32}:
             continue
         metrics = item["metrics"]
         lines.append(
-            f"| {item['engine']} | {item['segments']} | {item['search_threads']} | {item['clients']} | "
+            f"| {item['n']} | {item['engine']} | {item['segments']} | {item['search_threads']} | {item['clients']} | "
             f"{metric_text(metrics.get('throughput_qps'))} | {metric_text(metrics.get('mean_ms'))} | "
             f"{metric_text(metrics.get('server_cpu_ms_per_query'))} |"
         )
@@ -239,7 +247,7 @@ def markdown_report(report: dict[str, Any], target: float = 0.95) -> str:
         ]
     lines += [
         "",
-        "This is pilot evidence only. The 500K/1M gate remains closed until the full deployment is separately validated.",
+        note,
         "",
     ]
     return "\n".join(lines)
@@ -251,13 +259,15 @@ def main() -> int:
     parser.add_argument("--targets", default="0.90,0.95")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--markdown", type=Path)
+    parser.add_argument("--title", default="E6 100K pilot summary")
+    parser.add_argument("--note", default=PILOT_NOTE)
     args = parser.parse_args()
     report = analyze(args.root, [float(value) for value in args.targets.split(",")])
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
     if args.markdown:
         args.markdown.parent.mkdir(parents=True, exist_ok=True)
-        args.markdown.write_text(markdown_report(report))
+        args.markdown.write_text(markdown_report(report, title=args.title, note=args.note))
     print(f"verdict={report['verdict']} results={report['result_count']} issues={len(report['issues'])}")
     return 0 if report["verdict"] == "valid" else 1
 

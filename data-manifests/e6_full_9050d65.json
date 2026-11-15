@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E6_500K_1M_segment_thread_full",
+  "code_commit": "9050d65ffb9937b0414989376526ff1ad3b550e6",
+  "config_note": "21-point ef grid (commit 871bb01 config); code pinned to 9050d65",
+  "slurm_jobs": {
+    "qdrant_array": "6985667",
+    "pgvector_array": "6985669"
+  },
+  "submissions": {
+    "qdrant": "E6_qdrant_segment_threads-full-9050d65f-bbf40d5c",
+    "pgvector": "E6_pg_reference-full-9050d65f-5c85906b"
+  },
+  "superseded_partial_submissions": {
+    "qdrant": "E6_qdrant_segment_threads-full-9050d65f-7129d069 (jobs 6985575, cancelled after 2 tasks: ef grid ended at 512, recall 0.9485)",
+    "pgvector": "E6_pg_reference-full-9050d65f-708a34f5 (job 6985577, cancelled before start)"
+  },
+  "remote_roots": {
+    "qdrant": "/arf/scratch/endemir/rag_bench/results/E6_qdrant_segment_threads/full/E6_qdrant_segment_threads-full-9050d65f-bbf40d5c",
+    "pgvector": "/arf/scratch/endemir/rag_bench/results/E6_pg_reference/full/E6_pg_reference-full-9050d65f-5c85906b"
+  },
+  "workspace_root": "../artifacts/truba-experiments/E6/9050d65",
+  "artifact_tree": {
+    "file_count": 272,
+    "qdrant_kib": 227568,
+    "pgvector_kib": 34030,
+    "registry_kib": 134,
+    "sorted_file_sha256_manifest_sha256": "4804360d00adfbd12242fd528dd540b0d92b895edb2f7920cf38094f60eb6fee"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 54,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/e6_full_9050d65_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "control_cells": 18,
+    "independent_builds_per_cell": 3,
+    "issues": 0,
+    "tracked_json": "results/derived/e6_full_9050d65_analysis.json",
+    "tracked_summary": "results/derived/e6_full_9050d65_summary.md"
+  },
+  "registry": {
+    "qdrant": {
+      "completed_tasks": 48,
+      "attempts_per_task": 1,
+      "nodes": 10
+    },
+    "pgvector": {
+      "completed_tasks": 6,
+      "attempts_per_task": 1,
+      "nodes": 2
+    }
+  }
+}
