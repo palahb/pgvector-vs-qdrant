@@ -23,6 +23,17 @@
     "e1_scale_first100k": 2,
     "probe_6413800": 2
   },
+  "file_checksum_manifest": {
+    "path": "data-manifests/baseline_2026-11-14_files.sha256",
+    "file_count": 780,
+    "sha256": "cdf65b06c2066a07167d5c6d0b5caa8bce17280d95fd1c84852beae9aa0e4865"
+  },
+  "lossless_legacy_adapter_output": {
+    "workspace_path": "../artifacts/remote-archives/2026-11-14_baseline/adapted_results_v2.jsonl",
+    "record_count": 77,
+    "sha256": "61ebdbdb3bae7d83bbdf28f80fd72410a4ddb114891c5e0a596bb14d9c844d3b",
+    "provenance_status": "legacy_incomplete"
+  },
   "contents": [
     "results/",
     "pgvector-vs-qdrant/"

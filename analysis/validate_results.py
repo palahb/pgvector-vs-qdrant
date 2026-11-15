@@ -70,6 +70,7 @@ class Audit:
         self.experiments: Counter[str] = Counter()
         self.engines: Counter[str] = Counter()
         self.statuses: Counter[str] = Counter()
+        self.experiment_ids: dict[str, tuple[str, str]] = {}
 
     def issue(self, code: str, severity: str, message: str, path: Path) -> None:
         relative = self.relative(path)
@@ -107,6 +108,7 @@ class Audit:
                 path,
             )
 
+        result_sha = sha256_file(path)
         status = result.get("status")
         engine = result.get("engine")
         self.statuses[str(status)] += 1
@@ -116,6 +118,42 @@ class Audit:
             self.issue("non_ok_status", "error", "Result status is not 'ok'", path)
         if engine not in {"pg", "qdrant"}:
             self.issue("unknown_engine", "error", "Engine must be 'pg' or 'qdrant'", path)
+
+        schema_version = result.get("schema_version")
+        if schema_version is not None and (not isinstance(schema_version, int) or schema_version < 1):
+            self.issue("invalid_schema_version", "error", "schema_version must be a positive integer", path)
+        if isinstance(schema_version, int) and schema_version >= 2:
+            experiment_id = result.get("experiment_id")
+            config_id = result.get("config_id")
+            commit = result.get("code_commit")
+            legacy_incomplete = result.get("provenance_status") == "legacy_incomplete"
+            if not isinstance(experiment_id, str) or not experiment_id.strip():
+                self.issue("missing_experiment_id", "error", "Schema v2 requires experiment_id", path)
+            else:
+                prior = self.experiment_ids.get(experiment_id)
+                if prior and prior[0] != result_sha:
+                    self.issue(
+                        "conflicting_experiment_id",
+                        "error",
+                        f"experiment_id conflicts with {prior[1]}",
+                        path,
+                    )
+                else:
+                    self.experiment_ids[experiment_id] = (result_sha, relative)
+            if not isinstance(config_id, str) or not config_id.strip():
+                self.issue("missing_config_id_v2", "error", "Schema v2 requires config_id", path)
+            if legacy_incomplete:
+                self.issue(
+                    "legacy_incomplete_provenance",
+                    "warning",
+                    "Adapted legacy result contains explicit unknown provenance",
+                    path,
+                )
+            else:
+                if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+                    self.issue("invalid_code_commit", "error", "Schema v2 requires a full Git commit SHA", path)
+                if not isinstance(result.get("seed"), int):
+                    self.issue("invalid_seed", "error", "Schema v2 requires an integer seed", path)
 
         for key in ("n", "dim", "n_queries"):
             value = result.get(key)
@@ -198,7 +236,8 @@ class Audit:
         self.files.append(
             {
                 "path": relative,
-                "sha256": sha256_file(path),
+                "sha256": result_sha,
+                "experiment_id": result.get("experiment_id"),
                 "experiment": experiment,
                 "engine": engine,
                 "status": status,

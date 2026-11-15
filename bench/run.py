@@ -60,6 +60,8 @@ def parse():
     ap.add_argument("--qdrant-indexing-threshold-kb", type=int, default=None)
     ap.add_argument("--perf", action="store_true", help="perf stat the server during concurrency windows")
     ap.add_argument("--tag", default="", help="suffix for the result folder name")
+    ap.add_argument("--experiment-id", default=None,
+                    help="globally unique run ID; defaults to config/job/engine-derived ID")
     ap.add_argument("--work", default=None, help="node-local scratch; defaults to $TMPDIR or /tmp")
     ap.add_argument("--keep", action="store_true", help="keep the database files after the run")
     ap.add_argument("--out", required=True)
@@ -88,12 +90,17 @@ def main():
     warm = base[rng.choice(len(base), size=min(a.warm, len(base)), replace=False)]
     log(f"data: {base.shape} base, {queries.shape} queries ({dtag})")
 
-    config = {key: value for key, value in vars(a).items() if key not in {"out", "work", "keep"}}
+    config = {key: value for key, value in vars(a).items()
+              if key not in {"out", "work", "keep", "experiment_id"}}
+    config_id = stable_id(config)
+    experiment_id = a.experiment_id or f"{config_id}-{job}-{name}"
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     revision = git_state(repo)
     result = {
         "schema_version": 2,
-        "config_id": stable_id(config),
+        "provenance_status": "native",
+        "experiment_id": experiment_id,
+        "config_id": config_id,
         "seed": a.seed,
         "warm_seed": a.warm_seed,
         "code_commit": revision["commit"],
@@ -106,6 +113,8 @@ def main():
     image = os.environ.get("PG_SIF" if a.engine == "pg" else "QDRANT_SIF")
     result["image_sha256"] = sha256(image) if MODE == "apptainer" else None
     rpath = os.path.join(out_dir, "result.json")
+    if os.path.exists(rpath):
+        sys.exit(f"refusing to overwrite existing raw result: {rpath}")
     raw = {}
 
     srv = make_server(a.engine, work, server_cores, a)

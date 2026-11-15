@@ -74,6 +74,16 @@ The benchmark package can be syntax-checked without database services:
 python3 -m compileall -q bench
 ```
 
+Run the complete frozen-baseline audit with one command after the external archive has
+been restored at the workspace path recorded in its manifest:
+
+```bash
+make PYTHON_BIN=env/bin/python verify-baseline
+```
+
+This runs unit tests, syntax checks, the result validator, the lossless legacy adapter,
+paper source indexing, the M6 reconciliation and pixel/render figure reproduction.
+
 Full local execution requires compatible PostgreSQL/pgvector and Qdrant binaries. The
 supported paper environment is the version-pinned ARF setup documented in
 `bench/README.md` and the result manifests.

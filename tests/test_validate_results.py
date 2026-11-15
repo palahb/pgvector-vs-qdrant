@@ -17,6 +17,7 @@ from validate_results import validate  # noqa: E402
 def valid_result() -> dict:
     return {
         "schema_version": 1,
+        "experiment_id": "unit-pg-1",
         "code_commit": "a" * 40,
         "config_id": "unit",
         "seed": 42,
@@ -70,6 +71,23 @@ class ValidateResultsTests(unittest.TestCase):
         self.assertEqual(report["verdict"], "invalid")
         self.assertEqual(report["issues"]["missing_raw_npz"]["count"], 1)
         self.assertEqual(report["issues"]["missing_code_commit"]["severity"], "warning")
+
+    def test_schema_v2_duplicate_experiment_id_conflict_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            first = valid_result()
+            first["schema_version"] = 2
+            first["experiment_id"] = "same-id"
+            self.write_fixture(root, first)
+            second = dict(first)
+            second["n_queries"] = 3
+            run = root / "e0" / "other"
+            run.mkdir(parents=True)
+            (run / "result.json").write_text(json.dumps(second))
+            np.savez(run / "raw.npz", latency=np.array([1], dtype=np.int64))
+            report = validate(root)
+        self.assertEqual(report["verdict"], "invalid")
+        self.assertEqual(report["issues"]["conflicting_experiment_id"]["count"], 1)
 
 
 if __name__ == "__main__":

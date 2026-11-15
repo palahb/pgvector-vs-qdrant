@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "referee_item": "M6",
+  "paper_locations": [
+    "Table tab:hnsw (reviewer Table 5)",
+    "Figure fig:throughput (reviewer Figure 3)"
+  ],
+  "verdict": "resolved_methodological_mismatch_not_transcription_error",
+  "cause": [
+    "E1 includes ef=384 and selects it as the first swept point at or above Recall@10 0.95.",
+    "E2 omits ef=384; ef=256 remains below target, so it selects ef=512.",
+    "E2 therefore measures throughput at materially higher recall and search effort for both engines.",
+    "E1 pgvector and Qdrant came from different jobs/nodes/builds; E2 measured both in one job/node.",
+    "Throughput was not interpolated to exactly equal recall, unlike the engine-latency table."
+  ],
+  "measurements": {
+    "e1_pg": {
+      "source": "../artifacts/remote-archives/2026-11-14_baseline/extracted/results/e1_scale/n500000/pg/result.json",
+      "source_sha256": "2d426db70e1d3a15ba7cef1a7e5a4b05f299793877b50fbe78fe387f6f61cdc2",
+      "engine": "pg",
+      "slurm_job_id": "6415792",
+      "node": "hamsi125",
+      "measurement_time_utc": "2026-09-27T13:52:23Z",
+      "ef_grid": [
+        16,
+        32,
+        64,
+        96,
+        128,
+        192,
+        256,
+        384,
+        512,
+        768
+      ],
+      "matched_ef": 384,
+      "matched_recall": 0.95728,
+      "peak_qps": 1288.5,
+      "peak_clients": 8,
+      "server_cores_busy": 7.86,
+      "cpu_ms_per_query": 6.10012,
+      "build_total_s": 144.3
+    },
+    "e1_qdrant": {
+      "source": "../artifacts/remote-archives/2026-11-14_baseline/extracted/results/e1_scale/n500000/qdrant/result.json",
+      "source_sha256": "80a665397c4bbcca34ac68c703dc2514df40065f8614aa1bf413fee064894eb3",
+      "engine": "qdrant",
+      "slurm_job_id": "6414115",
+      "node": "hamsi33",
+      "measurement_time_utc": "2026-09-26T22:55:13Z",
+      "ef_grid": [
+        16,
+        32,
+        64,
+        96,
+        128,
+        192,
+        256,
+        384
+      ],
+      "matched_ef": 384,
+      "matched_recall": 0.95836,
+      "peak_qps": 1531.06,
+      "peak_clients": 16,
+      "server_cores_busy": 7.951,
+      "cpu_ms_per_query": 5.19313,
+      "build_total_s": 137.85
+    },
+    "e2_pg": {
+      "source": "../artifacts/remote-archives/2026-11-14_baseline/extracted/results/e2_hnsw/n500000_m16_efc64/pg/result.json",
+      "source_sha256": "4cb6862beac01df561c6fe3537444de4341cd8552e53ad0f37e1e3a65f0682e0",
+      "engine": "pg",
+      "slurm_job_id": "6416789",
+      "node": "hamsi111",
+      "measurement_time_utc": "2026-09-27T17:44:27Z",
+      "ef_grid": [
+        16,
+        32,
+        64,
+        128,
+        256,
+        512
+      ],
+      "matched_ef": 512,
+      "matched_recall": 0.96639,
+      "peak_qps": 1021.1,
+      "peak_clients": 8,
+      "server_cores_busy": 7.884,
+      "cpu_ms_per_query": 7.72109,
+      "build_total_s": 101.14
+    },
+    "e2_qdrant": {
+      "source": "../artifacts/remote-archives/2026-11-14_baseline/extracted/results/e2_hnsw/n500000_m16_efc64/qdrant/result.json",
+      "source_sha256": "fd9787c1ecb6bf5848a7af17975ca5997c7cdb2c85ccda7f5b4026c30c1e312e",
+      "engine": "qdrant",
+      "slurm_job_id": "6416789",
+      "node": "hamsi111",
+      "measurement_time_utc": "2026-09-27T17:52:28Z",
+      "ef_grid": [
+        16,
+        32,
+        64,
+        128,
+        256,
+        512
+      ],
+      "matched_ef": 512,
+      "matched_recall": 0.96718,
+      "peak_qps": 1241.46,
+      "peak_clients": 32,
+      "server_cores_busy": 7.958,
+      "cpu_ms_per_query": 6.41019,
+      "build_total_s": 143.32
+    }
+  },
+  "differences": {
+    "pg": {
+      "e2_vs_e1_qps_percent": -20.75,
+      "recall_delta": 0.00911,
+      "ef_delta": 128
+    },
+    "qdrant": {
+      "e2_vs_e1_qps_percent": -18.92,
+      "recall_delta": 0.00882,
+      "ef_delta": 128
+    }
+  },
+  "required_fix": [
+    "Do not compare the current E1 and E2 throughput cells as the same condition.",
+    "Use a fine common ef grid near the recall target and interpolate/model throughput at equal recall.",
+    "Repeat independent builds and report confidence intervals with job/node/config IDs."
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/palahb/pgvector-vs-qdrant/schemas/result-v2.schema.json",
+  "title": "pgvector-vs-qdrant benchmark result v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "config_id",
+    "seed",
+    "warm_seed",
+    "code_commit",
+    "code_dirty",
+    "command",
+    "engine",
+    "args",
+    "dataset",
+    "n",
+    "dim",
+    "n_queries",
+    "server_cores",
+    "client_cores",
+    "mode",
+    "host",
+    "image_sha256",
+    "build",
+    "server_info",
+    "runs",
+    "status"
+  ],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "provenance_status": { "enum": ["native", "legacy_incomplete"] },
+    "experiment_id": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "config_id": { "type": "string", "pattern": "^cfg-[0-9a-f]{16}$" },
+    "seed": { "type": ["integer", "null"] },
+    "warm_seed": { "type": ["integer", "null"] },
+    "code_commit": { "type": ["string", "null"] },
+    "code_dirty": { "type": ["boolean", "null"] },
+    "command": {
+      "type": ["array", "null"],
+      "items": { "type": "string" }
+    },
+    "engine": { "enum": ["pg", "qdrant"] },
+    "args": { "type": "object" },
+    "dataset": { "type": "string", "minLength": 1 },
+    "n": { "type": "integer", "minimum": 1 },
+    "dim": { "type": "integer", "minimum": 1 },
+    "n_queries": { "type": "integer", "minimum": 1 },
+    "server_cores": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 0 }
+    },
+    "client_cores": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 0 }
+    },
+    "mode": { "type": "string", "minLength": 1 },
+    "host": {
+      "type": "object",
+      "required": ["hostname", "time_utc", "slurm"],
+      "properties": {
+        "hostname": { "type": "string", "minLength": 1 },
+        "time_utc": { "type": "string", "minLength": 1 },
+        "slurm": {
+          "type": "object",
+          "required": ["SLURM_JOB_ID"],
+          "properties": {
+            "SLURM_JOB_ID": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "image_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "build": {
+      "type": "object",
+      "required": ["total_s"],
+      "properties": {
+        "total_s": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "server_info": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "version": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "runs": { "type": "array" },
+    "status": { "enum": ["running", "ok", "failed"] },
+    "error": { "type": "string" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "not": {
+          "properties": { "provenance_status": { "const": "legacy_incomplete" } },
+          "required": ["provenance_status"]
+        }
+      },
+      "then": {
+        "properties": {
+          "seed": { "type": "integer" },
+          "warm_seed": { "type": "integer" },
+          "code_commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "code_dirty": { "type": "boolean" },
+          "command": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "engine": { "const": "pg" } } },
+      "then": {
+        "properties": {
+          "server_info": {
+            "required": ["version", "pgvector"]
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "failed" } } },
+      "then": { "required": ["error"] }
+    }
+  ],
+  "additionalProperties": true
+}

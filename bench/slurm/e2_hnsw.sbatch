@@ -12,15 +12,20 @@
 #SBATCH -t 12:00:00
 #SBATCH --array=0-7
 #SBATCH -o logs/%x_%A_%a.out
-set -uo pipefail
+set -euo pipefail
 source "$SLURM_SUBMIT_DIR/env.sh"
 preflight
 CONFIGS=("16 64" "16 128" "16 256" "32 64" "32 128" "32 256" "64 128" "64 256")
 read -r M EFC <<< "${CONFIGS[$SLURM_ARRAY_TASK_ID]}"
 N=${N:-500000}
-OUT=$BENCH_RESULTS/e2_hnsw/n${N}_m${M}_efc${EFC}
+RUN_ID=${SLURM_ARRAY_JOB_ID:-$SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID:-0}
+RUN_ROOT=$BENCH_RESULTS/e2_hnsw/run_$RUN_ID
+OUT=$RUN_ROOT/n${N}_m${M}_efc${EFC}
 for e in pg qdrant; do
     bench --engine "$e" --n "$N" --m "$M" --efc "$EFC" --ef 16,32,64,128,256,512 \
-          --clients 1,8,32 --protocols grpc_raw,grpc --out "$OUT" || echo "$e FAILED"
+          --clients 1,8,32 --protocols grpc_raw,grpc --out "$OUT" \
+          --experiment-id "e2-n${N}-m${M}-efc${EFC}-j${RUN_ID}-${e}"
 done
 "$VENV/bin/python" "$BENCH_CODE/summarize.py" "$OUT"
+"$VENV/bin/python" "$SLURM_SUBMIT_DIR/../analysis/validate_results.py" \
+    "$RUN_ROOT" --strict-warnings --output "$RUN_ROOT/audit.json"

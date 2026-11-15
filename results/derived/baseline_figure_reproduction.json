@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "verdict": "reproduced",
+  "results_root": "../artifacts/remote-archives/2026-11-14_baseline/extracted/results",
+  "tracked_figure_root": "paper/figures",
+  "generator": "bench/make_figures.py",
+  "generator_sha256": "b3359bd5c4f31cf0f7e380934e8ea05050ed9b21c5ed84f27044529956359ee4",
+  "comparison": "PNG RGBA pixels and PDF renders at 150 DPI; byte hashes retained for provenance",
+  "figures": {
+    "build_time": {
+      "tracked_png_sha256": "a65383ed7c9b2d12b10d4c935ca62f3277e46e17cb4a75a5d8f71d91a5be0f13",
+      "generated_png_sha256": "ed9350d7528bd25701b6176691b5af81e25dbc78047040e79780949657862199",
+      "png_pixels_equal": true,
+      "tracked_pdf_sha256": "ad01f71f89b9b3d43084d29a04ee5ccddb54084190d6568d47a9e9b6bd8d5c9b",
+      "generated_pdf_sha256": "8b093d23b5edfb1d4f16511fc8930fdc820bbf2cf43ad20c96da152d0f191115",
+      "pdf_bytes_equal": false,
+      "pdf_render_equal": true
+    },
+    "recall_latency": {
+      "tracked_png_sha256": "eaffa2f2a25948104b126b2b81ae30d33465decf0777b5d219391c03d315689e",
+      "generated_png_sha256": "25f4d851b4e0256dac536c400af8d3b44811e984ceb3c1bfe11d08a6ac881cf4",
+      "png_pixels_equal": true,
+      "tracked_pdf_sha256": "68f10e286eba34ae95bc7562a51f8eb08bc968e51335ec18fa2144a247e18b92",
+      "generated_pdf_sha256": "bef05eb914fae08b1fb86a902c2fa944842c18e5414ed8a06f7244da404ca38f",
+      "pdf_bytes_equal": false,
+      "pdf_render_equal": true
+    },
+    "throughput": {
+      "tracked_png_sha256": "1829e428ed10ebb49e09ba27dd1bc55cf730f7af5b6544297e9167db511d5ad8",
+      "generated_png_sha256": "4bf454c4aa5cba3cae113594aa66fd14073e1d3146d0a073669243c89d3c480a",
+      "png_pixels_equal": true,
+      "tracked_pdf_sha256": "06c013177a2d552a68bc7752beefa12b5e082fdb0473dcbeb73439d86048cf0f",
+      "generated_pdf_sha256": "002e0e95ec617253e3b91b98be8abddef284698c8412ecbceeb19f6c8eea228d",
+      "pdf_bytes_equal": false,
+      "pdf_render_equal": true
+    },
+    "dimensionality": {
+      "tracked_png_sha256": "748a970783c96c1b1faefa36af9fad2acccbd9ed4de359fcbdedf8f5ce675273",
+      "generated_png_sha256": "d8ceb8a015b6fe331bd59d9d7ffa48493c4686d87132bc78c2cef21ee0520c8c",
+      "png_pixels_equal": true,
+      "tracked_pdf_sha256": "20f8ac458ee5dfe57c242f19926a46b6577f9826791460e529c619ce16dfd0dc",
+      "generated_pdf_sha256": "720335673a540264cf55b5096893612735ea196a5cdf26ff1db00cf001680468",
+      "pdf_bytes_equal": false,
+      "pdf_render_equal": true
+    }
+  }
+}

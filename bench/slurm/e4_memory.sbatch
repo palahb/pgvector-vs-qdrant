@@ -20,20 +20,26 @@
 #SBATCH -t 24:00:00
 #SBATCH --array=0-5
 #SBATCH -o logs/%x_%A_%a.out
-set -uo pipefail
+set -euo pipefail
 source "$SLURM_SUBMIT_DIR/env.sh"
 preflight
 N=${N:-1000000}
-OUT=$BENCH_RESULTS/e4_memory/n$N
+RUN_ID=${SLURM_ARRAY_JOB_ID:-$SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID:-0}
+RUN_ROOT=$BENCH_RESULTS/e4_memory/run_$RUN_ID
+OUT=$RUN_ROOT/n$N
 LIMITS=none,16G,8G,4G,2G
 PRESSURE="--ef 64,128 --reps 1 --warm 100 --nq 300 --clients 1,8,32 --conc-all-limits --conc-recall 0 --conc-duration 30"
 case $SLURM_ARRAY_TASK_ID in
     0|1|2|3)
         SB=(128MB 1GB 4GB 32GB)
         bench --engine pg --n "$N" --pg-shared-buffers "${SB[$SLURM_ARRAY_TASK_ID]}" \
-              --tag "sb${SB[$SLURM_ARRAY_TASK_ID]}" --clients 1,8,32 --out "$OUT" ;;
+              --tag "sb${SB[$SLURM_ARRAY_TASK_ID]}" --clients 1,8,32 --out "$OUT" \
+              --experiment-id "e4-n${N}-sb${SB[$SLURM_ARRAY_TASK_ID]}-j${RUN_ID}-pg" ;;
     4)  bench --engine pg --n "$N" --pg-shared-buffers 1GB --mem-limits "$LIMITS" $PRESSURE \
-              --tag capped --out "$OUT" ;;
+              --tag capped --out "$OUT" --experiment-id "e4-n${N}-capped-j${RUN_ID}-pg" ;;
     5)  bench --engine qdrant --n "$N" --qdrant-on-disk --protocols grpc_raw --mem-limits "$LIMITS" \
-              $PRESSURE --tag capped_ondisk --out "$OUT" ;;
+              $PRESSURE --tag capped_ondisk --out "$OUT" \
+              --experiment-id "e4-n${N}-capped-j${RUN_ID}-qdrant" ;;
 esac
+"$VENV/bin/python" "$SLURM_SUBMIT_DIR/../analysis/validate_results.py" \
+    "$RUN_ROOT" --strict-warnings --output "$RUN_ROOT/audit.json"

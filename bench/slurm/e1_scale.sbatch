@@ -12,13 +12,17 @@
 #SBATCH --mem=170G
 #SBATCH -t 12:00:00
 #SBATCH -o logs/%x_%j.out
-set -uo pipefail
+set -euo pipefail
 source "$SLURM_SUBMIT_DIR/env.sh"
 preflight
 N=${1:?usage: sbatch slurm/e1_scale.sbatch <n>}
-OUT=$BENCH_RESULTS/e1_scale/n$N
+RUN_ROOT=$BENCH_RESULTS/e1_scale/run_$SLURM_JOB_ID
+OUT=$RUN_ROOT/n$N
 # ENGINES="pg" reruns one engine only, e.g. sbatch --export=ALL,ENGINES=pg ...
 for e in ${ENGINES:-pg qdrant}; do
-    bench --engine "$e" --n "$N" --perf --out "$OUT" || echo "$e FAILED"
+    bench --engine "$e" --n "$N" --perf --out "$OUT" \
+          --experiment-id "e1-n${N}-j${SLURM_JOB_ID}-${e}"
 done
 "$VENV/bin/python" "$BENCH_CODE/summarize.py" "$OUT"
+"$VENV/bin/python" "$SLURM_SUBMIT_DIR/../analysis/validate_results.py" \
+    "$RUN_ROOT" --strict-warnings --output "$RUN_ROOT/audit.json"

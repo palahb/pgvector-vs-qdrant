@@ -12,15 +12,21 @@
 #SBATCH --mem=170G
 #SBATCH -t 12:00:00
 #SBATCH -o logs/%x_%j.out
-set -uo pipefail
+set -euo pipefail
 source "$SLURM_SUBMIT_DIR/env.sh"
 preflight
 N=${N:-100000}
+RUN_ROOT=$BENCH_RESULTS/e3_dims/run_$SLURM_JOB_ID
 for D in 128 256 384 512 640 768 896 1024; do
-    OUT=$BENCH_RESULTS/e3_dims/n${N}_d$D
-    COMMON="--n $N --dim $D --ef 16,32,64,128 --clients 1,8,32 --protocols grpc_raw,grpc --out $OUT"
-    bench --engine pg $COMMON || echo "pg d=$D FAILED"
-    bench --engine qdrant $COMMON --tag default || echo "qdrant default d=$D FAILED"
-    bench --engine qdrant $COMMON --tag forced --qdrant-indexing-threshold-kb 1 || echo "qdrant forced d=$D FAILED"
+    OUT=$RUN_ROOT/n${N}_d$D
+    COMMON=(--n "$N" --dim "$D" --ef 16,32,64,128 --clients 1,8,32 \
+            --protocols grpc_raw,grpc --out "$OUT")
+    bench --engine pg "${COMMON[@]}" --experiment-id "e3-n${N}-d${D}-j${SLURM_JOB_ID}-pg"
+    bench --engine qdrant "${COMMON[@]}" --tag default \
+          --experiment-id "e3-n${N}-d${D}-j${SLURM_JOB_ID}-qdrant-default"
+    bench --engine qdrant "${COMMON[@]}" --tag forced --qdrant-indexing-threshold-kb 1 \
+          --experiment-id "e3-n${N}-d${D}-j${SLURM_JOB_ID}-qdrant-forced"
 done
-"$VENV/bin/python" "$BENCH_CODE/summarize.py" "$BENCH_RESULTS/e3_dims"
+"$VENV/bin/python" "$BENCH_CODE/summarize.py" "$RUN_ROOT"
+"$VENV/bin/python" "$SLURM_SUBMIT_DIR/../analysis/validate_results.py" \
+    "$RUN_ROOT" --strict-warnings --output "$RUN_ROOT/audit.json"

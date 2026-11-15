@@ -13,10 +13,11 @@
 #SBATCH --mem=170G
 #SBATCH -t 04:00:00
 #SBATCH -o logs/%x_%j.out
-set -uo pipefail
+set -euo pipefail
 source "$SLURM_SUBMIT_DIR/env.sh"
 preflight
-OUT=$BENCH_RESULTS/e5_builds
+RUN_ROOT=$BENCH_RESULTS/e5_builds/run_$SLURM_JOB_ID
+OUT=$RUN_ROOT
 mkdir -p "$OUT"
 
 echo "== disk probe (node-local scratch, O_DIRECT)"
@@ -26,7 +27,10 @@ for rep in 1 2 3; do
     for n in 100000 500000 1000000; do
         for e in pg qdrant; do
             bench --engine "$e" --n "$n" --ef 64 --reps 1 --warm 100 --clients "" \
-                  --protocols grpc_raw --tag "r$rep" --out "$OUT/n$n" || echo "$e n=$n rep=$rep FAILED"
+                  --protocols grpc_raw --tag "r$rep" --out "$OUT/n$n" \
+                  --experiment-id "e5-n${n}-r${rep}-j${SLURM_JOB_ID}-${e}"
         done
     done
 done
+"$VENV/bin/python" "$SLURM_SUBMIT_DIR/../analysis/validate_results.py" \
+    "$RUN_ROOT" --strict-warnings --output "$RUN_ROOT/audit.json"
