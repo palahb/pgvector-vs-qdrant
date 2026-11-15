@@ -4,11 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import platform
 import subprocess
+import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -33,6 +36,12 @@ def parse_json_lines(text: str) -> list[dict]:
     return [json.loads(line) for line in text.splitlines() if line.strip()]
 
 
+def git_state(repo: Path) -> tuple[str, bool]:
+    commit = command_output(["git", "-C", str(repo), "rev-parse", "HEAD"]).strip()
+    dirty = bool(command_output(["git", "-C", str(repo), "status", "--porcelain"]).strip())
+    return commit, dirty
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--vectors", type=int, default=16384)
@@ -40,10 +49,19 @@ def main() -> int:
     parser.add_argument("--passes", type=int, default=12)
     parser.add_argument("--core", type=int, default=0)
     parser.add_argument("--compiler", default=os.environ.get("CC", "cc"))
+    parser.add_argument("--expected-commit")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if min(args.vectors, args.dim, args.passes) <= 0 or args.core < 0:
         parser.error("vectors, dim and passes must be positive; core must be non-negative")
+
+    if args.output.exists():
+        raise SystemExit(f"refusing to overwrite raw probe result: {args.output}")
+    commit, dirty = git_state(ROOT.parent)
+    if args.expected_commit and commit != args.expected_commit:
+        raise SystemExit(f"commit mismatch: expected {args.expected_commit}, found {commit}")
+    if args.expected_commit and dirty:
+        raise SystemExit("tracked worktree is dirty; refusing provenance-sensitive probe")
 
     with tempfile.TemporaryDirectory(prefix="distance-kernel-") as tmp:
         binary = Path(tmp) / "distance_kernel"
@@ -62,12 +80,20 @@ def main() -> int:
     checksum_relative_spread = (max(checksums) - min(checksums)) / scale if checksums else None
     report = {
         "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "probe": (
             "dot-product stage used by cosine distance after vector normalization; generated values are not "
             "normalized because the arithmetic path is identical; excludes graph traversal and database overhead"
         ),
         "host": platform.node(),
         "machine": platform.machine(),
+        "code_commit": commit,
+        "code_dirty": dirty,
+        "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+        "slurm_array_job_id": os.environ.get("SLURM_ARRAY_JOB_ID"),
+        "slurm_array_task_id": os.environ.get("SLURM_ARRAY_TASK_ID"),
+        "command": sys.argv,
+        "source_sha256": hashlib.sha256((ROOT / "distance_kernel.c").read_bytes()).hexdigest(),
         "compiler": command_output([args.compiler, "--version"]).splitlines()[0],
         "compile_command": compile_command[:-1] + ["OUTPUT"],
         "cpu_flags": cpu_flags(),
