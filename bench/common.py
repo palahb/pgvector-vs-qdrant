@@ -216,6 +216,34 @@ def sha256(path, limit_mb=2048):
     return h.hexdigest()
 
 
+def stable_id(obj, prefix="cfg"):
+    """Short deterministic ID for a JSON-serializable experiment configuration."""
+    payload = json.dumps(obj, sort_keys=True, separators=(",", ":"), default=str).encode()
+    return f"{prefix}-{hashlib.sha256(payload).hexdigest()[:16]}"
+
+
+def git_state(path):
+    """Return the checked-out commit and dirty state without failing outside Git."""
+    try:
+        commit = subprocess.run(
+            ["git", "-C", path, "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        ).stdout.strip()
+        dirty = bool(subprocess.run(
+            ["git", "-C", path, "status", "--porcelain", "--untracked-files=no"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        ).stdout.strip())
+        return {"commit": commit, "dirty": dirty}
+    except (OSError, subprocess.SubprocessError):
+        return {"commit": None, "dirty": None}
+
+
 def host_info():
     cpu_model = None
     for line in (_read("/proc/cpuinfo") or "").splitlines():

@@ -1,5 +1,5 @@
 """Paper figures from result.json files. Usage:
-  python make_figures.py $BENCH_RESULTS paper/figures
+  python make_figures.py $BENCH_RESULTS ../paper/figures
 Reads e1_scale/ (scale figures), e5_builds/ (build figure, falls back to e1) and e3_dims/ under the results root.
 Color is the system (pgvector blue, Qdrant orange), line style is Qdrant's client path.
 Rows whose recorded plan did not use the ANN index are left out of the curves.

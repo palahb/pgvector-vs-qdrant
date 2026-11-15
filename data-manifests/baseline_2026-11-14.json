@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "baseline_2026-11-14",
+  "created_at": "2026-11-14T22:39:00+03:00",
+  "archive": {
+    "filename": "e1-e5_results_and_repo.tar.gz",
+    "size_bytes": 524378398,
+    "sha256": "6398f683d5d164decb1580185e76d8bb884f50bc42ca04c93de869a65b361265",
+    "entry_count": 1039,
+    "gzip_verified": true,
+    "remote_path": "/arf/home/endemir/archives/pgvector-vs-qdrant/2026-11-14_baseline/e1-e5_results_and_repo.tar.gz",
+    "workspace_path": "../artifacts/remote-archives/2026-11-14_baseline/e1-e5_results_and_repo.tar.gz"
+  },
+  "active_result_counts": {
+    "e1_scale": 9,
+    "e2_hnsw": 16,
+    "e3_dims": 24,
+    "e4_memory": 6,
+    "e5_builds": 18,
+    "total": 73
+  },
+  "supplemental_result_counts": {
+    "e1_scale_first100k": 2,
+    "probe_6413800": 2
+  },
+  "contents": [
+    "results/",
+    "pgvector-vs-qdrant/"
+  ],
+  "storage_policy": {
+    "git_tracked": false,
+    "immutable": true,
+    "reason": "Raw NPZ files, logs, repository metadata and generated outputs are too large for ordinary Git history. This manifest is the tracked identity record."
+  }
+}

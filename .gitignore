@@ -12,3 +12,14 @@ __pycache__/
 .DS_Store
 
 .ipynb_checkpoints/
+
+# Large or machine-local experiment artifacts. Track manifests and validators instead.
+results/raw/**
+!results/raw/.gitkeep
+*.tar.gz
+*.sif
+
+# Local test and analysis caches.
+.pytest_cache/
+.coverage
+htmlcov/

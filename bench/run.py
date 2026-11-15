@@ -13,7 +13,7 @@ import traceback
 import numpy as np
 
 from common import (evict_page_cache, ground_truth, host_info, load_vectors, log, pick_cores,
-                    resident_bytes, save_json, sha256)
+                    resident_bytes, save_json, sha256, stable_id, git_state)
 from engines import MODE, make_server
 from workload import concurrency_run, latency_sweep
 
@@ -28,6 +28,8 @@ def parse():
     ap.add_argument("--n", type=int, default=100_000)
     ap.add_argument("--dim", type=int, default=1024)
     ap.add_argument("--synthetic", action="store_true", help="random clustered vectors instead of MS MARCO (smoke tests)")
+    ap.add_argument("--seed", type=int, default=42, help="seed for synthetic data generation")
+    ap.add_argument("--warm-seed", type=int, default=7, help="seed for warm-up vector sampling")
     ap.add_argument("--k", type=int, default=10)
     ap.add_argument("--m", type=int, default=16)
     ap.add_argument("--efc", type=int, default=64)
@@ -78,15 +80,25 @@ def main():
     os.makedirs(work, exist_ok=True)
 
     log(f"{name}: server cores {server_cores}, client cores {client_cores}, work {work}")
-    base, queries, dtag = load_vectors(a.n, a.dim, a.synthetic)
+    base, queries, dtag = load_vectors(a.n, a.dim, a.synthetic, seed=a.seed)
     gt = ground_truth(base, queries, a.k, dtag)
     if a.nq:
         queries, gt = queries[:a.nq], gt[:a.nq]
-    rng = np.random.default_rng(7)
+    rng = np.random.default_rng(a.warm_seed)
     warm = base[rng.choice(len(base), size=min(a.warm, len(base)), replace=False)]
     log(f"data: {base.shape} base, {queries.shape} queries ({dtag})")
 
+    config = {key: value for key, value in vars(a).items() if key not in {"out", "work", "keep"}}
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    revision = git_state(repo)
     result = {
+        "schema_version": 2,
+        "config_id": stable_id(config),
+        "seed": a.seed,
+        "warm_seed": a.warm_seed,
+        "code_commit": revision["commit"],
+        "code_dirty": revision["dirty"],
+        "command": sys.argv,
         "engine": a.engine, "args": vars(a), "dataset": dtag, "n": len(base), "dim": base.shape[1],
         "n_queries": len(queries), "server_cores": server_cores, "client_cores": client_cores,
         "mode": MODE, "host": host_info(), "runs": [], "status": "running",
