@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-15T04:49:59.204182+00:00",
+  "root": "../artifacts/truba-smoke/6984013",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "pg": 1,
+      "qdrant": 1
+    },
+    "engines": {
+      "pg": 1,
+      "qdrant": 1
+    },
+    "statuses": {
+      "ok": 2
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "pg/result.json",
+      "sha256": "1d82eeae0bec33b0f62d056819ccdbb9e235a45c2a84179295853caf92331c57",
+      "experiment_id": "cfg-da2dabc3e7e7a44e-6984013-pg",
+      "experiment": "pg",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6984013",
+      "raw_npz_size_bytes": 232738,
+      "raw_array_count": 6
+    },
+    {
+      "path": "qdrant/result.json",
+      "sha256": "63127a7727c77fd04035a99e0bd734e2a23a4f4e9fd1cc16dbeacbe75ef0e4d2",
+      "experiment_id": "cfg-7c0ddfcbc9b81b35-6984013-qdrant",
+      "experiment": "qdrant",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6984013",
+      "raw_npz_size_bytes": 146416,
+      "raw_array_count": 6
+    }
+  ]
+}

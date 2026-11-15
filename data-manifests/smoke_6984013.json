@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6984013",
+  "purpose": "Post-Phase-4 validation of the gated TRUBA orchestration commit",
+  "slurm": {
+    "job_id": "6984013",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:38",
+    "node": "hamsi101"
+  },
+  "code_commit": "06e771e27806baa7f309510b1b55d167896a06cd",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/06e771e27806_6984013",
+  "workspace_path": "../artifacts/truba-smoke/6984013",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6984013_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "1d82eeae0bec33b0f62d056819ccdbb9e235a45c2a84179295853caf92331c57",
+    "pg/raw.npz": "a7a5e9024521b355c1dc582956f5ab70e3df259b06e99a6115ff372dddcb1fb7",
+    "qdrant/result.json": "63127a7727c77fd04035a99e0bd734e2a23a4f4e9fd1cc16dbeacbe75ef0e4d2",
+    "qdrant/raw.npz": "875872ad865ded7972d59616b4ef7d4afae17e248eb36cbe406ca7127d670626"
+  }
+}
