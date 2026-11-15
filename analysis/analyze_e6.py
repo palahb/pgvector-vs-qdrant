@@ -47,6 +47,7 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
     issues: list[dict[str, Any]] = []
     observations: list[dict[str, Any]] = []
     matched: dict[tuple[Any, ...], dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+    concurrency_matched: dict[tuple[Any, ...], dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
     control_cells: dict[tuple[Any, ...], set[str]] = defaultdict(set)
 
     for result in results:
@@ -72,7 +73,7 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
         cell = (engine, result["n"], segments, threads)
         control_cells[cell].add(tag)
 
-        latency, _concurrency = run_rows(result)
+        latency, concurrency = run_rows(result)
         primary = "pg" if engine == "pg" else "grpc_raw"
         latency = [row for row in latency if row.get("proto") == primary]
         for target in targets:
@@ -93,12 +94,38 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
                 if isinstance(value, (int, float)):
                     matched[key][metric].append(float(value))
 
+        for run in result.get("runs", []):
+            if run.get("mem_limit") != "none" or run.get("conc_matched_ef") is None:
+                continue
+            matched_ef = run["conc_matched_ef"]
+            for row in run.get("concurrency", []):
+                if row.get("proto") != primary or row.get("ef") != matched_ef:
+                    continue
+                key = (*cell, args.get("conc_recall", 0.95), row["clients"])
+                for metric in (
+                    "ef", "recall_at_k", "throughput_qps", "mean_ms", "p99_ms",
+                    "server_cpu_ms_per_query", "client_cpu_ms_per_query",
+                    "server_cores_busy", "client_cores_busy",
+                ):
+                    value = row.get(metric)
+                    if isinstance(value, (int, float)):
+                        concurrency_matched[key][metric].append(float(value))
+
     aggregates = []
     for key, metrics in sorted(matched.items(), key=lambda item: tuple(map(str, item[0]))):
         engine, n, segments, threads, target = key
         aggregates.append({
             "engine": engine, "n": n, "segments": segments, "search_threads": threads,
             "recall_target": target,
+            "metrics": {name: interval(values) for name, values in sorted(metrics.items())},
+        })
+
+    concurrency_aggregates = []
+    for key, metrics in sorted(concurrency_matched.items(), key=lambda item: tuple(map(str, item[0]))):
+        engine, n, segments, threads, target, clients = key
+        concurrency_aggregates.append({
+            "engine": engine, "n": n, "segments": segments, "search_threads": threads,
+            "recall_target": target, "clients": clients,
             "metrics": {name: interval(values) for name, values in sorted(metrics.items())},
         })
 
@@ -120,6 +147,7 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
         "result_count": len(results),
         "control_cells": cells,
         "matched_recall_aggregates": aggregates,
+        "matched_concurrency_aggregates": concurrency_aggregates,
         "observations": observations,
         "issues": issues,
     }
