@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6984022",
+  "purpose": "E6 segment/search-thread and CPU-efficiency control validation",
+  "slurm": {
+    "job_id": "6984022",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:36",
+    "node": "hamsi51"
+  },
+  "code_commit": "14b97f4c00d6a37b96b16eea708d38efbb2b48b4",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/14b97f4c00d6_6984022",
+  "workspace_path": "../artifacts/truba-smoke/6984022",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6984022_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "04cb5c3d7ad0538f99d9064bc64fe69d11d9f502be3176ef7ad218f246612e90",
+    "pg/raw.npz": "1912924bcce32917128bdeee96954eed2196e6e5c0aa335c2f82337b97ecd7e3",
+    "qdrant/result.json": "3ca2dbc270e49df01ef8d8530740a6b43fcf0c15f85f669c71ee7920910bf52f",
+    "qdrant/raw.npz": "5d99d2eb2ca87fc9b649f2c52f9ba571c84751639d73f36dd386ab4e8083c05d"
+  }
+}
