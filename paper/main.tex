@@ -198,10 +198,15 @@ segments of a collection in parallel.
 \subsection{Prior Empirical Work}
 
 Zhang et al.~\cite{zhang2024} ask whether relational systems have fundamental
-limitations for vector search, using PostgreSQL with pgvector as a case study. They
-conclude that most of the gap to specialized systems comes from implementation choices
-and not from the relational architecture itself. \todo{Re-read~\cite{zhang2024} and state
-its specific bottleneck findings precisely.} Pan et al.~\cite{pan2024survey} survey VDBMS
+limitations for vector search. Their case study compares PASE, a PostgreSQL-based
+vector extension, with Faiss; pgvector is not the system they analyze. They identify
+seven root causes of the gap, among them the cost of going through the buffer manager
+and page-based indirection when all data is in memory (RC\#2), limited intra-query
+parallelism (RC\#3), and a page-oriented layout that wastes space for HNSW
+(RC\#4). They conclude that the gap is due to implementation issues and that there is no
+fundamental limitation in relational databases. We test whether the first three causes
+carry over to pgvector, a different and more widely used extension, and we compare it
+with a specialized system under a database-level protocol. Pan et al.~\cite{pan2024survey} survey VDBMS
 designs and treat the recall--latency tradeoff as the central issue. Aumüller et
 al.~\cite{aumuller2020} define the usual methodology for comparing ANN algorithms, with
 recall--throughput curves and exact ground truth. We follow the same methodology and
@@ -847,11 +852,10 @@ vol.~42, no.~4, pp.~824--836, 2020.
 Y.~Zhang, S.~Liu, and J.~Wang, ``Are there fundamental limitations in supporting
 vector data management in relational databases? A case study of PostgreSQL,'' in
 \textit{Proc.\ 40th IEEE International Conference on Data Engineering (ICDE)}, 2024.
-\todo{verify author list}
 
 \bibitem{pan2024survey}
 J.~J. Pan, J.~Wang, and G.~Li, ``Survey of vector database management systems,''
-\textit{The VLDB Journal}, vol.~33, pp.~1591--1615, 2024. \todo{verify pages}
+\textit{The VLDB Journal}, vol.~33, no.~5, pp.~1591--1615, 2024.
 
 \bibitem{aumuller2020}
 M.~Aumüller, E.~Bernhardsson, and A.~Faithfull, ``ANN-Benchmarks: A benchmarking tool
