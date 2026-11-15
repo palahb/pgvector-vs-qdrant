@@ -142,6 +142,9 @@ This paper makes the following contributions.
     size of each one's effect: the query set, asynchronous index construction,
     indexing thresholds, build memory and parallelism, buffer pool size, the client
     stack and protocol, and client-side saturation (Section~\ref{sec:confounders}).
+  \item A separation of latency from CPU cost per query at matched recall, using
+    controlled Qdrant segment counts and search-thread limits, which shows how much of
+    the latency gap comes from intra-query parallelism (Section~\ref{sec:cpu}).
   \item A concurrency analysis using closed-loop multi-process clients, per-query engine
     time, server CPU accounting and PostgreSQL wait-event sampling, which shows what
     limits each system's throughput.
