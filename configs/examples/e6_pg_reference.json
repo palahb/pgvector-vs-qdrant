@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E6_pg_reference",
+  "code_commit": "AUTO",
+  "registry_root": "$BENCH_ROOT/orchestration",
+  "requires_smoke": true,
+  "max_retries": 2,
+  "resources": {
+    "partition": "hamsi",
+    "cpus": 56,
+    "memory": "170G",
+    "time": "08:00:00",
+    "exclude": ["hamsi20", "hamsi65"]
+  },
+  "storage": {"min_free_gb": 200, "min_inode_free_percent": 10},
+  "base_args": {
+    "dim": 1024,
+    "seed": 42,
+    "warm_seed": 7,
+    "k": 10,
+    "m": 16,
+    "efc": 64,
+    "ef": [32, 64, 96, 128, 192, 256, 384, 512],
+    "reps": 3,
+    "warm": 500,
+    "clients": [1, 4, 8, 16, 32],
+    "conc_ef": 64,
+    "conc_recall": 0.95,
+    "conc_duration": 30,
+    "conc_warmup": 5,
+    "mem_limits": "none",
+    "pg_shared_buffers": "32GB",
+    "pg_effective_cache": "64GB",
+    "pg_maintenance_mem": "16GB",
+    "pg_planner": "force-index"
+  },
+  "stages": {
+    "pilot": {
+      "matrix": {"n": [100000], "tag": ["rep1", "rep2", "rep3"]},
+      "engines": ["pg"],
+      "base_args": {"reps": 1, "conc_duration": 5, "conc_warmup": 2}
+    },
+    "full": {
+      "matrix": {"n": [500000, 1000000], "tag": ["rep1", "rep2", "rep3"]},
+      "engines": ["pg"]
+    }
+  }
+}

@@ -58,6 +58,14 @@ def parse():
                          "which falls back to an exact parallel scan for some ef values (TOAST costing)")
     ap.add_argument("--qdrant-on-disk", action="store_true", help="mmap vectors and HNSW (needed for memory limits)")
     ap.add_argument("--qdrant-indexing-threshold-kb", type=int, default=None)
+    ap.add_argument("--qdrant-segments", type=int, default=0,
+                    help="target optimized segment count; 0 keeps Qdrant automatic selection")
+    ap.add_argument("--qdrant-search-threads", type=int, default=0,
+                    help="Qdrant search pool size; 0 keeps automatic selection")
+    ap.add_argument("--qdrant-require-indexed", action="store_true",
+                    help="fail if the final collection does not index every vector")
+    ap.add_argument("--qdrant-control-grace-s", type=float, default=60,
+                    help="maximum stable-green wait for requested segment/index controls")
     ap.add_argument("--perf", action="store_true", help="perf stat the server during concurrency windows")
     ap.add_argument("--tag", default="", help="suffix for the result folder name")
     ap.add_argument("--experiment-id", default=None,

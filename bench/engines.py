@@ -300,7 +300,7 @@ class Qdrant(Server):
         os.makedirs(os.path.join(self.work, "snapshots"))
 
     def _env(self):
-        return {
+        env = {
             "QDRANT__STORAGE__STORAGE_PATH": self.storage,
             "QDRANT__STORAGE__SNAPSHOTS_PATH": os.path.join(self.work, "snapshots"),
             "QDRANT__SERVICE__HOST": "127.0.0.1",
@@ -309,6 +309,11 @@ class Qdrant(Server):
             "QDRANT__TELEMETRY_DISABLED": "true",
             "QDRANT__LOG_LEVEL": "INFO",
         }
+        if self.args.qdrant_search_threads:
+            env["QDRANT__STORAGE__PERFORMANCE__MAX_SEARCH_THREADS"] = str(
+                self.args.qdrant_search_threads
+            )
+        return env
 
     def start(self, mem_limit=None):
         if MODE == "apptainer":
@@ -361,9 +366,12 @@ class Qdrant(Server):
         c = self.client("grpc")
         if c.collection_exists(COLL):
             c.delete_collection(COLL)
-        opt = None
+        optimizer_values = {}
         if a.qdrant_indexing_threshold_kb is not None:
-            opt = qm.OptimizersConfigDiff(indexing_threshold=a.qdrant_indexing_threshold_kb)
+            optimizer_values["indexing_threshold"] = a.qdrant_indexing_threshold_kb
+        if a.qdrant_segments:
+            optimizer_values["default_segment_number"] = a.qdrant_segments
+        opt = qm.OptimizersConfigDiff(**optimizer_values) if optimizer_values else None
         c.create_collection(
             COLL,
             vectors_config=qm.VectorParams(size=dim, distance=qm.Distance.COSINE, on_disk=a.qdrant_on_disk),
@@ -380,7 +388,7 @@ class Qdrant(Server):
         # Upsert returns before the HNSW graph exists. Index build time is the time until the
         # collection is green and stays green; the old harness never waited for this.
         t1 = time.perf_counter()
-        greens, trace, last = 0, [], None
+        greens, trace, last, unresolved_since = 0, [], None, None
         while greens < 3:
             st = self.collection_state(c)
             if st != last:
@@ -388,17 +396,45 @@ class Qdrant(Server):
                 last = st
             if st["status"] == "grey":
                 c.update_collection(COLL, optimizers_config=qm.OptimizersConfigDiff())
-            greens = greens + 1 if st["status"] == "green" else 0
+            controls_met = (
+                (not a.qdrant_segments or st["segments"] == a.qdrant_segments)
+                and (not a.qdrant_require_indexed or st["indexed"] >= st["points"])
+            )
+            greens = greens + 1 if st["status"] == "green" and controls_met else 0
+            if st["status"] == "green" and not controls_met:
+                unresolved_since = unresolved_since or time.perf_counter()
+                if time.perf_counter() - unresolved_since > a.qdrant_control_grace_s:
+                    raise RuntimeError(
+                        "qdrant stayed green without satisfying requested controls: "
+                        f"segments={st['segments']} indexed={st['indexed']}/{st['points']}"
+                    )
+            else:
+                unresolved_since = None
             if time.perf_counter() - t1 > 6 * 3600:
                 raise RuntimeError("qdrant indexing did not finish in 6h")
             time.sleep(0.5)
         index_s = time.perf_counter() - t1 - 1.0  # the two extra confirmation polls
         final = self.collection_state(c)
         log(f"qdrant: indexing wait {index_s:.1f}s, state {final}")
+        segment_target_met = not a.qdrant_segments or final["segments"] == a.qdrant_segments
+        fully_indexed = final["indexed"] >= final["points"]
+        if not segment_target_met:
+            raise RuntimeError(
+                f"qdrant segment target not met: requested={a.qdrant_segments} "
+                f"actual={final['segments']}"
+            )
+        if a.qdrant_require_indexed and not fully_indexed:
+            raise RuntimeError(
+                f"qdrant collection is not fully indexed: {final['indexed']}/{final['points']}"
+            )
         return {
             "upload_s": round(upload_s, 2), "index_wait_s": round(max(index_s, 0), 2),
             "total_s": round(upload_s + max(index_s, 0), 2), "final_state": final,
-            "fully_indexed": final["indexed"] >= final["points"], "state_trace": trace,
+            "fully_indexed": fully_indexed, "state_trace": trace,
+            "requested_segments": a.qdrant_segments or "auto",
+            "actual_segments": final["segments"],
+            "segment_target_met": segment_target_met,
+            "requested_search_threads": a.qdrant_search_threads or "auto",
             "storage_bytes": dir_size(self.storage),
             "method": f"single-stream gRPC upload_collection, batch {UPLOAD_BATCH}, then wait for green",
         }
@@ -408,7 +444,14 @@ class Qdrant(Server):
         cfg = c.get_collection(COLL).config
         tel = self._get("/telemetry?details_level=1").get("result", {})
         return {"version": self._get("/").get("version"), "collection_config": cfg.model_dump(),
-                "app": tel.get("app"), "image": QDRANT_SIF}
+                "app": tel.get("app"), "image": QDRANT_SIF,
+                "runtime_controls": {
+                    "requested_search_threads": self.args.qdrant_search_threads or "auto",
+                    "search_threads_environment": self._env().get(
+                        "QDRANT__STORAGE__PERFORMANCE__MAX_SEARCH_THREADS", "auto"
+                    ),
+                    "requested_segments": self.args.qdrant_segments or "auto",
+                }}
 
     def query_spec(self, ef, proto="grpc", k=10):
         return {"engine": "qdrant", "http": self.http, "grpc": self.grpc, "ef": ef, "k": k,

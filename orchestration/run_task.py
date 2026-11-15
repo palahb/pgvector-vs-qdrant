@@ -96,6 +96,12 @@ def execute(deployment_path: Path, task_index: int) -> int:
         ).stdout.strip()
         if commit != deployment["code_commit"]:
             raise RuntimeError(f"commit mismatch: checkout={commit} deployment={deployment['code_commit']}")
+        dirty = subprocess.run(
+            ["git", "-C", str(REPO), "status", "--porcelain", "--untracked-files=no"],
+            check=True, capture_output=True, text=True,
+        ).stdout.strip()
+        if dirty:
+            raise RuntimeError("tracked worktree changed after deployment render")
         if node in config.get("resources", {}).get("exclude", []):
             raise TransientPreflightError(f"scheduler placed task on excluded node: {node}")
 

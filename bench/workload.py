@@ -35,13 +35,23 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
                 lat = np.empty(len(queries), dtype=np.int64)
                 hits = 0
                 server.stats_begin(proto)
+                cpu0_srv = server.cpu_seconds()
+                cpu0_client = _cpu([os.getpid()])
                 for i, v in enumerate(queries):
                     t0 = now_ns()
                     ids = q(v)
                     lat[i] = now_ns() - t0
                     hits += recall_hits(ids, gt[i])
+                cpu1_srv = server.cpu_seconds()
+                cpu1_client = _cpu([os.getpid()])
                 srv = server.stats_end(proto)
                 row = {"proto": proto, "ef": ef, "rep": rep, "recall_at_k": round(hits / (k * len(queries)), 5),
+                       "server_cpu_ms_per_query": round(
+                           (cpu1_srv - cpu0_srv) * 1000 / max(len(queries), 1), 6
+                       ),
+                       "client_cpu_ms_per_query": round(
+                           (cpu1_client - cpu0_client) * 1000 / max(len(queries), 1), 6
+                       ),
                        **summarize(lat), **srv}
                 if plan:
                     row["plan"] = plan
@@ -207,8 +217,14 @@ def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k
         "recall_at_k": round(float(h[in_win].sum()) / (k * max(int(in_win.sum()), 1)), 5),
         **summarize(l[in_win]),
         "server_cores_busy": round((cpu1_srv - cpu0_srv) / wall, 3),
+        "server_cpu_ms_per_query": round(
+            (cpu1_srv - cpu0_srv) * 1000 / max(int(done_in_win.sum()), 1), 6
+        ),
         "server_cores_allotted": len(server.cores),
         "client_cores_busy": round((cpu1_cli - cpu0_cli) / wall, 3),
+        "client_cpu_ms_per_query": round(
+            (cpu1_cli - cpu0_cli) * 1000 / max(int(done_in_win.sum()), 1), 6
+        ),
         "client_cores_allotted": len(os.sched_getaffinity(0)),
         "server_ctx_switches_per_query": {
             "voluntary": round((ctx1[0] - ctx0[0]) / max(int(done_in_win.sum()), 1), 3),
