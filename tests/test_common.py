@@ -58,6 +58,19 @@ class CommonTests(unittest.TestCase):
         self.assertEqual(common.stable_id({"a": 1, "b": [2]}), common.stable_id({"b": [2], "a": 1}))
         self.assertNotEqual(common.stable_id({"a": 1}), common.stable_id({"a": 2}))
 
+    def test_perf_totals_are_normalized_without_fabricating_unsupported_events(self) -> None:
+        derived = workload.perf_per_query({
+            "cycles:u": 1000.0, "instructions:u": 2000.0,
+            "cache-references:u": 100.0, "cache-misses:u": 5.0,
+            "branches:u": 80.0, "branch-misses:u": 4.0,
+            "task-clock": "<not counted>",
+        }, 10)
+        self.assertEqual(derived["events_per_query"]["cycles:u"], 100.0)
+        self.assertEqual(derived["instructions_per_cycle"], 2.0)
+        self.assertEqual(derived["cache_miss_ratio"], 0.05)
+        self.assertEqual(derived["branch_miss_ratio"], 0.05)
+        self.assertNotIn("task-clock", derived["events_per_query"])
+
 
 if __name__ == "__main__":
     unittest.main()

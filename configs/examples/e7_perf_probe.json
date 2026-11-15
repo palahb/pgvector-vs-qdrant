@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E7_perf_counter_probe",
+  "code_commit": "AUTO",
+  "registry_root": "$BENCH_ROOT/orchestration",
+  "requires_smoke": true,
+  "max_retries": 1,
+  "resources": {
+    "partition": "hamsi",
+    "cpus": 56,
+    "memory": "170G",
+    "time": "00:20:00",
+    "array_concurrency": 1,
+    "exclude": ["hamsi20", "hamsi65"]
+  },
+  "storage": {"min_free_gb": 100, "min_inode_free_percent": 10},
+  "base_args": {
+    "synthetic": true,
+    "n": 5000,
+    "dim": 64,
+    "seed": 42,
+    "warm_seed": 7,
+    "k": 10,
+    "m": 16,
+    "efc": 64,
+    "ef": [16, 32],
+    "reps": 1,
+    "warm": 50,
+    "clients": [4],
+    "conc_ef": 32,
+    "conc_recall": 0,
+    "conc_duration": 5,
+    "conc_warmup": 2,
+    "mem_limits": "none",
+    "perf": true
+  },
+  "engine_args": {
+    "pg": {
+      "pg_shared_buffers": "256MB",
+      "pg_effective_cache": "512MB",
+      "pg_maintenance_mem": "512MB"
+    },
+    "qdrant": {"protocols": ["grpc_raw"]}
+  },
+  "stages": {
+    "pilot": {"matrix": {"tag": ["probe"]}, "engines": ["pg", "qdrant"]},
+    "full": {"matrix": {"tag": ["probe"]}, "engines": ["pg", "qdrant"]}
+  }
+}

@@ -118,7 +118,10 @@ class WaitEventSampler(threading.Thread):
 
 # ARF has perf_event_paranoid=2, so only user-space counts are meaningful. Context switches come from
 # /proc instead (see _ctx), since perf reports them as 0 at that level.
-PERF_EVENTS = "task-clock,page-faults,cycles:u,instructions:u,cache-misses:u"
+PERF_EVENTS = (
+    "task-clock,page-faults,cycles:u,instructions:u,cache-references:u,cache-misses:u,"
+    "branches:u,branch-misses:u"
+)
 
 
 def start_perf(pids, path):
@@ -149,6 +152,30 @@ def stop_perf(proc, path):
     except OSError:
         return {"error": "perf produced no output (perf_event_paranoid?)"}
     return res
+
+
+def perf_per_query(perf, query_count):
+    """Normalize supported numeric perf totals and derive ratios without inventing gaps."""
+    if not perf or query_count <= 0:
+        return None
+    numeric = {key: value for key, value in perf.items() if isinstance(value, (int, float))}
+    out = {
+        "query_count": int(query_count),
+        "events_per_query": {key: round(value / query_count, 6) for key, value in numeric.items()},
+    }
+    cycles = next((value for key, value in numeric.items() if key.split(":")[0] == "cycles"), None)
+    instructions = next((value for key, value in numeric.items() if key.split(":")[0] == "instructions"), None)
+    refs = next((value for key, value in numeric.items() if key.split(":")[0] == "cache-references"), None)
+    misses = next((value for key, value in numeric.items() if key.split(":")[0] == "cache-misses"), None)
+    branches = next((value for key, value in numeric.items() if key.split(":")[0] == "branches"), None)
+    branch_misses = next((value for key, value in numeric.items() if key.split(":")[0] == "branch-misses"), None)
+    if cycles:
+        out["instructions_per_cycle"] = round(instructions / cycles, 6) if instructions is not None else None
+    if refs:
+        out["cache_miss_ratio"] = round(misses / refs, 6) if misses is not None else None
+    if branches:
+        out["branch_miss_ratio"] = round(branch_misses / branches, 6) if branch_misses is not None else None
+    return out
 
 
 def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k, perf_path=None):
@@ -235,6 +262,7 @@ def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k
         row["pg_wait_events"] = sampler.result()
     if perf_res is not None:
         row["perf"] = perf_res
+        row["perf_derived"] = perf_per_query(perf_res, int(done_in_win.sum()))
     log(f"  {server.name}/{proto} C={clients}: {row['throughput_qps']} qps mean={row['mean_ms']}ms "
         f"p99={row['p99_ms']}ms srv_cores={row['server_cores_busy']} cli_cores={row['client_cores_busy']}")
     raw = {f"conc_{proto}_ef{ef}_c{clients}_lat": l[in_win], f"conc_{proto}_ef{ef}_c{clients}_start": s[in_win] - t_go}
