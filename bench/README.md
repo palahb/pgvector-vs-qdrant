@@ -55,6 +55,7 @@ Always submit from the `bench/` folder, because the scripts find `env.sh` throug
 
 | Job | What | Addresses |
 |---|---|---|
+| `sbatch slurm/smoke.sbatch` | 5K synthetic end-to-end run of both engines plus strict result audit | Code/environment sanity before real jobs |
 | `sbatch slurm/e1_scale.sbatch 100000` (also 500000, 1000000) | Build, ef sweep 16-256 x 3 reps, concurrency 1-64 clients, all protocols | Protocol parity, ingestion standardization, virtualization, scale |
 | `sbatch slurm/e2_hnsw.sbatch` | 8 (M, ef_construction) configs at 500K, array job | "Black box, default parameters" |
 | `sbatch slurm/e3_dims.sbatch` | 128-1024 dims step 128, Qdrant default vs forced indexing | 384-dim anomaly (SIMD vs indexing threshold) |
