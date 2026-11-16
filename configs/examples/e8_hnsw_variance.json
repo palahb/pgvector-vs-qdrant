@@ -9,8 +9,8 @@
     "partition": "hamsi",
     "cpus": 56,
     "memory": "170G",
-    "time": "08:00:00",
-    "array_concurrency": 2,
+    "time": "01:30:00",
+    "array_concurrency": 4,
     "exclude": [
       "hamsi20",
       "hamsi65"
