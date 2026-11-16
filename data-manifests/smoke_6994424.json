@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6994424",
+  "purpose": "Commit-specific smoke gate for the E8 full deployment (1.5 h limit)",
+  "slurm": {
+    "job_id": "6994424",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:38",
+    "node": "hamsi82"
+  },
+  "code_commit": "fe88da11e5c2c60a15eaacb786a21d60949b39ff",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/fe88da11e5c2_6994424",
+  "workspace_path": "../artifacts/truba-smoke/6994424",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6994424_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "42650cd97e8d7001625dacaf054bad56508647da9896bec0514a2fcb419d9ed6",
+    "pg/raw.npz": "86d52e19655e39a45ed090f494aa376ac73ecc0fa58f6687834ae74d022f5366",
+    "qdrant/result.json": "0f66d5bfe68ab2172ad85b1580ebe8a889787c65049a4b5db8a9da750b5564bd",
+    "qdrant/raw.npz": "e21252a97a00c002a983e2e4a180dd52d230b98b3eafcf63acc8c84254199f9d"
+  }
+}
