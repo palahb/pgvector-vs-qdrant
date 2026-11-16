@@ -58,32 +58,24 @@ Performance and Concurrency Behavior in RAG Workloads}
 \renewcommand{\shortauthors}{Demir and Pala}
 
 \begin{abstract}
-Teams that build Retrieval-Augmented Generation (RAG) applications usually have to
-choose between adding vector search to a relational database they already run, such as
-PostgreSQL with pgvector, and deploying a dedicated vector database such as Qdrant.
-Both systems search with the same HNSW index, so any performance difference between
-them comes from how they are engineered around it. We compare the two on dedicated
-bare-metal nodes with 100K to 1M MS MARCO v2.1 passages embedded in 1024 dimensions and
-the 1{,}677 TREC Deep Learning 2021--2023 queries. Every comparison is made at matched
-recall, and for every query we record both the time spent inside the engine and the
-time the client observes. At equal recall Qdrant's engine is 3.0--3.9$\times$ faster
-than pgvector's at all three scales, and the gap holds across eight HNSW construction
-settings (3.4--4.5$\times$) and across dimensions from 128 to 1024. The end-to-end
-advantage is smaller and depends on the client: 1.7--3.3$\times$ with a lean gRPC
-client, 0.8--2.3$\times$ with the official Python gRPC client and 0.5--1.7$\times$ with
-the official REST client, so REST users would find pgvector faster at moderate recall.
-Under concurrent load both systems are limited by CPU. Qdrant's throughput plateau is
-19--68\% higher, and its tail latency stays near the mean while pgvector's grows once
-there are more clients than cores. With build parallelism configured, pgvector
-builds its index faster at 500K and 1M vectors and slightly slower at 100K. PostgreSQL's
-buffer pool has a large effect. With the default 128\,MB of shared buffers, pgvector's
-engine time at 1M vectors is 2.7$\times$ longer and its throughput about 3$\times$
-lower than with the index held in shared buffers, although the whole index is in the
-operating system's page cache in both cases. When memory is capped and the data has to
-come from disk, pgvector's index takes about twice the space of Qdrant's storage, and
-Qdrant keeps in-memory performance under a tighter limit. We also report the measurement
-pitfalls we ran into, including a gap in pgvector's cost model for TOASTed vectors that
-can silently replace an index scan with an exact scan about 250$\times$ slower.
+Teams that build Retrieval-Augmented Generation (RAG) applications often choose between
+adding vector search to a relational database they already run, such as PostgreSQL with
+pgvector, and deploying a dedicated vector database such as Qdrant. Benchmarks of this
+choice are easy to get wrong. We compare the two, both using HNSW, on dedicated
+bare-metal nodes with 100K to 1M MS MARCO v2.1 passages in 1024 dimensions and the
+1{,}677 TREC Deep Learning 2021--2023 queries. We compare at matched recall and record
+engine time, end-to-end time and server CPU time for every query. Latency and cost per
+query give different answers. At matched recall, Qdrant's single-client latency is
+3.1--3.4$\times$ lower than pgvector's with its default four segments, but its CPU time
+per query is only about 1.4$\times$ lower. With eight segments the CPU cost is about
+equal, so the latency gain comes from searching segments in parallel. The end-to-end
+difference also depends on the client library, from 1.7--3.3$\times$ in Qdrant's favor
+with a lean gRPC client to 0.5--1.7$\times$ with the official REST client. We catalog ten
+measurement confounders and quantify each one. Three of them overturned our own earlier
+laptop conclusions. Others include Qdrant reporting a collection as green while segments
+remain unindexed, PostgreSQL's default shared buffers making pgvector 2.7$\times$ slower
+with all data in memory, and a gap in pgvector's cost model for TOASTed vectors that can
+replace an index scan with an exact scan about 250$\times$ slower.
 \end{abstract}
 
 \keywords{vector databases, approximate nearest neighbor search, HNSW, pgvector,
@@ -267,6 +259,32 @@ embeddings. Table~\ref{tab:dataset} summarizes the data.
     Dimensions & 1024 (truncated for E3) \\
     Queries & 1{,}677 (TREC DL 2021--2023) \\
     Words per passage (mean/median) & 161.7 / 155 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Experiment Map}
+
+Table~\ref{tab:expmap} lists the experiments, which the results sections refer to by
+label.
+
+\begin{table}[t]
+  \caption{Experiments}
+  \label{tab:expmap}
+  \small
+  \begin{tabular}{p{0.07\columnwidth}p{0.85\columnwidth}}
+    \toprule
+    ID & Scope \\
+    \midrule
+    E1 & Scale (100K, 500K, 1M): recall--latency sweeps, three client protocols for Qdrant,
+         closed-loop concurrency \\
+    E2 & Eight HNSW construction settings $(M, ef_{construction})$ at 500K \\
+    E3 & Embedding dimensionality (128--1024) and Qdrant's indexing threshold \\
+    E4 & PostgreSQL buffer pool size and cgroup memory limits \\
+    E5 & Build time: three builds per engine and scale on one node, engines interleaved \\
+    E6 & Qdrant segment count (1, 2, 4, 8) and search threads (one or automatic), with
+         server CPU time per query, against a one-graph pgvector reference; three builds
+         per cell \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -554,8 +572,10 @@ neighbor lists fit in the space that is left.
 
 Figure~\ref{fig:recall} shows the recall--latency curves, end to end in the top row and
 engine side in the bottom row. Table~\ref{tab:matched} reads the curves at two recall
-targets. At every scale and target, Qdrant's engine is 3.0--3.9$\times$ faster than
-pgvector's, and its p99 latency is closer to its mean. End-to-end results depend on the
+targets. At every scale and target, Qdrant's single-client engine latency is
+3.0--3.9$\times$ lower than pgvector's, with its default four segments searched in
+parallel (Section~\ref{sec:cpu} separates this from CPU cost), and its p99 latency is
+closer to its mean. End-to-end results depend on the
 client path. With gRPC-lean, Qdrant remains 1.7--3.3$\times$ faster. With the official
 gRPC client the advantage drops to 0.8--2.3$\times$, and with REST to 0.5--1.7$\times$.
 At Recall@10 = 0.90, a Qdrant user on REST waits longer than a pgvector user at every
@@ -873,9 +893,11 @@ cached from the build. This is why the two ``none'' rows differ.
 \section{Discussion}
 %% =============================================================
 
-When the working set fits in memory, Qdrant's engine answers queries 3--4$\times$ faster
+When the working set fits in memory, Qdrant's single-client latency is 3--4$\times$ lower
 than pgvector's at equal recall, from 100K to 1M vectors and for every HNSW configuration
-and dimension we tested. It also uses less CPU per query at saturation. For an
+and dimension we tested. Much of this comes from searching segments in parallel. Its CPU
+time per query is lower by a smaller factor, about 1.4$\times$ with the default four
+segments and about equal with eight (Section~\ref{sec:cpu}). For an
 application, however, the client matters about as much as the engine. Through Qdrant's
 official REST client, pgvector was the faster system at Recall@10 = 0.90 at every scale we
 measured. A team choosing between the two should therefore consider which client and
@@ -950,9 +972,11 @@ down latency only at $C=1$.
 We compared pgvector and Qdrant, two systems built on the same HNSW index, under
 conditions designed to remove the usual sources of bias: dedicated nodes, real queries,
 comparison at matched recall, separate engine and client times, and builds measured to
-completion. With the data in memory, Qdrant's engine is 3--4$\times$ faster at equal
-recall across scales, HNSW settings and dimensions, and it keeps tail latency under
-control when overloaded. The advantage an application actually sees, however, depends on
+completion. With the data in memory, Qdrant's single-client latency is 3--4$\times$ lower at
+equal recall across scales, HNSW settings and dimensions, but its CPU time per query is
+lower by only about 1.4$\times$ with four segments and about equal with eight, so most
+of the latency gap is intra-query parallelism. It also keeps tail latency under control
+when overloaded. The advantage an application actually sees, however, depends on
 the client path. Through the official REST client it disappears at moderate recall.
 pgvector builds its index faster than Qdrant at 500K and 1M once build parallelism is
 set, and its performance depends strongly on the buffer pool. With the default setting it is
