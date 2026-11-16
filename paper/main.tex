@@ -365,9 +365,13 @@ thread-based Python client and default settings. They led to three conclusions. 
 was about three times faster at 100K vectors, Qdrant built its indexes 3.5--4.7$\times$
 faster, and Qdrant's throughput did not increase with more clients while its p99 latency
 reached 864\,ms. None of these conclusions holds under the protocol of
-Section~\ref{sec:protocol}. Table~\ref{tab:confounders} lists the causes, together with
-one further problem that appeared only with the new harness. Each of them is easy to
-introduce by accident, and each one changes a result.
+Section~\ref{sec:protocol}. Table~\ref{tab:confounders} lists ten confounders with their
+mechanism and measured effect. Nine are causes of the laptop results or problems found
+while building the new harness, and the tenth, intra-query parallelism, only became
+visible once the new harness could separate latency from CPU cost
+(Section~\ref{sec:cpu}). Each of them is easy to introduce by accident, and each one
+changes a result. Table~\ref{tab:checklist} turns the list into a checklist that states
+how to detect each confounder and how this study avoids it.
 
 \begin{table*}[t]
   \caption{Confounders in vector database benchmarks and their measured effect}
@@ -426,6 +430,63 @@ introduce by accident, and each one changes a result.
       The engines reach different recall at the same $ef$ &
       $ef=64$ at 100K: pgvector 0.889 vs.\ Qdrant 0.927; fixed-$ef$ throughput favors the
       lower-recall engine \\
+    Intra-query parallelism and segment count &
+      Qdrant searches the segments of a collection in parallel, so more segments lower
+      single-client latency while raising the work done per query &
+      Matched recall 0.95, 1M: latency ratio 4.4$\times$ but CPU-per-query ratio
+      1.0$\times$ with eight segments, against 2.9$\times$ and 1.7$\times$ with one
+      (Section~\ref{sec:cpu}) \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+  \caption{Checklist for benchmarking vector databases: how to detect each confounder and
+  how this study avoids it}
+  \label{tab:checklist}
+  \small
+  \begin{tabular}{p{0.2\textwidth}p{0.37\textwidth}p{0.37\textwidth}}
+    \toprule
+    Confounder & How to detect it & How this study avoids it \\
+    \midrule
+    Queries drawn from the corpus &
+      Check whether query vectors appear in the corpus; recall near 1 at small $ef$ &
+      Real TREC DL queries, none of which is in the corpus \\
+    Build time at upsert return &
+      Compare the point count with the indexed-vector count after the upload &
+      Wait until the optimizer is idle and all vectors are indexed; a run fails
+      otherwise \\
+    Indexing threshold &
+      \texttt{green} does not imply indexed: compare the indexed-vector count with the
+      point count &
+      Record both counts for every build; lower the threshold where the curve over $d$
+      is studied \\
+    Planner fallback &
+      Record the query plan for every $ef$ and flag sequential scans &
+      Plans are recorded per $ef$. The benchmark sets \texttt{enable\_seqscan = off}, so
+      it measures the index and does not measure the exposure to the fallback \\
+    Build workers sized from the heap &
+      Compare the number of workers launched with the intended number &
+      Set the table's \texttt{parallel\_workers} explicitly and record it \\
+    Buffer pool size &
+      Per-query buffer hits and reads from \texttt{pg\_stat\_statements}, separately from
+      page-cache hits &
+      Main results use a buffer pool that holds the index; the effect of the default is
+      measured on its own \\
+    Client stack and protocol &
+      Record engine-side time and end-to-end time for the same queries &
+      Report every protocol separately, with persistent connections and processes
+      pinned to cores disjoint from the server \\
+    Thread-based client &
+      Client CPU use close to its allotment, flat throughput as clients are added &
+      Multi-process clients; client cores busy are reported next to server cores \\
+    Comparing at equal $ef$ &
+      Compare recall at the settings being compared &
+      Interpolate to matched recall, with a finer $ef$ grid near the target \\
+    Intra-query parallelism &
+      Server CPU time per query next to latency; segment count from the engine &
+      Report CPU per query with latency, and control the segment count and search
+      threads \\
     \bottomrule
   \end{tabular}
 \end{table*}
