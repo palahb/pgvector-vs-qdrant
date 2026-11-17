@@ -56,6 +56,16 @@ def parse():
     ap.add_argument("--pg-planner", choices=["force-index", "default"], default="force-index",
                     help="force-index sets enable_seqscan=off; default leaves the choice to the planner, "
                          "which falls back to an exact parallel scan for some ef values (TOAST costing)")
+    ap.add_argument("--pg-unlogged", action="store_true",
+                    help="create the table UNLOGGED so the load and index build skip most WAL")
+    ap.add_argument("--qdrant-upload-parallel", type=int, default=1,
+                    help="parallel gRPC upload streams (1 reproduces the single-stream baseline)")
+    ap.add_argument("--qdrant-upload-batch", type=int, default=512,
+                    help="points per upload batch (512 reproduces the baseline)")
+    ap.add_argument("--qdrant-defer-indexing", action="store_true",
+                    help="disable indexing during the upload and restore the threshold afterwards")
+    ap.add_argument("--qdrant-max-indexing-threads", type=int, default=0,
+                    help="HNSW build threads for Qdrant; 0 keeps automatic selection")
     ap.add_argument("--qdrant-on-disk", action="store_true", help="mmap vectors and HNSW (needed for memory limits)")
     ap.add_argument("--qdrant-indexing-threshold-kb", type=int, default=None)
     ap.add_argument("--qdrant-segments", type=int, default=0,

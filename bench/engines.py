@@ -25,6 +25,47 @@ PG_BIN = os.environ.get("PG_BIN", "/usr/lib/postgresql/16/bin")
 QDRANT_BIN = os.environ.get("QDRANT_BIN", "qdrant")
 COLL = "items"
 UPLOAD_BATCH = 512
+DEFAULT_QDRANT_INDEXING_THRESHOLD_KB = 20000
+
+# PostgreSQL write-path counters. Each query is best effort because the views differ
+# between major versions, and a counter that is unavailable is left out, never zero.
+_PG_ACTIVITY_QUERIES = (
+    ("SELECT wal_records, wal_fpi, wal_bytes FROM pg_stat_wal",
+     ("wal_records", "wal_fpi", "wal_bytes")),
+    ("SELECT num_timed, num_requested, write_time, sync_time, buffers_written FROM pg_stat_checkpointer",
+     ("checkpoints_timed", "checkpoints_requested", "checkpoint_write_ms", "checkpoint_sync_ms",
+      "checkpoint_buffers")),
+    ("SELECT checkpoints_timed, checkpoints_req, checkpoint_write_time, checkpoint_sync_time, "
+     "buffers_checkpoint FROM pg_stat_bgwriter",
+     ("checkpoints_timed", "checkpoints_requested", "checkpoint_write_ms", "checkpoint_sync_ms",
+      "checkpoint_buffers")),
+    ("SELECT COALESCE(sum(write_bytes), 0)::bigint FROM pg_stat_io", ("io_write_bytes",)),
+)
+
+
+def pg_activity_snapshot(conn):
+    """Cumulative WAL, checkpoint and write counters, for deltas around a build phase."""
+    try:
+        conn.execute("SELECT pg_stat_force_next_flush()")
+    except Exception:  # noqa: BLE001 - PostgreSQL before 15 has no such function
+        pass
+    out = {}
+    for sql, names in _PG_ACTIVITY_QUERIES:
+        if names[0] in out:  # the bgwriter fallback is only for versions without the checkpointer view
+            continue
+        try:
+            row = conn.execute(sql).fetchone()
+        except Exception:  # noqa: BLE001
+            continue
+        if row is None:
+            continue
+        for name, value in zip(names, row):
+            out[name] = float(value) if isinstance(value, float) else int(value)
+    return out
+
+
+def pg_activity_delta(before, after):
+    return {key: after[key] - before[key] for key in after if key in before}
 
 
 class Server:
@@ -180,11 +221,14 @@ class Pg(Server):
             conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
             conn.execute("CREATE EXTENSION IF NOT EXISTS pg_stat_statements")
             conn.execute("DROP TABLE IF EXISTS items")
-            conn.execute(f"CREATE TABLE items (id bigint PRIMARY KEY, embedding vector({dim}))")
+            unlogged = bool(getattr(self.args, "pg_unlogged", False))
+            kind = "UNLOGGED " if unlogged else ""
+            conn.execute(f"CREATE {kind}TABLE items (id bigint PRIMARY KEY, embedding vector({dim}))")
         # fresh connection so register_vector sees the new type
         with self.admin() as conn:
             conn.add_notice_handler(lambda d: notices.append(d.message_primary))
             log(f"pg: COPY {n} x {dim}")
+            activity = {"start": pg_activity_snapshot(conn)}
             t0 = time.perf_counter()
             with conn.cursor() as cur:
                 with cur.copy("COPY items (id, embedding) FROM STDIN WITH (FORMAT BINARY)") as cp:
@@ -192,6 +236,7 @@ class Pg(Server):
                     for i in range(n):
                         cp.write_row((i, base[i]))
             load_s = time.perf_counter() - t0
+            activity["after_copy"] = pg_activity_snapshot(conn)
             # PostgreSQL sizes parallel index-build workers from the heap, and with TOASTed
             # vectors the heap is tiny (~1.5% of the data), so it would plan few or no workers.
             workers = max(len(self.cores) - 1, 0)
@@ -201,11 +246,13 @@ class Pg(Server):
             conn.execute(f"CREATE INDEX items_hnsw ON items USING hnsw (embedding vector_cosine_ops) "
                          f"WITH (m = {m}, ef_construction = {efc})")
             index_s = time.perf_counter() - t0
+            activity["after_index"] = pg_activity_snapshot(conn)
             log(f"pg: index {index_s:.1f}s")
             t0 = time.perf_counter()
             conn.execute("VACUUM (ANALYZE) items")
             conn.execute("CHECKPOINT")
             vacuum_s = time.perf_counter() - t0
+            activity["after_checkpoint"] = pg_activity_snapshot(conn)
             sizes = conn.execute(
                 "SELECT pg_relation_size('items'), pg_total_relation_size('items'), "
                 "pg_relation_size('items_hnsw'), "
@@ -218,7 +265,15 @@ class Pg(Server):
             "heap_bytes": sizes[0], "table_total_bytes": sizes[1], "index_bytes": sizes[2],
             "toast_bytes": sizes[3], "parallel_workers": workers,
             "embedding_attstorage": storage, "notices": notices,
-            "method": "single-stream binary COPY, then CREATE INDEX (parallel maintenance workers)",
+            "table_unlogged": unlogged,
+            "write_activity": {
+                "copy": pg_activity_delta(activity["start"], activity["after_copy"]),
+                "index": pg_activity_delta(activity["after_copy"], activity["after_index"]),
+                "vacuum_checkpoint": pg_activity_delta(activity["after_index"], activity["after_checkpoint"]),
+            },
+            "method": ("single-stream binary COPY into an UNLOGGED table, then CREATE INDEX (parallel maintenance workers)"
+                       if unlogged else
+                       "single-stream binary COPY, then CREATE INDEX (parallel maintenance workers)"),
         }
 
     def info(self):
@@ -393,23 +448,39 @@ class Qdrant(Server):
         c = self.client("grpc")
         if c.collection_exists(COLL):
             c.delete_collection(COLL)
+        batch = getattr(a, "qdrant_upload_batch", UPLOAD_BATCH)
+        parallel = getattr(a, "qdrant_upload_parallel", 1)
+        defer = bool(getattr(a, "qdrant_defer_indexing", False))
+        index_threads = getattr(a, "qdrant_max_indexing_threads", 0)
+        # The threshold that applies once indexing is allowed. With deferral the collection is
+        # created with indexing switched off (threshold 0) and gets this value after the upload.
+        final_threshold = (a.qdrant_indexing_threshold_kb if a.qdrant_indexing_threshold_kb is not None
+                           else DEFAULT_QDRANT_INDEXING_THRESHOLD_KB)
         optimizer_values = {}
-        if a.qdrant_indexing_threshold_kb is not None:
+        if defer:
+            optimizer_values["indexing_threshold"] = 0
+        elif a.qdrant_indexing_threshold_kb is not None:
             optimizer_values["indexing_threshold"] = a.qdrant_indexing_threshold_kb
         if a.qdrant_segments:
             optimizer_values["default_segment_number"] = a.qdrant_segments
         opt = qm.OptimizersConfigDiff(**optimizer_values) if optimizer_values else None
+        hnsw_values = {"m": m, "ef_construct": efc, "on_disk": a.qdrant_on_disk}
+        if index_threads:
+            hnsw_values["max_indexing_threads"] = index_threads
         c.create_collection(
             COLL,
             vectors_config=qm.VectorParams(size=dim, distance=qm.Distance.COSINE, on_disk=a.qdrant_on_disk),
-            hnsw_config=qm.HnswConfigDiff(m=m, ef_construct=efc, on_disk=a.qdrant_on_disk),
+            hnsw_config=qm.HnswConfigDiff(**hnsw_values),
             optimizers_config=opt,
         )
-        log(f"qdrant: upload {n} x {dim} over gRPC, batch {UPLOAD_BATCH}")
+        log(f"qdrant: upload {n} x {dim} over gRPC, batch {batch}, {parallel} stream(s)"
+            f"{', indexing deferred' if defer else ''}")
         t0 = time.perf_counter()
-        c.upload_collection(COLL, vectors=base, ids=range(n), batch_size=UPLOAD_BATCH,
-                            parallel=1, wait=True, max_retries=5)
+        c.upload_collection(COLL, vectors=base, ids=range(n), batch_size=batch,
+                            parallel=parallel, wait=True, max_retries=5)
         upload_s = time.perf_counter() - t0
+        if defer:
+            c.update_collection(COLL, optimizers_config=qm.OptimizersConfigDiff(indexing_threshold=final_threshold))
         log(f"qdrant: upload {upload_s:.1f}s, waiting for optimizer to finish indexing")
 
         # Upsert returns before the HNSW graph exists. Index build time is the time until the
@@ -426,7 +497,7 @@ class Qdrant(Server):
             # default_segment_number is an optimizer target, not an exact public
             # segment-count contract. Qdrant may retain an additional appendable segment.
             # We record the actual count/telemetry but gate only on complete indexing.
-            controls_met = not a.qdrant_require_indexed or st["indexed"] >= st["points"]
+            controls_met = not (a.qdrant_require_indexed or defer) or st["indexed"] >= st["points"]
             greens = greens + 1 if st["status"] == "green" and controls_met else 0
             if st["status"] == "green" and not controls_met:
                 unresolved_since = unresolved_since or time.perf_counter()
@@ -445,7 +516,7 @@ class Qdrant(Server):
         log(f"qdrant: indexing wait {index_s:.1f}s, state {final}")
         segment_target_met = not a.qdrant_segments or final["segments"] == a.qdrant_segments
         fully_indexed = final["indexed"] >= final["points"]
-        if a.qdrant_require_indexed and not fully_indexed:
+        if (a.qdrant_require_indexed or defer) and not fully_indexed:
             raise RuntimeError(
                 f"qdrant collection is not fully indexed: {final['indexed']}/{final['points']}"
             )
@@ -458,7 +529,10 @@ class Qdrant(Server):
             "segment_target_met": segment_target_met,
             "requested_search_threads": a.qdrant_search_threads or "auto",
             "storage_bytes": dir_size(self.storage),
-            "method": f"single-stream gRPC upload_collection, batch {UPLOAD_BATCH}, then wait for green",
+            "upload_parallel": parallel, "upload_batch": batch,
+            "indexing_deferred": defer, "max_indexing_threads": index_threads or "auto",
+            "method": (f"gRPC upload_collection, batch {batch}, {parallel} stream(s)"
+                       f"{', indexing deferred until the upload ends' if defer else ''}, then wait for green"),
         }
 
     def info(self):
