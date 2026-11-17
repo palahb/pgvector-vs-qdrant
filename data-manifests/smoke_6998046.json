@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6998046",
+  "purpose": "Commit-specific smoke gate for E9 ingestion fairness (pg_stat_io fallback for PostgreSQL 17)",
+  "slurm": {
+    "job_id": "6998046",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:34",
+    "node": "hamsi42"
+  },
+  "code_commit": "31de7f4f3a8046684090fbb16e58dcd3a95ffa1d",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/31de7f4f3a80_6998046",
+  "workspace_path": "../artifacts/truba-smoke/6998046",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6998046_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "625737596b4ab1e1618d4b1a53859cda1e2544396e0cce1297f475458c693682",
+    "pg/raw.npz": "39f8d4a1913f20a6c323281c77a297a8cfc4c4df9dc352da0ea35c6a03b3143a",
+    "qdrant/result.json": "2532eb2afa2414efcd0165c028b0add094f15e5f48be5b0d1894899d585fde62",
+    "qdrant/raw.npz": "980a49e194e2abc33ce8baf4ae510bfc1763ac4db72363f4ae1fa4e68ee01410"
+  }
+}
