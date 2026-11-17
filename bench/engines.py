@@ -39,7 +39,9 @@ _PG_ACTIVITY_QUERIES = (
      "buffers_checkpoint FROM pg_stat_bgwriter",
      ("checkpoints_timed", "checkpoints_requested", "checkpoint_write_ms", "checkpoint_sync_ms",
       "checkpoint_buffers")),
+    # PostgreSQL 18 reports write_bytes; 16 and 17 report writes in units of op_bytes.
     ("SELECT COALESCE(sum(write_bytes), 0)::bigint FROM pg_stat_io", ("io_write_bytes",)),
+    ("SELECT COALESCE(sum(writes * op_bytes), 0)::bigint FROM pg_stat_io", ("io_write_bytes",)),
 )
 
 

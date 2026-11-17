@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_6998045",
+  "purpose": "Commit-specific smoke gate for E9 ingestion fairness (new write-activity and Qdrant upload controls)",
+  "slurm": {
+    "job_id": "6998045",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:32",
+    "node": "hamsi52"
+  },
+  "code_commit": "e48996f16e2c7eced4a82cceb15b036558cd2403",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/e48996f16e2c_6998045",
+  "workspace_path": "../artifacts/truba-smoke/6998045",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_6998045_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "939ba7f67746a4c17800e6feee0f474af8eb66f45cfc6d0fd662c8d6e4b504d2",
+    "pg/raw.npz": "c18528e739c569c04e5c767b1f372d7abfe45960d4d1c26d1778435bf795c4cc",
+    "qdrant/result.json": "0a66eab971939be8c65b629d1df57b5010a7e93a82de0822f20521faff3d4ed1",
+    "qdrant/raw.npz": "8b333ee0481136b82ca36712fd218a70a56be750cd4805b8e24712ffccc2fbb8"
+  }
+}

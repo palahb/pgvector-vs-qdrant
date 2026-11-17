@@ -47,6 +47,12 @@ class PgActivityTests(unittest.TestCase):
         self.assertEqual(snap["checkpoint_write_ms"], 12.5)
         self.assertEqual(snap["io_write_bytes"], 8192)
 
+    def test_io_write_bytes_falls_back_to_op_bytes_before_postgresql_18(self) -> None:
+        conn = FakeConn({"pg_stat_wal": (10, 2, 4096), "sum(writes * op_bytes)": (65536,)},
+                        failing=("sum(write_bytes)",))
+        snap = pg_activity_snapshot(conn)
+        self.assertEqual(snap["io_write_bytes"], 65536)
+
     def test_unavailable_views_are_omitted_not_zero(self) -> None:
         conn = FakeConn({"pg_stat_wal": (10, 2, 4096)},
                         failing=("pg_stat_checkpointer", "pg_stat_bgwriter", "pg_stat_io"))
