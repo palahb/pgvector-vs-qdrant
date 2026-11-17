@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E8_hnsw_build_variance_full",
+  "code_commit": "fe88da11e5c2c60a15eaacb786a21d60949b39ff",
+  "slurm_jobs": {
+    "pilot": "6995037",
+    "full": "6996492"
+  },
+  "smoke_gate": "smoke_6994424",
+  "submission": "E8_hnsw_build_variance-full-fe88da11-87ca9eb5",
+  "superseded_pilot": "E8_hnsw_build_variance-pilot-4aae9718-07c4c6c9 (job 6989865, commit 4aae971; superseded by the pilot at fe88da1 because the config changed)",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E8_hnsw_build_variance/full/E8_hnsw_build_variance-full-fe88da11-87ca9eb5",
+  "workspace_root": "../artifacts/truba-experiments/E8/fe88da1",
+  "artifact_tree": {
+    "file_count": 193,
+    "full_kib": 155943,
+    "registry_kib": 85,
+    "sorted_file_sha256_manifest_sha256": "51f76dfd7af7bf5296ff7a0a839505ead44f400dd4d255b1d9922ffb8425640b"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 48,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e8_full_fe88da1_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "results": 48,
+    "issues": 0,
+    "tracked_json": "results/derived/e8_full_fe88da1_analysis.json",
+    "tracked_summary": "results/derived/e8_full_fe88da1_summary.md",
+    "note": "Recall target 0.90 lies below the smallest swept ef (48) for 27 builds; those builds are excluded from 0.90 aggregates, 0.95 is fully interpolated."
+  },
+  "registry": {
+    "tasks": 24,
+    "attempts_per_task": 1,
+    "max_task_duration_s": 2593
+  }
+}

@@ -40,3 +40,16 @@ reference for everything beyond this scope.
   per scale, so direction and rough size only). Two remain in Results: graph-quality
   variance (E8) and build I/O (E9; the baseline stores no WAL or checkpoint volume).
 - Not done: LaTeX compile check (no TeX installed on this machine); push to GitHub.
+
+### Week 2 start (2026-11-17)
+
+- E8 (HNSW build variance): pilot 6995037 (6/6) and full 6996492 (24/24, one attempt each),
+  48 results, strict audit zero errors/warnings (`data-manifests/e8_full_fe88da1.json`).
+  Interpolated matched recall 0.95 at 500K: Qdrant latency 2.4-3.2x lower, server CPU
+  1.3-1.6x lower across all eight settings. Build-to-build latency CV 0.2-4.5%, so pgvector's
+  non-monotonic latency over graph density (3.6 and 4.9 standard errors) is systematic, not
+  noise. Recall 0.90 lies below the swept ef grid for 27 builds (excluded, not clamped).
+- Paper: HNSW Parameters section rewritten from E8; the graph-variance `\todo` is closed.
+  One `\todo` remains in Results (1M load I/O, needs E9).
+- Operational: commits pushed to `paper-full-revision` through `fe88da1`; later commits are
+  local. A queued 8 h time limit made the first pilot wait 18 h, 1.5 h limits backfill well.
