@@ -53,3 +53,19 @@ reference for everything beyond this scope.
   One `\todo` remains in Results (1M load I/O, needs E9).
 - Operational: commits pushed to `paper-full-revision` through `fe88da1`; later commits are
   local. A queued 8 h time limit made the first pilot wait 18 h, 1.5 h limits backfill well.
+
+### Week 3 work done early (2026-11-17)
+
+- E9 (ingestion fairness, referee M3/M4): harness now records PostgreSQL WAL, checkpoint and
+  write volume per build phase and supports `--pg-unlogged` and Qdrant parallel upload,
+  batch size, deferred indexing and indexing threads (defaults reproduce the old baseline).
+  Pilot 6998060 and full 6998157 (6/6, one attempt each), 36 results, strict audit clean
+  (`data-manifests/e9_full_31de7f4.json`).
+- Result: at 1M pgvector's load writes 4.6 GB of WAL and takes 93 s logged against 22 s
+  unlogged; load scales 2.9x for 2x data when logged and 2.0x unlogged. Qdrant total build
+  falls from 356 s to 206 s with parallel streams, larger batches and deferred indexing.
+  Which system "builds faster" flips with the configuration compared; the old build claim
+  (C04) is withdrawn and replaced.
+- Paper: new "Ingestion Fairness" subsection; the last `\todo` (1M load I/O) is closed.
+  The paper now has no `\todo`.
+- Not done: LaTeX compile check (no TeX), E10 memory study, push of the newest commits.

@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-17T05:22:39.253578+00:00",
+  "root": "../artifacts/truba-experiments/E9/31de7f4/full",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 36,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "task_0000_6998158": 6,
+      "task_0001_6998159": 6,
+      "task_0002_6998160": 6,
+      "task_0003_6998222": 6,
+      "task_0004_6998223": 6,
+      "task_0005_6998157": 6
+    },
+    "engines": {
+      "pg": 12,
+      "qdrant": 24
+    },
+    "statuses": {
+      "ok": 36
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "task_0000_6998158/pg_rep1_pg_logged/result.json",
+      "sha256": "17c3b80376d79df97404db362d25d741b8eaa6c61cc2bcf11d2a9113bf8dff22",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0000-a1-r00-pg",
+      "experiment": "task_0000_6998158",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998158",
+      "raw_npz_size_bytes": 31907,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0000_6998158/pg_rep1_pg_unlogged/result.json",
+      "sha256": "3702d64e1793bd16b8b5155a4bc663a67cb7c5a31d5e739938f50bc3393bab60",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0000-a1-r02-pg",
+      "experiment": "task_0000_6998158",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998158",
+      "raw_npz_size_bytes": 32722,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0000_6998158/qdrant_rep1_q_base/result.json",
+      "sha256": "bb715e4baae1ab44cd366fc91c251888cf7b24604d9a24a0ce8f37f7175d21cd",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0000-a1-r01-qdrant",
+      "experiment": "task_0000_6998158",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998158",
+      "raw_npz_size_bytes": 47018,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0000_6998158/qdrant_rep1_q_batch4096/result.json",
+      "sha256": "c1568e13a2c995106dd872c729729fe4a9a3458cfb99291b1d473eade6c11570",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0000-a1-r03-qdrant",
+      "experiment": "task_0000_6998158",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998158",
+      "raw_npz_size_bytes": 46920,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0000_6998158/qdrant_rep1_q_par4/result.json",
+      "sha256": "69951b9168d988e05dfced5dbaf941bbd13efb4d4f61241bfe454177b72ce7ba",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0000-a1-r04-qdrant",
+      "experiment": "task_0000_6998158",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998158",
+      "raw_npz_size_bytes": 46893,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0000_6998158/qdrant_rep1_q_tuned/result.json",
+      "sha256": "a58b5ab68f25e5ec22d4e600a1afb6e733a2ad277d90a375f502ea8797c89a7a",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0000-a1-r05-qdrant",
+      "experiment": "task_0000_6998158",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998158",
+      "raw_npz_size_bytes": 44634,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0001_6998159/pg_rep2_pg_logged/result.json",
+      "sha256": "5871de7c7bf8032a22498e28cdea25b65b7b4697d04fb3f3d6e22508aa00e1b7",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0001-a1-r05-pg",
+      "experiment": "task_0001_6998159",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998159",
+      "raw_npz_size_bytes": 32802,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0001_6998159/pg_rep2_pg_unlogged/result.json",
+      "sha256": "c45d2a809cd042400885deaef058eaf5a9915680f5cb14889471c779613b43a6",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0001-a1-r03-pg",
+      "experiment": "task_0001_6998159",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998159",
+      "raw_npz_size_bytes": 32266,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0001_6998159/qdrant_rep2_q_base/result.json",
+      "sha256": "ab75c548d0a1095f67e72ff518a3ce02926ad00a4ff726cd43d77b5c24f2f24c",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0001-a1-r04-qdrant",
+      "experiment": "task_0001_6998159",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998159",
+      "raw_npz_size_bytes": 47049,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0001_6998159/qdrant_rep2_q_batch4096/result.json",
+      "sha256": "61c729b65b308bf6f1abedcd28651a9c033e695ad73b61bc6f8c6272ff743eba",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0001-a1-r02-qdrant",
+      "experiment": "task_0001_6998159",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998159",
+      "raw_npz_size_bytes": 47123,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0001_6998159/qdrant_rep2_q_par4/result.json",
+      "sha256": "87d8f64b7ad4a4099a3c4110550e769ced99dc7888fcb5fa3eff98d4526a76a1",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0001-a1-r01-qdrant",
+      "experiment": "task_0001_6998159",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998159",
+      "raw_npz_size_bytes": 47753,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0001_6998159/qdrant_rep2_q_tuned/result.json",
+      "sha256": "08e0166708b9502398e3418aec17961aed228f10816a508f85f8d6b87a45a6b1",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0001-a1-r00-qdrant",
+      "experiment": "task_0001_6998159",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998159",
+      "raw_npz_size_bytes": 44490,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0002_6998160/pg_rep3_pg_logged/result.json",
+      "sha256": "c4093867ae2d70e1a45f1d04d54e7a3282ed708ae1add5396e526c1590e18a3f",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0002-a1-r03-pg",
+      "experiment": "task_0002_6998160",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998160",
+      "raw_npz_size_bytes": 32740,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0002_6998160/pg_rep3_pg_unlogged/result.json",
+      "sha256": "4e96a2b0330abb0dab2eed12f8f9d4123a8909b15c823263534221a478d5e0e2",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0002-a1-r05-pg",
+      "experiment": "task_0002_6998160",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998160",
+      "raw_npz_size_bytes": 33070,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0002_6998160/qdrant_rep3_q_base/result.json",
+      "sha256": "352d16d28944a1fd79f4fa081b591d0e5deaa3ac8f00ce6cc9cdac25139193c8",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0002-a1-r04-qdrant",
+      "experiment": "task_0002_6998160",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998160",
+      "raw_npz_size_bytes": 47103,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0002_6998160/qdrant_rep3_q_batch4096/result.json",
+      "sha256": "4f1b0d29913d4e82e29bf003a7beb5f0771474157594fb674984314715753e8f",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0002-a1-r00-qdrant",
+      "experiment": "task_0002_6998160",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998160",
+      "raw_npz_size_bytes": 46927,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0002_6998160/qdrant_rep3_q_par4/result.json",
+      "sha256": "604bb6a3e9ec3197e1bd8f285281eff2767d0ff7d6ccf22c26df1fb2058cfdc0",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0002-a1-r01-qdrant",
+      "experiment": "task_0002_6998160",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998160",
+      "raw_npz_size_bytes": 46797,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0002_6998160/qdrant_rep3_q_tuned/result.json",
+      "sha256": "4b6007ddb23a9418022e93f48da278856846b8fcbca99b11bbe6ead5d45f7236",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0002-a1-r02-qdrant",
+      "experiment": "task_0002_6998160",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998160",
+      "raw_npz_size_bytes": 43791,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0003_6998222/pg_rep1_pg_logged/result.json",
+      "sha256": "07557775d326cb4a231c4a5488f1955d79effc302b5a1c54ea4ca546c51d1da0",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0003-a1-r00-pg",
+      "experiment": "task_0003_6998222",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998222",
+      "raw_npz_size_bytes": 31479,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0003_6998222/pg_rep1_pg_unlogged/result.json",
+      "sha256": "e72a8bb07b4ccdd311818294e30fa15c6cc21e16833cd06a3a35d37bd0805136",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0003-a1-r02-pg",
+      "experiment": "task_0003_6998222",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998222",
+      "raw_npz_size_bytes": 31591,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0003_6998222/qdrant_rep1_q_base/result.json",
+      "sha256": "7efa92aad81871906af24448f01e96afef2e66a718b240632995d43093fcf56c",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0003-a1-r01-qdrant",
+      "experiment": "task_0003_6998222",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998222",
+      "raw_npz_size_bytes": 45371,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0003_6998222/qdrant_rep1_q_batch4096/result.json",
+      "sha256": "6f583d8cfe5081112e5cb9b85a64fbb5f2a6357f183b8c8ce17ba5e051c3f896",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0003-a1-r03-qdrant",
+      "experiment": "task_0003_6998222",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998222",
+      "raw_npz_size_bytes": 45420,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0003_6998222/qdrant_rep1_q_par4/result.json",
+      "sha256": "04af791804e5edccfa28f5ec23b14ecbfe234b53bd299975603bc27383a36657",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0003-a1-r04-qdrant",
+      "experiment": "task_0003_6998222",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998222",
+      "raw_npz_size_bytes": 46003,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0003_6998222/qdrant_rep1_q_tuned/result.json",
+      "sha256": "c04d4cfbc2f04efc053be0a616b6ed16f9eaab3b5ded755d70ecb3b83994a8bb",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0003-a1-r05-qdrant",
+      "experiment": "task_0003_6998222",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998222",
+      "raw_npz_size_bytes": 43483,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0004_6998223/pg_rep2_pg_logged/result.json",
+      "sha256": "1a7f40262ded19165e9e0445b1e9636e98ba544e6c206fd5a3e4de2a1e7ec480",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0004-a1-r05-pg",
+      "experiment": "task_0004_6998223",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998223",
+      "raw_npz_size_bytes": 31614,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0004_6998223/pg_rep2_pg_unlogged/result.json",
+      "sha256": "ab295b19c7490001395f94e0f0b04d197cdd2c039834833c034302024c1bb7f0",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0004-a1-r03-pg",
+      "experiment": "task_0004_6998223",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998223",
+      "raw_npz_size_bytes": 31165,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0004_6998223/qdrant_rep2_q_base/result.json",
+      "sha256": "3506cab83d8b3ed0edb05fa3cd1afa28a0f0cffa9498bbb938c1359f981877b0",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0004-a1-r04-qdrant",
+      "experiment": "task_0004_6998223",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998223",
+      "raw_npz_size_bytes": 46363,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0004_6998223/qdrant_rep2_q_batch4096/result.json",
+      "sha256": "3e5d721cad19a354f2d31717b71b2332e3ab3103584d93e01c54f68cc96b6420",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0004-a1-r02-qdrant",
+      "experiment": "task_0004_6998223",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998223",
+      "raw_npz_size_bytes": 46047,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0004_6998223/qdrant_rep2_q_par4/result.json",
+      "sha256": "3f1267658d1edd189c182dafbc8e39f17b5db8ec34ed7839a393183e38b17347",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0004-a1-r01-qdrant",
+      "experiment": "task_0004_6998223",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998223",
+      "raw_npz_size_bytes": 45356,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0004_6998223/qdrant_rep2_q_tuned/result.json",
+      "sha256": "c0508cc83c7f429b64a6ed3b581976b87f81b646dca41d2874b70cf306cfc067",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0004-a1-r00-qdrant",
+      "experiment": "task_0004_6998223",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998223",
+      "raw_npz_size_bytes": 43593,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0005_6998157/pg_rep3_pg_logged/result.json",
+      "sha256": "0a0d1cc724cefd2c23353bf28a6d38fa562a867ff80115f7fe0b8fe09a140e15",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0005-a1-r03-pg",
+      "experiment": "task_0005_6998157",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998157",
+      "raw_npz_size_bytes": 30703,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0005_6998157/pg_rep3_pg_unlogged/result.json",
+      "sha256": "3a9dacab99bc9bbc7f5fe3106ace1bab785ea72581d35a6a3b9fbf7292cdbe66",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0005-a1-r05-pg",
+      "experiment": "task_0005_6998157",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "6998157",
+      "raw_npz_size_bytes": 31380,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0005_6998157/qdrant_rep3_q_base/result.json",
+      "sha256": "db04014642399c41bf2be5b4a53bdf4417f998ce35f75e8d06f8ab6ab0a9972c",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0005-a1-r04-qdrant",
+      "experiment": "task_0005_6998157",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998157",
+      "raw_npz_size_bytes": 45986,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0005_6998157/qdrant_rep3_q_batch4096/result.json",
+      "sha256": "77c8ac88d99a4b47ee1a0313611aa1952b6341191b9f5920f7a7874f55429f8d",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0005-a1-r00-qdrant",
+      "experiment": "task_0005_6998157",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998157",
+      "raw_npz_size_bytes": 45712,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0005_6998157/qdrant_rep3_q_par4/result.json",
+      "sha256": "455acd9de2841f31ae4bd1e6fd9d537145946452364aa1d983e7ed9173a4780d",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0005-a1-r01-qdrant",
+      "experiment": "task_0005_6998157",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998157",
+      "raw_npz_size_bytes": 45836,
+      "raw_array_count": 3
+    },
+    {
+      "path": "task_0005_6998157/qdrant_rep3_q_tuned/result.json",
+      "sha256": "773fb9c4c5aae5ed9672c532487da9d17d3f87e3d0cc3b5b9e8e1b7888e8658f",
+      "experiment_id": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f-t0005-a1-r02-qdrant",
+      "experiment": "task_0005_6998157",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "6998157",
+      "raw_npz_size_bytes": 43715,
+      "raw_array_count": 3
+    }
+  ]
+}

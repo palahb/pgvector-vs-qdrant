@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E9_ingestion_build_fairness_full",
+  "code_commit": "31de7f4f3a8046684090fbb16e58dcd3a95ffa1d",
+  "slurm_jobs": {
+    "pilot": "6998060",
+    "full": "6998157"
+  },
+  "smoke_gate": "smoke_6998046",
+  "superseded_smoke": "smoke_6998045 (e48996f; pg_stat_io write volume was missing on PostgreSQL 17, fixed in 31de7f4)",
+  "submission": "E9_ingestion_build_fairness-full-31de7f4f-7dd2878f",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E9_ingestion_build_fairness/full/E9_ingestion_build_fairness-full-31de7f4f-7dd2878f",
+  "workspace_root": "../artifacts/truba-experiments/E9/31de7f4",
+  "artifact_tree": {
+    "file_count": 121,
+    "sorted_file_sha256_manifest_sha256": "25c85ae2306b0f2132a2cf86c54d60d842171d3f40da69b20472b1525692af32"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 36,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e9_full_31de7f4_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "results": 36,
+    "issues": 0,
+    "tracked_json": "results/derived/e9_full_31de7f4_analysis.json",
+    "tracked_summary": "results/derived/e9_full_31de7f4_summary.md"
+  },
+  "registry": {
+    "tasks": 6,
+    "attempts_per_task": 1,
+    "max_task_duration_s": 1936
+  },
+  "arms": [
+    "pg_logged",
+    "pg_unlogged",
+    "q_base",
+    "q_batch4096",
+    "q_par4",
+    "q_tuned"
+  ]
+}

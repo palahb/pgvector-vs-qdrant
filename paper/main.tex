@@ -287,6 +287,8 @@ label.
          per cell \\
     E8 & The E2 settings rebuilt three times each with a 21-point $ef$ grid, interpolated
          to matched recall \\
+    E9 & Ingestion configurations: pgvector logged and unlogged, Qdrant with larger
+         batches, parallel streams and deferred indexing; WAL and disk writes recorded \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -536,8 +538,8 @@ builds is at most 13\% of the mean. Qdrant indexes segments while the upload is 
 4--10\% of its build time falls after the last upsert returns, so its total is almost
 entirely the single-stream gRPC upload. pgvector's index build is its larger phase at
 every scale. Its load time grows faster than the data at 1M (98.5\,s against 26.4\,s at
-500K), which is consistent with the load becoming limited by writes to the disk.
-\todo{Check whether the 1M load is I/O-bound (WAL volume, checkpoint timing).}
+500K). Section~\ref{sec:ingest} below shows why, and shows that this comparison depends on how
+each system is loaded.
 
 \begin{table*}[t]
   \caption{Build time (s, mean $\pm$ standard deviation of three builds on one node,
@@ -569,6 +571,75 @@ The size of pgvector's index does not change with $M$. At 500K it is 3.81\,GiB f
 $M=16$, 32 and 64. A 1024-dimensional element takes about 4\,KB, so a second element does
 not fit on the same 8\,KB page. The index therefore uses one page per vector, and the
 neighbor lists fit in the space that is left.
+
+\subsection{Ingestion Fairness}
+\label{sec:ingest}
+
+The comparison above sets pgvector, with parallel index-build workers and a large
+maintenance memory, against a Qdrant load that uses one gRPC stream and batches of 512
+points. We therefore built each system in several configurations on the same node (E9,
+Table~\ref{tab:ingest}): pgvector with a logged and an unlogged table, and Qdrant with the
+baseline upload, with batches of 4096 points, with four parallel streams, and with four
+streams, batches of 4096 and indexing deferred until the upload ends. Each configuration
+was built three times, interleaved on one node, with the order rotated between repetitions.
+The baseline arms reproduce the builds above within 4\% at 1M (pgvector 296\,s against
+307\,s, Qdrant 356\,s against 370\,s).
+
+\begin{table*}[t]
+  \caption{Build time by ingestion configuration (s, mean $\pm$ standard deviation of three
+  builds on one node). pgvector: load and \texttt{CREATE INDEX}. Qdrant: upload and wait for
+  indexing. WAL and disk writes are totals in MB over load, index build and the final
+  checkpoint.}
+  \label{tab:ingest}
+  \small
+  \begin{tabular}{rl|rrr|rr}
+    \toprule
+    $N$ & Configuration & ingest & index & total & WAL MB & disk MB \\
+    \midrule
+    500K & pgvector, logged & 32.4 $\pm$ 2.8 & 74.4 $\pm$ 5.6 & 106.8 $\pm$ 7.5 & 4533 & 6909 \\
+     & pgvector, unlogged & 11.2 $\pm$ 0.0 & 50.5 $\pm$ 0.2 & 61.7 $\pm$ 0.2 & 0 & 15 \\
+     & Qdrant, baseline & 143.2 $\pm$ 18.0 & 8.7 $\pm$ 1.3 & 151.9 $\pm$ 19.1 & -- & -- \\
+     & Qdrant, batch 4096 & 120.7 $\pm$ 7.5 & 12.1 $\pm$ 0.8 & 132.8 $\pm$ 8.3 & -- & -- \\
+     & Qdrant, 4 streams & 97.8 $\pm$ 8.7 & 16.9 $\pm$ 5.9 & 114.7 $\pm$ 2.9 & -- & -- \\
+     & Qdrant, tuned & 62.6 $\pm$ 1.4 & 36.4 $\pm$ 0.8 & 99.0 $\pm$ 1.5 & -- & -- \\
+    \midrule
+    1M & pgvector, logged & 93.0 $\pm$ 11.2 & 202.7 $\pm$ 17.6 & 295.8 $\pm$ 28.6 & 9067 & 13894 \\
+     & pgvector, unlogged & 22.2 $\pm$ 0.1 & 103.6 $\pm$ 0.5 & 125.9 $\pm$ 0.6 & 0 & 46 \\
+     & Qdrant, baseline & 339.0 $\pm$ 42.5 & 16.9 $\pm$ 5.1 & 355.9 $\pm$ 47.4 & -- & -- \\
+     & Qdrant, batch 4096 & 271.1 $\pm$ 22.6 & 17.3 $\pm$ 4.6 & 288.4 $\pm$ 27.0 & -- & -- \\
+     & Qdrant, 4 streams & 229.5 $\pm$ 30.4 & 20.0 $\pm$ 2.2 & 249.5 $\pm$ 32.5 & -- & -- \\
+     & Qdrant, tuned & 130.3 $\pm$ 2.2 & 75.6 $\pm$ 2.6 & 205.9 $\pm$ 4.4 & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\textbf{Qdrant's build time depends on how it is loaded.} Four parallel streams, batches of
+4096 points and deferred indexing together cut the total from 152 to 99\,s at 500K
+(1.5$\times$) and from 356 to 206\,s at 1M (1.7$\times$). Deferring indexing moves work from
+the upload to the wait that follows (at 1M the wait grows from 17 to 76\,s), but the total
+still falls.
+
+\textbf{pgvector's load is limited by write-ahead logging.} At 1M the load writes 4.6\,GB of
+WAL, about as much as the data itself, and the index build writes another 4.5\,GB. The
+final checkpoint then writes 13.9\,GB in 80\,s, about 175\,MB/s, which matches the
+167\,MB/s we measured for the node's disk. The load takes 2.9$\times$ longer at 1M than at
+500K for twice the data, and a second checkpoint is requested during the 1M build (two,
+against one in each of the other three pgvector configurations at 500K and 1M). With an unlogged table there is no
+WAL, the load takes 11 and 22\,s and scales linearly (2.0$\times$), and the total falls to
+62 and 126\,s, 1.7$\times$ and 2.3$\times$ faster than the logged table. The 1M load is
+therefore limited by logging to the spinning disk. An unlogged table does not survive a
+crash, so this arm shows how much of the cost is logging and is not a like-for-like
+production configuration. We did not repeat the experiment on faster storage.
+
+\textbf{Which system builds faster depends on the configurations compared.} Against
+Qdrant's baseline upload, logged pgvector is 1.4$\times$ faster at 500K and 1.2$\times$
+faster at 1M, as in the earlier table. Against Qdrant with parallel streams and deferred
+indexing, the two are about equal at 500K (107 against 99\,s) and Qdrant is 1.4$\times$
+faster at 1M (206 against 296\,s). An unlogged pgvector table is faster than every Qdrant
+configuration (1.6$\times$ at both scales against the tuned arm). We therefore do not claim
+that either system builds faster. The earlier statement that pgvector builds faster
+describes Qdrant's single-stream baseline, and it reverses once Qdrant is loaded in
+parallel.
 
 \subsection{Latency at Matched Recall}
 
@@ -916,11 +987,12 @@ Under load, both systems are limited by CPU and not by locking. They differ in h
 handle overload. Qdrant's fixed thread pool keeps latency predictable when there are more
 clients than cores. pgvector's process-per-connection model loses some throughput and
 develops a long latency tail in that situation, so a deployment would benefit from a
-connection pooler sized to the number of cores. With its build parallelism configured,
-pgvector built its index faster than Qdrant at 500K and 1M on the same node, which
-reverses the large build-time advantage for Qdrant that our first measurements showed.
-Build times also varied considerably between nodes, so single build measurements on a
-shared cluster should be treated with care.
+connection pooler sized to the number of cores. Build time depends on how each system is
+loaded. Against Qdrant's single-stream upload, pgvector with its build parallelism
+configured built faster, but with parallel streams and deferred indexing Qdrant is
+1.4$\times$ faster at 1M, and pgvector's own load is limited by write-ahead logging on this
+disk (Section~\ref{sec:ingest}). Build times also varied considerably between nodes, so
+single build measurements on a shared cluster should be treated with care.
 
 Memory configuration matters as much as the choice of system. With PostgreSQL's
 default buffer pool, pgvector reads most index pages from the operating system's page
@@ -949,7 +1021,9 @@ share of latency further, and gRPC-lean gives an approximate lower bound for it.
 system and the interconnect are shared with other users. Database files are kept on
 node-local disk, and every result records the node's load and any other jobs on it.
 Query measurements run from memory and are not affected by the disk, but build times
-are, so all build times we report come from a single node.
+are, so all build times we report compare configurations on one node. The disk is
+rotational, and Section~\ref{sec:ingest} shows that pgvector's load is limited by writing
+its log to it, so build times on SSDs may differ.
 
 \textbf{Configuration.} We tune PostgreSQL's memory settings for an in-memory working
 set and leave Qdrant at its defaults, apart from $ef_{construction}$. Experiments E2 and
@@ -987,8 +1061,8 @@ lower by only about 1.4$\times$ with four segments and about equal with eight, s
 of the latency gap is intra-query parallelism. It also keeps tail latency under control
 when overloaded. The advantage an application actually sees, however, depends on
 the client path. Through the official REST client it disappears at moderate recall.
-pgvector builds its index faster than Qdrant at 500K and 1M once build parallelism is
-set, and its performance depends strongly on the buffer pool. With the default setting it is
+Which system builds faster depends on how each is loaded, and pgvector's performance
+depends strongly on the buffer pool. With the default setting it is
 2.7$\times$ slower even when nothing is read from disk. Under memory limits, pgvector's
 one-page-per-vector layout doubles the data it has to read, and Qdrant tolerates tighter
 limits.
