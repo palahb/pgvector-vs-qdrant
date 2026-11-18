@@ -75,7 +75,7 @@ measurement confounders and quantify each one. Three of them overturned our own 
 laptop conclusions. Others include Qdrant reporting a collection as green while segments
 remain unindexed, PostgreSQL's default shared buffers making pgvector 2.7$\times$ slower
 with all data in memory, and a gap in pgvector's cost model for TOASTed vectors that can
-replace an index scan with an exact scan about 250$\times$ slower.
+replace an index scan with an exact scan more than 200$\times$ slower.
 \end{abstract}
 
 \keywords{vector databases, approximate nearest neighbor search, HNSW, pgvector,
@@ -434,7 +434,8 @@ how to detect each confounder and how this study avoids it.
       500K, $ef=256$: parallel exact scan, recall 1.000 at 890\,ms per query
       against 3--5\,ms at the neighboring $ef$ values. Predicted index costs 10.5k
       ($ef=192$) and 13.3k ($ef=256$); recorded 10{,}516 and 13{,}324. At $ef=384$ the
-      correction applies and the cost drops to 3{,}787. \\
+      correction applies and the cost drops to 3{,}787. Exposure over the grid we ran:
+      Section~\ref{sec:planner} \\
     Build workers sized from the heap &
       PostgreSQL plans parallel \texttt{CREATE INDEX} workers from the heap size, which
       excludes the TOASTed vectors &
@@ -699,6 +700,26 @@ Python user of the official client waits is therefore spent in the client. REST 
 adds work on the server. At the same $ef$, Qdrant's engine-side time over REST is
 0.4--0.5\,ms higher than over gRPC, which we attribute to JSON parsing and
 serialization.
+
+\subsection{Planner Exposure}
+\label{sec:planner}
+
+The main experiments force the HNSW index (\texttt{enable\_seqscan = off}), so they measure
+the index and not how often PostgreSQL's planner would choose it. Our first scale runs also
+contain a run with the default planner, at the three scales and eight values of $ef$ from 16
+to 384, with one build per scale. We compare each cell with the forced-index run at the same
+$N$ and $ef$. In 23 of the 24 cells the two agree within 6\% in latency. In one cell, 500K
+vectors at $ef=256$, the default planner is 218$\times$ slower (888 against 4.1\,ms) and its
+recall is 1.000, the signature of an exact scan. This is 1 of 24 cells, 4\%, and the two
+neighbouring values of $ef$ at the same scale use the index.
+
+This exposure is a lower bound for two reasons. The plans were not recorded in that run,
+so the exact scan is inferred from latency and recall, and the cost model that decides
+between the index and a scan depends on the table, TOAST and index sizes
+(Table~\ref{tab:confounders}), which change with the number of vectors, the dimension and
+$ef$. We therefore do not know how the exposure varies outside the three scales and one
+dimension we ran. Measuring it needs only plans, not queries, and we leave it to future work
+together with a report to the pgvector maintainers.
 
 \subsection{Latency Versus CPU Cost}
 \label{sec:cpu}

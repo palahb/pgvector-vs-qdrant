@@ -132,9 +132,18 @@ is subject to the author's and the referee's agreement.
 - Not done: eBPF attribution (no privileges on the cluster); a real-data repetition of the
   perf measurement (the E7 pilot used synthetic data and only checks that counters work).
 
-### M12 — Planner fallback exposure: open
+### M12 — Planner fallback exposure: partly addressed
 
-- No new evidence. The default-planner grid and the upstream report are not done.
+- Evidence: the E1 default-planner run (one build per scale, ef 16-384, 24 cells) compared
+  with the forced-index run at the same N and ef.
+- 23 of 24 cells agree within 6% in latency. One cell (500K, ef=256) is 218x slower with
+  recall 1.000, the exact-scan signature. The earlier "about 250x" compared that cell with
+  neighbouring ef values; the like-for-like ratio is 218x and the manuscript now says
+  "more than 200x". New subsection "Planner Exposure".
+- Not done: the N x dimension x ef plan grid with recorded plans and predicted costs (the
+  existing run recorded no plans, so the exposure is a lower bound), and the minimal
+  reproducer and upstream report, which need the author's approval before anything is sent.
+- The grid needs only EXPLAIN, not query execution, so it is cheap to run.
 
 ## Minor comments
 
