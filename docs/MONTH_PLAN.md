@@ -127,3 +127,18 @@ reference for everything beyond this scope.
 - Fix: `set_ef_search` confirms the value with `SHOW` and raises on a mismatch; it is used at
   all three call sites. The E17 grid now stops at `ef=1000`. E6/E8 example configs still list
   1024 because they describe what ran.
+
+### Week 4 items done early (2026-11-18/19)
+
+- Related work: ten sources (Milvus, VBase, DiskANN, SPANN, Starling, Big-ANN NeurIPS'21,
+  Filtered-DiskANN, ACORN, pgvectorscale, VectorChord with RaBitQ) checked against primary
+  listings and positioned in a new Related Work subsection. Pages are given only where verified
+  (Milvus, DiskANN, Big-ANN, Filtered-DiskANN); VBase, SPANN, Starling, ACORN and RaBitQ have no
+  page range in the reference because none was confirmed. The vendor performance claims for
+  pgvectorscale and VectorChord are described as unreproduced.
+- E17 (planner exposure): pilot 7011941 reproduced the E1 fallback with recorded plans (500K,
+  ef=256: default plan Seq Scan, index cost 13,323 against scan cost 11,819; ef=192 index cost
+  10,516 and ef=384 3,787 match the paper's earlier figures). Full array 7013754 (20 jobs) submitted.
+- AI-use statement drafted (`paper/ai_use_statement.md`) with the facts that can be stated and the
+  points the authors must confirm; not inserted into the manuscript because the target journal's
+  wording and placement are not fixed.
