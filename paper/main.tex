@@ -112,8 +112,8 @@ depends heavily on how it is measured. The client library, the wire protocol, th
 moment at which an index is considered built, the query set and the server
 configuration all stand between the engine and the number that ends up in a table. Our
 own first measurements were taken on a laptop, with a thread-based Python client and
-default settings. They showed pgvector three times faster than Qdrant at 100K vectors
-and Qdrant's throughput not growing with the number of clients. Neither result held up
+default settings. They showed pgvector 1.6 to 3.7 times faster than Qdrant at 100K vectors
+at equal $ef$ and Qdrant's throughput not growing with the number of clients. Neither result held up
 when we repeated the measurements under controlled conditions
 (Section~\ref{sec:confounders}).
 
@@ -262,14 +262,23 @@ $k$-nearest-neighbor problem under cosine similarity is
 \text{KNN}(q,k)=\arg\max_{S\subseteq\mathcal{D},|S|=k}\sum_{x\in S}
 \frac{q\cdot x}{\|q\|\,\|x\|}.
 \end{equation}
-All vectors are $\ell_2$-normalized, so cosine similarity is the inner product, and we
-compute exact ground truth with batched matrix products. Recall@$K$ is
+Corpus vectors have unit norm up to $10^{-4}$ (the first 10{,}000 norms lie between 0.99994
+and 1.00007), and vectors truncated to fewer dimensions are normalized again, so cosine
+similarity is the inner product up to that precision. We compute exact ground truth over the
+whole corpus in single precision with batched matrix products. Ties at rank $K$ are broken
+arbitrarily and not by a fixed rule, and we did not count how many queries have such ties,
+so a returned neighbor with the same score as a ground-truth neighbor may count as a miss.
+Recall@$K$ is
 \begin{equation}
 \text{Recall@}K=\frac{|\mathcal{R}_K\cap\mathcal{G}_K|}{K},
 \end{equation}
 where $\mathcal{R}_K$ is the returned set and $\mathcal{G}_K$ the exact top-$K$. We use
 $K=10$. We report mean and 99th-percentile (p99) latency, throughput, index build time,
 index size, and the engine-side execution time per query for every measurement window.
+Every query returns identifiers only. The pgvector query selects the \texttt{id} column. The
+three Qdrant paths set the payload off explicitly and do not request vectors, which is the
+default of the client library, and the raw gRPC request leaves that field unset. We checked
+these defaults in the client but did not inspect what the server returns.
 
 \subsection{Dataset and Queries}
 
@@ -427,17 +436,59 @@ because with a spinning disk both systems did not leave the cold start in it.
 %% =============================================================
 
 Our first measurements of the same two systems were taken on a laptop with Docker, a
-thread-based Python client and default settings. They led to three conclusions. pgvector
-was about three times faster at 100K vectors, Qdrant built its indexes 3.5--4.7$\times$
-faster, and Qdrant's throughput did not increase with more clients while its p99 latency
-reached 864\,ms. None of these conclusions holds under the protocol of
-Section~\ref{sec:protocol}. Table~\ref{tab:confounders} lists ten confounders with their
+thread-based Python client and default settings. They led to three conclusions. At equal
+$ef$, pgvector's mean latency at 100K vectors was 1.6 to 3.7 times lower than Qdrant's
+(2.2 times at $ef=64$), Qdrant built its indexes 3.5--4.7$\times$ faster, and Qdrant's
+throughput did not increase with more clients while its p99 latency reached 864\,ms. None
+of these conclusions holds under the protocol of Section~\ref{sec:protocol}
+(Table~\ref{tab:laptop}). Table~\ref{tab:confounders} lists ten confounders with their
 mechanism and measured effect. Nine are causes of the laptop results or problems found
 while building the new harness, and the tenth, intra-query parallelism, only became
 visible once the new harness could separate latency from CPU cost
 (Section~\ref{sec:cpu}). Each of them is easy to introduce by accident, and each one
 changes a result. Table~\ref{tab:checklist} turns the list into a checklist that states
 how to detect each confounder and how this study avoids it.
+
+\begin{table*}[t]
+  \caption{The laptop measurements against the controlled harness, 100K vectors unless noted.
+  Laptop values are from the archived course-project result files. Controlled values are from
+  the first scale runs (E1) and the same-node build repetitions (E5), with real queries and
+  persistent clients. Ratios compare the systems within each column. The latency rows compare
+  at equal $ef$, which gives the two engines different recall (Section~\ref{sec:cpu} and
+  Table~\ref{tab:confounders}), so they show the direction of the change and not a matched
+  comparison.}
+  \label{tab:laptop}
+  \small
+  \begin{tabular}{p{0.2\textwidth}p{0.36\textwidth}p{0.38\textwidth}}
+    \toprule
+    Measurement & Laptop harness & Controlled harness \\
+    \midrule
+    Mean latency, $ef=64$ &
+      pgvector 2.99\,ms, Qdrant 6.55\,ms: pgvector 2.2$\times$ faster &
+      pgvector 1.17\,ms; Qdrant 0.79\,ms with lean gRPC (1.5$\times$ faster than pgvector),
+      1.62\,ms with the official gRPC client and 2.66\,ms with REST (pgvector 1.4$\times$ and
+      2.3$\times$ faster) \\
+    Same, other $ef$ &
+      pgvector 3.7$\times$ faster at $ef=16$, 2.6$\times$ at 32, 1.6$\times$ at 128 &
+      Qdrant (lean gRPC) 1.0$\times$, 1.2$\times$ and 1.8$\times$ faster at $ef=16$, 32 and 128 \\
+    Recall@10, $ef=64$ &
+      0.993 (pgvector), 0.998 (Qdrant), queries drawn from the corpus &
+      0.889 (pgvector), 0.927 (Qdrant), TREC queries not in the corpus \\
+    Build time, 100K / 500K / 1M &
+      pgvector 545 / 2{,}131 / 5{,}412\,s, Qdrant 116 / 609 / 1{,}367\,s: Qdrant 4.7 / 3.5 /
+      4.0$\times$ faster &
+      pgvector 20 / 94 / 307\,s, Qdrant 18 / 178 / 370\,s: Qdrant 1.2$\times$ faster at 100K,
+      pgvector 1.9 and 1.2$\times$ faster at 500K and 1M \\
+    Throughput, 100K &
+      1 / 10 / 50 clients: pgvector 33 / 177 / 184\,qps, Qdrant 29 / 35 / 28\,qps &
+      1 / 8 / 48 clients: pgvector 861 / 6{,}406 / 6{,}217\,qps, Qdrant (lean gRPC) 1{,}233 /
+      5{,}108 / 6{,}623\,qps \\
+    p99 latency, Qdrant, highest client count &
+      864\,ms with 50 clients (mean 116\,ms) &
+      15\,ms with 48 clients (mean 7.2\,ms) \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
 
 \begin{table*}[t]
   \caption{Confounders in vector database benchmarks and their measured effect}

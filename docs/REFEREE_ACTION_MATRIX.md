@@ -28,15 +28,15 @@ response letter must cite the eventual evidence, not merely this plan.
 | m2 | presentation | Define E0–E17 early in Methodology | Experiment-map table agrees with `docs/EXPERIMENT_MAP.md` | planned |
 | m3 | structure | Expand Measurement Confounders into mechanism/detection/mitigation subsections | Every confounder has evidence and actionable mitigation | open |
 | m4 | presentation | Split dense confounder table or separate mechanism/effect; add result cross-references | Readable rendered table and valid references | open |
-| m5 | data/quality | Add passage length, qrels coverage, exact-ground-truth precision and tie handling | Values generated from versioned data-analysis script | open |
-| m6 | implementation/writing | Verify and state Qdrant `with_payload=false`, `with_vectors=false` | Code test/inspection plus manuscript statement | open |
+| m5 | data/quality | Add passage length, qrels coverage, exact-ground-truth precision and tie handling | Values generated from versioned data-analysis script | partly (method stated; qrels open) |
+| m6 | implementation/writing | Verify and state Qdrant `with_payload=false`, `with_vectors=false` | Code test/inspection plus manuscript statement | done (text; server response not inspected) |
 | m7 | environment | Record pgvector iterative-scan setting, compile flags and ISA/SIMD availability for both engines | Result manifest/probe output and manuscript table | open |
 | m8 | causal analysis | Explain M-independent index size with per-page byte budget and measured sizes | Calculation and engine-format citation/verification | open |
 | m9 | figure/protocol | Show fixed-ef=64 curves or remove that protocol arm from claims | Figure/protocol are consistent | open |
 | m10 | anomaly | Repeat pgvector d=768 builds and discuss recall drop | ≥3 builds and anomaly decision logged | open |
 | m11 | wording | Replace broad speed claims; scope REST statement to official Python REST client | Claim-lint/search finds no forbidden wording | open |
 | m12 | writing | Shorten abstract to surviving 3–4 findings | Final abstract meets target journal guidance | open |
-| m13 | provenance/presentation | Publish old-harness vs controlled-harness numeric table | Same definitions and traceable E0/current sources | open |
+| m13 | provenance/presentation | Publish old-harness vs controlled-harness numeric table | Same definitions and traceable E0/current sources | done |
 
 ## Reviewer priority order mapped to execution
 

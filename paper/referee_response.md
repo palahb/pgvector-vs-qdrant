@@ -154,10 +154,16 @@ is subject to the author's and the referee's agreement.
 3. Expanded confounder section: done as a table with measured effects plus a
    detection-and-avoidance checklist (`tab:checklist`).
 4. Table splitting: done (mechanism/effect table and checklist table).
-5. Dataset statistics: partly done (passage length 161.7 mean, 155 median words). Qrels
-   coverage and ground-truth precision and tie handling are not done.
-6. Qdrant response flags: partly done (`with_payload=False` is set in the query path;
-   the manuscript statement and a `with_vectors` assertion are pending).
+5. Dataset statistics: partly done. Passage length is in Table 1 (161.7 mean, 155 median
+   words). The ground-truth method is now stated from the code: exact inner product over the
+   whole corpus in float32 with batched matrix products, corpus norms 0.99994-1.00007, and no
+   rule for ties at rank 10 (not counted, so a tied neighbor may count as a miss). Qrels
+   coverage is not done: the TREC DL qrels are not in the repository.
+6. Qdrant response flags: done in the text. All three Qdrant paths set the payload off
+   explicitly; no path requests vectors (client default `False` checked in qdrant-client 1.19.1,
+   and the raw gRPC request leaves the field unset). The server's response was not inspected,
+   and the harness does not set `with_vectors=False` explicitly; doing so would be a code
+   change with new gates.
 7. pgvector `hnsw.iterative_scan`, compile flags, ISA: partly done (the CPU supports AVX2
    and AVX-512 per the kernel probe); the setting and compile flags are not yet recorded.
 8. Per-page byte budget of the index size: open.
@@ -166,4 +172,7 @@ is subject to the author's and the referee's agreement.
 11. Wording: done for the three headline sentences; REST statement scoped to the official
     Python REST client.
 12. Abstract: done (about 240 words, three findings).
-13. Old-harness table: open.
+13. Old-harness table: done (Table `tab:laptop`): latency at four `ef` values, recall,
+    build times at three scales, throughput and p99, each from the archived course result files
+    next to the controlled-harness value. The "pgvector about three times faster" wording was
+    corrected: in the archive the ratio is 3.7x at ef=16, 2.6x at 32, 2.2x at 64 and 1.6x at 128.
