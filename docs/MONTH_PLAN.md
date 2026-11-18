@@ -69,3 +69,18 @@ reference for everything beyond this scope.
 - Paper: new "Ingestion Fairness" subsection; the last `\todo` (1M load I/O) is closed.
   The paper now has no `\todo`.
 - Not done: LaTeX compile check (no TeX), E10 memory study, push of the newest commits.
+
+### E10 operations note (2026-11-18)
+
+- Task 14 of E10 full array 7008319 (`pg_rep2_pg_sbq_none`) failed after 3 s on hamsi68
+  with `could not bind IPv4 address "127.0.0.1": Address already in use` (port 55432). It
+  started one minute after task 8 left the same node, so the previous PostgreSQL still held
+  the port. No result data was produced.
+- The orchestrator marks it non-retryable by design, so `retry` refused. Because the cause is
+  an infrastructure collision and not a benchmark or validation failure, it was resubmitted
+  by hand with `sbatch --array=14` on the same deployment (job 7008845). The registry keeps
+  both attempts. The failed attempt's directory (`task_0014_7008838`) is excluded from
+  analysis and must be listed as superseded in the E10 manifest.
+- Follow-up for the harness: wait for the port to become free (or pick a port per job)
+  before starting PostgreSQL. This needs a new commit and therefore new smoke and pilot
+  gates, so it is not applied to the running E10 array.
