@@ -14,8 +14,9 @@ import numpy as np
 
 from common import (evict_page_cache, ground_truth, host_info, load_vectors, log, pick_cores,
                     resident_bytes, save_json, sha256, stable_id, git_state)
-from engines import MODE, make_server
-from workload import concurrency_run, latency_sweep
+from engines import MODE, make_query_fn, make_server
+from workload import (cgroup_memory_bytes, concurrency_run, latency_sweep, memory_passes,
+                      proc_counters)
 
 
 def ints(s):
@@ -66,6 +67,15 @@ def parse():
                     help="disable indexing during the upload and restore the threshold afterwards")
     ap.add_argument("--qdrant-max-indexing-threads", type=int, default=0,
                     help="HNSW build threads for Qdrant; 0 keeps automatic selection")
+    ap.add_argument("--memory-passes", type=int, default=0,
+                    help="memory study: after every restart with an evicted page cache run this many full-query-set "
+                         "passes (the first is the cold start, the rest are steady state); replaces the latency sweep")
+    ap.add_argument("--memory-ef", type=int, default=128, help="ef used by the memory study")
+    ap.add_argument("--memory-clients", type=int, default=0,
+                    help="memory study: closed-loop clients for one window after the passes (0 = none)")
+    ap.add_argument("--memory-conc-duration", type=float, default=60)
+    ap.add_argument("--order-seed", type=int, default=None,
+                    help="seed of the memory study query order; defaults to --seed")
     ap.add_argument("--qdrant-on-disk", action="store_true", help="mmap vectors and HNSW (needed for memory limits)")
     ap.add_argument("--qdrant-indexing-threshold-kb", type=int, default=None)
     ap.add_argument("--qdrant-segments", type=int, default=0,
@@ -146,13 +156,40 @@ def main():
 
         for lim in [x for x in a.mem_limits.split(",") if x]:
             run = {"mem_limit": lim}
-            if lim != "none":
+            # The memory study starts every limit, including "none", from the same state: the
+            # server restarted with its files evicted from the page cache.
+            if lim != "none" or a.memory_passes:
                 srv.stop()
                 data_dir = srv.data if a.engine == "pg" else srv.storage
                 run["resident_before_evict"] = resident_bytes(data_dir)
                 run["evicted_bytes"] = evict_page_cache(data_dir)
                 run["resident_after_evict"] = resident_bytes(data_dir)
-                srv.start(mem_limit=lim)
+                srv.start(mem_limit=None if lim == "none" else lim)
+            if a.memory_passes:
+                proto = protocols[0]
+                log(f"== {name} mem_limit={lim}: {a.memory_passes} passes over {len(queries)} queries, ef={a.memory_ef}")
+                query = make_query_fn(srv.query_spec(a.memory_ef, proto, a.k))
+                rows, r = memory_passes(
+                    query, queries, gt, a.k, a.memory_passes,
+                    a.seed if a.order_seed is None else a.order_seed,
+                    counters_fn=lambda: proc_counters(srv.pids()),
+                    stats_begin=lambda: srv.stats_begin(proto), stats_end=lambda: srv.stats_end(proto))
+                run["memory_passes"] = [{"proto": proto, "ef": a.memory_ef, **row} for row in rows]
+                run["resident_after_passes"] = resident_bytes(data_dir)
+                server_pids = srv.pids()
+                run["server_cgroup_memory_bytes"] = cgroup_memory_bytes(server_pids[0]) if server_pids else None
+                raw.update({f"{lim}_{key}": v for key, v in r.items()})
+                save_json(result | {"runs": result["runs"] + [run]}, rpath)
+                if a.memory_clients:
+                    row, r = concurrency_run(srv, proto, a.memory_ef, a.memory_clients, a.memory_conc_duration,
+                                             0, queries, gt, a.k, None)
+                    run["concurrency"] = [row]
+                    raw.update({f"{lim}_{key}": v for key, v in r.items()})
+                if a.engine == "qdrant":
+                    run["collection_state"] = srv.collection_state()
+                result["runs"].append(run)
+                save_json(result, rpath)
+                continue
             log(f"== {name} mem_limit={lim}: latency sweep")
             run["latency"], r = latency_sweep(srv, protocols, a.ef, a.reps, queries, warm, gt, a.k)
             raw.update({f"{lim}_{key}": v for key, v in r.items()})

@@ -19,6 +19,86 @@ def recall_hits(ids, gt_row):
     return len(set(ids) & set(gt_row.tolist()))
 
 
+def proc_counters(pids, proc_root="/proc"):
+    """Page faults, bytes read from storage and resident memory summed over processes.
+
+    Processes that have exited are skipped. The stat file is split after the last ")" because
+    the command name may contain spaces and parentheses."""
+    from pathlib import Path
+    root = Path(proc_root)
+    total = {"minor_faults": 0, "major_faults": 0, "read_bytes": 0, "rss_kb": 0, "rss_file_kb": 0}
+    for pid in pids:
+        try:
+            fields = (root / str(pid) / "stat").read_text().rsplit(")", 1)[1].split()
+            total["minor_faults"] += int(fields[7])
+            total["major_faults"] += int(fields[9])
+            for line in (root / str(pid) / "io").read_text().splitlines():
+                if line.startswith("read_bytes:"):
+                    total["read_bytes"] += int(line.split()[1])
+            for line in (root / str(pid) / "status").read_text().splitlines():
+                if line.startswith("VmRSS:"):
+                    total["rss_kb"] += int(line.split()[1])
+                elif line.startswith("RssFile:"):
+                    total["rss_file_kb"] += int(line.split()[1])
+        except (OSError, IndexError, ValueError):
+            continue
+    return total
+
+
+def cgroup_memory_bytes(pid, sys_root="/sys/fs/cgroup"):
+    """memory.current of the cgroup a process belongs to, or None where it cannot be read."""
+    try:
+        with open(f"/proc/{pid}/cgroup") as f:
+            relative = next(line.strip().split("::", 1)[1] for line in f if line.startswith("0::"))
+        with open(os.path.join(sys_root, relative.lstrip("/"), "memory.current")) as f:
+            return int(f.read().strip())
+    except (OSError, StopIteration, IndexError, ValueError):
+        return None
+
+
+def pass_order(n, seed, index):
+    """Query order of one pass: a permutation fixed by (seed, pass index), so repetitions with
+    different seeds differ and a pass can be reproduced."""
+    return np.random.default_rng([seed, index]).permutation(n)
+
+
+def memory_passes(query_fn, queries, gt, k, passes, order_seed, counters_fn, stats_begin, stats_end):
+    """Cold-start and steady-state passes over the whole query set, one client.
+
+    Pass 0 follows a server restart with an evicted page cache and has no warm-up, so it
+    measures the cold start. Later passes measure the steady state. Every pass visits every
+    query once in its own random order, so the measurement is not a fixed subset of the graph."""
+    rows, raw = [], {}
+    for index in range(passes):
+        order = pass_order(len(queries), order_seed, index)
+        lat = np.empty(len(order), dtype=np.int64)
+        hits = 0
+        before = counters_fn()
+        stats_begin()
+        wall0 = now_ns()
+        for slot, j in enumerate(order):
+            t0 = now_ns()
+            ids = query_fn(queries[j])
+            lat[slot] = now_ns() - t0
+            hits += recall_hits(ids, gt[j])
+        wall_s = (now_ns() - wall0) / 1e9
+        stats = stats_end()
+        after = counters_fn()
+        row = {
+            "pass": index, "phase": "cold" if index == 0 else "steady",
+            "recall_at_k": round(hits / (k * len(order)), 5),
+            "wall_s": round(wall_s, 3), "throughput_qps": round(len(order) / wall_s, 3) if wall_s else None,
+            "major_faults": after["major_faults"] - before["major_faults"],
+            "minor_faults": after["minor_faults"] - before["minor_faults"],
+            "read_bytes": after["read_bytes"] - before["read_bytes"],
+            "rss_kb": after["rss_kb"], **summarize(lat), **stats,
+        }
+        rows.append(row)
+        raw[f"mem_pass{index}_lat"] = lat
+        raw[f"mem_pass{index}_order"] = order
+    return rows, raw
+
+
 def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
     """Sequential queries, one persistent connection per (protocol, ef). Each (protocol, ef)
     gets its own untimed warm-up pass over a separate query set before the measured reps."""
