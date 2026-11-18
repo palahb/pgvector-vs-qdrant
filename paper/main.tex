@@ -1064,8 +1064,8 @@ the client path. Through the official REST client it disappears at moderate reca
 Which system builds faster depends on how each is loaded, and pgvector's performance
 depends strongly on the buffer pool. With the default setting it is
 2.7$\times$ slower even when nothing is read from disk. Under memory limits, pgvector's
-one-page-per-vector layout doubles the data it has to read, and Qdrant tolerates tighter
-limits.
+one-page-per-vector layout doubles the data it has to read, and \prelim{Qdrant tolerates tighter
+limits}.
 
 Several of these results reverse what a simpler benchmark of the same two systems
 showed, and some of the reasons are easy to miss: an indexing threshold that leaves
