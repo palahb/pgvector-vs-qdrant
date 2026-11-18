@@ -84,3 +84,18 @@ reference for everything beyond this scope.
 - Follow-up for the harness: wait for the port to become free (or pick a port per job)
   before starting PostgreSQL. This needs a new commit and therefore new smoke and pilot
   gates, so it is not applied to the running E10 array.
+
+### E10 time-limit finding (2026-11-18)
+
+- Task 10 (`pg_rep1_pg_sb1G_4G`) hit the 3 h limit without finishing its first pass set, and
+  task 11 (`pg_rep1_pg_sbq_4G`) is about to. At the 8 GB cap the completed pgvector arms
+  already need 770-1,020 s per steady pass (459-610 ms/query, `shared_buffers=1GB`) and
+  1,940-1,960 s (about 1,160 ms/query, equalized arm), so one 4 GB pass is longer still.
+  The job limit of 3 h is too short for the pgvector 4 GB arms; this is a design limit of
+  the array, not a transient failure.
+- Pending 4 GB pgvector tasks 22, 23, 34 and 35 of array 7008319 were cancelled before they
+  started (no data lost) so they would not each occupy a node for 3 h and delay the rest.
+  Tasks 10 and 11 have partial directories (`status: running`) that must be excluded from
+  the analysis and listed as superseded in the E10 manifest.
+- Open decision for the author: rerun the six pgvector 4 GB arms with a longer limit (each
+  likely several hours) or report them as not completing within 3 h per task.
