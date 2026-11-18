@@ -212,6 +212,44 @@ latency and cost-normalized scores. Such suites rank systems under their own def
 configurations and client libraries. We instead ask which measurement choices change the
 ranking, and we hold the protocol, recall level and hardware fixed while varying them.
 
+\subsection{Systems and Indexes Outside This Study}
+
+The comparison here is between two systems that both use an in-memory HNSW graph with
+float32 vectors, so that the measurement choices can be isolated. Several lines of work
+change the answer to the question that motivates it, and we do not measure them.
+
+\textbf{Other vector database systems.} Milvus~\cite{milvus2021} is a purpose-built vector
+data management system. VBase~\cite{vbase2023} targets queries that combine vector similarity
+search with relational conditions, which is the integration that pgvector offers inside
+PostgreSQL. VectorDBBench~\cite{vectordbbench}, discussed above, benchmarks several such
+systems.
+
+\textbf{Indexes for data larger than memory.} DiskANN~\cite{diskann2019} indexes, stores and
+searches a billion-point collection on one machine with 64\,GB of RAM and a solid-state
+drive. SPANN~\cite{spann2021} keeps the centroids of its posting lists in memory and the lists
+on disk, and Starling~\cite{starling2024} is a disk-resident graph index framework for the
+vector data held by one segment of a database. The Big-ANN competition at
+NeurIPS~2021~\cite{bigann2022} ranked such algorithms at the scale of a billion vectors by
+hardware cost, accuracy and throughput. Our largest collection holds one million vectors
+and our out-of-core study (Section~\ref{sec:memory}) runs an in-memory graph from a
+spinning disk, which is not the setting these indexes are designed for.
+
+\textbf{Filtered search.} Filtered-DiskANN~\cite{filtereddiskann2023} and
+ACORN~\cite{acorn2024} study nearest-neighbor search under attribute filters, with ACORN built
+on HNSW. Filtered search is common in multi-tenant retrieval-augmented generation, and we do
+not measure it (Section~\ref{sec:threats}).
+
+\textbf{PostgreSQL-native alternatives.} pgvectorscale~\cite{pgvectorscale} extends pgvector
+with a StreamingDiskANN index and with statistical binary quantization.
+VectorChord~\cite{vectorchord} is a PostgreSQL extension whose index compresses vectors with
+RaBitQ~\cite{rabitq2024}. Both target the cost of float32 HNSW indexes on large collections,
+which is the cost this study measures (index size, build time, memory pressure), and their
+authors report large improvements from vendor-run benchmarks that we have not reproduced.
+pgvector's own half-precision and binary vector types, and Qdrant's scalar, product and
+binary quantization, belong to the same group. A system comparison that excludes them
+answers the question of which float32 HNSW implementation is cheaper, and not the question
+of which system a team should deploy.
+
 %% =============================================================
 \section{Methodology}
 %% =============================================================
@@ -1075,6 +1113,7 @@ applications in production, should check the query plan rather than assume the i
 used.
 
 \subsection{Threats to Validity}
+\label{sec:threats}
 
 \textbf{Single node, single client language.} Both systems run on a single node and are
 queried from Python. Clients written in compiled languages would reduce the client's
@@ -1189,6 +1228,58 @@ Cohere, ``Introducing Embed v3,'' Cohere Blog, 2023.
 \bibitem{vectordbbench}
 Zilliz, ``VectorDBBench: open-source benchmark for vector databases,'' accessed
 November 2026. \url{https://github.com/zilliztech/VectorDBBench}
+
+\bibitem{milvus2021}
+J.~Wang et al., ``Milvus: A purpose-built vector data management system,'' in
+\textit{Proc.\ 2021 ACM SIGMOD International Conference on Management of Data}, 2021,
+pp.~2614--2627.
+
+\bibitem{vbase2023}
+Q.~Zhang et al., ``VBASE: Unifying online vector similarity search and relational queries
+via relaxed monotonicity,'' in \textit{Proc.\ 17th USENIX Symposium on Operating Systems
+Design and Implementation (OSDI)}, 2023.
+
+\bibitem{diskann2019}
+S.~Jayaram Subramanya, F.~Devvrit, H.~V. Simhadri, R.~Krishnaswamy, and R.~Kadekodi,
+``DiskANN: Fast accurate billion-point nearest neighbor search on a single node,'' in
+\textit{Advances in Neural Information Processing Systems 32 (NeurIPS)}, 2019,
+pp.~13771--13781.
+
+\bibitem{spann2021}
+Q.~Chen et al., ``SPANN: Highly-efficient billion-scale approximate nearest neighbor
+search,'' in \textit{Advances in Neural Information Processing Systems 34 (NeurIPS)}, 2021.
+
+\bibitem{starling2024}
+M.~Wang et al., ``Starling: An I/O-efficient disk-resident graph index framework for
+high-dimensional vector similarity search on data segment,'' \textit{Proc.\ ACM on Management
+of Data (SIGMOD)}, 2024.
+
+\bibitem{bigann2022}
+H.~V. Simhadri et al., ``Results of the NeurIPS'21 challenge on billion-scale approximate
+nearest neighbor search,'' in \textit{Proc.\ Machine Learning Research}, vol.~176, 2022,
+pp.~177--189.
+
+\bibitem{filtereddiskann2023}
+S.~Gollapudi et al., ``Filtered-DiskANN: Graph algorithms for approximate nearest neighbor
+search with filters,'' in \textit{Proc.\ ACM Web Conference (WWW)}, 2023, pp.~3406--3416.
+
+\bibitem{acorn2024}
+L.~Patel, P.~Kraft, C.~Guestrin, and M.~Zaharia, ``ACORN: Performant and predicate-agnostic
+search over vector embeddings and structured data,'' \textit{Proc.\ ACM on Management of Data
+(SIGMOD)}, 2024. arXiv:2403.04871.
+
+\bibitem{rabitq2024}
+J.~Gao and C.~Long, ``RaBitQ: Quantizing high-dimensional vectors with a theoretical error
+bound for approximate nearest neighbor search,'' \textit{Proc.\ ACM on Management of Data},
+vol.~2, no.~3, article~167, 2024.
+
+\bibitem{pgvectorscale}
+Timescale, ``pgvectorscale: StreamingDiskANN and statistical binary quantization for
+PostgreSQL.'' \url{https://github.com/timescale/pgvectorscale}
+
+\bibitem{vectorchord}
+TensorChord, ``VectorChord (\texttt{vchord}): vector search extension for PostgreSQL.''
+\url{https://pgxn.org/dist/vchord/}
 
 \bibitem{msmarco}
 P.~Bajaj et al., ``MS MARCO: A human generated machine reading comprehension
