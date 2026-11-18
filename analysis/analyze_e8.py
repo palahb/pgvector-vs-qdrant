@@ -22,13 +22,16 @@ from analysis.analyze_e6 import interval
 METRICS = ("mean_ms", "p99_ms", "server_cpu_ms_per_query")
 PRIMARY = {"pg": "pg", "qdrant": "grpc_raw"}
 FIXED_EF = 128
+# pgvector rejects hnsw.ef_search above 1000 with a warning and keeps the default of 40, so a
+# pgvector row labelled with a larger ef was not measured at that ef.
+PG_EF_MAX = 1000
 
 
 def per_ef_curve(latency: list[dict[str, Any]], proto: str) -> list[dict[str, float]]:
     """Mean over repetitions at each swept ef, sorted by ef."""
     grouped: dict[int, list[dict[str, Any]]] = defaultdict(list)
     for row in latency:
-        if row.get("proto") == proto and "recall_at_k" in row:
+        if row.get("proto") == proto and "recall_at_k" in row and not (proto == "pg" and row["ef"] > PG_EF_MAX):
             grouped[row["ef"]].append(row)
     curve = []
     for ef in sorted(grouped):

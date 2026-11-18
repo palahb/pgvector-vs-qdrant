@@ -42,6 +42,8 @@ class FakeConn:
         if sql.startswith("RESET "):
             self.settings.pop(sql[6:].strip(), None)
             return Result(None)
+        if sql.startswith("SHOW hnsw.ef_search"):
+            return Result((self.settings.get("hnsw.ef_search", "40"),))
         if sql.startswith("EXPLAIN"):
             index_allowed = self.settings.get("enable_indexscan", "on") == "on"
             scan_allowed = self.settings.get("enable_seqscan", "on") == "on"
@@ -89,7 +91,8 @@ class PlanGridTests(unittest.TestCase):
     def test_no_query_is_executed_only_explained(self) -> None:
         conn = FakeConn(index_cost=5.0, scan_cost=10.0)
         plan_grid_rows(conn, [16], "[0.1]")
-        executed = [s for s in conn.statements if not s.startswith(("SET", "RESET", "EXPLAIN", "PREPARE"))]
+        # SHOW only reads a setting back to confirm it; no statement touches the table
+        executed = [s for s in conn.statements if not s.startswith(("SET", "RESET", "SHOW", "EXPLAIN", "PREPARE"))]
         self.assertEqual(executed, [])
 
 

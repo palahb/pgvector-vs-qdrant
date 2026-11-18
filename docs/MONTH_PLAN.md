@@ -109,3 +109,21 @@ reference for everything beyond this scope.
 - Memory section, methodology, discussion, threats and conclusion rewritten from E10; the
   old 300-query claim is gone. The analyzer now lists planned cells with no result.
 - Open for the author: whether to rerun the pgvector 4 GB arms with a longer job limit.
+
+### Measurement bug found by the E17 pilot (2026-11-18)
+
+- pgvector accepts `hnsw.ef_search` only from 1 to 1000. For a larger value the server logs
+  `WARNING: ... outside the valid range (1 .. 1000)` and keeps the previous value (40 by
+  default); the `SET` does not fail. The harness did not check, so pgvector rows labelled
+  `ef=1024` were measured at `ef=40` (E8 example: 1.1 ms and recall 0.79 against 10.3 ms and
+  0.974 at `ef=768`).
+- Affected: only the pgvector rows with `ef=1024` in E6 full (18 rows, 6 files) and E8 full
+  (72 rows, 24 files). E1-E4, E9, E10 and all pilots never exceeded `ef=1000`.
+- Reported numbers are unchanged. The matched-recall values come from the smallest `ef`
+  reaching the recall target, which was at most 512 in every pgvector build, so the invalid
+  1024 point was never selected or interpolated. Re-running both analyzers with those rows
+  excluded gives aggregates identical to the committed ones. The raw files keep the mislabeled
+  rows; the analyzers now exclude them explicitly and E6 lists each exclusion as an observation.
+- Fix: `set_ef_search` confirms the value with `SHOW` and raises on a mismatch; it is used at
+  all three call sites. The E17 grid now stops at `ef=1000`. E6/E8 example configs still list
+  1024 because they describe what ran.

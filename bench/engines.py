@@ -27,6 +27,22 @@ COLL = "items"
 UPLOAD_BATCH = 512
 DEFAULT_QDRANT_INDEXING_THRESHOLD_KB = 20000
 
+# pgvector accepts hnsw.ef_search from 1 to 1000. Outside that range the server only logs a
+# WARNING and keeps the previous value (40 by default), so a plain SET would silently measure a
+# different ef than the one recorded.
+PG_EF_SEARCH_MAX = 1000
+
+
+def set_ef_search(conn, ef):
+    """Sets hnsw.ef_search and confirms the server took the value."""
+    ef = int(ef)
+    conn.execute(f"SET hnsw.ef_search = {ef}")
+    applied = conn.execute("SHOW hnsw.ef_search").fetchone()[0]
+    if str(applied) != str(ef):
+        raise RuntimeError(
+            f"hnsw.ef_search = {ef} was not applied (server reports {applied}); pgvector accepts "
+            f"1..{PG_EF_SEARCH_MAX} and otherwise keeps the previous value")
+
 # PostgreSQL write-path counters. Each query is best effort because the views differ
 # between major versions, and a counter that is unavailable is left out, never zero.
 _PG_ACTIVITY_QUERIES = (
@@ -91,7 +107,7 @@ def plan_grid_rows(conn, efs, vector_literal, k=10):
     rows = []
     try:
         for ef in efs:
-            conn.execute(f"SET hnsw.ef_search = {int(ef)}")
+            set_ef_search(conn, ef)
             entry = {"ef": int(ef)}
             for label, switches in (("default", ()), ("forced_index", (("enable_seqscan", "off"),)),
                                     ("forced_scan", (("enable_indexscan", "off"), ("enable_bitmapscan", "off")))):
@@ -339,7 +355,7 @@ class Pg(Server):
         lit = "[" + ",".join(f"{x:.7g}" for x in vec.tolist()) + "]"
         out = {}
         with self.admin() as conn:
-            conn.execute(f"SET hnsw.ef_search = {int(ef)}")
+            set_ef_search(conn, ef)
             if self.args.pg_planner == "force-index":
                 conn.execute("SET enable_seqscan = off")
             conn.execute(f"PREPARE bq(vector) AS SELECT id FROM items ORDER BY embedding <=> $1 LIMIT {int(k)}")
@@ -653,7 +669,7 @@ def make_query_fn(spec):
         from pgvector.psycopg import register_vector
         conn = psycopg.connect(spec["dsn"], autocommit=True)
         register_vector(conn)
-        conn.execute(f"SET hnsw.ef_search = {int(ef)}")
+        set_ef_search(conn, ef)
         if spec.get("force_index"):
             # pgvector's README suggests this when the planner skips the index; see Pg.plan()
             conn.execute("SET enable_seqscan = off")

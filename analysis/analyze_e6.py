@@ -13,6 +13,10 @@ from pathlib import Path
 from typing import Any
 
 
+# pgvector rejects hnsw.ef_search above 1000 with a warning and keeps the default of 40, so any
+# pgvector row labelled with a larger ef was not measured at that ef and must not be used.
+PG_EF_MAX = 1000
+
 T95 = {2: 12.706, 3: 4.303, 4: 3.182, 5: 2.776, 6: 2.571, 7: 2.447, 8: 2.365, 9: 2.306, 10: 2.262}
 
 
@@ -99,6 +103,13 @@ def analyze(root: Path, targets: list[float]) -> dict[str, Any]:
         latency, concurrency = run_rows(result)
         primary = "pg" if engine == "pg" else "grpc_raw"
         latency = [row for row in latency if row.get("proto") == primary]
+        if engine == "pg":
+            invalid = [row for row in latency if row["ef"] > PG_EF_MAX]
+            if invalid:
+                observations.append({"experiment_id": result.get("experiment_id"),
+                                     "observation": "pg_rows_above_ef_search_limit_excluded",
+                                     "ef": sorted({row["ef"] for row in invalid}), "rows": len(invalid)})
+            latency = [row for row in latency if row["ef"] <= PG_EF_MAX]
         for target in targets:
             candidates = sorted(
                 (row for row in latency if row.get("recall_at_k", 0) >= target),
