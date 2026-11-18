@@ -67,6 +67,9 @@ def parse():
                     help="disable indexing during the upload and restore the threshold afterwards")
     ap.add_argument("--qdrant-max-indexing-threads", type=int, default=0,
                     help="HNSW build threads for Qdrant; 0 keeps automatic selection")
+    ap.add_argument("--plan-only", action="store_true",
+                    help="planner exposure study: build, then record the plan grid over --ef without running "
+                         "queries or computing ground truth")
     ap.add_argument("--memory-passes", type=int, default=0,
                     help="memory study: after every restart with an evicted page cache run this many full-query-set "
                          "passes (the first is the cold start, the rest are steady state); replaces the latency sweep")
@@ -111,9 +114,13 @@ def main():
 
     log(f"{name}: server cores {server_cores}, client cores {client_cores}, work {work}")
     base, queries, dtag = load_vectors(a.n, a.dim, a.synthetic, seed=a.seed)
-    gt = ground_truth(base, queries, a.k, dtag)
-    if a.nq:
-        queries, gt = queries[:a.nq], gt[:a.nq]
+    if a.plan_only:
+        # No query runs, so no ground truth: it is by far the most expensive part at 1M.
+        queries, gt = queries[:1], None
+    else:
+        gt = ground_truth(base, queries, a.k, dtag)
+        if a.nq:
+            queries, gt = queries[:a.nq], gt[:a.nq]
     rng = np.random.default_rng(a.warm_seed)
     warm = base[rng.choice(len(base), size=min(a.warm, len(base)), replace=False)]
     log(f"data: {base.shape} base, {queries.shape} queries ({dtag})")
@@ -154,7 +161,14 @@ def main():
         result["server_info"] = srv.info()
         save_json(result, rpath)
 
-        for lim in [x for x in a.mem_limits.split(",") if x]:
+        if a.plan_only:
+            if a.engine != "pg":
+                raise SystemExit("--plan-only is defined for pgvector only")
+            result["runs"].append({"mem_limit": "none", "plan_grid": srv.plan_grid(a.ef, queries[0], a.k)})
+            save_json(result, rpath)
+            log(f"{name}: plan grid of {len(a.ef)} ef values recorded")
+
+        for lim in ([] if a.plan_only else [x for x in a.mem_limits.split(",") if x]):
             run = {"mem_limit": lim}
             # The memory study starts every limit, including "none", from the same state: the
             # server restarted with its files evicted from the page cache.

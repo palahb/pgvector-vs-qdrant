@@ -70,6 +70,47 @@ def pg_activity_delta(before, after):
     return {key: after[key] - before[key] for key in after if key in before}
 
 
+def explain_summary(plan):
+    """Node types, total cost and index use of an EXPLAIN (FORMAT JSON) plan tree."""
+    nodes, stack = [], [plan]
+    while stack:
+        node = stack.pop(0)
+        nodes.append(node["Node Type"])
+        stack.extend(node.get("Plans", []))
+    return {"nodes": "/".join(nodes), "cost": plan["Total Cost"], "uses_index": "Index Scan" in nodes}
+
+
+def plan_grid_rows(conn, efs, vector_literal, k=10):
+    """Plans for the benchmark query at each ef, without executing it.
+
+    For every ef this records the planner's own choice, the best index plan (sequential scans
+    disabled) and the best scan plan (index scans disabled). The ratio of the two costs shows
+    how close the planner is to switching. The planner switches are restored afterwards."""
+    conn.execute(f"PREPARE bq(vector) AS SELECT id FROM items ORDER BY embedding <=> $1 LIMIT {int(k)}")
+    conn.execute("SET plan_cache_mode = force_custom_plan")
+    rows = []
+    try:
+        for ef in efs:
+            conn.execute(f"SET hnsw.ef_search = {int(ef)}")
+            entry = {"ef": int(ef)}
+            for label, switches in (("default", ()), ("forced_index", (("enable_seqscan", "off"),)),
+                                    ("forced_scan", (("enable_indexscan", "off"), ("enable_bitmapscan", "off")))):
+                for name, value in switches:
+                    conn.execute(f"SET {name} = {value}")
+                try:
+                    explained = conn.execute(f"EXPLAIN (FORMAT JSON) EXECUTE bq('{vector_literal}')").fetchone()[0][0]
+                    entry[label] = explain_summary(explained["Plan"])
+                finally:
+                    for name, _ in switches:
+                        conn.execute(f"RESET {name}")
+            scan_cost = entry["forced_scan"]["cost"]
+            entry["index_to_scan_cost_ratio"] = (entry["forced_index"]["cost"] / scan_cost) if scan_cost else None
+            rows.append(entry)
+    finally:
+        conn.execute("RESET hnsw.ef_search")
+    return rows
+
+
 class Server:
     name = "?"
 
@@ -313,6 +354,24 @@ class Pg(Server):
                 out[mode] = {"nodes": "/".join(nodes), "cost": p["Total Cost"],
                              "uses_index": "Index Scan" in nodes}
         return out
+
+    def plan_grid(self, efs, vec, k=10):
+        """Plan-only measurement for the planner exposure study: table, TOAST and index sizes
+        in pages plus the plan grid. Nothing in it runs a query."""
+        lit = "[" + ",".join(f"{x:.7g}" for x in vec.tolist()) + "]"
+        with self.admin() as conn:
+            conn.execute("ANALYZE items")
+            sizes = conn.execute(
+                "SELECT c.relpages, c.reltuples, COALESCE(t.relpages, 0), i.relpages "
+                "FROM pg_class c LEFT JOIN pg_class t ON t.oid = c.reltoastrelid, pg_class i "
+                "WHERE c.relname = 'items' AND i.relname = 'items_hnsw'").fetchone()
+            settings = dict(conn.execute(
+                "SELECT name, setting FROM pg_settings WHERE name IN ('random_page_cost', 'seq_page_cost', "
+                "'cpu_tuple_cost', 'effective_cache_size', 'max_parallel_workers_per_gather', "
+                "'parallel_setup_cost', 'parallel_tuple_cost', 'min_parallel_table_scan_size')").fetchall())
+            rows = plan_grid_rows(conn, efs, lit, k)
+        return {"table_pages": {"heap": sizes[0], "heap_tuples": sizes[1], "toast": sizes[2], "index": sizes[3]},
+                "planner_settings": settings, "grid": rows}
 
     def stats_begin(self, proto):
         with self.admin() as conn:

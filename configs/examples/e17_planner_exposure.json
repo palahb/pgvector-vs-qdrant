@@ -1,0 +1,1155 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E17_planner_exposure",
+  "code_commit": "AUTO",
+  "registry_root": "$BENCH_ROOT/orchestration",
+  "requires_smoke": true,
+  "max_retries": 1,
+  "resources": {
+    "partition": "hamsi",
+    "cpus": 56,
+    "memory": "170G",
+    "time": "01:30:00",
+    "array_concurrency": 4,
+    "exclude": [
+      "hamsi20",
+      "hamsi65"
+    ]
+  },
+  "storage": {
+    "min_free_gb": 200,
+    "min_inode_free_percent": 10
+  },
+  "stages": {
+    "pilot": {
+      "jobs": [
+        {
+          "job_key": "n-100000_d-1024",
+          "factors": {
+            "n": 100000,
+            "dim": 1024
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 100000,
+                "dim": 1024,
+                "tag": "n100000_d1024"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-500000_d-1024",
+          "factors": {
+            "n": 500000,
+            "dim": 1024
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 500000,
+                "dim": 1024,
+                "tag": "n500000_d1024"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "full": {
+      "jobs": [
+        {
+          "job_key": "n-100000_d-128",
+          "factors": {
+            "n": 100000,
+            "dim": 128
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 100000,
+                "dim": 128,
+                "tag": "n100000_d128"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-384",
+          "factors": {
+            "n": 100000,
+            "dim": 384
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 100000,
+                "dim": 384,
+                "tag": "n100000_d384"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-768",
+          "factors": {
+            "n": 100000,
+            "dim": 768
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 100000,
+                "dim": 768,
+                "tag": "n100000_d768"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-1024",
+          "factors": {
+            "n": 100000,
+            "dim": 1024
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 100000,
+                "dim": 1024,
+                "tag": "n100000_d1024"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-250000_d-128",
+          "factors": {
+            "n": 250000,
+            "dim": 128
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 250000,
+                "dim": 128,
+                "tag": "n250000_d128"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-250000_d-384",
+          "factors": {
+            "n": 250000,
+            "dim": 384
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 250000,
+                "dim": 384,
+                "tag": "n250000_d384"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-250000_d-768",
+          "factors": {
+            "n": 250000,
+            "dim": 768
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 250000,
+                "dim": 768,
+                "tag": "n250000_d768"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-250000_d-1024",
+          "factors": {
+            "n": 250000,
+            "dim": 1024
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 250000,
+                "dim": 1024,
+                "tag": "n250000_d1024"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-500000_d-128",
+          "factors": {
+            "n": 500000,
+            "dim": 128
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 500000,
+                "dim": 128,
+                "tag": "n500000_d128"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-500000_d-384",
+          "factors": {
+            "n": 500000,
+            "dim": 384
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 500000,
+                "dim": 384,
+                "tag": "n500000_d384"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-500000_d-768",
+          "factors": {
+            "n": 500000,
+            "dim": 768
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 500000,
+                "dim": 768,
+                "tag": "n500000_d768"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-500000_d-1024",
+          "factors": {
+            "n": 500000,
+            "dim": 1024
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 500000,
+                "dim": 1024,
+                "tag": "n500000_d1024"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-750000_d-128",
+          "factors": {
+            "n": 750000,
+            "dim": 128
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 750000,
+                "dim": 128,
+                "tag": "n750000_d128"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-750000_d-384",
+          "factors": {
+            "n": 750000,
+            "dim": 384
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 750000,
+                "dim": 384,
+                "tag": "n750000_d384"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-750000_d-768",
+          "factors": {
+            "n": 750000,
+            "dim": 768
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 750000,
+                "dim": 768,
+                "tag": "n750000_d768"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-750000_d-1024",
+          "factors": {
+            "n": 750000,
+            "dim": 1024
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 750000,
+                "dim": 1024,
+                "tag": "n750000_d1024"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-1000000_d-128",
+          "factors": {
+            "n": 1000000,
+            "dim": 128
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 1000000,
+                "dim": 128,
+                "tag": "n1000000_d128"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-1000000_d-384",
+          "factors": {
+            "n": 1000000,
+            "dim": 384
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 1000000,
+                "dim": 384,
+                "tag": "n1000000_d384"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-1000000_d-768",
+          "factors": {
+            "n": 1000000,
+            "dim": 768
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 1000000,
+                "dim": 768,
+                "tag": "n1000000_d768"
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-1000000_d-1024",
+          "factors": {
+            "n": 1000000,
+            "dim": 1024
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  24,
+                  32,
+                  48,
+                  64,
+                  96,
+                  128,
+                  160,
+                  192,
+                  224,
+                  256,
+                  320,
+                  384,
+                  448,
+                  512,
+                  640,
+                  768,
+                  1024
+                ],
+                "reps": 1,
+                "warm": 1,
+                "nq": 0,
+                "mem_limits": "none",
+                "plan_only": true,
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "default",
+                "n": 1000000,
+                "dim": 1024,
+                "tag": "n1000000_d1024"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
