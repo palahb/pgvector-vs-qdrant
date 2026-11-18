@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-18T20:24:06.263808+00:00",
+  "root": "../artifacts/truba-experiments/E17/a5bb141/pilot",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "task_0000_7012417": 1,
+      "task_0001_7011941": 1
+    },
+    "engines": {
+      "pg": 2
+    },
+    "statuses": {
+      "ok": 2
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "task_0000_7012417/pg_n100000_d1024/result.json",
+      "sha256": "754a2f5f305dc74995b7a18e73253e88981ac78433ab6df7f626a741054071e8",
+      "experiment_id": "E17_planner_exposure-pilot-a5bb141a-cbb7fabd-t0000-a1-r00-pg",
+      "experiment": "task_0000_7012417",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7012417",
+      "raw_npz_size_bytes": 22,
+      "raw_array_count": 0
+    },
+    {
+      "path": "task_0001_7011941/pg_n500000_d1024/result.json",
+      "sha256": "55ff98c4b4cbc584f196348892b4961cdc7e99f0366a4a5c7700297786cf26d9",
+      "experiment_id": "E17_planner_exposure-pilot-a5bb141a-cbb7fabd-t0001-a1-r00-pg",
+      "experiment": "task_0001_7011941",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7011941",
+      "raw_npz_size_bytes": 22,
+      "raw_array_count": 0
+    }
+  ]
+}
