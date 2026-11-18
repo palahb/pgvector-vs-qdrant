@@ -873,6 +873,16 @@ $(16,64)$ by 0.27\,ms and $(64,128)$ is slower than $(32,128)$ by 0.58\,ms, whic
 and 4.9 standard errors of the difference. These gaps are systematic and not variation
 between builds, as we had suspected from single builds. We have not isolated their cause.
 
+\textbf{A limit of pgvector's \texttt{ef\_search}.} Our largest swept $ef$ was 1024 for the
+E6 and E8 runs, but pgvector accepts \texttt{hnsw.ef\_search} only up to 1000. For a larger
+value the server issues a warning and keeps the previous setting (40), without an error.
+The pgvector rows at $ef=1024$ in those two experiments were therefore measured at
+$ef=40$, and we exclude them. This does not change any reported number: every pgvector
+build in E6 and E8 reached Recall@10 = 0.95 at $ef\le 512$, and the matched values are
+taken from the smallest such $ef$. The harness now confirms the setting after applying
+it. We list this because a benchmark that sweeps $ef$ past 1000 would otherwise measure a
+different point than it records.
+
 \subsection{Dimensionality}
 \label{sec:dims}
 
