@@ -68,18 +68,25 @@ is subject to the author's and the referee's agreement.
   scales linearly. The 1M load is therefore limited by logging to the spinning disk.
 - Not done: builds on NVMe or tmpfs. Build times are labelled as specific to this disk.
 
-### M5 — Memory working set: pending E10
+### M5 — Memory working set: addressed, with one incomplete cell group
 
-- The superiority claim from the 300-query study is still in the draft (the Memory Pressure
-  section and one Conclusion sentence, now marked as preliminary) and is withdrawn from the
-  Abstract; it will be replaced, not kept, once E10 is final. The corrected study (E10) uses the full 1,677-query set in a random order
-  per pass, separates the cold pass from steady-state passes, restarts every limit
-  (including "none") from an evicted page cache, runs three repetitions with their own
-  order seeds, and adds a pgvector arm with `shared_buffers` equal to a quarter of the limit.
-- Status: the array is running. Early rows (not final) show that Qdrant's behaviour at the
-  4 GB limit is borderline and varies between repetitions. pgvector's 4 GB arms did not
-  finish within the 3 h job limit.
-- Not done: NVMe.
+- Evidence: E10 (`data-manifests/e10_full_0b0b905.json`), 30 usable results (strict audit
+  clean), 1M vectors, ef=128.
+- Each system and limit (including "none") starts from a restarted server with an evicted
+  page cache; one client runs three passes over all 1,677 queries, each in its own random
+  order; the first pass is the cold start and the later passes are the steady state. Three
+  repetitions with their own order seeds. pgvector also has an arm with `shared_buffers`
+  equal to a quarter of the limit. Page faults, bytes read, resident memory and cgroup
+  memory are recorded per pass.
+- The referee's suspicion is confirmed. With the 300-query subset pgvector was back to
+  3.6 ms at 8 GB; with the full query set it is at 636 ms (1,171 ms for the equalized arm).
+  Qdrant stays at 1.2 ms down to 8 GB. At 4 GB, just below Qdrant's data size, Qdrant
+  settled to 1.2-1.4 ms in two of three repetitions and was still at 35 ms in the third.
+- The "Qdrant tolerates tighter limits" claim is replaced by these results in the Memory
+  section, Discussion, Threats and Conclusion.
+- Not done: NVMe. pgvector's 4 GB arms did not finish within the 3 h job limit (tasks 10
+  and 11 killed; the other four 4 GB pgvector tasks were cancelled before they started), so
+  that comparison is incomplete and is reported as such.
 
 ### M6 — Internal inconsistencies: addressed
 

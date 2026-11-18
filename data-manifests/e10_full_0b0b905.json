@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E10_memory_limits_full",
+  "code_commit": "0b0b905c9fca9aa0350d4a392440394aa7a9a066",
+  "slurm_jobs": {
+    "smoke": "7008296",
+    "pilot": "7008303",
+    "full_array": "7008319",
+    "manual_retry_task14": "7008845"
+  },
+  "submission": "E10_memory_limits-full-0b0b905c-0b300a95",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E10_memory_limits/full/E10_memory_limits-full-0b0b905c-0b300a95",
+  "workspace_root": "../artifacts/truba-experiments/E10/0b0b905",
+  "artifact_tree": {
+    "file_count": 192,
+    "sorted_file_sha256_manifest_sha256": "abb9e9c8b4cab192c0f9554d2689fb44b336c809751b708d1f42d8ba76e3a543"
+  },
+  "planned_tasks": 36,
+  "executed": {
+    "started": 32,
+    "completed_ok": 30,
+    "completed_ok_note": "29 original tasks plus the manual retry of task 14"
+  },
+  "excluded_from_analysis": [
+    {
+      "task": 10,
+      "dir": "task_0010_7008472",
+      "arm": "pg_sb1G_4G rep1",
+      "reason": "killed at the 3 h job limit, no pass set recorded (status running)"
+    },
+    {
+      "task": 11,
+      "dir": "task_0011_7008558",
+      "arm": "pg_sbq_4G rep1",
+      "reason": "killed at the 3 h job limit, no pass set recorded (status running)"
+    },
+    {
+      "task": 14,
+      "dir": "task_0014_7008838",
+      "arm": "pg_sbq_none rep2",
+      "reason": "PostgreSQL could not bind 127.0.0.1:55432, previous server still held the port; no data; replaced by manual retry job 7008845"
+    }
+  ],
+  "cancelled_before_start": [
+    22,
+    23,
+    34,
+    35
+  ],
+  "cancelled_reason": "pgvector 4G arms, expected to exceed the 3 h job limit like tasks 10 and 11; no data lost; resubmission is a single command if the author wants them",
+  "result_audit": {
+    "clean_set": {
+      "verdict": "validated",
+      "result_files": 30,
+      "errors": 0,
+      "warnings": 0,
+      "strict_warnings": true,
+      "tracked_report": "results/validated/e10_full_0b0b905_audit.json"
+    },
+    "all_attempts": {
+      "verdict": "invalid",
+      "result_files": 33,
+      "errors": 8,
+      "note": "errors are exactly the three excluded directories",
+      "tracked_report": "results/validated/e10_full_0b0b905_audit_all_attempts.json"
+    }
+  },
+  "analysis": {
+    "verdict": "valid",
+    "results_read": 33,
+    "cells_with_data": 10,
+    "cells_missing": [
+      {
+        "system": "pg_sb1G",
+        "limit": "4G"
+      },
+      {
+        "system": "pg_sbq",
+        "limit": "4G"
+      }
+    ],
+    "tracked_json": "results/derived/e10_full_0b0b905_analysis.json",
+    "tracked_summary": "results/derived/e10_full_0b0b905_summary.md"
+  }
+}

@@ -99,3 +99,13 @@ reference for everything beyond this scope.
   the analysis and listed as superseded in the E10 manifest.
 - Open decision for the author: rerun the six pgvector 4 GB arms with a longer limit (each
   likely several hours) or report them as not completing within 3 h per task.
+
+### E10 result (2026-11-18)
+
+- E10 full array 7008319 finished: 30 usable results, strict audit clean
+  (`data-manifests/e10_full_0b0b905.json`). Excluded: tasks 10 and 11 (3 h limit), task 14
+  first attempt (port collision; manual retry 7008845 completed). Cancelled before start:
+  tasks 22, 23, 34, 35. The pgvector 4 GB cells therefore have no completed repetition.
+- Memory section, methodology, discussion, threats and conclusion rewritten from E10; the
+  old 300-query claim is gone. The analyzer now lists planned cells with no result.
+- Open for the author: whether to rerun the pgvector 4 GB arms with a longer job limit.

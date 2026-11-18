@@ -21,6 +21,8 @@ from analysis.analyze_e6 import interval
 
 TAG = re.compile(r"^(rep\d+)_(.+)_(none|\d+G)$")
 LIMIT_ORDER = {"none": 0, "16G": 1, "8G": 2, "4G": 3, "2G": 4}
+EXPECTED_SYSTEMS = ("qdrant_mmap", "pg_sb1G", "pg_sbq")
+EXPECTED_LIMITS = ("none", "16G", "8G", "4G")
 PASS_METRICS = ("mean_ms", "p99_ms", "throughput_qps", "recall_at_k", "major_faults", "read_bytes", "wall_s")
 
 
@@ -29,7 +31,9 @@ def parse_tag(tag: str) -> tuple[str, str, str] | None:
     return (match.group(1), match.group(2), match.group(3)) if match else None
 
 
-def analyze(root: Path, expected_passes: int = 3) -> dict[str, Any]:
+def analyze(root: Path, expected_passes: int = 3, expected_cells=None) -> dict[str, Any]:
+    if expected_cells is None:
+        expected_cells = [(s, l) for l in EXPECTED_LIMITS for s in EXPECTED_SYSTEMS]
     results = [json.loads(path.read_text()) for path in sorted(root.glob("**/result.json"))]
     cells: dict[tuple[str, str, str, str], list[float]] = defaultdict(list)
     included: dict[tuple[str, str], set[str]] = defaultdict(set)
@@ -76,9 +80,11 @@ def analyze(root: Path, expected_passes: int = 3) -> dict[str, Any]:
     for cell in cell_list:
         if len(cell["reps"]) < 3:
             issues.append({"cell": cell, "problem": "fewer_than_three_repetitions"})
+    missing = [{"system": s, "limit": l} for s, l in expected_cells if (s, l) not in included]
     return {"schema_version": 1, "generated_at": datetime.now(timezone.utc).isoformat(), "root": str(root),
             "verdict": "valid" if not issues else "incomplete", "result_count": len(results),
-            "included_cells": cell_list, "excluded": excluded, "aggregates": aggregates, "issues": issues}
+            "included_cells": cell_list, "excluded": excluded, "missing_cells": missing,
+            "aggregates": aggregates, "issues": issues}
 
 
 def get(report: dict[str, Any], system: str, limit: str, phase: str, metric: str) -> dict[str, Any] | None:
@@ -111,6 +117,11 @@ def markdown_report(report: dict[str, Any], title: str = "E10 memory limits") ->
         lines.append(f"| {s} | {l} | {g('cold', 'mean_ms', 1)} | {g('cold', 'wall_s', 0)} | {g('cold', 'major_faults', 0)} | "
                      f"{g('steady_last', 'mean_ms')} | {g('steady_last', 'p99_ms')} | {g('steady_last', 'throughput_qps', 1)} | "
                      f"{','.join(r[3:] for r in item['reps'])} |")
+    if report.get("missing_cells"):
+        lines += ["", "## Cells with no completed repetition", "",
+                  "These cells of the planned matrix have no usable result (time limit, failure or not run). "
+                  "They are absent from the table above, not zero.", ""]
+        lines += [f"- {m['system']} at {m['limit']}" for m in report["missing_cells"]]
     if report["excluded"]:
         lines += ["", "## Excluded results", "",
                   "These did not record a full set of passes (time limit or failure) and are not averaged in.", ""]

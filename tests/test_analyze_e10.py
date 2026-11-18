@@ -74,6 +74,13 @@ class AnalyzeE10Tests(unittest.TestCase):
         self.assertEqual(report["verdict"], "incomplete")
         self.assertTrue(any(i["problem"] == "fewer_than_three_repetitions" for i in report["issues"]))
 
+    def test_cells_of_the_planned_matrix_without_results_are_reported_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write(root, [result(f"rep{i}", "pg_sbq", "8G", 5.0, 2.0) for i in (1, 2, 3)])
+            report = analyze(root, expected_cells=[("pg_sbq", "8G"), ("pg_sbq", "4G")])
+        self.assertEqual(report["missing_cells"], [{"system": "pg_sbq", "limit": "4G"}])
+
     def test_unindexed_qdrant_build_is_an_issue(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

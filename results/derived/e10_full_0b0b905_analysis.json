@@ -1,0 +1,3358 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-18T11:54:18.517820+00:00",
+  "root": "../artifacts/truba-experiments/E10/0b0b905/full",
+  "verdict": "valid",
+  "result_count": 33,
+  "included_cells": [
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "reps": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "experiment_id": "E10_memory_limits-full-0b0b905c-0b300a95-t0010-a1-r00-pg",
+      "system": "pg_sb1G",
+      "limit": "4G",
+      "rep": "rep1",
+      "status": "running",
+      "passes_recorded": 0
+    },
+    {
+      "experiment_id": "E10_memory_limits-full-0b0b905c-0b300a95-t0011-a1-r00-pg",
+      "system": "pg_sbq",
+      "limit": "4G",
+      "rep": "rep1",
+      "status": "running",
+      "passes_recorded": 0
+    },
+    {
+      "experiment_id": "E10_memory_limits-full-0b0b905c-0b300a95-t0014-a1-r00-pg",
+      "system": "pg_sbq",
+      "limit": "none",
+      "rep": "rep2",
+      "status": "failed",
+      "passes_recorded": 0
+    }
+  ],
+  "missing_cells": [
+    {
+      "system": "pg_sb1G",
+      "limit": "4G"
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "4G"
+    }
+  ],
+  "aggregates": [
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 261677.666667,
+        "sd": 0.57735,
+        "ci95_low": 261676.232333,
+        "ci95_high": 261679.101,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1131.9085,
+        "sd": 84.969474,
+        "ci95_low": 920.815588,
+        "ci95_high": 1343.001412,
+        "cv_percent": 7.507
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 5715.783967,
+        "sd": 545.874867,
+        "ci95_low": 4359.646177,
+        "ci95_high": 7071.921756,
+        "cv_percent": 9.55
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 8474316800.0,
+        "sd": 10863509.391126,
+        "ci95_low": 8447328168.543152,
+        "ci95_high": 8501305431.456848,
+        "cv_percent": 0.128
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.893997,
+        "sd": 0.002313,
+        "ci95_low": 0.88825,
+        "ci95_high": 0.899743,
+        "cv_percent": 0.259
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.886667,
+        "sd": 0.063721,
+        "ci95_low": 0.728363,
+        "ci95_high": 1.044971,
+        "cv_percent": 7.187
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1898.221667,
+        "sd": 142.49389,
+        "ci95_low": 1544.218652,
+        "ci95_high": 2252.224682,
+        "cv_percent": 7.507
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 1056.286667,
+        "sd": 7.954975,
+        "ci95_low": 1036.523817,
+        "ci95_high": 1076.049516,
+        "cv_percent": 0.753
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 10.098752,
+        "sd": 0.264574,
+        "ci95_low": 9.441461,
+        "ci95_high": 10.756044,
+        "cv_percent": 2.62
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 5.666667,
+        "sd": 1.154701,
+        "ci95_low": 2.798,
+        "ci95_high": 8.535333,
+        "cv_percent": 20.377
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 7.2337,
+        "sd": 0.035842,
+        "ci95_low": 7.144657,
+        "ci95_high": 7.322743,
+        "cv_percent": 0.495
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 23.7932,
+        "sd": 0.836176,
+        "ci95_low": 21.715855,
+        "ci95_high": 25.870545,
+        "cv_percent": 3.514
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 126603264.0,
+        "sd": 2013370.457286,
+        "ci95_low": 121601370.845456,
+        "ci95_high": 131605157.154544,
+        "cv_percent": 1.59
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.893997,
+        "sd": 0.002313,
+        "ci95_low": 0.88825,
+        "ci95_high": 0.899743,
+        "cv_percent": 0.259
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 138.133333,
+        "sd": 0.686091,
+        "ci95_low": 136.42885,
+        "ci95_high": 139.837816,
+        "cv_percent": 0.497
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 12.140667,
+        "sd": 0.059769,
+        "ci95_low": 11.99218,
+        "ci95_high": 12.289153,
+        "cv_percent": 0.492
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 3.0,
+        "sd": 1.0,
+        "ci95_low": 0.515662,
+        "ci95_high": 5.484338,
+        "cv_percent": 33.333
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.562233,
+        "sd": 0.038766,
+        "ci95_low": 6.465925,
+        "ci95_high": 6.658542,
+        "cv_percent": 0.591
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 13.153533,
+        "sd": 0.805562,
+        "ci95_low": 11.152245,
+        "ci95_high": 15.154822,
+        "cv_percent": 6.124
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 17055744.0,
+        "sd": 2048049.15141,
+        "ci95_low": 11967697.240628,
+        "ci95_high": 22143790.759372,
+        "cv_percent": 12.008
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.893997,
+        "sd": 0.002313,
+        "ci95_low": 0.88825,
+        "ci95_high": 0.899743,
+        "cv_percent": 0.259
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 152.257,
+        "sd": 0.8974,
+        "ci95_low": 150.027555,
+        "ci95_high": 154.486445,
+        "cv_percent": 0.589
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 11.014667,
+        "sd": 0.064933,
+        "ci95_low": 10.85335,
+        "ci95_high": 11.175983,
+        "cv_percent": 0.59
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 261679.0,
+        "sd": 1.0,
+        "ci95_low": 261676.515662,
+        "ci95_high": 261681.484338,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1064.6825,
+        "sd": 49.381698,
+        "ci95_low": 942.001662,
+        "ci95_high": 1187.363338,
+        "cv_percent": 4.638
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 5666.061433,
+        "sd": 525.577053,
+        "ci95_low": 4360.35028,
+        "ci95_high": 6971.772587,
+        "cv_percent": 9.276
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 8480664234.666667,
+        "sd": 29738178.713686,
+        "ci95_low": 8406784541.04232,
+        "ci95_high": 8554543928.291014,
+        "cv_percent": 0.351
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.893143,
+        "sd": 0.002911,
+        "ci95_low": 0.885911,
+        "ci95_high": 0.900376,
+        "cv_percent": 0.326
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.940333,
+        "sd": 0.04319,
+        "ci95_low": 0.833036,
+        "ci95_high": 1.047631,
+        "cv_percent": 4.593
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1785.566,
+        "sd": 82.943174,
+        "ci95_low": 1579.507104,
+        "ci95_high": 1991.624896,
+        "cv_percent": 4.645
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 1057.44,
+        "sd": 7.1732,
+        "ci95_low": 1039.619345,
+        "ci95_high": 1075.260655,
+        "cv_percent": 0.678
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 9.857935,
+        "sd": 0.022717,
+        "ci95_low": 9.801499,
+        "ci95_high": 9.91437,
+        "cv_percent": 0.23
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 5.333333,
+        "sd": 1.154701,
+        "ci95_low": 2.464667,
+        "ci95_high": 8.202,
+        "cv_percent": 21.651
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 7.174633,
+        "sd": 0.01002,
+        "ci95_low": 7.14974,
+        "ci95_high": 7.199527,
+        "cv_percent": 0.14
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 21.5962,
+        "sd": 1.160475,
+        "ci95_low": 18.713189,
+        "ci95_high": 24.479211,
+        "cv_percent": 5.374
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 126180010.666667,
+        "sd": 5361353.166442,
+        "ci95_low": 112860596.146962,
+        "ci95_high": 139499425.186372,
+        "cv_percent": 4.249
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.893143,
+        "sd": 0.002911,
+        "ci95_low": 0.885911,
+        "ci95_high": 0.900376,
+        "cv_percent": 0.326
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 139.267,
+        "sd": 0.196054,
+        "ci95_low": 138.779937,
+        "ci95_high": 139.754063,
+        "cv_percent": 0.141
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 12.041333,
+        "sd": 0.017039,
+        "ci95_low": 11.999002,
+        "ci95_high": 12.083664,
+        "cv_percent": 0.142
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 3.0,
+        "sd": 0.0,
+        "ci95_low": 3.0,
+        "ci95_high": 3.0,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.520733,
+        "sd": 0.091673,
+        "ci95_low": 6.292988,
+        "ci95_high": 6.748479,
+        "cv_percent": 1.406
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 13.015833,
+        "sd": 0.398047,
+        "ci95_low": 12.02695,
+        "ci95_high": 14.004716,
+        "cv_percent": 3.058
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 21244586.666667,
+        "sd": 2112683.817863,
+        "ci95_low": 15995965.535843,
+        "ci95_high": 26493207.79749,
+        "cv_percent": 9.945
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.893143,
+        "sd": 0.002911,
+        "ci95_low": 0.885911,
+        "ci95_high": 0.900376,
+        "cv_percent": 0.326
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 153.239667,
+        "sd": 2.161101,
+        "ci95_low": 147.87076,
+        "ci95_high": 158.608573,
+        "cv_percent": 1.41
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 10.945,
+        "sd": 0.153659,
+        "ci95_low": 10.56326,
+        "ci95_high": 11.32674,
+        "cv_percent": 1.404
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 261680.333333,
+        "sd": 1.527525,
+        "ci95_low": 261676.538444,
+        "ci95_high": 261684.128223,
+        "cv_percent": 0.001
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1245.9021,
+        "sd": 94.32835,
+        "ci95_low": 1011.558577,
+        "ci95_high": 1480.245623,
+        "cv_percent": 7.571
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 5693.422933,
+        "sd": 643.426046,
+        "ci95_low": 4094.935024,
+        "ci95_high": 7291.910843,
+        "cv_percent": 11.301
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 9340095146.666666,
+        "sd": 73077365.094465,
+        "ci95_low": 9158546256.39892,
+        "ci95_high": 9521644036.934412,
+        "cv_percent": 0.782
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.889683,
+        "sd": 0.00254,
+        "ci95_low": 0.883374,
+        "ci95_high": 0.895993,
+        "cv_percent": 0.285
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.805667,
+        "sd": 0.059408,
+        "ci95_low": 0.658077,
+        "ci95_high": 0.953257,
+        "cv_percent": 7.374
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2089.467667,
+        "sd": 158.321236,
+        "ci95_low": 1696.14417,
+        "ci95_high": 2482.791163,
+        "cv_percent": 7.577
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 3.88,
+        "sd": 0.127671,
+        "ci95_low": 3.562821,
+        "ci95_high": 4.197179,
+        "cv_percent": 3.291
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 8.587219,
+        "sd": 2.1e-05,
+        "ci95_low": 8.587166,
+        "ci95_high": 8.587272,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 3.333333,
+        "sd": 0.57735,
+        "ci95_low": 1.899,
+        "ci95_high": 4.767667,
+        "cv_percent": 17.321
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 483.389733,
+        "sd": 27.662106,
+        "ci95_low": 414.667706,
+        "ci95_high": 552.111761,
+        "cv_percent": 5.723
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1837.750133,
+        "sd": 162.585008,
+        "ci95_low": 1433.833986,
+        "ci95_high": 2241.66628,
+        "cv_percent": 8.847
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 3445138773.333333,
+        "sd": 128047859.879434,
+        "ci95_low": 3127024582.540872,
+        "ci95_high": 3763252964.125795,
+        "cv_percent": 3.717
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.889683,
+        "sd": 0.00254,
+        "ci95_low": 0.883374,
+        "ci95_high": 0.895993,
+        "cv_percent": 0.285
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 2.073,
+        "sd": 0.116568,
+        "ci95_low": 1.783407,
+        "ci95_high": 2.362593,
+        "cv_percent": 5.623
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 810.732,
+        "sd": 46.364225,
+        "ci95_low": 695.547583,
+        "ci95_high": 925.916417,
+        "cv_percent": 5.719
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 14.666667,
+        "sd": 16.862186,
+        "ci95_low": -27.224708,
+        "ci95_high": 56.558041,
+        "cv_percent": 114.969
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 635.62,
+        "sd": 40.87338,
+        "ci95_low": 534.0767,
+        "ci95_high": 737.1633,
+        "cv_percent": 6.43
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1889.989967,
+        "sd": 71.134309,
+        "ci95_low": 1713.268284,
+        "ci95_high": 2066.711649,
+        "cv_percent": 3.764
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 4328478037.333333,
+        "sd": 152859417.171035,
+        "ci95_low": 3948723546.753351,
+        "ci95_high": 4708232527.913315,
+        "cv_percent": 3.531
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.889683,
+        "sd": 0.00254,
+        "ci95_low": 0.883374,
+        "ci95_high": 0.895993,
+        "cv_percent": 0.285
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.577,
+        "sd": 0.098077,
+        "ci95_low": 1.333345,
+        "ci95_high": 1.820655,
+        "cv_percent": 6.219
+      }
+    },
+    {
+      "system": "pg_sb1G",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1066.202333,
+        "sd": 68.562061,
+        "ci95_low": 895.870985,
+        "ci95_high": 1236.533682,
+        "cv_percent": 6.43
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 1659623.0,
+        "sd": 2995.024541,
+        "ci95_low": 1652182.346098,
+        "ci95_high": 1667063.653902,
+        "cv_percent": 0.18
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 971.5356,
+        "sd": 23.738976,
+        "ci95_low": 912.559955,
+        "ci95_high": 1030.511245,
+        "cv_percent": 2.443
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 4619.8269,
+        "sd": 196.036175,
+        "ci95_low": 4132.80674,
+        "ci95_high": 5106.84706,
+        "cv_percent": 4.243
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 8386060288.0,
+        "sd": 9048397.755728,
+        "ci95_low": 8363581007.731342,
+        "ci95_high": 8408539568.268658,
+        "cv_percent": 0.108
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.89358,
+        "sd": 0.000352,
+        "ci95_low": 0.892707,
+        "ci95_high": 0.894453,
+        "cv_percent": 0.039
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.029667,
+        "sd": 0.025658,
+        "ci95_low": 0.965923,
+        "ci95_high": 1.09341,
+        "cv_percent": 2.492
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1629.276333,
+        "sd": 39.81043,
+        "ci95_low": 1530.373762,
+        "ci95_high": 1728.178905,
+        "cv_percent": 2.443
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 3279.75,
+        "sd": 11.773288,
+        "ci95_low": 3250.501172,
+        "ci95_high": 3308.998828,
+        "cv_percent": 0.359
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 16.262909,
+        "sd": 0.15371,
+        "ci95_low": 15.881042,
+        "ci95_high": 16.644775,
+        "cv_percent": 0.945
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.294933,
+        "sd": 0.008445,
+        "ci95_low": 2.273952,
+        "ci95_high": 2.315914,
+        "cv_percent": 0.368
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 3.9768,
+        "sd": 0.104989,
+        "ci95_low": 3.715972,
+        "ci95_high": 4.237628,
+        "cv_percent": 2.64
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.89358,
+        "sd": 0.000352,
+        "ci95_low": 0.892707,
+        "ci95_high": 0.894453,
+        "cv_percent": 0.039
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 434.631333,
+        "sd": 1.600604,
+        "ci95_low": 430.654891,
+        "ci95_high": 438.607776,
+        "cv_percent": 0.368
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 3.858667,
+        "sd": 0.013868,
+        "ci95_low": 3.824213,
+        "ci95_high": 3.893121,
+        "cv_percent": 0.359
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.291233,
+        "sd": 0.008338,
+        "ci95_low": 2.270519,
+        "ci95_high": 2.311948,
+        "cv_percent": 0.364
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 3.958933,
+        "sd": 0.089086,
+        "ci95_low": 3.737613,
+        "ci95_high": 4.180253,
+        "cv_percent": 2.25
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.89358,
+        "sd": 0.000352,
+        "ci95_low": 0.892707,
+        "ci95_high": 0.894453,
+        "cv_percent": 0.039
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 435.337667,
+        "sd": 1.594572,
+        "ci95_low": 431.376209,
+        "ci95_high": 439.299124,
+        "cv_percent": 0.366
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 3.852333,
+        "sd": 0.014295,
+        "ci95_low": 3.816821,
+        "ci95_high": 3.887846,
+        "cv_percent": 0.371
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 1048106.666667,
+        "sd": 1.527525,
+        "ci95_low": 1048102.871777,
+        "ci95_high": 1048110.461556,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1050.592033,
+        "sd": 24.830474,
+        "ci95_low": 988.904739,
+        "ci95_high": 1112.279328,
+        "cv_percent": 2.363
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 5331.1221,
+        "sd": 297.874144,
+        "ci95_low": 4591.101984,
+        "ci95_high": 6071.142216,
+        "cv_percent": 5.587
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 8445139626.666667,
+        "sd": 31512577.086978,
+        "ci95_low": 8366851727.366764,
+        "ci95_high": 8523427525.96657,
+        "cv_percent": 0.373
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.894973,
+        "sd": 0.00224,
+        "ci95_low": 0.889409,
+        "ci95_high": 0.900537,
+        "cv_percent": 0.25
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.952,
+        "sd": 0.021932,
+        "ci95_low": 0.897514,
+        "ci95_high": 1.006486,
+        "cv_percent": 2.304
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1761.868,
+        "sd": 41.632258,
+        "ci95_low": 1658.43939,
+        "ci95_high": 1865.29661,
+        "cv_percent": 2.363
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 1581.193333,
+        "sd": 11.087869,
+        "ci95_low": 1553.647317,
+        "ci95_high": 1608.739349,
+        "cv_percent": 0.701
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 13.133036,
+        "sd": 0.022872,
+        "ci95_low": 13.076213,
+        "ci95_high": 13.189859,
+        "cv_percent": 0.174
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 7.0,
+        "sd": 1.732051,
+        "ci95_low": 2.697,
+        "ci95_high": 11.303,
+        "cv_percent": 24.744
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 4.814433,
+        "sd": 0.091471,
+        "ci95_low": 4.587189,
+        "ci95_high": 5.041678,
+        "cv_percent": 1.9
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 19.928867,
+        "sd": 2.596821,
+        "ci95_low": 13.477485,
+        "ci95_high": 26.380248,
+        "cv_percent": 13.03
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 127668224.0,
+        "sd": 5157078.718326,
+        "ci95_low": 114856296.296734,
+        "ci95_high": 140480151.703266,
+        "cv_percent": 4.039
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.894973,
+        "sd": 0.00224,
+        "ci95_low": 0.889409,
+        "ci95_high": 0.900537,
+        "cv_percent": 0.25
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 207.507,
+        "sd": 3.923729,
+        "ci95_low": 197.759129,
+        "ci95_high": 217.254871,
+        "cv_percent": 1.891
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 8.083333,
+        "sd": 0.153722,
+        "ci95_low": 7.701437,
+        "ci95_high": 8.46523,
+        "cv_percent": 1.902
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 2.666667,
+        "sd": 0.57735,
+        "ci95_low": 1.232333,
+        "ci95_high": 4.101,
+        "cv_percent": 21.651
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 4.209133,
+        "sd": 0.076413,
+        "ci95_low": 4.019298,
+        "ci95_high": 4.398969,
+        "cv_percent": 1.815
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 9.876333,
+        "sd": 0.56192,
+        "ci95_low": 8.480335,
+        "ci95_high": 11.272332,
+        "cv_percent": 5.69
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 32615082.666667,
+        "sd": 4836580.549897,
+        "ci95_low": 20599380.808927,
+        "ci95_high": 44630784.524406,
+        "cv_percent": 14.829
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.894973,
+        "sd": 0.00224,
+        "ci95_low": 0.889409,
+        "ci95_high": 0.900537,
+        "cv_percent": 0.25
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 237.304333,
+        "sd": 4.34436,
+        "ci95_low": 226.511474,
+        "ci95_high": 248.097193,
+        "cv_percent": 1.831
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 7.068667,
+        "sd": 0.128165,
+        "ci95_low": 6.750261,
+        "ci95_high": 7.387073,
+        "cv_percent": 1.813
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 523829.333333,
+        "sd": 0.57735,
+        "ci95_low": 523827.899,
+        "ci95_high": 523830.767667,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1503.0598,
+        "sd": 106.693966,
+        "ci95_low": 1237.995903,
+        "ci95_high": 1768.123697,
+        "cv_percent": 7.098
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 5654.391633,
+        "sd": 914.11769,
+        "ci95_low": 3383.414129,
+        "ci95_high": 7925.369138,
+        "cv_percent": 16.167
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 11371107669.333334,
+        "sd": 89055076.608579,
+        "ci95_low": 11149864739.869514,
+        "ci95_high": 11592350598.797153,
+        "cv_percent": 0.783
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.894573,
+        "sd": 0.001468,
+        "ci95_low": 0.890927,
+        "ci95_high": 0.89822,
+        "cv_percent": 0.164
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.667333,
+        "sd": 0.049238,
+        "ci95_low": 0.545011,
+        "ci95_high": 0.789656,
+        "cv_percent": 7.378
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2520.643,
+        "sd": 178.926031,
+        "ci95_low": 2076.130224,
+        "ci95_high": 2965.155776,
+        "cv_percent": 7.098
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 2.083333,
+        "sd": 0.110604,
+        "ci95_low": 1.808555,
+        "ci95_high": 2.358112,
+        "cv_percent": 5.309
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 8.587229,
+        "sd": 0.000162,
+        "ci95_low": 8.586825,
+        "ci95_high": 8.587632,
+        "cv_percent": 0.002
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 27.333333,
+        "sd": 16.772994,
+        "ci95_low": -14.336457,
+        "ci95_high": 69.003124,
+        "cv_percent": 61.365
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1170.650067,
+        "sd": 43.478944,
+        "ci95_low": 1062.633665,
+        "ci95_high": 1278.666468,
+        "cv_percent": 3.714
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2861.7137,
+        "sd": 119.998008,
+        "ci95_low": 2563.598064,
+        "ci95_high": 3159.829336,
+        "cv_percent": 4.193
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 9784823808.0,
+        "sd": 157015859.328087,
+        "ci95_low": 9394743309.35857,
+        "ci95_high": 10174904306.64143,
+        "cv_percent": 1.605
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.894573,
+        "sd": 0.001468,
+        "ci95_low": 0.890927,
+        "ci95_high": 0.89822,
+        "cv_percent": 0.164
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.855,
+        "sd": 0.031225,
+        "ci95_low": 0.777427,
+        "ci95_high": 0.932573,
+        "cv_percent": 3.652
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1963.405,
+        "sd": 72.84997,
+        "ci95_low": 1782.421035,
+        "ci95_high": 2144.388965,
+        "cv_percent": 3.71
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 3.666667,
+        "sd": 1.527525,
+        "ci95_low": -0.128223,
+        "ci95_high": 7.461556,
+        "cv_percent": 41.66
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1171.078267,
+        "sd": 4.745377,
+        "ci95_low": 1159.289145,
+        "ci95_high": 1182.867389,
+        "cv_percent": 0.405
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2737.422933,
+        "sd": 20.694864,
+        "ci95_low": 2686.009893,
+        "ci95_high": 2788.835974,
+        "cv_percent": 0.756
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 10509275136.0,
+        "sd": 104590494.919939,
+        "ci95_low": 10249436973.242987,
+        "ci95_high": 10769113298.757013,
+        "cv_percent": 0.995
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.894573,
+        "sd": 0.001468,
+        "ci95_low": 0.890927,
+        "ci95_high": 0.89822,
+        "cv_percent": 0.164
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.853667,
+        "sd": 0.003512,
+        "ci95_low": 0.844942,
+        "ci95_high": 0.862391,
+        "cv_percent": 0.411
+      }
+    },
+    {
+      "system": "pg_sbq",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1963.909667,
+        "sd": 7.957793,
+        "ci95_low": 1944.139817,
+        "ci95_high": 1983.679516,
+        "cv_percent": 0.405
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 937049.0,
+        "sd": 14273.474805,
+        "ci95_low": 901588.861177,
+        "ci95_high": 972509.138823,
+        "cv_percent": 1.523
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 610.7503,
+        "sd": 91.572704,
+        "ci95_low": 383.252732,
+        "ci95_high": 838.247868,
+        "cv_percent": 14.993
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 4624.613667,
+        "sd": 1160.500773,
+        "ci95_low": 1741.537254,
+        "ci95_high": 7507.690079,
+        "cv_percent": 25.094
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 3939603797.333333,
+        "sd": 56800955.698563,
+        "ci95_low": 3798491012.822133,
+        "ci95_high": 4080716581.844534,
+        "cv_percent": 1.442
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.905207,
+        "sd": 0.004647,
+        "ci95_low": 0.893663,
+        "ci95_high": 0.91675,
+        "cv_percent": 0.513
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.660333,
+        "sd": 0.233958,
+        "ci95_low": 1.079103,
+        "ci95_high": 2.241564,
+        "cv_percent": 14.091
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1024.243,
+        "sd": 153.567644,
+        "ci95_low": 642.729036,
+        "ci95_high": 1405.756964,
+        "cv_percent": 14.993
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 3358.256667,
+        "sd": 620.963875,
+        "ci95_low": 1815.572385,
+        "ci95_high": 4900.940948,
+        "cv_percent": 18.491
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 4.852433,
+        "sd": 0.315775,
+        "ci95_low": 4.067941,
+        "ci95_high": 5.636925,
+        "cv_percent": 6.508
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.193367,
+        "sd": 0.037715,
+        "ci95_low": 1.09967,
+        "ci95_high": 1.287063,
+        "cv_percent": 3.16
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.628733,
+        "sd": 0.017809,
+        "ci95_low": 1.584491,
+        "ci95_high": 1.672976,
+        "cv_percent": 1.093
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.905207,
+        "sd": 0.004647,
+        "ci95_low": 0.893663,
+        "ci95_high": 0.91675,
+        "cv_percent": 0.513
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 832.808667,
+        "sd": 25.7859,
+        "ci95_low": 768.747771,
+        "ci95_high": 896.869563,
+        "cv_percent": 3.096
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2.015,
+        "sd": 0.06338,
+        "ci95_low": 1.857543,
+        "ci95_high": 2.172457,
+        "cv_percent": 3.145
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.190833,
+        "sd": 0.03808,
+        "ci95_low": 1.096229,
+        "ci95_high": 1.285437,
+        "cv_percent": 3.198
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.6428,
+        "sd": 0.019705,
+        "ci95_low": 1.593846,
+        "ci95_high": 1.691754,
+        "cv_percent": 1.199
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.905207,
+        "sd": 0.004647,
+        "ci95_low": 0.893663,
+        "ci95_high": 0.91675,
+        "cv_percent": 0.513
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 834.632333,
+        "sd": 26.169264,
+        "ci95_low": 769.619031,
+        "ci95_high": 899.645636,
+        "cv_percent": 3.135
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "none",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2.011,
+        "sd": 0.064094,
+        "ci95_low": 1.85177,
+        "ci95_high": 2.17023,
+        "cv_percent": 3.187
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 933957.0,
+        "sd": 10338.681105,
+        "ci95_low": 908272.219506,
+        "ci95_high": 959641.780494,
+        "cv_percent": 1.107
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 655.8657,
+        "sd": 99.398524,
+        "ci95_low": 408.92615,
+        "ci95_high": 902.80525,
+        "cv_percent": 15.155
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 4997.6729,
+        "sd": 1375.588749,
+        "ci95_low": 1580.245211,
+        "ci95_high": 8415.100589,
+        "cv_percent": 27.525
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 3932102656.0,
+        "sd": 41354416.058657,
+        "ci95_low": 3829364300.102594,
+        "ci95_high": 4034841011.897406,
+        "cv_percent": 1.052
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.903737,
+        "sd": 0.00559,
+        "ci95_low": 0.889848,
+        "ci95_high": 0.917625,
+        "cv_percent": 0.619
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.548,
+        "sd": 0.230541,
+        "ci95_low": 0.975259,
+        "ci95_high": 2.120741,
+        "cv_percent": 14.893
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1099.901,
+        "sd": 166.690838,
+        "ci95_low": 685.784583,
+        "ci95_high": 1514.017417,
+        "cv_percent": 15.155
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 2851.623333,
+        "sd": 151.040411,
+        "ci95_low": 2476.38787,
+        "ci95_high": 3226.858796,
+        "cv_percent": 5.297
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 4.484231,
+        "sd": 0.017007,
+        "ci95_low": 4.44198,
+        "ci95_high": 4.526482,
+        "cv_percent": 0.379
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.241967,
+        "sd": 0.002312,
+        "ci95_low": 1.236224,
+        "ci95_high": 1.247709,
+        "cv_percent": 0.186
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.6961,
+        "sd": 0.03481,
+        "ci95_low": 1.609619,
+        "ci95_high": 1.782581,
+        "cv_percent": 2.052
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.903737,
+        "sd": 0.00559,
+        "ci95_low": 0.889848,
+        "ci95_high": 0.917625,
+        "cv_percent": 0.619
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 799.794667,
+        "sd": 1.445966,
+        "ci95_low": 796.202398,
+        "ci95_high": 803.386935,
+        "cv_percent": 0.181
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2.096667,
+        "sd": 0.004041,
+        "ci95_low": 2.086626,
+        "ci95_high": 2.106707,
+        "cv_percent": 0.193
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.2407,
+        "sd": 0.003704,
+        "ci95_low": 1.231498,
+        "ci95_high": 1.249902,
+        "cv_percent": 0.299
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.7048,
+        "sd": 0.021095,
+        "ci95_low": 1.652393,
+        "ci95_high": 1.757207,
+        "cv_percent": 1.237
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.903737,
+        "sd": 0.00559,
+        "ci95_low": 0.889848,
+        "ci95_high": 0.917625,
+        "cv_percent": 0.619
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 800.675667,
+        "sd": 2.331052,
+        "ci95_low": 794.884545,
+        "ci95_high": 806.466789,
+        "cv_percent": 0.291
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "16G",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2.094333,
+        "sd": 0.006028,
+        "ci95_low": 2.079358,
+        "ci95_high": 2.109308,
+        "cv_percent": 0.288
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 929546.666667,
+        "sd": 4941.718055,
+        "ci95_low": 917269.767688,
+        "ci95_high": 941823.565645,
+        "cv_percent": 0.532
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 570.4776,
+        "sd": 24.652818,
+        "ci95_low": 509.231662,
+        "ci95_high": 631.723538,
+        "cv_percent": 4.321
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 3966.3837,
+        "sd": 232.607679,
+        "ci95_low": 3388.507554,
+        "ci95_high": 4544.259846,
+        "cv_percent": 5.864
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 3912354474.666667,
+        "sd": 26794393.215963,
+        "ci95_low": 3845788139.831419,
+        "ci95_high": 3978920809.501914,
+        "cv_percent": 0.685
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.89839,
+        "sd": 0.00244,
+        "ci95_low": 0.892329,
+        "ci95_high": 0.904451,
+        "cv_percent": 0.272
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.754667,
+        "sd": 0.077681,
+        "ci95_low": 1.561681,
+        "ci95_high": 1.947652,
+        "cv_percent": 4.427
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 956.705667,
+        "sd": 41.343411,
+        "ci95_low": 853.994652,
+        "ci95_high": 1059.416681,
+        "cv_percent": 4.321
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 3299.723333,
+        "sd": 410.409142,
+        "ci95_low": 2280.12822,
+        "ci95_high": 4319.318447,
+        "cv_percent": 12.438
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 4.433271,
+        "sd": 0.056542,
+        "ci95_low": 4.292801,
+        "ci95_high": 4.573742,
+        "cv_percent": 1.275
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.2183,
+        "sd": 0.018535,
+        "ci95_low": 1.172252,
+        "ci95_high": 1.264348,
+        "cv_percent": 1.521
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.688567,
+        "sd": 0.017251,
+        "ci95_low": 1.645709,
+        "ci95_high": 1.731424,
+        "cv_percent": 1.022
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.89839,
+        "sd": 0.00244,
+        "ci95_low": 0.892329,
+        "ci95_high": 0.904451,
+        "cv_percent": 0.272
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 815.028333,
+        "sd": 12.153774,
+        "ci95_low": 784.834248,
+        "ci95_high": 845.222418,
+        "cv_percent": 1.491
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2.058,
+        "sd": 0.030806,
+        "ci95_low": 1.981468,
+        "ci95_high": 2.134532,
+        "cv_percent": 1.497
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.218433,
+        "sd": 0.017909,
+        "ci95_low": 1.173941,
+        "ci95_high": 1.262926,
+        "cv_percent": 1.47
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.682233,
+        "sd": 0.017289,
+        "ci95_low": 1.639282,
+        "ci95_high": 1.725185,
+        "cv_percent": 1.028
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.89839,
+        "sd": 0.00244,
+        "ci95_low": 0.892329,
+        "ci95_high": 0.904451,
+        "cv_percent": 0.272
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 814.967333,
+        "sd": 11.747973,
+        "ci95_low": 785.781395,
+        "ci95_high": 844.153272,
+        "cv_percent": 1.442
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "8G",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 2.057667,
+        "sd": 0.029501,
+        "ci95_low": 1.984375,
+        "ci95_high": 2.130958,
+        "cv_percent": 1.434
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "cold",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 933271.666667,
+        "sd": 8256.543728,
+        "ci95_low": 912759.619614,
+        "ci95_high": 953783.713719,
+        "cv_percent": 0.885
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "cold",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 765.5667,
+        "sd": 61.446392,
+        "ci95_low": 612.913082,
+        "ci95_high": 918.220318,
+        "cv_percent": 8.026
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "cold",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6437.974467,
+        "sd": 742.279526,
+        "ci95_low": 4593.901078,
+        "ci95_high": 8282.047855,
+        "cv_percent": 11.53
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "cold",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 4007026688.0,
+        "sd": 165026702.438571,
+        "ci95_low": 3597044545.738314,
+        "ci95_high": 4417008830.261686,
+        "cv_percent": 4.118
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "cold",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.90833,
+        "sd": 0.004596,
+        "ci95_low": 0.896911,
+        "ci95_high": 0.919749,
+        "cv_percent": 0.506
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "cold",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.311667,
+        "sd": 0.101076,
+        "ci95_low": 1.06056,
+        "ci95_high": 1.562773,
+        "cv_percent": 7.706
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "cold",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 1283.878333,
+        "sd": 103.037074,
+        "ci95_low": 1027.899394,
+        "ci95_high": 1539.857273,
+        "cv_percent": 8.025
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "concurrency",
+      "metric": "qps_c8",
+      "stats": {
+        "n": 3,
+        "mean": 2348.356667,
+        "sd": 1774.603898,
+        "ci95_low": -2060.359601,
+        "ci95_high": 6757.072934,
+        "cv_percent": 75.568
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "memory",
+      "metric": "cgroup_gb",
+      "stats": {
+        "n": 3,
+        "mean": 4.294715,
+        "sd": 5.3e-05,
+        "ci95_low": 4.294582,
+        "ci95_high": 4.294848,
+        "cv_percent": 0.001
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_first",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 27079.333333,
+        "sd": 28230.214883,
+        "ci95_low": -43054.068129,
+        "ci95_high": 97212.734796,
+        "cv_percent": 104.25
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_first",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 32.318933,
+        "sd": 31.08682,
+        "ci95_low": -44.911242,
+        "ci95_high": 109.549109,
+        "cv_percent": 96.188
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_first",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 249.0398,
+        "sd": 214.047735,
+        "ci95_low": -282.727168,
+        "ci95_high": 780.806768,
+        "cv_percent": 85.949
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_first",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 154031445.333333,
+        "sd": 182608284.903994,
+        "ci95_low": -299629294.009983,
+        "ci95_high": 607692184.67665,
+        "cv_percent": 118.553
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_first",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.90833,
+        "sd": 0.004596,
+        "ci95_low": 0.896911,
+        "ci95_high": 0.919749,
+        "cv_percent": 0.506
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_first",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 266.436333,
+        "sd": 420.977981,
+        "ci95_low": -779.41535,
+        "ci95_high": 1312.288017,
+        "cv_percent": 158.003
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_first",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 54.213333,
+        "sd": 52.132123,
+        "ci95_low": -75.300492,
+        "ci95_high": 183.727159,
+        "cv_percent": 96.161
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_last",
+      "metric": "major_faults",
+      "stats": {
+        "n": 3,
+        "mean": 5953.666667,
+        "sd": 10260.135493,
+        "ci95_low": -19535.979961,
+        "ci95_high": 31443.313294,
+        "cv_percent": 172.333
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_last",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 12.3947,
+        "sd": 19.194499,
+        "ci95_low": -35.290928,
+        "ci95_high": 60.080328,
+        "cv_percent": 154.861
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_last",
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 113.7453,
+        "sd": 188.859081,
+        "ci95_low": -355.444531,
+        "ci95_high": 582.935131,
+        "cv_percent": 166.037
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_last",
+      "metric": "read_bytes",
+      "stats": {
+        "n": 3,
+        "mean": 26335914.666667,
+        "sd": 42611319.411131,
+        "ci95_low": -79525014.253461,
+        "ci95_high": 132196843.586794,
+        "cv_percent": 161.799
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_last",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.90833,
+        "sd": 0.004596,
+        "ci95_low": 0.896911,
+        "ci95_high": 0.919749,
+        "cv_percent": 0.506
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_last",
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 518.027667,
+        "sd": 428.730849,
+        "ci95_low": -547.084763,
+        "ci95_high": 1583.140097,
+        "cv_percent": 82.762
+      }
+    },
+    {
+      "system": "qdrant_mmap",
+      "limit": "4G",
+      "phase": "steady_last",
+      "metric": "wall_s",
+      "stats": {
+        "n": 3,
+        "mean": 20.8,
+        "sd": 32.189011,
+        "ci95_low": -59.168389,
+        "ci95_high": 100.768389,
+        "cv_percent": 154.755
+      }
+    }
+  ],
+  "issues": []
+}
