@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-18T04:01:08.574288+00:00",
+  "root": "../artifacts/truba-experiments/E10/0b0b905/pilot",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 3,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "task_0000_7008304": 1,
+      "task_0001_7008305": 1,
+      "task_0002_7008303": 1
+    },
+    "engines": {
+      "pg": 2,
+      "qdrant": 1
+    },
+    "statuses": {
+      "ok": 3
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "task_0000_7008304/qdrant_rep1_qdrant_mmap_2G/result.json",
+      "sha256": "780344d1fe6aae8e80a994eeed72b72543f12c1cd84a6261a0f8d799db96f401",
+      "experiment_id": "E10_memory_limits-pilot-0b0b905c-0b300a95-t0000-a1-r00-qdrant",
+      "experiment": "task_0000_7008304",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7008304",
+      "raw_npz_size_bytes": 346950,
+      "raw_array_count": 8
+    },
+    {
+      "path": "task_0001_7008305/pg_rep1_pg_sb1G_2G/result.json",
+      "sha256": "36426f1a4f0979db7aacd42df3038934f6f4f6a6ee966aafd7c7581717ea442c",
+      "experiment_id": "E10_memory_limits-pilot-0b0b905c-0b300a95-t0001-a1-r00-pg",
+      "experiment": "task_0001_7008305",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7008305",
+      "raw_npz_size_bytes": 325277,
+      "raw_array_count": 8
+    },
+    {
+      "path": "task_0002_7008303/pg_rep1_pg_sbq_2G/result.json",
+      "sha256": "fef54c230114c0d12f9e4f28c0318516dd80499b1f2fe9219293325db1dadef5",
+      "experiment_id": "E10_memory_limits-pilot-0b0b905c-0b300a95-t0002-a1-r00-pg",
+      "experiment": "task_0002_7008303",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7008303",
+      "raw_npz_size_bytes": 204313,
+      "raw_array_count": 8
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_7008296",
+  "purpose": "Commit-specific smoke gate for E10 memory study",
+  "slurm": {
+    "job_id": "7008296",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:37",
+    "node": "hamsi41"
+  },
+  "code_commit": "0b0b905c9fca9aa0350d4a392440394aa7a9a066",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/0b0b905c9fca_7008296",
+  "workspace_path": "../artifacts/truba-smoke/7008296",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_7008296_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "d5f449c7b44d09cccbb1158d70d3b1d2ec642cfbb7b415e4b8e80b56300931c9",
+    "pg/raw.npz": "1885544e1a880b618dfb7c06e84226130022966e2897ff2500c32ceab94a6bc5",
+    "qdrant/result.json": "aebb6b56d6b4e478467404a95499c512f7b4393b93ecc08e5d6063ce79ff1a49",
+    "qdrant/raw.npz": "ab33992d3d93bef3d69711939f5aebd1e94382a6d425574b07cd00f11f04de89"
+  }
+}
