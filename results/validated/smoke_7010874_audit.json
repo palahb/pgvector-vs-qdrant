@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-18T15:07:34.284666+00:00",
+  "root": "/arf/scratch/endemir/rag_bench/results/smoke/a5bb141ac967_7010874",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "pg": 1,
+      "qdrant": 1
+    },
+    "engines": {
+      "pg": 1,
+      "qdrant": 1
+    },
+    "statuses": {
+      "ok": 2
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "pg/result.json",
+      "sha256": "87c32b95d96d893e9fcdcba35d01f295fcc368d43400f305d4768a560de164fa",
+      "experiment_id": "cfg-be9c51f6de80feab-7010874-pg",
+      "experiment": "pg",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7010874",
+      "raw_npz_size_bytes": 234604,
+      "raw_array_count": 6
+    },
+    {
+      "path": "qdrant/result.json",
+      "sha256": "b7c64efaa115b48d681a29e69416afe8b50f17f93d27c98e2aecc695e43af5b9",
+      "experiment_id": "cfg-ca9a340fc1979c9f-7010874-qdrant",
+      "experiment": "qdrant",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7010874",
+      "raw_npz_size_bytes": 145975,
+      "raw_array_count": 6
+    }
+  ]
+}

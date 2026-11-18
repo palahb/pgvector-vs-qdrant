@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_7010874",
+  "purpose": "Commit-specific smoke gate for E17 planner exposure (ef_search confirmation, grid capped at 1000)",
+  "slurm": {
+    "job_id": "7010874",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:39",
+    "node": "hamsi35"
+  },
+  "code_commit": "a5bb141ac967bd90271455184575d7829dab9141",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/a5bb141ac967_7010874",
+  "workspace_path": "../artifacts/truba-smoke/7010874",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_7010874_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "87c32b95d96d893e9fcdcba35d01f295fcc368d43400f305d4768a560de164fa",
+    "pg/raw.npz": "7b40787f6a68a4144dbc4b2fe3254ded172f98be71e23bde650f5bb723b9e578",
+    "qdrant/result.json": "b7c64efaa115b48d681a29e69416afe8b50f17f93d27c98e2aecc695e43af5b9",
+    "qdrant/raw.npz": "6bfc27df8195efbdfecb76a196113234fffec934fbad62d2ec6864b5637f2f85"
+  }
+}
