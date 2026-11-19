@@ -522,8 +522,9 @@ how to detect each confounder and how this study avoids it.
       2.3 points. This produces a non-monotonic latency curve over $d$ and explains the
       earlier 384-dimension ``anomaly'' (Section~\ref{sec:dims}) \\
     Planner fallback for TOASTed vectors &
-      pgvector's HNSW cost estimate applies its TOAST correction only when the estimated
-      index pages exceed the heap pages; just below that threshold the index is costed
+      pgvector's HNSW cost estimate lowers its startup cost for out-of-line vectors only when
+      the estimated pages visited at startup (index pages times the scan fraction) exceed the
+      table's pages and the fraction is below 0.5; below that point the index is costed
       with random page reads, against a sequential scan of a heap that holds about 1.1\%
       of the data &
       500K, $ef=256$: parallel exact scan, recall 1.000 at 890\,ms per query
@@ -827,13 +828,25 @@ the index. This agrees with the earlier run at the default planner, where only $
 500K was slow (Table~\ref{tab:confounders}), and it adds that the range moves with $N$
 and the dimension, so a setting that is safe at one scale may not be at the next.
 
-The cause is visible in the costs. The cost of the scan plan depends on the heap, which
-holds only pointers to the out-of-line vectors, and the heap has the same size at 768 and at
-1024 dimensions. The scan therefore costs exactly the same at both dimensions (for example
-11{,}819 at 500K), and it is 3.0 to 3.8 times cheaper than at 128 dimensions with
-the same number of vectors, although the scan reads far more data. The cost of the index
-plan grows with $ef$ until the planner switches to the scan, and in the affected cells the
-index costs 1.01 to 1.27 times as much as the scan.
+The cause is in pgvector's cost estimator (\texttt{hnswcostestimate} in \texttt{src/hnsw.c},
+version 0.8.6). From $M$, $ef$ and the number of tuples it estimates the fraction of the index
+that a scan visits, and it charges the pages visited at random-page cost. A comment in the
+source notes that the TOAST pages are not part of the sequential scan cost, and for this reason
+it lowers the startup cost only when the estimated pages visited at startup (the index pages
+times that fraction) exceed the number of pages of the table, and only when the fraction is
+below 0.5. When the vectors are stored out of line the table is small (3{,}712 pages at 500K
+vectors, which hold pointers only), so the condition holds from a modest $ef$ on, and below it
+the index is charged at the full random-page cost. In that band the index can cost more than a
+parallel sequential scan of the small heap. We applied the formula from the source to the page
+counts we recorded. It predicts, in all 20 builds, the value of $ef$ at which the cost of the
+index plan drops: 320 at 500K vectors and 1024 dimensions, where the cost falls from 13{,}323
+at $ef=256$ to 3{,}782 at $ef=320$, and no drop at all for the builds with 128 and 384
+dimensions, whose heaps are large. The exposed values of $ef$ are the ones just below the
+predicted threshold, where the uncorrected index cost exceeds the scan cost. The cost of the
+scan plan depends on the heap, which has the same size at 768 and at 1024 dimensions, so the
+scan costs exactly the same at both (for example 11{,}819 at 500K), and 3.0 to 3.8 times less
+than at 128 dimensions with the same number of vectors, although it reads far more data. In the
+affected cells the index plan costs 1.01 to 1.27 times as much as the scan plan.
 
 Two limits apply. The plans are those of one prepared statement with a custom plan, and the
 planner may choose differently for other query vectors or with a generic plan. And we

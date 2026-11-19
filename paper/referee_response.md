@@ -152,8 +152,13 @@ is subject to the author's and the referee's agreement.
 - The earlier "about 250x" wording is replaced by the like-for-like 218x measured at 500K,
   1024 dimensions, ef=256, and "more than 200x" in the abstract. The latency of the scan plan
   was not measured in the other eight affected cells.
-- Not done: a minimal reproducer and the upstream report. Nothing has been sent to the
-  pgvector maintainers; that needs the author's approval. The manuscript says so.
+- Mechanism checked against the source: the condition in `hnswcostestimate` (pgvector 0.8.6)
+  predicts the ef at which the index cost drops in all 20 builds (for example 320 at 500K x 1024,
+  cost 13,323 at ef=256 to 3,782 at ef=320); the manuscript's earlier wording ("estimated index pages
+  exceed the heap pages") was imprecise and now reads "estimated pages visited at startup".
+- Not done: running the reproducer and sending the upstream report. A draft issue with a
+  reproducer script is in `docs/PGVECTOR_ISSUE_DRAFT.md`; the script has not been run, and nothing has
+  been sent to the pgvector maintainers (needs the author's approval). The manuscript says so.
 
 ## Minor comments
 

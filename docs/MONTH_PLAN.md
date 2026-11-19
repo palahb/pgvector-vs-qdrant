@@ -206,8 +206,10 @@ like; the 300-query memory claim replaced; "pgvector about 3x faster" restated a
   with a longer limit is the author's decision.
 - Throughput interpolation at matched recall (M7) and compile flags of the engine binaries (m7) were not
   done.
-- Upstream report to the pgvector maintainers: not sent, needs the author's approval. A reproducer has
-  not been written or run.
+- Upstream report to the pgvector maintainers: not sent, needs the author's approval. A draft issue and
+  a reproducer script are written (`docs/PGVECTOR_ISSUE_DRAFT.md`); the reproducer has not been run.
+  The cost-estimator mechanism in it was checked against pgvector's source and reproduces the observed
+  threshold in 20 of 20 builds.
 
 **Needs the author or supervisor** (nothing here is blocked on tooling): journal and deadline, the
 scope reduction, the AI-use statement wording and its attestation, the 4 GB decision, the upstream

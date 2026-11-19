@@ -49,8 +49,10 @@ makalesi pgvector'ü değil PASE'i inceliyormuş, metin düzeltildi.
    Systems and Software / PeerJ CS gibi bir alternatif mi? Şablona geçişi dergi kesinleşince
    yapacağım.
 3. **Son tarih** var mı?
-4. **pgvector'e bildirim:** Planlayıcı bulgusu için minimal tekrar üretilebilir örnek ve issue
-   metnini hazırlayıp size göstermeyi, onayınızla göndermeyi öneriyorum.
+4. **pgvector'e bildirim:** Planlayıcı bulgusu için issue metni ve tekrar üretici örnek taslağı
+   hazır (`docs/PGVECTOR_ISSUE_DRAFT.md`). Mekanizmayı pgvector kaynağıyla karşılaştırdım: maliyet
+   formülü 20 build'in 20'sinde indeks maliyetinin düştüğü `ef` değerini doğru öngörüyor. Örnek
+   betiği henüz çalıştırmadım. Onayınızla önce çalıştırıp sonra göndermeyi öneriyorum.
 5. **Yapay zekâ beyanı:** Taslak hazır (Claude, GPT/Codex kullanımı). Sizin Claude ve Gemini
    ile ürettiğiniz değerlendirme ve plan dokümanlarını beyanda ayrıca anmamı ister misiniz?
 

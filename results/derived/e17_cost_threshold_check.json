@@ -1,0 +1,201 @@
+{
+  "matches": 20,
+  "builds": 20,
+  "rows": [
+    {
+      "dim": 128,
+      "n": 100000,
+      "heap_pages": 7168,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 128,
+      "n": 250000,
+      "heap_pages": 17920,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 128,
+      "n": 500000,
+      "heap_pages": 35776,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 128,
+      "n": 750000,
+      "heap_pages": 53632,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 128,
+      "n": 1000000,
+      "heap_pages": 71488,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 384,
+      "n": 100000,
+      "heap_pages": 20032,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 384,
+      "n": 250000,
+      "heap_pages": 50048,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 384,
+      "n": 500000,
+      "heap_pages": 100032,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 384,
+      "n": 750000,
+      "heap_pages": 150016,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 384,
+      "n": 1000000,
+      "heap_pages": 200000,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 768,
+      "n": 100000,
+      "heap_pages": 768,
+      "predicted_ef": 128,
+      "observed_ef": 128,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 768,
+      "n": 250000,
+      "heap_pages": 1856,
+      "predicted_ef": 320,
+      "observed_ef": 320,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 768,
+      "n": 500000,
+      "heap_pages": 3712,
+      "predicted_ef": 768,
+      "observed_ef": 768,
+      "match": true,
+      "exposed_ef": [
+        512,
+        640
+      ]
+    },
+    {
+      "dim": 768,
+      "n": 750000,
+      "heap_pages": 5568,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": [
+        768,
+        1000
+      ]
+    },
+    {
+      "dim": 768,
+      "n": 1000000,
+      "heap_pages": 7360,
+      "predicted_ef": null,
+      "observed_ef": null,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 1024,
+      "n": 100000,
+      "heap_pages": 768,
+      "predicted_ef": 48,
+      "observed_ef": 48,
+      "match": true,
+      "exposed_ef": []
+    },
+    {
+      "dim": 1024,
+      "n": 250000,
+      "heap_pages": 1856,
+      "predicted_ef": 160,
+      "observed_ef": 160,
+      "match": true,
+      "exposed_ef": [
+        128
+      ]
+    },
+    {
+      "dim": 1024,
+      "n": 500000,
+      "heap_pages": 3712,
+      "predicted_ef": 320,
+      "observed_ef": 320,
+      "match": true,
+      "exposed_ef": [
+        256
+      ]
+    },
+    {
+      "dim": 1024,
+      "n": 750000,
+      "heap_pages": 5568,
+      "predicted_ef": 512,
+      "observed_ef": 512,
+      "match": true,
+      "exposed_ef": [
+        384,
+        448
+      ]
+    },
+    {
+      "dim": 1024,
+      "n": 1000000,
+      "heap_pages": 7360,
+      "predicted_ef": 640,
+      "observed_ef": 640,
+      "match": true,
+      "exposed_ef": [
+        512
+      ]
+    }
+  ]
+}
