@@ -664,9 +664,20 @@ each system is loaded.
 \end{figure}
 
 The size of pgvector's index does not change with $M$. At 500K it is 3.81\,GiB for
-$M=16$, 32 and 64. A 1024-dimensional element takes about 4\,KB, so a second element does
-not fit on the same 8\,KB page. The index therefore uses one page per vector, and the
-neighbor lists fit in the space that is left.
+$M=16$, 32 and 64. The byte budget explains this. An 8\,KiB page offers 8{,}156\,bytes for one
+tuple, and 8{,}160 for tuples in general once the 24-byte page header and 8-byte page special
+space are taken out. An element tuple is a 72-byte header (type and flags, ten heap
+pointers of 6 bytes, the neighbor pointer) followed by the vector, which is 8 bytes of
+header plus 4 bytes per dimension. At 1024 dimensions it takes 4{,}176 bytes after
+alignment, so a second element (8{,}360 bytes with item identifiers) does not fit on the
+page, and the index uses one page per vector. A level-0 neighbor tuple holds $2M$ pointers
+of 6 bytes and a 4-byte header, which is 200, 392 and 776 bytes for $M=16$, 32 and 64.
+Each fits in the 3{,}980 bytes that remain beside the element, so a larger $M$ costs no
+extra page. The same budget gives two elements per page at 768 dimensions (3{,}152 bytes
+each), and the measured index of 249{,}433 pages for 500K vectors (E17) is half a page per
+vector, as predicted. Qdrant has no such constraint. We read the layout from the
+\texttt{hnsw.h} header of pgvector 0.8.0 and checked that the tuple definitions are identical in
+0.8.6, where only the size macros changed, to guard against overflow.
 
 \subsection{Ingestion Fairness}
 \label{sec:ingest}

@@ -170,7 +170,11 @@ is subject to the author's and the referee's agreement.
    change with new gates.
 7. pgvector `hnsw.iterative_scan`, compile flags, ISA: partly done (the CPU supports AVX2
    and AVX-512 per the kernel probe); the setting and compile flags are not yet recorded.
-8. Per-page byte budget of the index size: open.
+8. Per-page byte budget of the index size: done. The tuple layout was read from pgvector's
+   `hnsw.h` (v0.8.0, tuple structs identical in v0.8.6): at 1024 dimensions an element tuple
+   takes 4,176 bytes, so two do not fit on a page; level-0 neighbor tuples of 200, 392 and 776
+   bytes (M=16, 32, 64) fit beside it. The same budget predicts the measured half page per vector
+   at 768 dimensions (E17: 249,433 pages for 500K vectors).
 9. Fixed-`ef` figure: open.
 10. d=768 outlier: open (no repeated builds yet).
 11. Wording: done for the three headline sentences; REST statement scoped to the official

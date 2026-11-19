@@ -31,7 +31,7 @@ response letter must cite the eventual evidence, not merely this plan.
 | m5 | data/quality | Add passage length, qrels coverage, exact-ground-truth precision and tie handling | Values generated from versioned data-analysis script | partly (method stated; qrels open) |
 | m6 | implementation/writing | Verify and state Qdrant `with_payload=false`, `with_vectors=false` | Code test/inspection plus manuscript statement | done (text; server response not inspected) |
 | m7 | environment | Record pgvector iterative-scan setting, compile flags and ISA/SIMD availability for both engines | Result manifest/probe output and manuscript table | open |
-| m8 | causal analysis | Explain M-independent index size with per-page byte budget and measured sizes | Calculation and engine-format citation/verification | open |
+| m8 | causal analysis | Explain M-independent index size with per-page byte budget and measured sizes | Calculation and engine-format citation/verification | done |
 | m9 | figure/protocol | Show fixed-ef=64 curves or remove that protocol arm from claims | Figure/protocol are consistent | open |
 | m10 | anomaly | Repeat pgvector d=768 builds and discuss recall drop | ≥3 builds and anomaly decision logged | open |
 | m11 | wording | Replace broad speed claims; scope REST statement to official Python REST client | Claim-lint/search finds no forbidden wording | open |
