@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-19T04:55:32.307556+00:00",
+  "root": "../artifacts/truba-experiments/E18/7d1b1c4/pilot",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 4,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "task_0000_7014902": 2,
+      "task_0001_7014839": 2
+    },
+    "engines": {
+      "pg": 2,
+      "qdrant": 2
+    },
+    "statuses": {
+      "ok": 4
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "task_0000_7014902/pg_rep1_d128/result.json",
+      "sha256": "a95fd65914472d06992ef89a0fa6ed5224b055f9d0eabf37ab2039ab7b197a2e",
+      "experiment_id": "E18_per_query_recall_dimensions-pilot-7d1b1c44-763a67fb-t0000-a1-r00-pg",
+      "experiment": "task_0000_7014902",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7014902",
+      "raw_npz_size_bytes": 79930,
+      "raw_array_count": 18
+    },
+    {
+      "path": "task_0000_7014902/qdrant_rep1_d128/result.json",
+      "sha256": "b7ca8b6e56e3e3307283cce04b7bcc3a3441fed310719be857bcefc83b632688",
+      "experiment_id": "E18_per_query_recall_dimensions-pilot-7d1b1c44-763a67fb-t0000-a1-r01-qdrant",
+      "experiment": "task_0000_7014902",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7014902",
+      "raw_npz_size_bytes": 88679,
+      "raw_array_count": 18
+    },
+    {
+      "path": "task_0001_7014839/pg_rep1_d768/result.json",
+      "sha256": "e2f8b572c115e87e512d4eddc87119309fdefe691d923c420c2b4bd4739b78e2",
+      "experiment_id": "E18_per_query_recall_dimensions-pilot-7d1b1c44-763a67fb-t0001-a1-r00-pg",
+      "experiment": "task_0001_7014839",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7014839",
+      "raw_npz_size_bytes": 77628,
+      "raw_array_count": 18
+    },
+    {
+      "path": "task_0001_7014839/qdrant_rep1_d768/result.json",
+      "sha256": "f48b7074194d09f00b611afc13d1c9be98f96a9f3378ad750910ad49d5f7b007",
+      "experiment_id": "E18_per_query_recall_dimensions-pilot-7d1b1c44-763a67fb-t0001-a1-r01-qdrant",
+      "experiment": "task_0001_7014839",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7014839",
+      "raw_npz_size_bytes": 80920,
+      "raw_array_count": 18
+    }
+  ]
+}
