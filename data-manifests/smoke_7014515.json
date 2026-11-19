@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_7014515",
+  "purpose": "Commit-specific smoke gate for E18 (per-query hits, hnsw scan settings)",
+  "slurm": {
+    "job_id": "7014515",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:36",
+    "node": "hamsi39"
+  },
+  "code_commit": "4903fd997c7ad04478773a4c45a4804a277ae0cc",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/4903fd997c7a_7014515",
+  "workspace_path": "../artifacts/truba-smoke/7014515",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_7014515_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "f6d2cfbd0d281ca561bd77be42807beb5ef84e8bd1a30203bdc0961403f72df2",
+    "pg/raw.npz": "04cc02b4fe0bf30c6575ee7ec2e36838f273cb4d5d6ce3f248b9cfdf8fc42945",
+    "qdrant/result.json": "c9e208b32075ae15bc1d62dca947cf90e049f68cf8bcd9ce38dd1beb61510573",
+    "qdrant/raw.npz": "6d96d6a6225fb97f1a3aa74a139224c8372fa55e248db49000bc22948e9babd7"
+  }
+}
