@@ -794,21 +794,35 @@ serialization.
 \label{sec:planner}
 
 The main experiments force the HNSW index (\texttt{enable\_seqscan = off}), so they measure
-the index and not how often PostgreSQL's planner would choose it. Our first scale runs also
-contain a run with the default planner, at the three scales and eight values of $ef$ from 16
-to 384, with one build per scale. We compare each cell with the forced-index run at the same
-$N$ and $ef$. In 23 of the 24 cells the two agree within 6\% in latency. In one cell, 500K
-vectors at $ef=256$, the default planner is 218$\times$ slower (888 against 4.1\,ms) and its
-recall is 1.000, the signature of an exact scan. This is 1 of 24 cells, 4\%, and the two
-neighbouring values of $ef$ at the same scale use the index.
+the index and not how often PostgreSQL's planner would choose it. We measured that exposure
+separately (E17) without running any query. For one build of each combination of 100K, 250K,
+500K, 750K and 1M vectors and 128, 384, 768 and 1024 dimensions, we ask the planner for the
+plan of the benchmark query at 18 values of $ef$ from 16 to 1000, and we record its own
+choice together with the cheapest index plan and the cheapest scan plan and their costs. Of
+the 360 cells, 9 (2.5\%) use a sequential scan under the default planner.
 
-This exposure is a lower bound for two reasons. The plans were not recorded in that run,
-so the exact scan is inferred from latency and recall, and the cost model that decides
-between the index and a scan depends on the table, TOAST and index sizes
-(Table~\ref{tab:confounders}), which change with the number of vectors, the dimension and
-$ef$. We therefore do not know how the exposure varies outside the three scales and one
-dimension we ran. Measuring it needs only plans, not queries, and we leave it to future work
-together with a report to the pgvector maintainers.
+All 9 are in the two dimensions whose vectors are stored out of line (768 and 1024), where
+they make up 9 of 180 cells (5.0\%) and occur in 6 of the 10 builds. None occurs at 128 or
+384 dimensions (0 of 180). Within the affected builds the exposure is a narrow range of
+$ef$ and not a threshold: at 500K vectors and 1024 dimensions only $ef=256$ is affected, at
+750K the values 384 and 448, and at 1M only 512, while the values on both sides of each use
+the index. This agrees with the earlier run at the default planner, where only $ef=256$ at
+500K was slow (Table~\ref{tab:confounders}), and it adds that the range moves with $N$
+and the dimension, so a setting that is safe at one scale may not be at the next.
+
+The cause is visible in the costs. The cost of the scan plan depends on the heap, which
+holds only pointers to the out-of-line vectors, and the heap has the same size at 768 and at
+1024 dimensions. The scan therefore costs exactly the same at both dimensions (for example
+11{,}819 at 500K), and it is 3.0 to 3.8 times cheaper than at 128 dimensions with
+the same number of vectors, although the scan reads far more data. The cost of the index
+plan grows with $ef$ until the planner switches to the scan, and in the affected cells the
+index costs 1.01 to 1.27 times as much as the scan.
+
+Two limits apply. The plans are those of one prepared statement with a custom plan, and the
+planner may choose differently for other query vectors or with a generic plan. And we
+measured the latency of the scan plan only at 500K vectors and 1024 dimensions (888\,ms
+against 4.1\,ms for the index, Table~\ref{tab:confounders}), not in the other eight cells.
+We have not reported this behavior to the pgvector maintainers.
 
 \subsection{Latency Versus CPU Cost}
 \label{sec:cpu}

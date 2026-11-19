@@ -132,18 +132,22 @@ is subject to the author's and the referee's agreement.
 - Not done: eBPF attribution (no privileges on the cluster); a real-data repetition of the
   perf measurement (the E7 pilot used synthetic data and only checks that counters work).
 
-### M12 — Planner fallback exposure: partly addressed
+### M12 — Planner fallback exposure: addressed, upstream report open
 
-- Evidence: the E1 default-planner run (one build per scale, ef 16-384, 24 cells) compared
-  with the forced-index run at the same N and ef.
-- 23 of 24 cells agree within 6% in latency. One cell (500K, ef=256) is 218x slower with
-  recall 1.000, the exact-scan signature. The earlier "about 250x" compared that cell with
-  neighbouring ef values; the like-for-like ratio is 218x and the manuscript now says
-  "more than 200x". New subsection "Planner Exposure".
-- Not done: the N x dimension x ef plan grid with recorded plans and predicted costs (the
-  existing run recorded no plans, so the exposure is a lower bound), and the minimal
-  reproducer and upstream report, which need the author's approval before anything is sent.
-- The grid needs only EXPLAIN, not query execution, so it is cheap to run.
+- Evidence: E17 (`data-manifests/e17_full_a5bb141.json`, 20 builds, 360 cells, strict audit
+  clean) and the E1 default-planner run.
+- The default planner's plan was recorded for every combination of 100K-1M vectors,
+  128/384/768/1024 dimensions and 18 values of ef (16-1000), with the best index and scan
+  plan costs. 9 of 360 cells (2.5%) use a sequential scan; all are at 768 or 1024 dimensions
+  (9 of 180, 5.0%, in 6 of 10 builds) and none at 128 or 384. The affected ef values form
+  narrow ranges that move with N (for example only ef=256 at 500K and only ef=512 at 1M, at
+  1024 dimensions). The scan plan costs the same at 768 and 1024 dimensions because the heap
+  holds only pointers, and 3.0-3.8x less than at 128 dimensions.
+- The earlier "about 250x" wording is replaced by the like-for-like 218x measured at 500K,
+  1024 dimensions, ef=256, and "more than 200x" in the abstract. The latency of the scan plan
+  was not measured in the other eight affected cells.
+- Not done: a minimal reproducer and the upstream report. Nothing has been sent to the
+  pgvector maintainers; that needs the author's approval. The manuscript says so.
 
 ## Minor comments
 

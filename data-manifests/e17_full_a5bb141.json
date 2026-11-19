@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E17_planner_exposure_full",
+  "code_commit": "a5bb141ac967bd90271455184575d7829dab9141",
+  "slurm_jobs": {
+    "smoke": "7010874",
+    "pilot": "7011941",
+    "full": "7013754"
+  },
+  "superseded": {
+    "smoke": "7010794 at a61b17c",
+    "pilot": "7010802 at a61b17c, task 0 failed (ef=1024 above the pgvector ef_search limit), task 1 cancelled; no result data used"
+  },
+  "submission": "E17_planner_exposure-full-a5bb141a-cbb7fabd",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E17_planner_exposure/full/E17_planner_exposure-full-a5bb141a-cbb7fabd",
+  "workspace_root": "../artifacts/truba-experiments/E17/a5bb141",
+  "artifact_tree": {
+    "file_count": 112,
+    "sorted_file_sha256_manifest_sha256": "23e2d98c575ca7813be2a883b4e61b1f07e194ef1d3e3d4db96d9052482d0c76"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 20,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e17_full_a5bb141_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "builds": 20,
+    "cells": 360,
+    "exposed_cells": 9,
+    "tracked_json": "results/derived/e17_full_a5bb141_analysis.json",
+    "tracked_summary": "results/derived/e17_full_a5bb141_summary.md"
+  },
+  "registry": {
+    "tasks": 20,
+    "attempts_per_task": 1
+  },
+  "scope": "plan-only (EXPLAIN, custom plan); no query executed; plan latency measured only for 500K x 1024 in E1"
+}

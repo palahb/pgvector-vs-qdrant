@@ -142,3 +142,10 @@ reference for everything beyond this scope.
 - AI-use statement drafted (`paper/ai_use_statement.md`) with the facts that can be stated and the
   points the authors must confirm; not inserted into the manuscript because the target journal's
   wording and placement are not fixed.
+
+### E17 result (2026-11-19)
+
+- E17 full array 7013754: 20 builds, 360 plan cells, one attempt each, strict audit clean
+  (`data-manifests/e17_full_a5bb141.json`). 9 cells (2.5%) take a sequential scan, all at 768
+  and 1024 dimensions; none at 128 or 384. Paper subsection "Planner Exposure" rewritten from
+  the grid. The upstream report is not sent and needs the author's approval.

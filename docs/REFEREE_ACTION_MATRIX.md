@@ -18,7 +18,7 @@ response letter must cite the eventual evidence, not merely this plan.
 | M9 | 1 | scope + experiment + writing | Title; Introduction; Methodology; Results | Complete filtered, mixed read/write/freshness, hybrid and qrels/nDCG experiments; otherwise title/scope reduction requires author approval | E12–E14; phases 11–14 | open |
 | M10 | 2 | experiment + literature | Dataset; Dimensions; Threats | At least 10M; resource record; verify Cohere training claim; native lower-dimensional second model/dataset; no generality claim from truncation alone | E16; phase 16 | partly |
 | M11 | 1 | measurement definition + experiment | Metrics; Engine-side telemetry; Threats | Precisely define both self-reported spans; external on-CPU/perf attribution; avoid treating spans as identical; reconcile with CPU-ms/query | E7; phase 6 | partly (E1 counters) |
-| M12 | 2 | experiment + upstream | Protocol; Confounders; Discussion | Default-planner N×ef×dimension exposure matrix; predicted/actual cost; minimum reproducer; upstream issue/response citation after user approval | E17; phase 17 | partly (E1 default-planner run) |
+| M12 | 2 | experiment + upstream | Protocol; Confounders; Discussion | Default-planner N×ef×dimension exposure matrix; predicted/actual cost; minimum reproducer; upstream issue/response citation after user approval | E17; phase 17 | addressed (E17); upstream report open |
 
 ## Minor comments
 
