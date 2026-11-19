@@ -13,7 +13,7 @@ response letter must cite the eventual evidence, not merely this plan.
 | M4 | 2 | experiment | Environment; Build; Threats | Repeat build arms on verified NVMe/tmpfs; logged/unlogged pg arms; record WAL/checkpoints/storage; no headline from rotational-disk-only result | E9; phase 8 | partly (E9) |
 | M5 | 1 | experiment + analysis | Memory Pressure; Abstract; Discussion; Conclusion | Full or held-out queries disjoint from warm-up; ≥3 runs; randomized/counterbalanced order; cold and steady-state separated; NVMe; equal memory accounting; remove current superiority claim | E10; phase 9 | addressed (E10; pgvector 4G incomplete) |
 | M6 | 1 | provenance + experiment | HNSW Table; Concurrency Figure/Table | Resolve 500K throughput mismatch by tracing exact files/config/node/build/ef; ≥3 independent builds; every table row carries source IDs; CI/variance reported | E8; phases 3/7 | addressed (E8) |
-| M7 | 1 | experiment + statistics | Matched-recall protocol; Latency; Concurrency | Fine ef near targets or model/interpolate both latency and throughput; compare equal recall; report per-query recall distribution and uncertainty | E8; phase 7 | partly (E6, E8) |
+| M7 | 1 | experiment + statistics | Matched-recall protocol; Latency; Concurrency | Fine ef near targets or model/interpolate both latency and throughput; compare equal recall; report per-query recall distribution and uncertainty | E8; phase 7 | mostly (E6, E8, E18); throughput interpolation open |
 | M8 | 2 | experiment | Methodology; Concurrency; Threats | Open-loop Poisson offered loads; p99/p99.9 vs offered load; 8/16/28/56 cores with NUMA; PgBouncer arm; repeated windows/CI | E11; phase 10 | open |
 | M9 | 1 | scope + experiment + writing | Title; Introduction; Methodology; Results | Complete filtered, mixed read/write/freshness, hybrid and qrels/nDCG experiments; otherwise title/scope reduction requires author approval | E12–E14; phases 11–14 | open |
 | M10 | 2 | experiment + literature | Dataset; Dimensions; Threats | At least 10M; resource record; verify Cohere training claim; native lower-dimensional second model/dataset; no generality claim from truncation alone | E16; phase 16 | partly |
@@ -30,10 +30,10 @@ response letter must cite the eventual evidence, not merely this plan.
 | m4 | presentation | Split dense confounder table or separate mechanism/effect; add result cross-references | Readable rendered table and valid references | open |
 | m5 | data/quality | Add passage length, qrels coverage, exact-ground-truth precision and tie handling | Values generated from versioned data-analysis script | partly (method stated; qrels open) |
 | m6 | implementation/writing | Verify and state Qdrant `with_payload=false`, `with_vectors=false` | Code test/inspection plus manuscript statement | done (text; server response not inspected) |
-| m7 | environment | Record pgvector iterative-scan setting, compile flags and ISA/SIMD availability for both engines | Result manifest/probe output and manuscript table | open |
+| m7 | environment | Record pgvector iterative-scan setting, compile flags and ISA/SIMD availability for both engines | Result manifest/probe output and manuscript table | partly (settings recorded; compile flags open) |
 | m8 | causal analysis | Explain M-independent index size with per-page byte budget and measured sizes | Calculation and engine-format citation/verification | done |
 | m9 | figure/protocol | Show fixed-ef=64 curves or remove that protocol arm from claims | Figure/protocol are consistent | open |
-| m10 | anomaly | Repeat pgvector d=768 builds and discuss recall drop | ≥3 builds and anomaly decision logged | open |
+| m10 | anomaly | Repeat pgvector d=768 builds and discuss recall drop | ≥3 builds and anomaly decision logged | done (E18) |
 | m11 | wording | Replace broad speed claims; scope REST statement to official Python REST client | Claim-lint/search finds no forbidden wording | open |
 | m12 | writing | Shorten abstract to surviving 3–4 findings | Final abstract meets target journal guidance | open |
 | m13 | provenance/presentation | Publish old-harness vs controlled-harness numeric table | Same definitions and traceable E0/current sources | done |

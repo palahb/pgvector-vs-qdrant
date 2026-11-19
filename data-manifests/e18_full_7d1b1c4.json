@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E18_per_query_recall_dimensions_full",
+  "code_commit": "7d1b1c443ae5bf4b7443fab32cd7798c851a5139",
+  "slurm_jobs": {
+    "smoke": "7014812",
+    "pilot": "7014839",
+    "full": "7014911"
+  },
+  "superseded": {
+    "smoke": "7014515 at 4903fd9",
+    "pilot": "7014788 at 4903fd9: task 0 failed (Qdrant gRPC port 56334 still held by the previous job), task 1 completed; no result used"
+  },
+  "submission": "E18_per_query_recall_dimensions-full-7d1b1c44-763a67fb",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E18_per_query_recall_dimensions/full/E18_per_query_recall_dimensions-full-7d1b1c44-763a67fb",
+  "workspace_root": "../artifacts/truba-experiments/E18/7d1b1c4",
+  "artifact_tree": {
+    "file_count": 210,
+    "sorted_file_sha256_manifest_sha256": "31ab31b4006fad414e131f7b0f58c7b185583fd498260bb11cf0574a806c9d33"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 48,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e18_full_7d1b1c4_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "cells": 16,
+    "issues": 0,
+    "tracked_json": "results/derived/e18_full_7d1b1c4_analysis.json",
+    "tracked_summary": "results/derived/e18_full_7d1b1c4_summary.md"
+  },
+  "registry": {
+    "tasks": 24,
+    "attempts_per_task": 1
+  },
+  "scope": "100K vectors, M=16, efc=64, 8 dimensions x 3 builds, both engines; per-query neighbor counts in raw.npz as none_hits_*"
+}

@@ -336,6 +336,8 @@ label.
          to matched recall \\
     E9 & Ingestion configurations: pgvector logged and unlogged, Qdrant with larger
          batches, parallel streams and deferred indexing; WAL and disk writes recorded \\
+    E17 & Planner plans (no query run) for 100K--1M vectors, 128--1024 dimensions and 18 values of $ef$ \\
+    E18 & Per-query recall and recall across eight dimensions, three builds each, 100K vectors \\
     E10 & Cold start and steady state under 16, 8 and 4\,GB memory limits, full query set in random
          order, three repetitions; pgvector with two buffer-pool settings, Qdrant memory-mapped \\
     \bottomrule
@@ -368,8 +370,12 @@ in-memory working set and parallel index builds: \texttt{shared\_buffers}=32\,GB
 7 parallel maintenance workers. We also set the table's \texttt{parallel\_workers} to 7,
 because PostgreSQL otherwise chooses the number of build workers from the heap size, and
 the heap holds only the TOAST pointers. In addition, \texttt{jit} is off,
-\texttt{track\_io\_timing} is on and \texttt{pg\_stat\_statements} is loaded. Qdrant runs
-with its defaults: vectors in memory, the default optimizer (indexing threshold 20\,MB)
+\texttt{track\_io\_timing} is on and \texttt{pg\_stat\_statements} is loaded. pgvector's
+\texttt{hnsw.iterative\_scan} is off (its default), with \texttt{hnsw.max\_scan\_tuples} at
+20{,}000 and \texttt{hnsw.scan\_mem\_multiplier} at 1; the benchmark query has no filter, so
+iterative scans would not change its result. The CPU supports AVX2 and AVX-512 (Section~\ref{sec:cpu}
+reports instruction counts), but we did not record the compile flags of either engine's binaries
+or which instruction sets they use. Qdrant runs with its defaults: vectors in memory, the default optimizer (indexing threshold 20\,MB)
 and an automatically chosen number of segments.
 
 \subsection{Measurement Protocol}
@@ -885,6 +891,47 @@ intervals are wide for some Qdrant configurations because the matched-recall $ef
 between builds, so we report these ratios as ranges and do not treat differences of
 about ten percent as meaningful.
 
+\subsection{Per-Query Recall}
+\label{sec:perquery}
+
+A mean Recall@10 of 0.95 can come from many queries slightly below 1 or from a few that fail
+completely, and retrieval quality for applications depends on the second case. E18 stores the
+number of true neighbors found for every query and repeats the build three times at each of
+eight dimensions (100K vectors, $M=16$, $ef_{construction}=64$). Table~\ref{tab:perquery}
+reads the distribution at the smallest swept $ef$ whose mean recall reaches 0.95, where the
+mean is between 0.95 and 0.97 in the rows shown.
+
+\begin{table}[t]
+  \caption{Per-query Recall@10 at the smallest swept $ef$ with mean recall of at least 0.95
+  (mean over three builds, 100K vectors, 1{,}677 queries). Shares in percent of queries;
+  $p_1$ is the first percentile of per-query recall.}
+  \label{tab:perquery}
+  \small
+  \begin{tabular}{lr|rrrrr}
+    \toprule
+    System & $d$ & $ef$ & all 10 & $<0.8$ & $\le 0.5$ & $p_1$ \\
+    \midrule
+    pgvector & 128 & 192 & 81.1 & 1.8 & 0.3 & 0.70 \\
+    pgvector & 768 & 192 & 79.9 & 6.1 & 2.0 & 0.33 \\
+    pgvector & 1024 & 192 & 80.6 & 6.2 & 2.1 & 0.30 \\
+    \midrule
+    Qdrant & 128 & 96 & 77.9 & 2.5 & 0.2 & 0.70 \\
+    Qdrant & 768 & 107 & 79.9 & 6.1 & 2.2 & 0.40 \\
+    Qdrant & 1024 & 117 & 80.9 & 5.6 & 2.2 & 0.37 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+About 80\% of the queries return all ten neighbors in every row. The rest is a heavy tail
+that grows with the dimension. At 128 dimensions 1.9\% (pgvector) and 2.5\% (Qdrant) of the
+queries have a recall below 0.8; at 768 and 1024 dimensions it is about 6\% for both, and
+about 2\% of the queries find at most five of their ten neighbors. At 1024 dimensions the
+worst query finds none of its ten neighbors in all three builds of both engines. The two
+engines have almost the same tails at each dimension (6.2\% against 5.6\% below 0.8 at 1024),
+so matching on mean recall does not hide a difference in the worst queries between them. For
+an application that retrieves ten passages, a mean of 0.95 at high dimension means that about
+one query in sixteen has a recall below 0.8.
+
 \subsection{Concurrency}
 
 Figure~\ref{fig:throughput} shows closed-loop throughput at matched recall, that is, at
@@ -1013,6 +1060,15 @@ engine time rises by up to 1.9$\times$ and recall also rises, because part of ea
 comes from an exact scan. The resulting saw-tooth curve is the ``384-dimension anomaly''
 we saw in our first measurements. It comes from the optimizer state, and SIMD alignment
 does not explain it.
+
+pgvector's recall at $ef=64$ in the single build of this experiment fell to 0.871 at 768
+dimensions, 0.013 below its value at 640 and 0.020 below its value at 896. We rebuilt every
+dimension three times (E18, Section~\ref{sec:perquery}). At 768 dimensions the three builds
+give 0.877 with a standard deviation of 0.001, which is 0.008 below 640 dimensions (0.885) and
+0.002 below 896 (0.879). Across all eight dimensions pgvector's recall at $ef=64$ lies between
+0.870 and 0.885, with a standard deviation across builds of at most 0.0075. The sharp drop
+therefore came mostly from that single build, and a dip of about 0.008 remains at 768
+dimensions. We did not find its cause.
 
 \begin{figure*}[t]
   \centering

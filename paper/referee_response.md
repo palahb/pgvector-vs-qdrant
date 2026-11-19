@@ -100,12 +100,18 @@ is subject to the author's and the referee's agreement.
 - The non-monotonic pgvector latency over graph density is not build-to-build noise
   (3.6 and 4.9 standard errors of the difference); it is systematic and its cause is open.
 
-### M7 — Matched recall: partly addressed
+### M7 — Matched recall: mostly addressed
 
-- Evidence: E6 and E8 use per-build linear interpolation of latency and CPU in recall.
-- Not done: interpolation of throughput (concurrency still runs at the first swept `ef`
-  reaching the target), and per-query recall distributions (the baseline stores latency
-  arrays only; new runs would have to store retrieved identifiers).
+- Evidence: E6 and E8 (per-build linear interpolation of latency and CPU in recall) and E18
+  (`data-manifests/e18_full_7d1b1c4.json`, per-query recall).
+- Per-query recall distributions are now stored and reported (new subsection "Per-Query
+  Recall"). At the smallest swept ef reaching a mean of 0.95, about 80% of queries return all
+  ten neighbors; at 768 and 1024 dimensions about 6% of queries have a recall below 0.8 and
+  about 2% find at most five neighbors, and the worst query finds none. The two engines have
+  almost the same tails at each dimension, so matching on the mean does not hide a
+  difference in the worst queries.
+- Not done: interpolation of throughput (concurrency still runs at the first swept ef reaching
+  the target).
 
 ### M8 — Closed loop and eight cores: open
 
@@ -168,15 +174,20 @@ is subject to the author's and the referee's agreement.
    and the raw gRPC request leaves the field unset). The server's response was not inspected,
    and the harness does not set `with_vectors=False` explicitly; doing so would be a code
    change with new gates.
-7. pgvector `hnsw.iterative_scan`, compile flags, ISA: partly done (the CPU supports AVX2
-   and AVX-512 per the kernel probe); the setting and compile flags are not yet recorded.
+7. pgvector `hnsw.iterative_scan`, compile flags, ISA: partly done. The scan settings are now
+   recorded in every result (`iterative_scan` off, `max_scan_tuples` 20,000, `scan_mem_multiplier`
+   1) and stated in the manuscript; the CPU supports AVX2 and AVX-512 (kernel probe). The
+   compile flags and which instruction sets the binaries use were not recorded.
 8. Per-page byte budget of the index size: done. The tuple layout was read from pgvector's
    `hnsw.h` (v0.8.0, tuple structs identical in v0.8.6): at 1024 dimensions an element tuple
    takes 4,176 bytes, so two do not fit on a page; level-0 neighbor tuples of 200, 392 and 776
    bytes (M=16, 32, 64) fit beside it. The same budget predicts the measured half page per vector
    at 768 dimensions (E17: 249,433 pages for 500K vectors).
 9. Fixed-`ef` figure: open.
-10. d=768 outlier: open (no repeated builds yet).
+10. d=768 outlier: done (E18, three builds per dimension). The single-build drop to 0.871 shrinks
+    to 0.877 +/- 0.001 over three builds, 0.008 below 640 dimensions and 0.002 below 896; pgvector's
+    recall at ef=64 lies between 0.870 and 0.885 across all dimensions. A dip of about 0.008
+    remains and its cause was not found.
 11. Wording: done for the three headline sentences; REST statement scoped to the official
     Python REST client.
 12. Abstract: done (about 240 words, three findings).

@@ -164,3 +164,13 @@ reference for everything beyond this scope.
 - This changes the code commit, so smoke and pilot were run again for it.
 - Also found in the E18 smoke: `hnsw.iterative_scan` is `off` in the main experiments
   (recorded in `server_info`), which answers referee minor comment 7.
+
+### E18 result (2026-11-19)
+
+- E18 full array 7014911: 24 tasks (8 dimensions x 3 builds, both engines), one attempt each, strict
+  audit clean (`data-manifests/e18_full_7d1b1c4.json`). The harness now stores the number of true
+  neighbors found per query and records pgvector's `hnsw.*` scan settings.
+- Per-query recall: ~80% of queries perfect at mean recall 0.95; ~6% below 0.8 at 768/1024 dims;
+  tails equal across engines. d=768: the E3 dip to 0.871 shrinks to 0.877 +/- 0.001 over three
+  builds. Paper: new subsection "Per-Query Recall", extended Dimensionality, Environment and
+  experiment map. Referee M7 mostly, m7 partly, m10 done.
