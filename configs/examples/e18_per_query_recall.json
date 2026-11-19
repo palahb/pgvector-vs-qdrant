@@ -1,0 +1,2321 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E18_per_query_recall_dimensions",
+  "code_commit": "AUTO",
+  "registry_root": "$BENCH_ROOT/orchestration",
+  "requires_smoke": true,
+  "max_retries": 1,
+  "resources": {
+    "partition": "hamsi",
+    "cpus": 56,
+    "memory": "170G",
+    "time": "01:30:00",
+    "array_concurrency": 4,
+    "exclude": [
+      "hamsi20",
+      "hamsi65"
+    ]
+  },
+  "storage": {
+    "min_free_gb": 200,
+    "min_inode_free_percent": 10
+  },
+  "stages": {
+    "pilot": {
+      "jobs": [
+        {
+          "job_key": "n-100000_d-128_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 128,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep1_d128",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep1_d128",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-768_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 768,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep1_d768",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep1_d768",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "full": {
+      "jobs": [
+        {
+          "job_key": "n-100000_d-128_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 128,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep1_d128",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep1_d128",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-128_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 128,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep2_d128",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep2_d128",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-128_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 128,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep3_d128",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 128,
+                "tag": "rep3_d128",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-256_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 256,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 256,
+                "tag": "rep1_d256",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 256,
+                "tag": "rep1_d256",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-256_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 256,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 256,
+                "tag": "rep2_d256",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 256,
+                "tag": "rep2_d256",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-256_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 256,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 256,
+                "tag": "rep3_d256",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 256,
+                "tag": "rep3_d256",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-384_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 384,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 384,
+                "tag": "rep1_d384",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 384,
+                "tag": "rep1_d384",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-384_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 384,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 384,
+                "tag": "rep2_d384",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 384,
+                "tag": "rep2_d384",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-384_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 384,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 384,
+                "tag": "rep3_d384",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 384,
+                "tag": "rep3_d384",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-512_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 512,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 512,
+                "tag": "rep1_d512",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 512,
+                "tag": "rep1_d512",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-512_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 512,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 512,
+                "tag": "rep2_d512",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 512,
+                "tag": "rep2_d512",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-512_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 512,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 512,
+                "tag": "rep3_d512",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 512,
+                "tag": "rep3_d512",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-640_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 640,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 640,
+                "tag": "rep1_d640",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 640,
+                "tag": "rep1_d640",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-640_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 640,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 640,
+                "tag": "rep2_d640",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 640,
+                "tag": "rep2_d640",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-640_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 640,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 640,
+                "tag": "rep3_d640",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 640,
+                "tag": "rep3_d640",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-768_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 768,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep1_d768",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep1_d768",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-768_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 768,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep2_d768",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep2_d768",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-768_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 768,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep3_d768",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 768,
+                "tag": "rep3_d768",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-896_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 896,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 896,
+                "tag": "rep1_d896",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 896,
+                "tag": "rep1_d896",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-896_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 896,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 896,
+                "tag": "rep2_d896",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 896,
+                "tag": "rep2_d896",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-896_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 896,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 896,
+                "tag": "rep3_d896",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 896,
+                "tag": "rep3_d896",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-1024_tag-rep1",
+          "factors": {
+            "n": 100000,
+            "dim": 1024,
+            "tag": "rep1"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 1024,
+                "tag": "rep1_d1024",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 1024,
+                "tag": "rep1_d1024",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-1024_tag-rep2",
+          "factors": {
+            "n": 100000,
+            "dim": 1024,
+            "tag": "rep2"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 1024,
+                "tag": "rep2_d1024",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 1024,
+                "tag": "rep2_d1024",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        },
+        {
+          "job_key": "n-100000_d-1024_tag-rep3",
+          "factors": {
+            "n": 100000,
+            "dim": 1024,
+            "tag": "rep3"
+          },
+          "runs": [
+            {
+              "engine": "pg",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 1024,
+                "tag": "rep3_d1024",
+                "pg_shared_buffers": "32GB",
+                "pg_effective_cache": "64GB",
+                "pg_maintenance_mem": "16GB",
+                "pg_planner": "force-index"
+              }
+            },
+            {
+              "engine": "qdrant",
+              "args": {
+                "seed": 42,
+                "warm_seed": 7,
+                "k": 10,
+                "m": 16,
+                "efc": 64,
+                "ef": [
+                  16,
+                  32,
+                  64,
+                  96,
+                  128,
+                  192,
+                  256,
+                  384
+                ],
+                "reps": 1,
+                "warm": 100,
+                "nq": 0,
+                "mem_limits": "none",
+                "clients": [
+                  1
+                ],
+                "conc_ef": 64,
+                "conc_recall": 0,
+                "conc_duration": 3,
+                "conc_warmup": 1,
+                "n": 100000,
+                "dim": 1024,
+                "tag": "rep3_d1024",
+                "protocols": [
+                  "grpc_raw"
+                ],
+                "qdrant_indexing_threshold_kb": 1,
+                "qdrant_require_indexed": true,
+                "qdrant_control_grace_s": 120
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

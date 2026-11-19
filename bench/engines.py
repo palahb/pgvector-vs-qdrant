@@ -339,9 +339,14 @@ class Pg(Server):
         with self.admin() as conn:
             ver = conn.execute("SELECT version()").fetchone()[0]
             ext = conn.execute("SELECT extversion FROM pg_extension WHERE extname='vector'").fetchone()
+            # The hnsw.* settings exist only once the extension library is loaded in the session.
+            conn.execute("SELECT '[1,2]'::vector")
             rows = conn.execute("SELECT name, setting, unit FROM pg_settings WHERE name = ANY(%s)",
                                 (list(self.settings().keys()) + ["huge_pages", "work_mem",
-                                                                 "random_page_cost", "wal_level"],)).fetchall()
+                                                                 "random_page_cost", "wal_level",
+                                                                 "hnsw.ef_search", "hnsw.iterative_scan",
+                                                                 "hnsw.max_scan_tuples",
+                                                                 "hnsw.scan_mem_multiplier"],)).fetchall()
         return {"version": ver, "pgvector": ext[0] if ext else None,
                 "settings": {r[0]: f"{r[1]}{r[2] or ''}" for r in rows}, "image": PG_SIF}
 

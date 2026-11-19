@@ -113,6 +113,7 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
                 q(v)
             for rep in range(reps):
                 lat = np.empty(len(queries), dtype=np.int64)
+                per_query_hits = np.empty(len(queries), dtype=np.int16)
                 hits = 0
                 server.stats_begin(proto)
                 cpu0_srv = server.cpu_seconds()
@@ -121,7 +122,8 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
                     t0 = now_ns()
                     ids = q(v)
                     lat[i] = now_ns() - t0
-                    hits += recall_hits(ids, gt[i])
+                    per_query_hits[i] = recall_hits(ids, gt[i])
+                    hits += per_query_hits[i]
                 cpu1_srv = server.cpu_seconds()
                 cpu1_client = _cpu([os.getpid()])
                 srv = server.stats_end(proto)
@@ -137,6 +139,8 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
                     row["plan"] = plan
                 out.append(row)
                 raw[f"lat_{proto}_ef{ef}_rep{rep}"] = lat
+                # Neighbors found per query (0..k): the per-query recall distribution, not only its mean.
+                raw[f"hits_{proto}_ef{ef}_rep{rep}"] = per_query_hits
                 log(f"  {server.name}/{proto} ef={ef} rep={rep}: mean={row['mean_ms']}ms "
                     f"p99={row['p99_ms']}ms recall={row['recall_at_k']} server={srv.get('server_mean_ms')}ms")
     return out, raw
