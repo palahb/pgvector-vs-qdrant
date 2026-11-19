@@ -174,3 +174,41 @@ reference for everything beyond this scope.
   tails equal across engines. d=768: the E3 dip to 0.871 shrinks to 0.877 +/- 0.001 over three
   builds. Paper: new subsection "Per-Query Recall", extended Dimensionality, Environment and
   experiment map. Referee M7 mostly, m7 partly, m10 done.
+
+## Month 1 status (2026-11-19)
+
+Written to say plainly what is finished, what is blocked and on whom. The plan's own week 4 row
+(results, abstract, section 4, referee response, AI-use statement, journal template) is met except
+the journal template. Nothing below is marked done unless a validated result set, a manifest or a
+commit backs it.
+
+**Done and backed by validated results** (strict audit zero errors and zero warnings; manifests under
+`data-manifests/`): E6 (segments, threads, CPU per query), E7 (counters pilot on synthetic data; real-data
+counters recomputed from E1), E8 (HNSW build variance), E9 (ingestion fairness, WAL), E10 (memory limits,
+without the pgvector 4 GB arms), E17 (planner plan grid, 360 cells), E18 (per-query recall, eight
+dimensions, three builds). Paper: no `\todo`, Related Work, Per-Query Recall, Planner Exposure,
+laptop-versus-controlled table, byte budget, experiment map E1-E18, abstract of about 240 words.
+Referee response drafted for all twelve major and thirteen minor comments.
+
+**Corrections found along the way** (all recorded above): Zhang et al. studied PASE, not pgvector; the
+`ef_search` range problem (reported numbers unchanged); the "250x" slowdown restated as 218x like for
+like; the 300-query memory claim replaced; "pgvector about 3x faster" restated as 1.6-3.7x at equal ef.
+
+**Not done, and why**
+- LaTeX compile check: no TeX on this machine and installing one was declined. The structural checks
+  (environments, labels, references, citations) pass; the real build has to be done in Overleaf.
+- Journal template: depends on the supervisor's journal decision, which has not arrived. The draft is
+  in the ACM sigconf class.
+- Scope items M8 (open loop, 16/28/56 cores, PgBouncer), M9 (filtered, mixed read/write, hybrid, nDCG)
+  and M10 (10M scale, second embedding model) were proposed as future work and need the supervisor's
+  agreement. qrels are not in the repository, so nDCG@10 was not computed.
+- pgvector 4 GB memory arms: did not finish in the 3 h job limit; reported as not completed. Rerunning
+  with a longer limit is the author's decision.
+- Throughput interpolation at matched recall (M7) and compile flags of the engine binaries (m7) were not
+  done.
+- Upstream report to the pgvector maintainers: not sent, needs the author's approval. A reproducer has
+  not been written or run.
+
+**Needs the author or supervisor** (nothing here is blocked on tooling): journal and deadline, the
+scope reduction, the AI-use statement wording and its attestation, the 4 GB decision, the upstream
+report. A draft of the second status mail to the supervisor is in `docs/MAIL_HOCA_DURUM_2.md`.
