@@ -33,6 +33,40 @@ DEFAULT_QDRANT_INDEXING_THRESHOLD_KB = 20000
 PG_EF_SEARCH_MAX = 1000
 
 
+def port_in_use(port, host="127.0.0.1"):
+    """True when binding host:port fails because another socket holds it.
+
+    Binding is what the server itself does, so this agrees with its failure. Connecting to the
+    port instead can look free when the owner's accept queue is full. SO_REUSEADDR matches what
+    PostgreSQL and Qdrant set, so connections in TIME_WAIT do not count as the port being used."""
+    import errno
+    import socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            sock.bind((host, int(port)))
+        except OSError as error:
+            return error.errno == errno.EADDRINUSE
+        return False
+
+
+def wait_for_free_ports(ports, timeout_s=120.0, poll_s=1.0):
+    """Waits until none of the ports has a listener, and returns the seconds waited.
+
+    The cluster nodes run one job after another, and the server of the previous job can still
+    hold its port for a moment after that job ends. Two benchmark runs failed that way
+    (PostgreSQL on 55432, Qdrant gRPC on 56334) although they only needed a few seconds."""
+    start = time.monotonic()
+    while True:
+        busy = [p for p in ports if port_in_use(p)]
+        if not busy:
+            return round(time.monotonic() - start, 2) if time.monotonic() - start > poll_s else 0.0
+        if time.monotonic() - start > timeout_s:
+            raise RuntimeError(f"port(s) {busy} still in use after {timeout_s:.0f}s; "
+                               "a server from an earlier job is probably still running on this node")
+        time.sleep(poll_s)
+
+
 def set_ef_search(conn, ef):
     """Sets hnsw.ef_search and confirms the server took the value."""
     ef = int(ef)
@@ -241,6 +275,9 @@ class Pg(Server):
         flags = []
         for k, v in self.settings().items():
             flags += ["-c", f"{k}={v}"]
+        waited = wait_for_free_ports([self.port])
+        if waited:
+            log(f"pg: port {self.port} was busy for {waited:.1f}s")
         self._launch(self._cmd("postgres", "-D", self.data, *flags), mem_limit=mem_limit)
         self._wait_ready(lambda: self.admin().close() is None)
 
@@ -480,6 +517,9 @@ class Qdrant(Server):
         return env
 
     def start(self, mem_limit=None):
+        waited = wait_for_free_ports([self.http, self.grpc])
+        if waited:
+            log(f"qdrant: ports {self.http}/{self.grpc} were busy for {waited:.1f}s")
         if MODE == "apptainer":
             envs = []
             for k, v in self._env().items():

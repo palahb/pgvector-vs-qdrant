@@ -149,3 +149,18 @@ reference for everything beyond this scope.
   (`data-manifests/e17_full_a5bb141.json`). 9 cells (2.5%) take a sequential scan, all at 768
   and 1024 dimensions; none at 128 or 384. Paper subsection "Planner Exposure" rewritten from
   the grid. The upstream report is not sent and needs the author's approval.
+
+### Second port collision and its fix (2026-11-19)
+
+- E18 pilot task 0 (`qdrant_rep1_d128`) failed after 48 s on hamsi54: Qdrant logged `Error while
+  starting gRPC server: transport error` right after `gRPC listening on 56334`. The same class
+  of fault as E10 task 14 (PostgreSQL on 55432): the previous job on the node still held its
+  port. Task 1 ran on the same node a minute later and completed. That is two collisions in
+  roughly 150 task starts of this session.
+- Fix (the follow-up noted for E10): both servers now wait for their ports to be free before
+  starting (`wait_for_free_ports`, up to 120 s, polling by trying to bind, which is what the
+  server does; connecting is not used because a full accept queue made it look free). A wait
+  is logged. The earlier failed attempt's directory is excluded from analysis.
+- This changes the code commit, so smoke and pilot were run again for it.
+- Also found in the E18 smoke: `hnsw.iterative_scan` is `off` in the main experiments
+  (recorded in `server_info`), which answers referee minor comment 7.
