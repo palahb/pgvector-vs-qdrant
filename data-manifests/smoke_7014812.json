@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_7014812",
+  "purpose": "Commit-specific smoke gate for E18 with the port-wait fix",
+  "slurm": {
+    "job_id": "7014812",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:34",
+    "node": "hamsi59"
+  },
+  "code_commit": "7d1b1c443ae5bf4b7443fab32cd7798c851a5139",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/7d1b1c443ae5_7014812",
+  "workspace_path": "../artifacts/truba-smoke/7014812",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 2,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_7014812_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "b38e2a8e22dc1954d672cf7081e20bfd437e603d8868b5e9f4b6c34fd501f424",
+    "pg/raw.npz": "263a9c2ad9f313a29b311da2c2f727464035e45be0c3d5e505316e56f69d97bc",
+    "qdrant/result.json": "263169d278be70638337645e35d7baef2be1475127497924b50e200fbff2a93d",
+    "qdrant/raw.npz": "e209a3322c49f3f4937842fa74063e93a23655827dc2e670dc64507e72fa15c9"
+  }
+}
