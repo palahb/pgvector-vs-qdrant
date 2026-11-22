@@ -48,6 +48,18 @@ class PgVectorTypeTests(unittest.TestCase):
                          "SELECT id FROM items ORDER BY embedding <=> %s::halfvec(8) LIMIT 10")
 
 
+class PgCopyValueTests(unittest.TestCase):
+    def test_vector_is_passed_through(self):
+        v = np.ones(4, dtype=np.float32)
+        self.assertIs(features.pg_copy_value("vector", v), v)
+
+    def test_halfvec_is_wrapped_and_binary_dumpable(self):
+        from pgvector import HalfVector
+        h = features.pg_copy_value("halfvec", np.arange(4, dtype=np.float32))
+        self.assertIsInstance(h, HalfVector)
+        self.assertTrue(len(h.to_binary()) > 0)
+
+
 class PgDdlTests(unittest.TestCase):
     def test_default_ddl_is_unchanged(self):
         self.assertEqual(features.pg_create_table_sql("vector", 1024, False),

@@ -148,8 +148,9 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k, store_ids=
                        **summarize(lat), **srv}
                 if plan:
                     row["plan"] = plan
-                if perf_rec is not None:
-                    row["perf_record_file"] = f"perfrec_{proto}_ef{ef}.data"
+                perf_file = f"perfrec_{proto}_ef{ef}.data"
+                if perf_rec is not None and perf_record_dir and os.path.exists(os.path.join(perf_record_dir, perf_file)):
+                    row["perf_record_file"] = perf_file
                 out.append(row)
                 if returned is not None:
                     raw[f"ids_{proto}_ef{ef}_rep{rep}"] = returned

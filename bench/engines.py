@@ -17,7 +17,7 @@ import urllib.request
 import psutil
 
 from common import dir_size, fmt_cpus, log
-from features import (pg_create_index_sql, pg_create_table_sql, pg_plan_prepare_sql, pg_query_sql,
+from features import (pg_copy_value, pg_create_index_sql, pg_create_table_sql, pg_plan_prepare_sql, pg_query_sql,
                       pg_vector_type, pgbouncer_ini, pooled_dsn, qdrant_quantization)
 
 MODE = os.environ.get("BENCH_MODE", "apptainer")
@@ -385,7 +385,7 @@ class Pg(Server):
                 with cur.copy("COPY items (id, embedding) FROM STDIN WITH (FORMAT BINARY)") as cp:
                     cp.set_types(["int8", pg_vector_type(self.vector_type, dim)["copy_type"]])
                     for i in range(n):
-                        cp.write_row((i, base[i]))
+                        cp.write_row((i, pg_copy_value(self.vector_type, base[i])))
             load_s = time.perf_counter() - t0
             activity["after_copy"] = pg_activity_snapshot(conn)
             # PostgreSQL sizes parallel index-build workers from the heap, and with TOASTed

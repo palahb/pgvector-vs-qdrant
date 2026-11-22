@@ -24,6 +24,14 @@ def pg_vector_type(kind, dim):
             "param_cast": "" if kind == "vector" else f"::{kind}({dim})"}
 
 
+def pg_copy_value(kind, vec):
+    """Value for binary COPY: numpy arrays dump as vector, halfvec needs its own wrapper."""
+    if kind == "halfvec":
+        from pgvector import HalfVector
+        return HalfVector(vec)
+    return vec
+
+
 def pg_create_table_sql(kind, dim, unlogged):
     return (f"CREATE {'UNLOGGED ' if unlogged else ''}TABLE items "
             f"(id bigint PRIMARY KEY, embedding {pg_vector_type(kind, dim)['column']})")
