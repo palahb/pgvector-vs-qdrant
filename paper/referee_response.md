@@ -97,6 +97,12 @@ is subject to the author's and the referee's agreement.
 - Every row of the new HNSW table is the mean of three independent builds, interpolated to
   the recall target. Build-to-build standard deviation of the interpolated latency is
   0.2-4.5% of the mean.
+- Per-table source statement (supervisor's 17 November request): the manuscript's new table
+  `tab:sources` gives for every table and figure the number of builds, the jobs and nodes, and
+  the `ef` point. In E1 the two engines were built and measured on different nodes, and the
+  concurrency figure uses the smallest swept `ef` reaching 0.95 (pgvector 192, 384, 512; Qdrant
+  96, 384, 384). E6 uses the same rule, so its recall is 0.951-0.957 and not identical for the
+  two engines; E8 interpolates.
 - The non-monotonic pgvector latency over graph density is not build-to-build noise
   (3.6 and 4.9 standard errors of the difference); it is systematic and its cause is open.
 
@@ -113,21 +119,26 @@ is subject to the author's and the referee's agreement.
 - Not done: interpolation of throughput (concurrency still runs at the first swept ef reaching
   the target).
 
-### M8 — Closed loop and eight cores: open
+### M8 — Closed loop and eight cores: open, partly committed
 
-- No new evidence. Proposed as future work.
+- No new evidence yet. Supervisor decision (17 November): a minimal open-loop experiment (E22) is
+  in scope and is the first item cut if time runs short; 16+ cores is future work.
 
 ### M9 — RAG workload scope: open, scope reduction proposed
 
-- No new evidence. The proposal is to limit the title and framing to unfiltered ANN search.
-  nDCG@10 with the TREC qrels is possible but not done.
+- No new evidence. The supervisor approved removing "RAG" from the title: unfiltered ANN search.
+  Filtered and hybrid search and mixed read-write stay future work.
+- nDCG@10 (E23) is committed but gated: the statement in the earlier status mail that the qrels
+  were at hand was not verified. They are not on disk, passage IDs and returned IDs were not
+  stored, and coverage of the 1M prefix is unmeasured. If coverage is insufficient, nDCG is
+  reported as a limitation only.
 
 ### M10 — Scale and model generality: partly addressed
 
 - The Cohere embed-v3 statement was checked against documentation: v3 is not trained with a
   Matryoshka objective, so the manuscript now calls the dimensionality experiment "prefix
   truncation" and states that it does not transfer to native low-dimensional models.
-- Not done: 10M scale and a second model.
+- Not done: 10M scale (a single point if time allows) and a second model (future work).
 
 ### M11 — Engine-time boundaries: partly addressed
 
@@ -200,3 +211,17 @@ is subject to the author's and the referee's agreement.
     build times at three scales, throughput and p99, each from the archived course result files
     next to the controlled-harness value. The "pgvector about three times faster" wording was
     corrected: in the archive the ratio is 3.7x at ef=16, 2.6x at 32, 2.2x at 64 and 1.6x at 128.
+
+## New commitments after the supervisor's reply of 17 November
+
+Recorded in `docs/HOCA_CEVAP_17_KASIM.md`; none has results yet.
+
+1. Causal analysis of the latency gap (E19), highest priority; bounded, since neither engine
+   exposes a per-query distance count and there is no root or eBPF access.
+2. `halfvec` and `int8` quantization (E20).
+3. PgBouncer (E21).
+4. Minimal open-loop generator (E22), first to be cut.
+5. nDCG@10 with TREC DL qrels (E23), gated on qrels coverage.
+
+The manuscript's harness commit will be pinned with a tag; tables are regenerated from raw
+results with the tagged analysis tools and each raw result keeps the commit that produced it.

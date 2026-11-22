@@ -344,6 +344,53 @@ label.
   \end{tabular}
 \end{table}
 
+Table~\ref{tab:sources} states, for each table and figure, how many builds it rests on, where
+they ran and which $ef$ point it uses. The two engines are not always built on the same node,
+and the tables that compare them say so.
+
+\begin{table*}[t]
+  \caption{Where each table and figure comes from. Nodes are Slurm compute nodes. Job numbers,
+  commits and file checksums are in the manifests under \texttt{data-manifests/}. The records of
+  E1--E5 predate the provenance system and lack commit and seed fields.}
+  \label{tab:sources}
+  \small
+  \begin{tabular}{p{0.15\textwidth}p{0.04\textwidth}p{0.15\textwidth}p{0.31\textwidth}p{0.26\textwidth}}
+    \toprule
+    Table or figure & Exp. & Builds & Jobs and nodes & $ef$ point \\
+    \midrule
+    Table~\ref{tab:matched}, Figure~\ref{fig:recall} & E1 & one per engine and scale &
+      six jobs, the two engines on different nodes: 100K \texttt{hamsi54} (pgvector) and
+      \texttt{hamsi32} (Qdrant), 500K \texttt{hamsi125} and \texttt{hamsi33}, 1M
+      \texttt{hamsi112} and \texttt{hamsi14} &
+      latency interpolated in recall to 0.90 and 0.95 \\
+    Figure~\ref{fig:throughput} & E1 & same builds &
+      same jobs &
+      smallest swept $ef$ with Recall@10 $\ge 0.95$: pgvector 192, 384, 512 and Qdrant 96,
+      384, 384 at 100K, 500K, 1M \\
+    Table~\ref{tab:build}, Figure~\ref{fig:build} & E5 & three per engine and scale, engines
+      interleaved & one job (6416987), one node (\texttt{hamsi120}) & not applicable \\
+    Table~\ref{tab:hnsw} & E8 & three per setting & 24 jobs, both engines in each job, 7 nodes &
+      each build interpolated to Recall@10 = 0.95 on a 21-point grid \\
+    Table~\ref{tab:cpu} & E6 & three per cell & 48 Qdrant jobs on 10 nodes and 6 pgvector jobs on
+      2 nodes, in separate arrays & smallest swept $ef$ reaching 0.95 on a 21-point grid;
+      recall 0.951--0.957 and not identical for the two engines \\
+    Table~\ref{tab:ingest} & E9 & three per arm and scale & 6 jobs, each builds all six arms on
+      one node, 3 nodes in total & not applicable \\
+    Table~\ref{tab:sb} & E4 & one build and one run per row & four jobs: \texttt{hamsi85}
+      (128\,MB), \texttt{hamsi13} (1\,GB), \texttt{hamsi31} (4\,GB), \texttt{hamsi7} (32\,GB) &
+      fixed $ef=64$ and $ef=512$ \\
+    Table~\ref{tab:caps} & E10 & three per system and limit & one job per system, limit and
+      repetition, 8 nodes & fixed $ef=128$ \\
+    Figure~\ref{fig:dims} & E3 & one per dimension and arm & one job (6415795), one node
+      (\texttt{hamsi107}) & fixed $ef=64$ \\
+    Table~\ref{tab:perquery} & E18 & three per dimension & 24 jobs, 3 nodes & smallest swept $ef$
+      whose mean recall reaches 0.95 (grid 16--384) \\
+    Section~\ref{sec:planner} & E17 & one per size and dimension & 20 jobs, 3 nodes (E1 default-planner
+      run: as above) & 18 values from 16 to 1000, plans only \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
 \subsection{Environment}
 
 All experiments run on compute nodes of the TRUBA/ARF cluster, and each measurement has
@@ -868,7 +915,8 @@ target of one yields a single non-empty indexed segment plus an empty appendable
 segment, and all vectors were indexed in every run.
 
 \begin{table}[t]
-  \caption{Matched recall 0.95, one client, lean gRPC. Latency and server CPU time per
+  \caption{Smallest swept $ef$ with Recall@10 $\ge 0.95$ (recall 0.951--0.957, not identical
+  for the two engines), one client, lean gRPC. Latency and server CPU time per
   query in ms (mean of three builds); ratios are pgvector divided by Qdrant, so values
   above 1 favor Qdrant. 95\% intervals are in the analysis files.}
   \label{tab:cpu}
@@ -948,7 +996,9 @@ one query in sixteen has a recall below 0.8.
 \subsection{Concurrency}
 
 Figure~\ref{fig:throughput} shows closed-loop throughput at matched recall, that is, at
-the smallest swept $ef$ reaching Recall@10 $\geq 0.95$. Both systems scale almost
+the smallest swept $ef$ reaching Recall@10 $\geq 0.95$: $ef=192$, 384 and 512 for pgvector and
+$ef=96$, 384 and 384 for Qdrant at 100K, 500K and 1M. Each point rests on one build per engine,
+and the two engines were built and measured on different nodes (Table~\ref{tab:sources}). Both systems scale almost
 linearly until the number of clients reaches the 8 server cores. After that they level
 off, with the server using 7.9 of its 8 cores. In PostgreSQL, 97--100\% of the sampled
 backend states are on CPU and lock waits are at most 0.5\%, so throughput is limited by

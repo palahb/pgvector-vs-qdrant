@@ -27,6 +27,11 @@ the referee identified design confounders.
 | C12 | Both systems are CPU-bound under closed-loop load | Results/Discussion; E1 CPU and wait metrics | qualify | Repeat windows/builds, report server/client saturation and distinguish closed-loop scope |
 | C13 | Qdrant indexing threshold explains the folklore 384-d anomaly/saw-tooth curve | Confounders/Dimensions; E3 default vs forced | qualify | Repeat graph builds and explicitly correlate indexed-vector/segment state with latency |
 | C14 | The released artifact is fully reproducible with pinned containers and raw per-query data | Artifact statement; harness and archive | qualify | New schema/provenance fields, clean-environment reproduction, public immutable artifact and instructions |
+| C15 | Qdrant's latency gap is explained by intra-query parallelism rather than per-query work (new commitment) | Latency vs CPU section; E6 | rerun | E19 causal analysis; no per-query distance count is available from either engine, so the mechanism is bounded, not proven |
+| C16 | `halfvec` and `int8` change index size, latency and recall by stated amounts (new commitment) | none yet | rerun | E20, matched-recall comparison |
+| C17 | A connection pooler (PgBouncer) changes pgvector concurrency behavior (new commitment) | none yet | rerun | E21 |
+| C18 | Tail behavior under open-loop arrivals (new commitment) | none yet | rerun | E22, minimal; first to be cut when time is short |
+| C19 | nDCG@10 can be reported with TREC DL qrels (new commitment; the sent mail said qrels were at hand, which was not verified) | none yet | rerun | E23, gated on qrels coverage of the 1M prefix; see `docs/HOCA_CEVAP_17_KASIM.md` |
 
 ## Claims forbidden until their gates pass
 
@@ -36,3 +41,6 @@ the referee identified design confounders.
 - Do not generalize truncation results to native embedding dimensions before E16.
 - Do not claim RAG-workload coverage before E12–E14, or retitle if those experiments are
   explicitly removed with author approval.
+- Do not present nDCG@10 as an absolute result before the qrels coverage of the 1M prefix is
+  measured and found sufficient (E23 gate).
+- Do not state a mechanism for the Qdrant latency gap as proven; E19 can only bound it.
