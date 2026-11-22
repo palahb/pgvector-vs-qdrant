@@ -255,11 +255,23 @@ def stop_perf(proc, path):
 
 
 def start_perf_record(pids, path):
-    """Sampling profile of the server processes (user space), or None where perf is missing."""
+    """Sampling profile of the server processes (user space), or None where perf is missing or
+    could not attach. perf stderr goes next to the data file. A pid that exits between listing
+    and attaching makes perf quit at once, so the attach is retried with the pids still alive."""
     if not shutil.which("perf") or not pids:
         return None
-    return subprocess.Popen(perf_record_cmd(pids, path), stdout=subprocess.DEVNULL,
-                            stderr=subprocess.DEVNULL, start_new_session=True)
+    for _ in range(3):
+        alive = [p for p in pids if psutil.pid_exists(p)]
+        if not alive:
+            return None
+        err = open(path + ".stderr.txt", "w")
+        proc = subprocess.Popen(perf_record_cmd(alive, path), stdout=subprocess.DEVNULL, stderr=err,
+                                start_new_session=True)
+        time.sleep(0.5)
+        if proc.poll() is None:
+            return proc
+        pids = alive
+    return None
 
 
 def stop_perf_record(proc):
