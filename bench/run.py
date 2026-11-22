@@ -16,11 +16,20 @@ from common import (evict_page_cache, ground_truth, host_info, load_vectors, log
                     resident_bytes, save_json, sha256, stable_id, git_state)
 from engines import MODE, make_query_fn, make_server
 from workload import (cgroup_memory_bytes, concurrency_run, latency_sweep, memory_passes,
-                      proc_counters)
+                      open_loop_run, proc_counters)
 
 
 def ints(s):
     return [int(x) for x in s.split(",") if x]
+
+
+ADDED_DEFAULTS = {
+    "store_ids": False, "perf_record": False, "pg_vector_type": "vector",
+    "qdrant_quantization": "none", "qdrant_quant_on_disk": False, "qdrant_no_rescore": False,
+    "qdrant_oversampling": None, "pg_pooler": False, "pg_pooler_pool_size": 16,
+    "pg_pooler_max_client_conn": 200, "open_loop_rates": [], "open_loop_duration": 30,
+    "open_loop_workers": 64, "open_loop_ef": 0,
+}
 
 
 def parse():
@@ -89,6 +98,31 @@ def parse():
                     help="fail if the final collection does not index every vector")
     ap.add_argument("--qdrant-control-grace-s", type=float, default=60,
                     help="maximum stable-green wait for requested segment/index controls")
+    ap.add_argument("--store-ids", action="store_true",
+                    help="keep the returned row numbers of rep 0 of every (protocol, ef) in raw.npz (for nDCG)")
+    ap.add_argument("--perf-record", action="store_true",
+                    help="perf record (user-space cycles) of the server during rep 0 of every latency point")
+    ap.add_argument("--pg-vector-type", choices=["vector", "halfvec"], default="vector",
+                    help="pgvector column and index type; halfvec stores 16-bit floats")
+    ap.add_argument("--qdrant-quantization", choices=["none", "int8"], default="none",
+                    help="Qdrant scalar quantization of the collection")
+    ap.add_argument("--qdrant-quant-on-disk", action="store_true",
+                    help="int8 only: let quantized vectors leave RAM (default is always_ram)")
+    ap.add_argument("--qdrant-no-rescore", action="store_true",
+                    help="int8 only: skip rescoring candidates with the original vectors")
+    ap.add_argument("--qdrant-oversampling", type=float, default=None,
+                    help="int8 only: candidate oversampling factor (Qdrant default when unset)")
+    ap.add_argument("--pg-pooler", action="store_true",
+                    help="route benchmark clients through PgBouncer (transaction pooling)")
+    ap.add_argument("--pg-pooler-pool-size", type=int, default=16)
+    ap.add_argument("--pg-pooler-max-client-conn", type=int, default=200)
+    ap.add_argument("--open-loop-rates", type=ints, default=[],
+                    help="offered rates (queries per second) for the open-loop runs; empty disables")
+    ap.add_argument("--open-loop-duration", type=float, default=30)
+    ap.add_argument("--open-loop-workers", type=int, default=64,
+                    help="client processes serving the open-loop arrivals (bounds the in-flight queries)")
+    ap.add_argument("--open-loop-ef", type=int, default=0,
+                    help="ef of the open-loop runs; 0 uses the matched-recall ef of the sweep")
     ap.add_argument("--perf", action="store_true", help="perf stat the server during concurrency windows")
     ap.add_argument("--tag", default="", help="suffix for the result folder name")
     ap.add_argument("--experiment-id", default=None,
@@ -125,8 +159,11 @@ def main():
     warm = base[rng.choice(len(base), size=min(a.warm, len(base)), replace=False)]
     log(f"data: {base.shape} base, {queries.shape} queries ({dtag})")
 
+    # Options added after the first results existed leave the config identity of older runs alone
+    # while they are at their defaults.
     config = {key: value for key, value in vars(a).items()
-              if key not in {"out", "work", "keep", "experiment_id"}}
+              if key not in {"out", "work", "keep", "experiment_id"}
+              and not (key in ADDED_DEFAULTS and value == ADDED_DEFAULTS[key])}
     config_id = stable_id(config)
     experiment_id = a.experiment_id or f"{config_id}-{job}-{name}"
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -158,6 +195,10 @@ def main():
         srv.init()
         srv.start()
         result["build"] = srv.build(base, a.m, a.efc)
+        if a.pg_pooler:
+            if a.engine != "pg" or any(x not in ("", "none") for x in a.mem_limits.split(",")) or a.memory_passes:
+                raise SystemExit("--pg-pooler is defined for pgvector without memory limits")
+            srv.start_pooler()
         result["server_info"] = srv.info()
         save_json(result, rpath)
 
@@ -205,7 +246,9 @@ def main():
                 save_json(result, rpath)
                 continue
             log(f"== {name} mem_limit={lim}: latency sweep")
-            run["latency"], r = latency_sweep(srv, protocols, a.ef, a.reps, queries, warm, gt, a.k)
+            run["latency"], r = latency_sweep(srv, protocols, a.ef, a.reps, queries, warm, gt, a.k,
+                                               store_ids=a.store_ids,
+                                               perf_record_dir=out_dir if a.perf_record else None)
             raw.update({f"{lim}_{key}": v for key, v in r.items()})
             save_json(result | {"runs": result["runs"] + [run]}, rpath)
 
@@ -225,6 +268,18 @@ def main():
                     row, r = concurrency_run(srv, proto, ef, c, a.conc_duration, a.conc_warmup,
                                              queries, gt, a.k, perf_path)
                     run["concurrency"].append(row)
+                    raw.update({f"{lim}_{key}": v for key, v in r.items()})
+                    save_json(result | {"runs": result["runs"] + [run]}, rpath)
+            if a.open_loop_rates and lim == "none":
+                rows = sorted((x for x in run["latency"] if x["proto"] == protocols[0] and x["rep"] == 0),
+                              key=lambda x: x["ef"])
+                ok = [x["ef"] for x in rows if x["recall_at_k"] >= a.conc_recall]
+                ef = a.open_loop_ef or (ok[0] if ok else rows[-1]["ef"])
+                run["open_loop"] = []
+                for rate in a.open_loop_rates:
+                    row, r = open_loop_run(srv, protocols[0], ef, rate, a.open_loop_duration,
+                                           a.open_loop_workers, queries, gt, a.k, a.seed)
+                    run["open_loop"].append(row)
                     raw.update({f"{lim}_{key}": v for key, v in r.items()})
                     save_json(result | {"runs": result["runs"] + [run]}, rpath)
             if a.engine == "qdrant":

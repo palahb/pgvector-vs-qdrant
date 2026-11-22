@@ -17,6 +17,8 @@ import urllib.request
 import psutil
 
 from common import dir_size, fmt_cpus, log
+from features import (pg_create_index_sql, pg_create_table_sql, pg_plan_prepare_sql, pg_query_sql,
+                      pg_vector_type, pgbouncer_ini, pooled_dsn, qdrant_quantization)
 
 MODE = os.environ.get("BENCH_MODE", "apptainer")
 PG_SIF = os.environ.get("PG_SIF")
@@ -130,13 +132,13 @@ def explain_summary(plan):
     return {"nodes": "/".join(nodes), "cost": plan["Total Cost"], "uses_index": "Index Scan" in nodes}
 
 
-def plan_grid_rows(conn, efs, vector_literal, k=10):
+def plan_grid_rows(conn, efs, vector_literal, k=10, vector_type="vector", dim=None):
     """Plans for the benchmark query at each ef, without executing it.
 
     For every ef this records the planner's own choice, the best index plan (sequential scans
     disabled) and the best scan plan (index scans disabled). The ratio of the two costs shows
     how close the planner is to switching. The planner switches are restored afterwards."""
-    conn.execute(f"PREPARE bq(vector) AS SELECT id FROM items ORDER BY embedding <=> $1 LIMIT {int(k)}")
+    conn.execute(pg_plan_prepare_sql(vector_type, dim, k))
     conn.execute("SET plan_cache_mode = force_custom_plan")
     rows = []
     try:
@@ -235,6 +237,10 @@ class Pg(Server):
         self.data = os.path.join(self.work, "pgdata")
         self.port = int(os.environ.get("PG_PORT", "55432"))
         self.dsn = f"host=127.0.0.1 port={self.port} dbname=postgres user=postgres"
+        self.vector_type = getattr(args, "pg_vector_type", "vector")
+        self.dim = None  # set by build()
+        self.pooler = None
+        self.pooler_port = int(os.environ.get("PGBOUNCER_PORT", "56432"))
 
     def _cmd(self, binary, *a):
         if MODE == "apptainer":
@@ -282,6 +288,7 @@ class Pg(Server):
         self._wait_ready(lambda: self.admin().close() is None)
 
     def stop(self):
+        self.stop_pooler()
         if not self.proc or self.proc.poll() is not None:
             return
         subprocess.run(self._cmd("pg_ctl", "stop", "-D", self.data, "-m", "fast", "-w", "-t", "600"),
@@ -289,6 +296,53 @@ class Pg(Server):
         if not self._kill_group(signal.SIGTERM, 60):
             self._kill_group(signal.SIGKILL, 30)
         log("pg: stopped")
+
+    def query_dsn(self):
+        """Where benchmark clients connect: PgBouncer when a pooler runs, else the server."""
+        return pooled_dsn(self.dsn, self.pooler_port) if self.pooler else self.dsn
+
+    def start_pooler(self):
+        """PgBouncer (transaction pooling) in front of the server, pinned to the server cores so
+        its CPU counts as server cost. Binary from PGBOUNCER_BIN, or PGBOUNCER_SIF with apptainer."""
+        a = self.args
+        os.makedirs(self.work, exist_ok=True)
+        auth = os.path.join(self.work, "pgbouncer_users.txt")
+        with open(auth, "w") as f:
+            f.write('"postgres" ""\n')
+        ini = os.path.join(self.work, "pgbouncer.ini")
+        with open(ini, "w") as f:
+            f.write(pgbouncer_ini(self.pooler_port, self.port, a.pg_pooler_pool_size,
+                                  a.pg_pooler_max_client_conn, auth, self.work))
+        sif = os.environ.get("PGBOUNCER_SIF")
+        binary = os.environ.get("PGBOUNCER_BIN", "pgbouncer")
+        cmd = (["apptainer", "exec", "--cleanenv", "--bind", self.work, sif, "pgbouncer", ini]
+               if sif else [binary, ini])
+        waited = wait_for_free_ports([self.pooler_port])
+        if waited:
+            log(f"pgbouncer: port {self.pooler_port} was busy for {waited:.1f}s")
+        self.logf_pooler = open(os.path.join(self.log_dir, f"pgbouncer_{int(time.time())}.log"), "w")
+        self.pooler = subprocess.Popen(["taskset", "-c", fmt_cpus(self.cores)] + cmd,
+                                       stdout=self.logf_pooler, stderr=subprocess.STDOUT,
+                                       start_new_session=True)
+        t0 = time.time()
+        while time.time() - t0 < 60:
+            if self.pooler.poll() is not None:
+                self.pooler = None
+                raise RuntimeError("pgbouncer exited early, see the pgbouncer log")
+            if port_in_use(self.pooler_port):
+                log(f"pgbouncer: ready after {time.time() - t0:.1f}s")
+                return
+            time.sleep(0.2)
+        raise RuntimeError("pgbouncer not ready after 60s")
+
+    def stop_pooler(self):
+        if self.pooler and self.pooler.poll() is None:
+            try:
+                os.killpg(self.pooler.pid, signal.SIGTERM)
+                self.pooler.wait(30)
+            except (ProcessLookupError, subprocess.TimeoutExpired):
+                os.killpg(self.pooler.pid, signal.SIGKILL)
+        self.pooler = None
 
     def admin(self):
         import psycopg
@@ -305,12 +359,14 @@ class Pg(Server):
             with open(os.path.join(self.data, "postmaster.pid")) as f:
                 pm = int(f.readline())
             p = psutil.Process(pm)
-            return [pm] + [c.pid for c in p.children(recursive=True)]
+            pooler = [self.pooler.pid] if self.pooler and self.pooler.poll() is None else []
+            return [pm] + [c.pid for c in p.children(recursive=True)] + pooler
         except (OSError, ValueError, psutil.Error):
             return []
 
     def build(self, base, m, efc):
         dim, n = base.shape[1], len(base)
+        self.dim = dim
         notices = []
         with self.admin() as conn:
             conn.add_notice_handler(lambda d: notices.append(d.message_primary))
@@ -318,8 +374,7 @@ class Pg(Server):
             conn.execute("CREATE EXTENSION IF NOT EXISTS pg_stat_statements")
             conn.execute("DROP TABLE IF EXISTS items")
             unlogged = bool(getattr(self.args, "pg_unlogged", False))
-            kind = "UNLOGGED " if unlogged else ""
-            conn.execute(f"CREATE {kind}TABLE items (id bigint PRIMARY KEY, embedding vector({dim}))")
+            conn.execute(pg_create_table_sql(self.vector_type, dim, unlogged))
         # fresh connection so register_vector sees the new type
         with self.admin() as conn:
             conn.add_notice_handler(lambda d: notices.append(d.message_primary))
@@ -328,7 +383,7 @@ class Pg(Server):
             t0 = time.perf_counter()
             with conn.cursor() as cur:
                 with cur.copy("COPY items (id, embedding) FROM STDIN WITH (FORMAT BINARY)") as cp:
-                    cp.set_types(["int8", "vector"])
+                    cp.set_types(["int8", pg_vector_type(self.vector_type, dim)["copy_type"]])
                     for i in range(n):
                         cp.write_row((i, base[i]))
             load_s = time.perf_counter() - t0
@@ -339,8 +394,7 @@ class Pg(Server):
             conn.execute(f"ALTER TABLE items SET (parallel_workers = {workers})")
             log(f"pg: load {load_s:.1f}s, building HNSW m={m} ef_construction={efc} ({workers} workers)")
             t0 = time.perf_counter()
-            conn.execute(f"CREATE INDEX items_hnsw ON items USING hnsw (embedding vector_cosine_ops) "
-                         f"WITH (m = {m}, ef_construction = {efc})")
+            conn.execute(pg_create_index_sql(self.vector_type, m, efc))
             index_s = time.perf_counter() - t0
             activity["after_index"] = pg_activity_snapshot(conn)
             log(f"pg: index {index_s:.1f}s")
@@ -361,7 +415,7 @@ class Pg(Server):
             "heap_bytes": sizes[0], "table_total_bytes": sizes[1], "index_bytes": sizes[2],
             "toast_bytes": sizes[3], "parallel_workers": workers,
             "embedding_attstorage": storage, "notices": notices,
-            "table_unlogged": unlogged,
+            "table_unlogged": unlogged, "vector_type": self.vector_type,
             "write_activity": {
                 "copy": pg_activity_delta(activity["start"], activity["after_copy"]),
                 "index": pg_activity_delta(activity["after_copy"], activity["after_index"]),
@@ -384,12 +438,17 @@ class Pg(Server):
                                                                  "hnsw.ef_search", "hnsw.iterative_scan",
                                                                  "hnsw.max_scan_tuples",
                                                                  "hnsw.scan_mem_multiplier"],)).fetchall()
-        return {"version": ver, "pgvector": ext[0] if ext else None,
+        return {"version": ver, "pgvector": ext[0] if ext else None, "vector_type": self.vector_type,
+                "pooler": ({"kind": "pgbouncer", "pool_mode": "transaction",
+                            "pool_size": self.args.pg_pooler_pool_size,
+                            "max_client_conn": self.args.pg_pooler_max_client_conn}
+                           if self.pooler else None),
                 "settings": {r[0]: f"{r[1]}{r[2] or ''}" for r in rows}, "image": PG_SIF}
 
     def query_spec(self, ef, proto="pg", k=10):
-        return {"engine": "pg", "dsn": self.dsn, "ef": ef, "k": k, "proto": "pg",
-                "force_index": self.args.pg_planner == "force-index"}
+        return {"engine": "pg", "dsn": self.query_dsn(), "ef": ef, "k": k, "proto": "pg",
+                "force_index": self.args.pg_planner == "force-index",
+                "vector_type": self.vector_type, "dim": self.dim}
 
     def plan(self, ef, vec, k=10):
         """Plan nodes for the benchmark query at this ef, as a custom and as a generic plan
@@ -400,7 +459,7 @@ class Pg(Server):
             set_ef_search(conn, ef)
             if self.args.pg_planner == "force-index":
                 conn.execute("SET enable_seqscan = off")
-            conn.execute(f"PREPARE bq(vector) AS SELECT id FROM items ORDER BY embedding <=> $1 LIMIT {int(k)}")
+            conn.execute(pg_plan_prepare_sql(self.vector_type, self.dim, k))
             for mode in ("custom", "generic"):
                 conn.execute(f"SET plan_cache_mode = force_{mode}_plan")
                 p = conn.execute(f"EXPLAIN (FORMAT JSON) EXECUTE bq('{lit}')").fetchone()[0][0]["Plan"]
@@ -427,7 +486,7 @@ class Pg(Server):
                 "SELECT name, setting FROM pg_settings WHERE name IN ('random_page_cost', 'seq_page_cost', "
                 "'cpu_tuple_cost', 'effective_cache_size', 'max_parallel_workers_per_gather', "
                 "'parallel_setup_cost', 'parallel_tuple_cost', 'min_parallel_table_scan_size')").fetchall())
-            rows = plan_grid_rows(conn, efs, lit, k)
+            rows = plan_grid_rows(conn, efs, lit, k, self.vector_type, self.dim)
         return {"table_pages": {"heap": sizes[0], "heap_tuples": sizes[1], "toast": sizes[2], "index": sizes[3]},
                 "planner_settings": settings, "grid": rows}
 
@@ -486,6 +545,23 @@ def qdrant_segment_summary(collections_telemetry):
     }
 
 
+def qdrant_quantization_config(desc):
+    """Collection-level scalar quantization from the recorded description, or None."""
+    if not desc:
+        return None
+    from qdrant_client import models as qm
+    return qm.ScalarQuantization(scalar=qm.ScalarQuantizationConfig(
+        type=qm.ScalarType.INT8, quantile=desc["quantile"], always_ram=desc["always_ram"]))
+
+
+def qdrant_search_quantization(desc):
+    """Search-time quantization parameters (rescore, oversampling), or None."""
+    if not desc:
+        return None
+    from qdrant_client import models as qm
+    return qm.QuantizationSearchParams(rescore=desc["rescore"], oversampling=desc["oversampling"])
+
+
 class Qdrant(Server):
     name = "qdrant"
 
@@ -494,6 +570,11 @@ class Qdrant(Server):
         self.http = int(os.environ.get("QDRANT_HTTP_PORT", "56333"))
         self.grpc = int(os.environ.get("QDRANT_GRPC_PORT", "56334"))
         self.storage = os.path.join(self.work, "storage")
+        self.quantization = qdrant_quantization(
+            getattr(args, "qdrant_quantization", "none"),
+            always_ram=not getattr(args, "qdrant_quant_on_disk", False),
+            rescore=not getattr(args, "qdrant_no_rescore", False),
+            oversampling=getattr(args, "qdrant_oversampling", None))
 
     def init(self):
         if os.path.exists(self.work):
@@ -594,6 +675,7 @@ class Qdrant(Server):
             vectors_config=qm.VectorParams(size=dim, distance=qm.Distance.COSINE, on_disk=a.qdrant_on_disk),
             hnsw_config=qm.HnswConfigDiff(**hnsw_values),
             optimizers_config=opt,
+            quantization_config=qdrant_quantization_config(self.quantization),
         )
         log(f"qdrant: upload {n} x {dim} over gRPC, batch {batch}, {parallel} stream(s)"
             f"{', indexing deferred' if defer else ''}")
@@ -653,6 +735,7 @@ class Qdrant(Server):
             "storage_bytes": dir_size(self.storage),
             "upload_parallel": parallel, "upload_batch": batch,
             "indexing_deferred": defer, "max_indexing_threads": index_threads or "auto",
+            "quantization": self.quantization,
             "method": (f"gRPC upload_collection, batch {batch}, {parallel} stream(s)"
                        f"{', indexing deferred until the upload ends' if defer else ''}, then wait for green"),
         }
@@ -677,7 +760,7 @@ class Qdrant(Server):
 
     def query_spec(self, ef, proto="grpc", k=10):
         return {"engine": "qdrant", "http": self.http, "grpc": self.grpc, "ef": ef, "k": k,
-                "proto": proto}
+                "proto": proto, "quantization": self.quantization}
 
     def _query_counters(self, proto):
         side = "rest" if proto == "rest" else "grpc"
@@ -718,7 +801,7 @@ def make_query_fn(spec):
         if spec.get("force_index"):
             # pgvector's README suggests this when the planner skips the index; see Pg.plan()
             conn.execute("SET enable_seqscan = off")
-        sql = f"SELECT id FROM items ORDER BY embedding <=> %s LIMIT {int(k)}"
+        sql = pg_query_sql(spec.get("vector_type", "vector"), spec.get("dim"), k)
 
         def q(vec):
             return [r[0] for r in conn.execute(sql, (vec,), binary=True, prepare=True).fetchall()]
@@ -734,7 +817,13 @@ def make_query_fn(spec):
         from qdrant_client import grpc as qg
         stub = c.grpc_points
         no_payload = qg.WithPayloadSelector(enable=False)
+        sq = spec.get("quantization")
         sp = qg.SearchParams(hnsw_ef=int(ef))
+        if sq:
+            qp = qg.QuantizationSearchParams(rescore=sq["rescore"])
+            if sq["oversampling"] is not None:
+                qp.oversampling = sq["oversampling"]
+            sp = qg.SearchParams(hnsw_ef=int(ef), quantization=qp)
 
         def q(vec, _client=c):  # holding the client keeps its channel open
             req = qg.QueryPoints(collection_name=COLL, limit=k, params=sp, with_payload=no_payload,
@@ -742,7 +831,8 @@ def make_query_fn(spec):
             return [p.id.num for p in stub.Query(req, timeout=600).result]
         return q
 
-    params = qm.SearchParams(hnsw_ef=int(ef), exact=False)
+    params = qm.SearchParams(hnsw_ef=int(ef), exact=False,
+                             quantization=qdrant_search_quantization(spec.get("quantization")))
 
     def q(vec):
         return [p.id for p in c.query_points(COLL, query=vec, limit=k, search_params=params,

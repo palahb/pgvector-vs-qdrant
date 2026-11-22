@@ -40,6 +40,14 @@ bench --engine pg "${common[@]}" \
     --pg-shared-buffers 256MB --pg-effective-cache 512MB --pg-maintenance-mem 512MB
 bench --engine qdrant "${common[@]}" --protocols grpc_raw
 
+# Optional features of the single harness package: returned IDs, perf record, halfvec, int8
+# quantization and the open-loop generator (default runs above are unchanged).
+feat=(--store-ids --perf-record --open-loop-rates 50 --open-loop-duration 3 --open-loop-workers 4)
+bench --engine pg "${common[@]}" "${feat[@]}" --tag halfvec --pg-vector-type halfvec \
+    --pg-shared-buffers 256MB --pg-effective-cache 512MB --pg-maintenance-mem 512MB
+bench --engine qdrant "${common[@]}" "${feat[@]}" --tag int8 --protocols grpc_raw,grpc \
+    --qdrant-quantization int8
+
 "$VENV/bin/python" "$SLURM_SUBMIT_DIR/../analysis/validate_results.py" \
     "$out" --strict-warnings --output "$out/audit.json"
 "$VENV/bin/python" "$BENCH_CODE/summarize.py" "$out"

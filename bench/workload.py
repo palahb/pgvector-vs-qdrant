@@ -13,6 +13,7 @@ import psutil
 
 from common import log, now_ns, summarize
 from engines import make_query_fn
+from features import (open_loop_summary, pad_ids, perf_record_cmd, poisson_arrivals)
 
 
 def recall_hits(ids, gt_row):
@@ -99,9 +100,12 @@ def memory_passes(query_fn, queries, gt, k, passes, order_seed, counters_fn, sta
     return rows, raw
 
 
-def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
+def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k, store_ids=False, perf_record_dir=None):
     """Sequential queries, one persistent connection per (protocol, ef). Each (protocol, ef)
-    gets its own untimed warm-up pass over a separate query set before the measured reps."""
+    gets its own untimed warm-up pass over a separate query set before the measured reps.
+
+    store_ids keeps the returned row numbers (n_queries x k, -1 padded) for rep 0 of every
+    (protocol, ef); perf_record_dir samples the server's user-space cycles during that same rep."""
     out, raw = [], {}
     for proto in protocols:
         for ef in efs:
@@ -114,6 +118,9 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
             for rep in range(reps):
                 lat = np.empty(len(queries), dtype=np.int64)
                 per_query_hits = np.empty(len(queries), dtype=np.int16)
+                returned = np.full((len(queries), k), -1, dtype=np.int64) if store_ids and rep == 0 else None
+                perf_rec = (start_perf_record(server.pids(), os.path.join(
+                    perf_record_dir, f"perfrec_{proto}_ef{ef}.data")) if perf_record_dir and rep == 0 else None)
                 hits = 0
                 server.stats_begin(proto)
                 cpu0_srv = server.cpu_seconds()
@@ -122,11 +129,15 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
                     t0 = now_ns()
                     ids = q(v)
                     lat[i] = now_ns() - t0
+                    if returned is not None:
+                        returned[i] = pad_ids(ids, k)
                     per_query_hits[i] = recall_hits(ids, gt[i])
                     hits += per_query_hits[i]
                 cpu1_srv = server.cpu_seconds()
                 cpu1_client = _cpu([os.getpid()])
                 srv = server.stats_end(proto)
+                if perf_rec is not None:
+                    stop_perf_record(perf_rec)
                 row = {"proto": proto, "ef": ef, "rep": rep, "recall_at_k": round(hits / (k * len(queries)), 5),
                        "server_cpu_ms_per_query": round(
                            (cpu1_srv - cpu0_srv) * 1000 / max(len(queries), 1), 6
@@ -137,7 +148,11 @@ def latency_sweep(server, protocols, efs, reps, queries, warm, gt, k):
                        **summarize(lat), **srv}
                 if plan:
                     row["plan"] = plan
+                if perf_rec is not None:
+                    row["perf_record_file"] = f"perfrec_{proto}_ef{ef}.data"
                 out.append(row)
+                if returned is not None:
+                    raw[f"ids_{proto}_ef{ef}_rep{rep}"] = returned
                 raw[f"lat_{proto}_ef{ef}_rep{rep}"] = lat
                 # Neighbors found per query (0..k): the per-query recall distribution, not only its mean.
                 raw[f"hits_{proto}_ef{ef}_rep{rep}"] = per_query_hits
@@ -236,6 +251,22 @@ def stop_perf(proc, path):
     except OSError:
         return {"error": "perf produced no output (perf_event_paranoid?)"}
     return res
+
+
+def start_perf_record(pids, path):
+    """Sampling profile of the server processes (user space), or None where perf is missing."""
+    if not shutil.which("perf") or not pids:
+        return None
+    return subprocess.Popen(perf_record_cmd(pids, path), stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL, start_new_session=True)
+
+
+def stop_perf_record(proc):
+    proc.send_signal(signal.SIGINT)
+    try:
+        proc.wait(60)
+    except subprocess.TimeoutExpired:
+        proc.kill()
 
 
 def perf_per_query(perf, query_count):
@@ -373,3 +404,74 @@ def _cpu(pids):
         except psutil.Error:
             pass
     return total
+
+
+def _open_loop_worker(spec, queries, gt, jobs, t_zero, go, ready, results):
+    """Sends each of its planned queries at its planned time (monotonic ns from t_zero) and never
+    waits for an earlier reply of another worker. One worker handles one query at a time, so the
+    pool size bounds the in-flight queries; a saturated server shows as send lag."""
+    try:
+        q = make_query_fn(spec)
+        q(queries[0])
+    except Exception as e:
+        ready.put(("err", repr(e)))
+        return
+    ready.put(("ok", os.getpid()))
+    go.wait()
+    t_zero = t_zero.value
+    planned, started, finished, hits = [], [], [], []
+    for at, j in jobs:
+        delay = (t_zero + at - now_ns()) / 1e9
+        if delay > 0:
+            time.sleep(delay)
+        t0 = now_ns()
+        ids = q(queries[j])
+        t1 = now_ns()
+        planned.append(t_zero + at)
+        started.append(t0)
+        finished.append(t1)
+        hits.append(recall_hits(ids, gt[j]))
+    results.put((np.array(planned, dtype=np.int64), np.array(started, dtype=np.int64),
+                 np.array(finished, dtype=np.int64), np.array(hits, dtype=np.int16)))
+
+
+def open_loop_run(server, proto, ef, rate, duration, workers, queries, gt, k, seed):
+    """Open loop: Poisson arrivals at `rate` per second for `duration` seconds, served by a pool
+    of `workers` client processes. Latency is measured from the planned send time."""
+    ctx = mp.get_context("spawn")
+    ready, results = ctx.Queue(), ctx.Queue()
+    arrivals = poisson_arrivals(rate, duration, seed)
+    qidx = np.random.default_rng([seed, 1]).integers(0, len(queries), size=len(arrivals))
+    t_zero, go = ctx.Value("q", 0), ctx.Event()
+    spec = server.query_spec(ef, proto, k)
+    chunks = [list(zip(arrivals[w::workers].tolist(), qidx[w::workers].tolist())) for w in range(workers)]
+    procs = [ctx.Process(target=_open_loop_worker, args=(spec, queries, gt, chunks[w], t_zero, go, ready, results),
+                         daemon=True) for w in range(workers)]
+    for p in procs:
+        p.start()
+    pids = []
+    for _ in procs:
+        status, info = ready.get(timeout=300)
+        if status != "ok":
+            raise RuntimeError(f"open-loop worker failed: {info}")
+        pids.append(info)
+    srv_pids = server.pids()
+    server.stats_begin(proto)
+    cpu0 = server.cpu_seconds()
+    t_zero.value = now_ns() + 500_000_000  # workers sleep until this instant
+    go.set()
+    parts = [results.get(timeout=duration + 600) for _ in procs]
+    cpu1 = server.cpu_seconds()
+    srv = server.stats_end(proto)
+    for p in procs:
+        p.join(30)
+    planned, started, finished, hits = (np.concatenate([x[i] for x in parts]) for i in range(4))
+    row = {"proto": proto, "ef": ef, "workers": workers, "seed": seed,
+           **open_loop_summary(planned - t_zero.value, started - t_zero.value, finished - t_zero.value,
+                               hits, k, rate, duration),
+           "server_cpu_ms_per_query": round((cpu1 - cpu0) * 1000 / max(len(planned), 1), 6),
+           "server_cores_busy": round((cpu1 - cpu0) / ((max(finished) - t_zero.value) / 1e9), 3), **srv}
+    log(f"  {server.name}/{proto} open-loop {rate}/s: achieved={row['achieved_qps']} mean={row['mean_ms']}ms "
+        f"p99={row['p99_ms']}ms lag_max={row['max_send_lag_ms']}ms")
+    return row, {f"open_{proto}_ef{ef}_r{rate}_lat": finished - planned,
+                 f"open_{proto}_ef{ef}_r{rate}_planned": planned - t_zero.value}
