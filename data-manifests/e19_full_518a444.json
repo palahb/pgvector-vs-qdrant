@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E19_causal_decomposition_full",
+  "code_commit": "518a444ab1961a225e275c1f1030892a1ffb9ed8",
+  "analysis_code_commit": "see git log: analysis/perf_profile.py, analysis/analyze_e19.py and scripts/e19_section.py changed after the run (post-processing only)",
+  "slurm_jobs": {
+    "smoke": "7045437",
+    "pilot": "7045616",
+    "full": "7045635"
+  },
+  "superseded": {
+    "smoke": "none"
+  },
+  "notes": [
+    "Array task 5 waited in the queue for over a day; its time limit was lowered from 1:30 to 0:45 with scontrol to help it backfill. It ran 15:54 and is unchanged otherwise.",
+    "Function names come from perf report --symfs on unpacked images (apptainer build --sandbox) at /arf/scratch/endemir/rag_bench/runtime/{pgroot,qroot}; postgres is stripped, so its static functions stay unresolved (about 16% of pgvector samples)."
+  ],
+  "submission": "E19_causal_decomposition-full-518a444a-d245c02f",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E19_causal_decomposition/full/E19_causal_decomposition-full-518a444a-d245c02f",
+  "workspace_root": "../artifacts/truba-experiments/E19/518a444",
+  "artifact_tree": {
+    "file_count": 152,
+    "sorted_file_sha256_manifest_sha256": "aa11171c27793021ede9882151f484624435c2ca3acc8e9a7b98ae3a230d524a",
+    "scheme": "sha256 of the sorted lines '<sha256>  <relative path>\\n' over the local workspace copy; server logs and perf.data files are not copied (perf_profiles.json holds their summaries)"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 9,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e19_full_518a444_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "cells": 3,
+    "issues": 0,
+    "tracked_json": "results/derived/e19_full_518a444_analysis.json",
+    "tracked_summary": "results/derived/e19_full_518a444_summary.md",
+    "paper_section_generator": "scripts/e19_section.py"
+  },
+  "registry": {
+    "tasks": 6,
+    "attempts_per_task": 1
+  },
+  "scope": "1M vectors x 1024, M=16, efc=64, one client; pgvector, Qdrant with automatic segments (4) and with one segment; 3 builds each; perf record of rep 0 at 8 ef values, hardware counters over a 30 s window, timing from reps 1-2"
+}

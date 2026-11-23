@@ -136,7 +136,9 @@ This paper makes the following contributions.
     stack and protocol, and client-side saturation (Section~\ref{sec:confounders}).
   \item A separation of latency from CPU cost per query at matched recall, using
     controlled Qdrant segment counts and search-thread limits, which shows how much of
-    the latency gap comes from intra-query parallelism (Section~\ref{sec:cpu}).
+    the latency gap comes from intra-query parallelism (Section~\ref{sec:cpu}), and a
+    profile and counter decomposition of where a query's CPU goes in each engine
+    (Section~\ref{sec:causal}).
   \item A concurrency analysis using closed-loop multi-process clients, per-query engine
     time, server CPU accounting and PostgreSQL wait-event sampling, which shows what
     limits each system's throughput.
@@ -338,6 +340,8 @@ label.
          batches, parallel streams and deferred indexing; WAL and disk writes recorded \\
     E17 & Planner plans (no query run) for 100K--1M vectors, 128--1024 dimensions and 18 values of $ef$ \\
     E18 & Per-query recall and recall across eight dimensions, three builds each, 100K vectors \\
+    E19 & Where a query's CPU goes at 1M $\times$ 1024: perf profiles and hardware counters of pgvector,
+         Qdrant with four segments and Qdrant with one segment, three builds each \\
     E20 & Reduced precision at 1M $\times$ 1024: pgvector \texttt{halfvec} and Qdrant \texttt{int8}
          against their float32 arms, three builds each \\
     E10 & Cold start and steady state under 16, 8 and 4\,GB memory limits, full query set in random
@@ -387,6 +391,9 @@ and the tables that compare them say so.
       (\texttt{hamsi107}) & fixed $ef=64$ \\
     Table~\ref{tab:perquery} & E18 & three per dimension & 24 jobs, 3 nodes & smallest swept $ef$
       whose mean recall reaches 0.95 (grid 16--384) \\
+    Table~\ref{tab:causal} & E19 & three per arm & 6 jobs (all arms of one system per job), 6 nodes,
+      the two systems on different nodes & smallest swept $ef$ with rep-0 recall $\ge 0.95$ on an 8-point grid
+      (128--640); timing from reps 1 and 2 \\
     Table~\ref{tab:quant} & E20 & three per arm & 6 jobs (both arms of one system per job), 6 nodes,
       the two systems on different nodes & smallest swept $ef$ reaching 0.95 on a 21-point grid
       (interpolated); throughput at the matched and the fixed $ef=64$ \\
@@ -956,6 +963,74 @@ work ratio is 1.4--1.5$\times$, much lower than the 3.1--3.4$\times$ latency rat
 intervals are wide for some Qdrant configurations because the matched-recall $ef$ varies
 between builds, so we report these ratios as ranges and do not treat differences of
 about ten percent as meaningful.
+
+\subsection{Causal Decomposition}
+\label{sec:causal}
+
+Section~\ref{sec:cpu} shows that pgvector needs more CPU per query than Qdrant, and that Qdrant's
+latency lead comes mostly from searching its segments in parallel. This section asks where a query's
+CPU goes. One client queries 1M vectors of 1024 dimensions at the matched-recall $ef$ of each build (the
+smallest swept $ef$ that reaches Recall@10 of 0.95). We built pgvector, Qdrant with its automatic segments
+(four) and Qdrant with one segment, 3, 3 and 3 times. Timing uses repetitions one and two of the sweep; repetition
+zero ran under \texttt{perf record} (user-space cycles of the server processes), and a separate
+30\,s window gives user-space hardware counters per query. The profiles resolve function names only
+after unpacking the images and pointing \texttt{perf report} at them, which we did for both. We sort the
+functions into categories by name: the distance function, graph search with element loading, queues and
+visited sets, the buffer manager (hash lookup, pinning, locks), and the rest. Inlining moves work between
+categories, so a share is the share of samples whose top frame is in the category.
+
+\begin{table*}[t]
+  \caption{CPU per query at matched recall 0.95, one client, 1M vectors, mean of the builds.
+  Cycles are user-space; the category columns are millions of cycles per query (profile share times
+  cycles). Vector reads are cache misses per query divided by the 64 cache lines of a vector, a proxy
+  checked against pgvector's block counter (5107 blocks per query). The last column sums the request path,
+  the unresolved addresses and the rest.}
+  \label{tab:causal}
+  \small
+  \begin{tabular}{@{}lrrrrrrrrrrr@{}}
+    \toprule
+    & & CPU & Mcyc. & & reads & cyc. per & \multicolumn{5}{c}{Mcycles per query in} \\
+    arm & $ef$ & ms & per q. & IPC & $\times10^3$ & read & distance & elements & queues & buffers & other \\
+    \midrule
+    pgvector & 448 & 6.54 & 17.2 & 0.66 & 5.2 & 3342 & 4.5 & 4.3 & 1.0 & 4.4 & 3.0 \\
+    Qdrant, 4 segments & 363 & 4.76 & 12.5 & 0.51 & 8.9 & 1410 & 9.6 & 1.7 & 0.3 & 0.0 & 0.9 \\
+    Qdrant, 1 segment & 427 & 3.75 & 9.9 & 0.51 & 6.9 & 1427 & 7.5 & 1.4 & 0.3 & 0.0 & 0.7 \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\paragraph{The gap is per-read cost, not the number of distances.}
+pgvector uses 1.37 (1.31 to 1.52) times the CPU time per query of Qdrant with its automatic segments and 1.75 (1.68 to 1.88) times that of Qdrant with one
+segment (ratio of means, with the range over all build pairs). It does not read more vectors. The vectors read per query,
+estimated from cache misses, are 5.2 thousand for pgvector (its block counter says 5.1 thousand, so the proxy
+is within 1\%), 6.9 thousand for Qdrant with one segment and 8.9 thousand for four segments, so Qdrant reads 1.34 and 1.72
+times as many vectors. The cost per read reverses the order. pgvector spends 3342 cycles per vector read, Qdrant 1410
+and 1427, a factor of 2.3 (the range over build pairs is 2.3 to 2.4). The CPU gap is the product of a smaller number of
+reads and a larger cost per read, not of the distance work.
+
+\paragraph{Where pgvector's cycles go.} The distance function and the loading of elements together take
+8.9 million cycles per query in pgvector and 8.9 million in Qdrant with one segment, which is the same work
+(Qdrant's distance function takes 76\% of its cycles because its memory waits are counted there, pgvector's
+fall in the element loader). The difference is everything around it: 8.4 million cycles
+in pgvector, 49\% of its total, against 1.0 million in Qdrant. In pgvector the buffer manager takes 25\% of the cycles
+(mostly \texttt{hash\_search\_with\_hash\_value}, the buffer-mapping lookup, and lightweight locks), the
+visited-set hash and the candidate heaps 6\%, and a further 16\% of the samples fall on addresses of the stripped
+\texttt{postgres} binary that have no name. The largest of these lie next to buffer-table symbols
+(\texttt{BufTableDelete}, \texttt{LockBufHdr}), so we read them as more buffer-manager work, but we did not attribute them.
+Qdrant has no counterpart: its request path, scheduling and result merging take 3\% of its cycles.
+pgvector retires 0.66 instructions per cycle against 0.51 for Qdrant, which fits Qdrant's cycles being dominated by waiting
+for vector data, and pgvector's by instructions around the data. The functions that carry the distance samples are
+\texttt{VectorInnerProduct.fma} in pgvector and \texttt{dot\_similarity\_avx} in Qdrant, so both run AVX/FMA code, although
+the processors also support AVX-512.
+
+\paragraph{What was not measured.} Neither engine reports how many distances a query computes, and
+the nodes allow neither root nor eBPF, so the distance count is a proxy. Two upper bounds are consistent for pgvector. The time in distance
+functions, divided by the 248\,ns of the fastest kernel in our pinned-core probe (E7), allows at most 6.9 thousand distances per query;
+the block counter gives 5.1 thousand. For Qdrant the same time bound gives at most 11.5 thousand (one segment) and 14.8 thousand
+(four segments), and the cache-miss proxy 6.9 and 8.9 thousand. User-space cycles only are profiled, so time in the kernel
+(page-cache and system calls) is outside the table. Qdrant's matched $ef$ differs between builds (the grid is coarse), which moves
+its means by up to the spread shown in the analysis file.
+
 
 \subsection{Per-Query Recall}
 \label{sec:perquery}

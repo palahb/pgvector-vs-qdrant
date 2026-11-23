@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-23T14:15:30.746949+00:00",
+  "root": "../artifacts/truba-experiments/E19/518a444/full",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 9,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "E19_causal_decomposition-full-518a444a-d245c02f": 9
+    },
+    "engines": {
+      "pg": 3,
+      "qdrant": 6
+    },
+    "statuses": {
+      "ok": 9
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0000_7045641/pg_rep1_pg/result.json",
+      "sha256": "eba54e9a14a3c1ddd10ab0b1c7021c08bbc63d7db3ab2f5d5910c26313c78dd1",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0000-a1-r00-pg",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7045641",
+      "raw_npz_size_bytes": 252803,
+      "raw_array_count": 52
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0001_7045653/qdrant_rep1_auto/result.json",
+      "sha256": "b3843ac3d691cb69fd304c7a7930ebba8092494d96ffff6ab2ff49b55ddbc027",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0001-a1-r00-qdrant",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7045653",
+      "raw_npz_size_bytes": 265025,
+      "raw_array_count": 50
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0001_7045653/qdrant_rep1_seg1/result.json",
+      "sha256": "ba157ac902e24e9b326d78d3b543a614dbd5d9b1f96a0bf76fb7d8ee9c8bb814",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0001-a1-r01-qdrant",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7045653",
+      "raw_npz_size_bytes": 359740,
+      "raw_array_count": 52
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0002_7045720/pg_rep2_pg/result.json",
+      "sha256": "fa5ca761b4e3eef035410edc59a7bddab9a8a3977469bac2d3acbc969288d472",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0002-a1-r00-pg",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7045720",
+      "raw_npz_size_bytes": 253432,
+      "raw_array_count": 52
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0003_7045940/qdrant_rep2_auto/result.json",
+      "sha256": "6e1bf64baa9e509493834e6678266ab5a5ae9f41103fbf4dcfb16e4b12e7d31f",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0003-a1-r00-qdrant",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7045940",
+      "raw_npz_size_bytes": 376443,
+      "raw_array_count": 52
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0003_7045940/qdrant_rep2_seg1/result.json",
+      "sha256": "5cbafdd7f8a56803fea4242263ae50917db56fb5cc5d6287ac473cb12e5b6bb6",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0003-a1-r01-qdrant",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7045940",
+      "raw_npz_size_bytes": 266125,
+      "raw_array_count": 50
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0004_7045990/pg_rep3_pg/result.json",
+      "sha256": "1abf1e4019bc3cebb5adc7b22915b0e6d90c2a2d4c3233be31dac542e2603d6b",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0004-a1-r00-pg",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7045990",
+      "raw_npz_size_bytes": 253980,
+      "raw_array_count": 52
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0005_7045635/qdrant_rep3_auto/result.json",
+      "sha256": "54fa9b38b8fa1b0e5b3950896c1df4e3715c98c171314f7a8f083d5b11282849",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0005-a1-r00-qdrant",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7045635",
+      "raw_npz_size_bytes": 265726,
+      "raw_array_count": 50
+    },
+    {
+      "path": "E19_causal_decomposition-full-518a444a-d245c02f/task_0005_7045635/qdrant_rep3_seg1/result.json",
+      "sha256": "72da76d8cc629640bc45f4f1622e637c2820a264a3c48763341581247a5d131f",
+      "experiment_id": "E19_causal_decomposition-full-518a444a-d245c02f-t0005-a1-r01-qdrant",
+      "experiment": "E19_causal_decomposition-full-518a444a-d245c02f",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7045635",
+      "raw_npz_size_bytes": 359606,
+      "raw_array_count": 52
+    }
+  ]
+}

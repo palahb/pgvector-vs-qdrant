@@ -140,7 +140,7 @@ is subject to the author's and the referee's agreement.
   truncation" and states that it does not transfer to native low-dimensional models.
 - Not done: 10M scale (a single point if time allows) and a second model (future work).
 
-### M11 — Engine-time boundaries: partly addressed
+### M11 — Engine-time boundaries: partly addressed (E19 adds the causal decomposition; see the section Causal Decomposition)
 
 - Evidence: E1 server-side counters (single build per scale) and the E7 pilot.
 - The manuscript compares engine-side times only at one client and uses server CPU time per
@@ -216,8 +216,7 @@ is subject to the author's and the referee's agreement.
 
 Recorded in `docs/HOCA_CEVAP_17_KASIM.md`; none has results yet.
 
-1. Causal analysis of the latency gap (E19), highest priority; bounded, since neither engine
-   exposes a per-query distance count and there is no root or eBPF access.
+1. Causal analysis of the latency gap (E19), highest priority: done and bounded. New subsection Causal Decomposition (`data-manifests/e19_full_518a444.json`, three builds each of pgvector, Qdrant with four segments and with one segment at 1M). Function names resolve from `perf report` once the images are unpacked, so the profile is by function, not only by counter. pgvector's extra CPU is not more distance work: it reads fewer vectors than Qdrant (5.2K against 6.9K and 8.9K per query) but spends about 2.3 times the cycles per read (3342 against 1410-1427), 49% of its cycles outside distance and element loading (buffer manager 25%, unresolved postgres addresses 16%, visited set and heaps 6%). Neither engine exposes a per-query distance count and there is no root or eBPF, so the count is a proxy (cache misses, calibrated against pgvector's block counter) with upper bounds, and user-space cycles only are profiled.
 2. `halfvec` and `int8` quantization (E20): done. New subsection Quantization with three builds per arm at 1M (`data-manifests/e20_full_77f7567.json`). halfvec makes the index 0.334 times as large and the build 0.59 times as long with no detectable change in search speed or recall; int8 makes Qdrant 0.63 times as slow per query (0.55 times the CPU) with a highest recall within 0.0024, but does not shrink the storage directory. The earlier statement that pgvector needs about twice the bytes is restated as a property of the 32-bit layout (index 1.5-1.9 times Qdrant's float32 storage, 0.48-0.65 times with halfvec). Qdrant's float32 storage size varies between builds (3.94-5.24 GiB) for a reason we did not find.
 3. PgBouncer (E21).
 4. Minimal open-loop generator (E22), first to be cut.

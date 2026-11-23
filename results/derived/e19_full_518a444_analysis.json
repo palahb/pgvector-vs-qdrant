@@ -1,0 +1,1697 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-23T14:15:30.885905+00:00",
+  "root": "../artifacts/truba-experiments/E19/518a444/full",
+  "kernel_ns_per_distance": {
+    "scalar": 1504.333682,
+    "avx2_fma": 282.214804,
+    "avx512f_fma": 248.19019
+  },
+  "verdict": "valid",
+  "result_count": 9,
+  "cells": [
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "builds": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "builds": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "builds": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    }
+  ],
+  "aggregates": [
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "blocks_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5107.4,
+        "sd": 8.141253,
+        "ci95_low": 5087.174374,
+        "ci95_high": 5127.625626,
+        "cv_percent": 0.159
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cache_miss_ratio",
+      "stats": {
+        "n": 3,
+        "mean": 0.869668,
+        "sd": 0.00133,
+        "ci95_low": 0.866364,
+        "ci95_high": 0.872972,
+        "cv_percent": 0.153
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cache_misses_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 330259.194697,
+        "sd": 1074.775187,
+        "ci95_low": 327589.089635,
+        "ci95_high": 332929.299759,
+        "cv_percent": 0.325
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles",
+      "stats": {
+        "n": 3,
+        "mean": 17244252.005043,
+        "sd": 197107.892258,
+        "ci95_low": 16754569.337145,
+        "ci95_high": 17733934.672942,
+        "cv_percent": 1.143
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_buffer_manager",
+      "stats": {
+        "n": 3,
+        "mean": 4368300.297552,
+        "sd": 114353.479104,
+        "ci95_low": 4084207.580158,
+        "ci95_high": 4652393.014946,
+        "cv_percent": 2.618
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_distance",
+      "stats": {
+        "n": 3,
+        "mean": 4515923.45972,
+        "sd": 241861.390904,
+        "ci95_low": 3915057.965179,
+        "ci95_high": 5116788.95426,
+        "cv_percent": 5.356
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_graph_and_element_access",
+      "stats": {
+        "n": 3,
+        "mean": 4335635.890266,
+        "sd": 130510.959304,
+        "ci95_low": 4011402.527461,
+        "ci95_high": 4659869.25307,
+        "cv_percent": 3.01
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_other",
+      "stats": {
+        "n": 3,
+        "mean": 194843.888908,
+        "sd": 31784.158107,
+        "ci95_low": 115881.290504,
+        "ci95_high": 273806.487313,
+        "cv_percent": 16.313
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_per_block",
+      "stats": {
+        "n": 3,
+        "mean": 3376.302372,
+        "sd": 34.812919,
+        "ci95_low": 3289.815308,
+        "ci95_high": 3462.789436,
+        "cv_percent": 1.031
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_per_vector_read",
+      "stats": {
+        "n": 3,
+        "mean": 3341.656285,
+        "sd": 27.457602,
+        "ci95_low": 3273.442316,
+        "ci95_high": 3409.870254,
+        "cv_percent": 0.822
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_queues_and_visited",
+      "stats": {
+        "n": 3,
+        "mean": 1022807.392012,
+        "sd": 33551.597363,
+        "ci95_low": 939453.876734,
+        "ci95_high": 1106160.90729,
+        "cv_percent": 3.28
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_request_path",
+      "stats": {
+        "n": 3,
+        "mean": 76325.554304,
+        "sd": 7740.399355,
+        "ci95_low": 57095.784439,
+        "ci95_high": 95555.324169,
+        "cv_percent": 10.141
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "cycles_unresolved",
+      "stats": {
+        "n": 3,
+        "mean": 2730415.522281,
+        "sd": 100311.423551,
+        "ci95_low": 2481208.020023,
+        "ci95_high": 2979623.02454,
+        "cv_percent": 3.674
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "distance_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.712402,
+        "sd": 0.085117,
+        "ci95_low": 1.500944,
+        "ci95_high": 1.923861,
+        "cv_percent": 4.971
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "distances_upper_avx2",
+      "stats": {
+        "n": 3,
+        "mean": 6067.727181,
+        "sd": 301.602069,
+        "ci95_low": 5318.445636,
+        "ci95_high": 6817.008725,
+        "cv_percent": 4.971
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "distances_upper_avx512",
+      "stats": {
+        "n": 3,
+        "mean": 6899.5573,
+        "sd": 342.948965,
+        "ci95_low": 6047.556081,
+        "ci95_high": 7751.558518,
+        "cv_percent": 4.971
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "ef",
+      "stats": {
+        "n": 3,
+        "mean": 448.0,
+        "sd": 0.0,
+        "ci95_low": 448.0,
+        "ci95_high": 448.0,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "instructions",
+      "stats": {
+        "n": 3,
+        "mean": 11466067.300537,
+        "sd": 25105.398323,
+        "ci95_low": 11403697.000247,
+        "ci95_high": 11528437.600827,
+        "cv_percent": 0.219
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "ipc",
+      "stats": {
+        "n": 3,
+        "mean": 0.664969,
+        "sd": 0.006331,
+        "ci95_low": 0.64924,
+        "ci95_high": 0.680698,
+        "cv_percent": 0.952
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.634633,
+        "sd": 0.007719,
+        "ci95_low": 6.615456,
+        "ci95_high": 6.65381,
+        "cv_percent": 0.116
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.952157,
+        "sd": 0.000985,
+        "ci95_low": 0.949709,
+        "ci95_high": 0.954604,
+        "cv_percent": 0.103
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 6.539455,
+        "sd": 0.007503,
+        "ci95_low": 6.520815,
+        "ci95_high": 6.558096,
+        "cv_percent": 0.115
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "share_buffer_manager",
+      "stats": {
+        "n": 3,
+        "mean": 0.253319,
+        "sd": 0.005918,
+        "ci95_low": 0.238617,
+        "ci95_high": 0.268022,
+        "cv_percent": 2.336
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "share_distance",
+      "stats": {
+        "n": 3,
+        "mean": 0.261866,
+        "sd": 0.013273,
+        "ci95_low": 0.228891,
+        "ci95_high": 0.294841,
+        "cv_percent": 5.069
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "share_graph_and_element_access",
+      "stats": {
+        "n": 3,
+        "mean": 0.251457,
+        "sd": 0.008548,
+        "ci95_low": 0.230221,
+        "ci95_high": 0.272693,
+        "cv_percent": 3.399
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "share_other",
+      "stats": {
+        "n": 3,
+        "mean": 0.01131,
+        "sd": 0.001931,
+        "ci95_low": 0.006514,
+        "ci95_high": 0.016107,
+        "cv_percent": 17.07
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "share_queues_and_visited",
+      "stats": {
+        "n": 3,
+        "mean": 0.059312,
+        "sd": 0.001798,
+        "ci95_low": 0.054845,
+        "ci95_high": 0.06378,
+        "cv_percent": 3.032
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "share_request_path",
+      "stats": {
+        "n": 3,
+        "mean": 0.004424,
+        "sd": 0.000416,
+        "ci95_low": 0.003391,
+        "ci95_high": 0.005457,
+        "cv_percent": 9.399
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "share_unresolved",
+      "stats": {
+        "n": 3,
+        "mean": 0.158311,
+        "sd": 0.004236,
+        "ci95_low": 0.147788,
+        "ci95_high": 0.168835,
+        "cv_percent": 2.676
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "us_per_block",
+      "stats": {
+        "n": 3,
+        "mean": 1.280389,
+        "sd": 0.00089,
+        "ci95_low": 1.278179,
+        "ci95_high": 1.282599,
+        "cv_percent": 0.069
+      }
+    },
+    {
+      "engine": "pg",
+      "arm": "pg",
+      "metric": "vector_reads_proxy",
+      "stats": {
+        "n": 3,
+        "mean": 5160.299917,
+        "sd": 16.793362,
+        "ci95_low": 5118.579526,
+        "ci95_high": 5202.020309,
+        "cv_percent": 0.325
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cache_miss_ratio",
+      "stats": {
+        "n": 3,
+        "mean": 0.899352,
+        "sd": 0.00369,
+        "ci95_low": 0.890185,
+        "ci95_high": 0.908518,
+        "cv_percent": 0.41
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cache_misses_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 568880.098342,
+        "sd": 47979.200119,
+        "ci95_low": 449683.538282,
+        "ci95_high": 688076.658402,
+        "cv_percent": 8.434
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles",
+      "stats": {
+        "n": 3,
+        "mean": 12528016.369666,
+        "sd": 1026766.44013,
+        "ci95_low": 9977181.271428,
+        "ci95_high": 15078851.467905,
+        "cv_percent": 8.196
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_buffer_manager",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_distance",
+      "stats": {
+        "n": 3,
+        "mean": 9637196.481113,
+        "sd": 718186.603637,
+        "ci95_low": 7852978.060992,
+        "ci95_high": 11421414.901234,
+        "cv_percent": 7.452
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_graph_and_element_access",
+      "stats": {
+        "n": 3,
+        "mean": 1712488.836669,
+        "sd": 225729.534822,
+        "ci95_low": 1151700.328562,
+        "ci95_high": 2273277.344775,
+        "cv_percent": 13.181
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_other",
+      "stats": {
+        "n": 3,
+        "mean": 370844.648926,
+        "sd": 18590.509226,
+        "ci95_low": 324659.536543,
+        "ci95_high": 417029.76131,
+        "cv_percent": 5.013
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_per_vector_read",
+      "stats": {
+        "n": 3,
+        "mean": 1409.623036,
+        "sd": 3.604035,
+        "ci95_low": 1400.669393,
+        "ci95_high": 1418.576678,
+        "cv_percent": 0.256
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_queues_and_visited",
+      "stats": {
+        "n": 3,
+        "mean": 313540.301633,
+        "sd": 54599.229142,
+        "ci95_low": 177897.350529,
+        "ci95_high": 449183.252736,
+        "cv_percent": 17.414
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_request_path",
+      "stats": {
+        "n": 3,
+        "mean": 333805.950802,
+        "sd": 67713.735974,
+        "ci95_low": 165582.129294,
+        "ci95_high": 502029.77231,
+        "cv_percent": 20.285
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_unresolved",
+      "stats": {
+        "n": 3,
+        "mean": 160140.150524,
+        "sd": 59037.655868,
+        "ci95_low": 13470.646322,
+        "ci95_high": 306809.654727,
+        "cv_percent": 36.866
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "distance_ms",
+      "stats": {
+        "n": 3,
+        "mean": 3.664312,
+        "sd": 0.269836,
+        "ci95_low": 2.993947,
+        "ci95_high": 4.334676,
+        "cv_percent": 7.364
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "distances_upper_avx2",
+      "stats": {
+        "n": 3,
+        "mean": 12984.122893,
+        "sd": 956.137755,
+        "ci95_low": 10608.753336,
+        "ci95_high": 15359.49245,
+        "cv_percent": 7.364
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "distances_upper_avx512",
+      "stats": {
+        "n": 3,
+        "mean": 14764.127854,
+        "sd": 1087.215531,
+        "ci95_low": 12063.116771,
+        "ci95_high": 17465.138938,
+        "cv_percent": 7.364
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "ef",
+      "stats": {
+        "n": 3,
+        "mean": 362.666667,
+        "sd": 36.950417,
+        "ci95_low": 270.869333,
+        "ci95_high": 454.464,
+        "cv_percent": 10.189
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "instructions",
+      "stats": {
+        "n": 3,
+        "mean": 6400006.702475,
+        "sd": 524946.112708,
+        "ci95_low": 5095863.017364,
+        "ci95_high": 7704150.387586,
+        "cv_percent": 8.202
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "ipc",
+      "stats": {
+        "n": 3,
+        "mean": 0.510854,
+        "sd": 8.1e-05,
+        "ci95_low": 0.510652,
+        "ci95_high": 0.511055,
+        "cv_percent": 0.016
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.1066,
+        "sd": 0.135627,
+        "ci95_low": 1.769656,
+        "ci95_high": 2.443544,
+        "cv_percent": 6.438
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.95186,
+        "sd": 0.001398,
+        "ci95_low": 0.948388,
+        "ci95_high": 0.955332,
+        "cv_percent": 0.147
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 4.763466,
+        "sd": 0.386452,
+        "ci95_low": 3.803388,
+        "ci95_high": 5.723544,
+        "cv_percent": 8.113
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_buffer_manager",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_distance",
+      "stats": {
+        "n": 3,
+        "mean": 0.769586,
+        "sd": 0.006808,
+        "ci95_low": 0.752673,
+        "ci95_high": 0.7865,
+        "cv_percent": 0.885
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_graph_and_element_access",
+      "stats": {
+        "n": 3,
+        "mean": 0.136303,
+        "sd": 0.007249,
+        "ci95_low": 0.118295,
+        "ci95_high": 0.154311,
+        "cv_percent": 5.318
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_other",
+      "stats": {
+        "n": 3,
+        "mean": 0.02966,
+        "sd": 0.001151,
+        "ci95_low": 0.0268,
+        "ci95_high": 0.03252,
+        "cv_percent": 3.881
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_queues_and_visited",
+      "stats": {
+        "n": 3,
+        "mean": 0.024895,
+        "sd": 0.002438,
+        "ci95_low": 0.018838,
+        "ci95_high": 0.030951,
+        "cv_percent": 9.792
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_request_path",
+      "stats": {
+        "n": 3,
+        "mean": 0.026461,
+        "sd": 0.003407,
+        "ci95_low": 0.017996,
+        "ci95_high": 0.034926,
+        "cv_percent": 12.877
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_unresolved",
+      "stats": {
+        "n": 3,
+        "mean": 0.013096,
+        "sd": 0.005958,
+        "ci95_low": -0.001706,
+        "ci95_high": 0.027898,
+        "cv_percent": 45.496
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "vector_reads_proxy",
+      "stats": {
+        "n": 3,
+        "mean": 8888.751537,
+        "sd": 749.675002,
+        "ci95_low": 7026.305286,
+        "ci95_high": 10751.197788,
+        "cv_percent": 8.434
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cache_miss_ratio",
+      "stats": {
+        "n": 3,
+        "mean": 0.883214,
+        "sd": 0.002811,
+        "ci95_low": 0.876232,
+        "ci95_high": 0.890197,
+        "cv_percent": 0.318
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cache_misses_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 442785.649939,
+        "sd": 28233.141109,
+        "ci95_low": 372644.978742,
+        "ci95_high": 512926.321136,
+        "cv_percent": 6.376
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles",
+      "stats": {
+        "n": 3,
+        "mean": 9876263.241016,
+        "sd": 657719.415495,
+        "ci95_low": 8242265.766746,
+        "ci95_high": 11510260.715286,
+        "cv_percent": 6.66
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_buffer_manager",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_distance",
+      "stats": {
+        "n": 3,
+        "mean": 7510420.734236,
+        "sd": 506966.307333,
+        "ci95_low": 6250944.966595,
+        "ci95_high": 8769896.501876,
+        "cv_percent": 6.75
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_graph_and_element_access",
+      "stats": {
+        "n": 3,
+        "mean": 1405608.664004,
+        "sd": 91780.970998,
+        "ci95_low": 1177593.690958,
+        "ci95_high": 1633623.637051,
+        "cv_percent": 6.53
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_other",
+      "stats": {
+        "n": 3,
+        "mean": 265985.42395,
+        "sd": 38329.265825,
+        "ci95_low": 170762.564363,
+        "ci95_high": 361208.283536,
+        "cv_percent": 14.41
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_per_vector_read",
+      "stats": {
+        "n": 3,
+        "mean": 1427.334211,
+        "sd": 5.984287,
+        "ci95_low": 1412.467219,
+        "ci95_high": 1442.201204,
+        "cv_percent": 0.419
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_queues_and_visited",
+      "stats": {
+        "n": 3,
+        "mean": 261974.582726,
+        "sd": 33064.554519,
+        "ci95_low": 179831.046593,
+        "ci95_high": 344118.118859,
+        "cv_percent": 12.621
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_request_path",
+      "stats": {
+        "n": 3,
+        "mean": 284660.726463,
+        "sd": 27622.755289,
+        "ci95_low": 216036.460079,
+        "ci95_high": 353284.992847,
+        "cv_percent": 9.704
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_unresolved",
+      "stats": {
+        "n": 3,
+        "mean": 147613.109638,
+        "sd": 39728.446205,
+        "ci95_low": 48914.212773,
+        "ci95_high": 246312.006503,
+        "cv_percent": 26.914
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "distance_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.848452,
+        "sd": 0.181548,
+        "ci95_low": 2.397425,
+        "ci95_high": 3.299478,
+        "cv_percent": 6.374
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "distances_upper_avx2",
+      "stats": {
+        "n": 3,
+        "mean": 10093.20384,
+        "sd": 643.297267,
+        "ci95_low": 8495.035861,
+        "ci95_high": 11691.37182,
+        "cv_percent": 6.374
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "distances_upper_avx512",
+      "stats": {
+        "n": 3,
+        "mean": 11476.890136,
+        "sd": 731.487462,
+        "ci95_low": 9659.627886,
+        "ci95_high": 13294.152387,
+        "cv_percent": 6.374
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "ef",
+      "stats": {
+        "n": 3,
+        "mean": 426.666667,
+        "sd": 36.950417,
+        "ci95_low": 334.869333,
+        "ci95_high": 518.464,
+        "cv_percent": 8.66
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "instructions",
+      "stats": {
+        "n": 3,
+        "mean": 5061581.005496,
+        "sd": 322586.697552,
+        "ci95_low": 4260166.547271,
+        "ci95_high": 5862995.463721,
+        "cv_percent": 6.373
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "ipc",
+      "stats": {
+        "n": 3,
+        "mean": 0.512568,
+        "sd": 0.001684,
+        "ci95_low": 0.508383,
+        "ci95_high": 0.516753,
+        "cv_percent": 0.329
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.328367,
+        "sd": 0.122647,
+        "ci95_low": 2.02367,
+        "ci95_high": 2.633064,
+        "cv_percent": 5.268
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.9515,
+        "sd": 0.000485,
+        "ci95_low": 0.950295,
+        "ci95_high": 0.952705,
+        "cv_percent": 0.051
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 3.745776,
+        "sd": 0.23613,
+        "ci95_low": 3.159149,
+        "ci95_high": 4.332403,
+        "cv_percent": 6.304
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_buffer_manager",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_distance",
+      "stats": {
+        "n": 3,
+        "mean": 0.760423,
+        "sd": 0.002419,
+        "ci95_low": 0.754413,
+        "ci95_high": 0.766432,
+        "cv_percent": 0.318
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_graph_and_element_access",
+      "stats": {
+        "n": 3,
+        "mean": 0.142333,
+        "sd": 0.001091,
+        "ci95_low": 0.139623,
+        "ci95_high": 0.145044,
+        "cv_percent": 0.767
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_other",
+      "stats": {
+        "n": 3,
+        "mean": 0.02686,
+        "sd": 0.002484,
+        "ci95_low": 0.020689,
+        "ci95_high": 0.03303,
+        "cv_percent": 9.247
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_queues_and_visited",
+      "stats": {
+        "n": 3,
+        "mean": 0.026459,
+        "sd": 0.001777,
+        "ci95_low": 0.022045,
+        "ci95_high": 0.030874,
+        "cv_percent": 6.716
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_request_path",
+      "stats": {
+        "n": 3,
+        "mean": 0.02903,
+        "sd": 0.004793,
+        "ci95_low": 0.017123,
+        "ci95_high": 0.040936,
+        "cv_percent": 16.509
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_unresolved",
+      "stats": {
+        "n": 3,
+        "mean": 0.014895,
+        "sd": 0.003505,
+        "ci95_low": 0.006187,
+        "ci95_high": 0.023603,
+        "cv_percent": 23.531
+      }
+    },
+    {
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "vector_reads_proxy",
+      "stats": {
+        "n": 3,
+        "mean": 6918.52578,
+        "sd": 441.14283,
+        "ci95_low": 5822.577793,
+        "ci95_high": 8014.473768,
+        "cv_percent": 6.376
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cache_miss_ratio",
+      "ratio_of_means": 0.9669941967894284,
+      "pairwise_min": 0.9631796793443226,
+      "pairwise_max": 0.9732454301319222,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cache_misses_per_query",
+      "ratio_of_means": 0.5805427113018712,
+      "pairwise_min": 0.5506251022390442,
+      "pairwise_max": 0.644767639767663,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles",
+      "ratio_of_means": 1.3764550984141644,
+      "pairwise_min": 1.2962726049148705,
+      "pairwise_max": 1.5352918856654507,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_distance",
+      "ratio_of_means": 0.4685930673479818,
+      "pairwise_min": 0.4299682220536647,
+      "pairwise_max": 0.5439664880639896,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_graph_and_element_access",
+      "ratio_of_means": 2.5317746880616516,
+      "pairwise_min": 2.2556837138760915,
+      "pairwise_max": 3.0408560473250597,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_other",
+      "ratio_of_means": 0.5254056906919681,
+      "pairwise_min": 0.40916035850566324,
+      "pairwise_max": 0.6106326450362569,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_per_vector_read",
+      "ratio_of_means": 2.3706027788613877,
+      "pairwise_min": 2.342804553149962,
+      "pairwise_max": 2.3927206577345492,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_queues_and_visited",
+      "ratio_of_means": 3.2621241565643024,
+      "pairwise_min": 2.8735489676424693,
+      "pairwise_max": 4.234475795484783,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_request_path",
+      "ratio_of_means": 0.22865246746124254,
+      "pairwise_min": 0.1856630412501001,
+      "pairwise_max": 0.332374706555058,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "cycles_unresolved",
+      "ratio_of_means": 17.050162082029477,
+      "pairwise_min": 11.8499062176784,
+      "pairwise_max": 26.705201104648395,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "distance_ms",
+      "ratio_of_means": 0.4673189888117216,
+      "pairwise_min": 0.43257508591289007,
+      "pairwise_max": 0.539943758975285,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "distances_upper_avx2",
+      "ratio_of_means": 0.4673189888117216,
+      "pairwise_min": 0.43257508591289007,
+      "pairwise_max": 0.5399437589752849,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "distances_upper_avx512",
+      "ratio_of_means": 0.46731898881172157,
+      "pairwise_min": 0.43257508591289007,
+      "pairwise_max": 0.5399437589752849,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "ef",
+      "ratio_of_means": 1.2352941176470587,
+      "pairwise_min": 1.1666666666666667,
+      "pairwise_max": 1.4,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "instructions",
+      "ratio_of_means": 1.7915711394651286,
+      "pairwise_min": 1.7056124816588476,
+      "pairwise_max": 1.9837585453495836,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "ipc",
+      "ratio_of_means": 1.3016822954608411,
+      "pairwise_min": 1.2917628387609486,
+      "pairwise_max": 1.3157822476475611,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "mean_ms",
+      "ratio_of_means": 3.149450931991519,
+      "pairwise_min": 3.031696663388753,
+      "pairwise_max": 3.4067948717948715,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "recall_at_k",
+      "ratio_of_means": 1.0003116704837545,
+      "pairwise_min": 0.9979959499302256,
+      "pairwise_max": 1.0029463449538583,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "server_cpu_ms_per_query",
+      "ratio_of_means": 1.3728354260787263,
+      "pairwise_min": 1.3096234137665161,
+      "pairwise_max": 1.5165746208277384,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_distance",
+      "ratio_of_means": 0.34026793662395505,
+      "pairwise_min": 0.3262384637493769,
+      "pairwise_max": 0.3631834910192606,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_graph_and_element_access",
+      "ratio_of_means": 1.844842864831627,
+      "pairwise_min": 1.709687210940262,
+      "pairwise_max": 2.0207934850758096,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_other",
+      "ratio_of_means": 0.38133775693159183,
+      "pairwise_min": 0.2940575160358897,
+      "pairwise_max": 0.4362776373157693,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_queues_and_visited",
+      "ratio_of_means": 2.3825485322269664,
+      "pairwise_min": 2.188514292170377,
+      "pairwise_max": 2.7778078744679098,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_request_path",
+      "ratio_of_means": 0.16720280876971352,
+      "pairwise_min": 0.14105488411137165,
+      "pairwise_max": 0.21648958719728714,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "share_unresolved",
+      "ratio_of_means": 12.088578230442147,
+      "pairwise_min": 7.893297141287799,
+      "pairwise_max": 20.14489539439635,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "auto",
+      "metric": "vector_reads_proxy",
+      "ratio_of_means": 0.5805427113018712,
+      "pairwise_min": 0.5506251022390442,
+      "pairwise_max": 0.644767639767663,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cache_miss_ratio",
+      "ratio_of_means": 0.9846620179588562,
+      "pairwise_min": 0.9816597342919002,
+      "pairwise_max": 0.9899912121440108,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cache_misses_per_query",
+      "ratio_of_means": 0.7458669781712208,
+      "pairwise_min": 0.714054885744375,
+      "pairwise_max": 0.807029608187774,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles",
+      "ratio_of_means": 1.7460300099563557,
+      "pairwise_min": 1.6586913062638913,
+      "pairwise_max": 1.9100952287397053,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_distance",
+      "ratio_of_means": 0.6012876800808615,
+      "pairwise_min": 0.5543492918572367,
+      "pairwise_max": 0.691909765486339,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_graph_and_element_access",
+      "ratio_of_means": 3.0845255875940345,
+      "pairwise_min": 2.851251711995176,
+      "pairwise_max": 3.3964836184799596,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_other",
+      "ratio_of_means": 0.7325359638700243,
+      "pairwise_min": 0.5189605870210064,
+      "pairwise_max": 0.9377733501742889,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_per_vector_read",
+      "ratio_of_means": 2.3411869897262183,
+      "pairwise_min": 2.3097473041324097,
+      "pairwise_max": 2.3668217489924825,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_queues_and_visited",
+      "ratio_of_means": 3.90422376617902,
+      "pairwise_min": 3.444461174257367,
+      "pairwise_max": 4.70754383535643,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_request_path",
+      "ratio_of_means": 0.268128151194088,
+      "pairwise_min": 0.22534173010330244,
+      "pairwise_max": 0.3288463199089108,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "cycles_unresolved",
+      "ratio_of_means": 18.497107262240988,
+      "pairwise_min": 13.680325677818292,
+      "pairwise_max": 23.06873138486154,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "distance_ms",
+      "ratio_of_means": 0.6011695866644795,
+      "pairwise_min": 0.5617727443649789,
+      "pairwise_max": 0.6861268251786431,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "distances_upper_avx2",
+      "ratio_of_means": 0.6011695866644796,
+      "pairwise_min": 0.5617727443649789,
+      "pairwise_max": 0.686126825178643,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "distances_upper_avx512",
+      "ratio_of_means": 0.6011695866644795,
+      "pairwise_min": 0.5617727443649789,
+      "pairwise_max": 0.686126825178643,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "ef",
+      "ratio_of_means": 1.05,
+      "pairwise_min": 1.0,
+      "pairwise_max": 1.1666666666666667,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "instructions",
+      "ratio_of_means": 2.2653134046628587,
+      "pairwise_min": 2.1759612394895256,
+      "pairwise_max": 2.4510270063960036,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "ipc",
+      "ratio_of_means": 1.2973286433918585,
+      "pairwise_min": 1.283196235201953,
+      "pairwise_max": 1.3152357788277556,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "mean_ms",
+      "ratio_of_means": 2.8494796065911725,
+      "pairwise_min": 2.7616974292737804,
+      "pairwise_max": 3.0379558705842005,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "recall_at_k",
+      "ratio_of_means": 1.0006901383779996,
+      "pairwise_min": 0.9991806206273505,
+      "pairwise_max": 1.0022608256745673,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "server_cpu_ms_per_query",
+      "ratio_of_means": 1.7458211709304396,
+      "pairwise_min": 1.6776416859577314,
+      "pairwise_max": 1.884978527922194,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_distance",
+      "ratio_of_means": 0.3443684595024801,
+      "pairwise_min": 0.33204965314949686,
+      "pairwise_max": 0.36543689240773636,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_graph_and_element_access",
+      "ratio_of_means": 1.766674277305025,
+      "pairwise_min": 1.6895770133156789,
+      "pairwise_max": 1.8333119365312414,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_other",
+      "ratio_of_means": 0.42108733249543295,
+      "pairwise_min": 0.30593862779491565,
+      "pairwise_max": 0.4987023357955684,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_queues_and_visited",
+      "ratio_of_means": 2.2416379843079137,
+      "pairwise_min": 2.050954627846781,
+      "pairwise_max": 2.482177631124527,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_request_path",
+      "ratio_of_means": 0.15240902995452574,
+      "pairwise_min": 0.11881741761390685,
+      "pairwise_max": 0.19348260001735676,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "share_unresolved",
+      "ratio_of_means": 10.628309652513177,
+      "pairwise_min": 8.231516603447114,
+      "pairwise_max": 13.272783700890873,
+      "pairs": 9
+    },
+    {
+      "baseline": "pg/pg",
+      "engine": "qdrant",
+      "arm": "seg1",
+      "metric": "vector_reads_proxy",
+      "ratio_of_means": 0.7458669781712208,
+      "pairwise_min": 0.714054885744375,
+      "pairwise_max": 0.807029608187774,
+      "pairs": 9
+    }
+  ],
+  "issues": []
+}
