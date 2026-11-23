@@ -16,9 +16,10 @@ import urllib.request
 
 import psutil
 
-from common import dir_size, fmt_cpus, log
-from features import (pg_copy_value, pg_create_index_sql, pg_create_table_sql, pg_plan_prepare_sql, pg_query_sql,
-                      pg_vector_type, pgbouncer_ini, pooled_dsn, qdrant_quantization)
+from common import dir_size, fmt_cpus, log, sha256
+from features import (conn_mode_flags, pg_copy_value, pooler_cmd, pg_create_index_sql, pg_create_table_sql, pg_plan_prepare_sql, pg_query_sql,
+                      pg_txn_settings, pg_vector_type, pgbouncer_ini, pooled_dsn, qdrant_quantization,
+                      txn_query)
 
 MODE = os.environ.get("BENCH_MODE", "apptainer")
 PG_SIF = os.environ.get("PG_SIF")
@@ -240,6 +241,8 @@ class Pg(Server):
         self.vector_type = getattr(args, "pg_vector_type", "vector")
         self.dim = None  # set by build()
         self.pooler = None
+        self.conn_mode = "direct"
+        self.pooler_image = None
         self.pooler_port = int(os.environ.get("PGBOUNCER_PORT", "56432"))
 
     def _cmd(self, binary, *a):
@@ -299,7 +302,33 @@ class Pg(Server):
 
     def query_dsn(self):
         """Where benchmark clients connect: PgBouncer when a pooler runs, else the server."""
-        return pooled_dsn(self.dsn, self.pooler_port) if self.pooler else self.dsn
+        return pooled_dsn(self.dsn, self.pooler_port) if conn_mode_flags(self.conn_mode)["use_pooler"] else self.dsn
+
+    def set_conn_mode(self, mode):
+        """direct: session SET, straight to PostgreSQL. direct_txn: a transaction per query. pooled: the
+        same, through PgBouncer (started on first use)."""
+        if conn_mode_flags(mode)["use_pooler"] and not self.pooler:
+            self.start_pooler()
+        self.conn_mode = mode
+
+    def pooler_pids(self):
+        """The pooler runs inside the Apptainer wrapper, so its CPU is that of the wrapper's descendants."""
+        if not self.pooler or self.pooler.poll() is not None:
+            return []
+        try:
+            return [self.pooler.pid] + [c.pid for c in psutil.Process(self.pooler.pid).children(recursive=True)]
+        except psutil.Error:
+            return []
+
+    def pooler_cpu_seconds(self):
+        total = 0.0
+        for pid in self.pooler_pids():
+            try:
+                t = psutil.Process(pid).cpu_times()
+                total += t.user + t.system
+            except psutil.Error:
+                pass
+        return total
 
     def start_pooler(self):
         """PgBouncer (transaction pooling) in front of the server, pinned to the server cores so
@@ -314,9 +343,8 @@ class Pg(Server):
             f.write(pgbouncer_ini(self.pooler_port, self.port, a.pg_pooler_pool_size,
                                   a.pg_pooler_max_client_conn, auth, self.work))
         sif = os.environ.get("PGBOUNCER_SIF")
-        binary = os.environ.get("PGBOUNCER_BIN", "pgbouncer")
-        cmd = (["apptainer", "exec", "--cleanenv", "--bind", self.work, sif, "pgbouncer", ini]
-               if sif else [binary, ini])
+        cmd = pooler_cmd(sif, os.environ.get("PGBOUNCER_BIN"), ini, self.work)
+        self.pooler_image = sif
         waited = wait_for_free_ports([self.pooler_port])
         if waited:
             log(f"pgbouncer: port {self.pooler_port} was busy for {waited:.1f}s")
@@ -334,6 +362,18 @@ class Pg(Server):
                 return
             time.sleep(0.2)
         raise RuntimeError("pgbouncer not ready after 60s")
+
+    def pooler_info(self):
+        """Which pooler ran: image, its checksum and the version it reports."""
+        out = {"image": self.pooler_image, "image_sha256": sha256(self.pooler_image) if self.pooler_image else None,
+               "pool_mode": "transaction", "pool_size": self.args.pg_pooler_pool_size,
+               "max_client_conn": self.args.pg_pooler_max_client_conn, "pinned_cores": list(self.cores)}
+        try:
+            cmd = pooler_cmd(self.pooler_image, os.environ.get("PGBOUNCER_BIN"), "--version", self.work)[:-1] + ["--version"]
+            out["version"] = subprocess.run(cmd, capture_output=True, text=True, timeout=30).stdout.splitlines()[0]
+        except (OSError, IndexError, subprocess.SubprocessError):
+            out["version"] = None
+        return out
 
     def stop_pooler(self):
         if self.pooler and self.pooler.poll() is None:
@@ -359,8 +399,7 @@ class Pg(Server):
             with open(os.path.join(self.data, "postmaster.pid")) as f:
                 pm = int(f.readline())
             p = psutil.Process(pm)
-            pooler = [self.pooler.pid] if self.pooler and self.pooler.poll() is None else []
-            return [pm] + [c.pid for c in p.children(recursive=True)] + pooler
+            return [pm] + [c.pid for c in p.children(recursive=True)] + self.pooler_pids()
         except (OSError, ValueError, psutil.Error):
             return []
 
@@ -442,13 +481,14 @@ class Pg(Server):
                 "pooler": ({"kind": "pgbouncer", "pool_mode": "transaction",
                             "pool_size": self.args.pg_pooler_pool_size,
                             "max_client_conn": self.args.pg_pooler_max_client_conn}
-                           if self.pooler else None),
+                           if self.pooler else None), "conn_modes": getattr(self.args, "pg_conn_modes", ["direct"]),
                 "settings": {r[0]: f"{r[1]}{r[2] or ''}" for r in rows}, "image": PG_SIF}
 
     def query_spec(self, ef, proto="pg", k=10):
         return {"engine": "pg", "dsn": self.query_dsn(), "ef": ef, "k": k, "proto": "pg",
                 "force_index": self.args.pg_planner == "force-index",
-                "vector_type": self.vector_type, "dim": self.dim}
+                "vector_type": self.vector_type, "dim": self.dim,
+                "per_query_txn": conn_mode_flags(self.conn_mode)["per_query_txn"]}
 
     def plan(self, ef, vec, k=10):
         """Plan nodes for the benchmark query at this ef, as a custom and as a generic plan
@@ -797,11 +837,25 @@ def make_query_fn(spec):
         from pgvector.psycopg import register_vector
         conn = psycopg.connect(spec["dsn"], autocommit=True)
         register_vector(conn)
+        sql = pg_query_sql(spec.get("vector_type", "vector"), spec.get("dim"), k)
+        if spec.get("per_query_txn"):
+            # Every query carries its own settings (SET LOCAL), which also works through a transaction
+            # pooler. The value is checked once, inside a transaction, before anything is timed.
+            settings = pg_txn_settings(ef, spec.get("force_index"))
+            with conn.transaction():
+                for statement in settings:
+                    conn.execute(statement)
+                seen = conn.execute("SHOW hnsw.ef_search").fetchone()[0]
+            if int(seen) != int(ef):
+                raise RuntimeError(f"hnsw.ef_search is {seen} inside the transaction, expected {ef}")
+
+            def q_txn(vec):
+                return txn_query(conn, settings, sql, vec)
+            return q_txn
         set_ef_search(conn, ef)
         if spec.get("force_index"):
             # pgvector's README suggests this when the planner skips the index; see Pg.plan()
             conn.execute("SET enable_seqscan = off")
-        sql = pg_query_sql(spec.get("vector_type", "vector"), spec.get("dim"), k)
 
         def q(vec):
             return [r[0] for r in conn.execute(sql, (vec,), binary=True, prepare=True).fetchall()]

@@ -13,7 +13,7 @@ import psutil
 
 from common import log, now_ns, summarize
 from engines import make_query_fn
-from features import (open_loop_summary, pad_ids, perf_record_cmd, poisson_arrivals)
+from features import (open_loop_summary, pad_ids, perf_record_cmd, poisson_arrivals, pooler_usage)
 
 
 def recall_hits(ids, gt_row):
@@ -306,7 +306,12 @@ def perf_per_query(perf, query_count):
     return out
 
 
-def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k, perf_path=None):
+def conc_raw_key(proto, ef, clients, suffix, mode=""):
+    """Name of a per-window array in raw.npz. The default connection mode keeps the old names."""
+    return f"conc_{proto}_ef{ef}_c{clients}{('_' + mode) if mode else ''}_{suffix}"
+
+
+def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k, perf_path=None, mode=""):
     """Closed loop: `clients` processes, each with its own connection, issue queries back to back.
     Only queries that start inside the measurement window count, after `warmup` seconds."""
     ctx = mp.get_context("spawn")
@@ -339,12 +344,14 @@ def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k
     perf = start_perf(srv_pids, perf_path) if perf_path else None
     server.stats_begin(proto)
     cpu0_srv = server.cpu_seconds()
+    cpu0_pool = server.pooler_cpu_seconds() if hasattr(server, "pooler_cpu_seconds") else 0.0
     cpu0_cli = _cpu(worker_pids)
     ctx0 = _ctx(srv_pids)
     w0 = now_ns()
     time.sleep(duration)
     w1 = now_ns()
     cpu1_srv = server.cpu_seconds()
+    cpu1_pool = server.pooler_cpu_seconds() if hasattr(server, "pooler_cpu_seconds") else 0.0
     cpu1_cli = _cpu(worker_pids)
     ctx1 = _ctx(srv_pids)
     srv = server.stats_end(proto)
@@ -386,6 +393,10 @@ def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k
             "involuntary": round((ctx1[1] - ctx0[1]) / max(int(done_in_win.sum()), 1), 3)},
         "warmup_s": warmup, **srv,
     }
+    if mode:
+        row["conn_mode"] = mode
+        if mode == "pooled":
+            row.update(pooler_usage(cpu0_pool, cpu1_pool, wall, int(done_in_win.sum())))
     if sampler:
         row["pg_wait_events"] = sampler.result()
     if perf_res is not None:
@@ -393,7 +404,8 @@ def concurrency_run(server, proto, ef, clients, duration, warmup, queries, gt, k
         row["perf_derived"] = perf_per_query(perf_res, int(done_in_win.sum()))
     log(f"  {server.name}/{proto} C={clients}: {row['throughput_qps']} qps mean={row['mean_ms']}ms "
         f"p99={row['p99_ms']}ms srv_cores={row['server_cores_busy']} cli_cores={row['client_cores_busy']}")
-    raw = {f"conc_{proto}_ef{ef}_c{clients}_lat": l[in_win], f"conc_{proto}_ef{ef}_c{clients}_start": s[in_win] - t_go}
+    raw = {conc_raw_key(proto, ef, clients, "lat", mode): l[in_win],
+           conc_raw_key(proto, ef, clients, "start", mode): s[in_win] - t_go}
     return row, raw
 
 

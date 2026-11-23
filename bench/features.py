@@ -96,6 +96,55 @@ def open_loop_summary(planned, started, finished, hits, k, offered_rate, window_
     return out
 
 
+PG_EF_SEARCH_MAX = 1000
+CONN_MODES = ("direct", "direct_txn", "pooled")
+
+
+def pg_txn_settings(ef, force_index):
+    """Settings that a pooled query carries inside its own transaction. A session-level SET does not
+    survive a transaction pooler: the next statement may reach another server connection."""
+    if not 1 <= int(ef) <= PG_EF_SEARCH_MAX:
+        raise ValueError(f"hnsw.ef_search {ef} is outside 1..{PG_EF_SEARCH_MAX}; pgvector would ignore it")
+    out = [f"SET LOCAL hnsw.ef_search = {int(ef)}"]
+    if force_index:
+        out.append("SET LOCAL enable_seqscan = off")
+    return out
+
+
+def parse_conn_modes(text):
+    modes = [m for m in text.split(",") if m]
+    if not modes or len(set(modes)) != len(modes) or any(m not in CONN_MODES for m in modes):
+        raise ValueError(f"connection modes must be distinct values of {CONN_MODES}, got {text!r}")
+    return modes
+
+
+def conn_mode_flags(mode):
+    return {"use_pooler": mode == "pooled", "per_query_txn": mode in ("direct_txn", "pooled")}
+
+
+POOLER_BINARY_IN_IMAGE = "/opt/pgbouncer/pgbouncer"
+
+
+def pooler_cmd(sif, binary, ini, work):
+    """The pgbouncer command: from the digest-pinned image (the binary is not on its PATH) or a native one."""
+    if sif:
+        return ["apptainer", "exec", "--cleanenv", "--bind", work, sif, POOLER_BINARY_IN_IMAGE, ini]
+    return [binary or "pgbouncer", ini]
+
+
+def pooler_usage(cpu0, cpu1, wall_s, completed):
+    return {"pooler_cores_busy": round((cpu1 - cpu0) / wall_s, 4) if wall_s else None,
+            "pooler_cpu_ms_per_query": round((cpu1 - cpu0) * 1000 / completed, 6) if completed else None}
+
+
+def txn_query(conn, settings, sql, vec):
+    """One pooled query: BEGIN, the SET LOCAL statements, the SELECT, COMMIT."""
+    with conn.transaction():
+        for statement in settings:
+            conn.execute(statement)
+        return [r[0] for r in conn.execute(sql, (vec,), binary=True, prepare=True).fetchall()]
+
+
 def pgbouncer_ini(listen_port, pg_port, pool_size, max_client_conn, auth_file, log_dir,
                   max_prepared_statements=200):
     """Transaction pooling, with protocol-level prepared statements tracked by the pooler
@@ -111,6 +160,9 @@ def pgbouncer_ini(listen_port, pg_port, pool_size, max_client_conn, auth_file, l
         f"auth_file = {auth_file}",
         "pool_mode = transaction",
         f"default_pool_size = {pool_size}",
+        f"min_pool_size = {pool_size}",
+        "ignore_startup_parameters = extra_float_digits",
+        "unix_socket_dir =",
         f"max_client_conn = {max_client_conn}",
         f"max_prepared_statements = {max_prepared_statements}",
         f"logfile = {log_dir}/pgbouncer.log",

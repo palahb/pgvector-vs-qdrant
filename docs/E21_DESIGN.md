@@ -39,8 +39,10 @@ the 8 server cores.
 
 ## Checks that make a result usable (decided now)
 
-* Recall in all three arms at the same `ef` must agree within 0.002. If a pooled arm differs, its `ef` did not take effect and
-  that arm is invalid.
+* Recall in all three arms at the same `ef` must agree within 0.01. Two windows see different subsets of the 1,677 queries (per-query
+  recall has a spread of about 0.15, so means of a few thousand queries differ by up to about 0.004), which is why 0.002, the value first
+  written here, is too tight; a pooled arm that ran at pgvector's default `ef=40` instead of the matched one differs by more than 0.05.
+  If a pooled arm differs by more than 0.01, its `ef` did not take effect and that arm is invalid. (Amended before any measurement.)
 * A window counts only if every worker connected and received a reply.
 * Report throughput, mean and p99 latency, server CPU per query (with the pooler's share), per arm, plus the paired ratios
   `direct_txn / direct` and `pooled / direct_txn` per build with the range over the three builds.

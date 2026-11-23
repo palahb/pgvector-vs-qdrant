@@ -45,6 +45,11 @@ bench --engine qdrant "${common[@]}" --protocols grpc_raw
 feat=(--store-ids --perf-record --open-loop-rates 50 --open-loop-duration 3 --open-loop-workers 4)
 bench --engine pg "${common[@]}" "${feat[@]}" --tag halfvec --pg-vector-type halfvec \
     --pg-shared-buffers 256MB --pg-effective-cache 512MB --pg-maintenance-mem 512MB
+# pgvector through PgBouncer: three connection modes on one build, and the recall agreement between them
+bench --engine pg "${common[@]}" --tag pooler --pg-conn-modes direct,direct_txn,pooled --pg-pooler-pool-size 4 \
+    --pg-shared-buffers 256MB --pg-effective-cache 512MB --pg-maintenance-mem 512MB
+PYTHONPATH="$SLURM_SUBMIT_DIR/.." "$VENV/bin/python" -m analysis.analyze_e21 "$out/pg_pooler" --allow-fewer-builds \
+    --output "$out/e21_check.json"
 bench --engine qdrant "${common[@]}" "${feat[@]}" --tag int8 --protocols grpc_raw,grpc \
     --qdrant-quantization int8
 

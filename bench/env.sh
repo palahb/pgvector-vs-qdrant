@@ -12,6 +12,7 @@ export QDRANT_VERSION=v1.19.1
 export PGVECTOR_TAG=0.8.6-pg17
 export QDRANT_SIF=$BENCH_ROOT/images/qdrant-$QDRANT_VERSION.sif
 export PG_SIF=$BENCH_ROOT/images/pgvector-$PGVECTOR_TAG.sif
+export PGBOUNCER_SIF=$BENCH_ROOT/images/pgbouncer-1.25.1.sif
 export VENV=$BENCH_ROOT/venv
 
 export APPTAINER_CACHEDIR=${APPTAINER_CACHEDIR:-/tmp/$USER-apptainer-cache}

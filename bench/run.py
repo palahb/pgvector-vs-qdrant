@@ -15,6 +15,7 @@ import numpy as np
 from common import (evict_page_cache, ground_truth, host_info, load_vectors, log, pick_cores,
                     resident_bytes, save_json, sha256, stable_id, git_state)
 from engines import MODE, make_query_fn, make_server
+from features import parse_conn_modes
 from workload import (cgroup_memory_bytes, concurrency_run, latency_sweep, memory_passes,
                       open_loop_run, proc_counters)
 
@@ -26,7 +27,7 @@ def ints(s):
 ADDED_DEFAULTS = {
     "store_ids": False, "perf_record": False, "pg_vector_type": "vector",
     "qdrant_quantization": "none", "qdrant_quant_on_disk": False, "qdrant_no_rescore": False,
-    "qdrant_oversampling": None, "pg_pooler": False, "pg_pooler_pool_size": 16,
+    "qdrant_oversampling": None, "pg_conn_modes": ["direct"], "pg_pooler_pool_size": 16,
     "pg_pooler_max_client_conn": 200, "open_loop_rates": [], "open_loop_duration": 30,
     "open_loop_workers": 64, "open_loop_ef": 0,
 }
@@ -112,8 +113,10 @@ def parse():
                     help="int8 only: skip rescoring candidates with the original vectors")
     ap.add_argument("--qdrant-oversampling", type=float, default=None,
                     help="int8 only: candidate oversampling factor (Qdrant default when unset)")
-    ap.add_argument("--pg-pooler", action="store_true",
-                    help="route benchmark clients through PgBouncer (transaction pooling)")
+    ap.add_argument("--pg-conn-modes", type=parse_conn_modes, default=["direct"],
+                    help="pgvector concurrency windows are run once per mode, on the same build: direct (session SET), "
+                         "direct_txn (a transaction per query, SET LOCAL) and pooled (the same through PgBouncer in "
+                         "transaction mode)")
     ap.add_argument("--pg-pooler-pool-size", type=int, default=16)
     ap.add_argument("--pg-pooler-max-client-conn", type=int, default=200)
     ap.add_argument("--open-loop-rates", type=ints, default=[],
@@ -195,10 +198,9 @@ def main():
         srv.init()
         srv.start()
         result["build"] = srv.build(base, a.m, a.efc)
-        if a.pg_pooler:
-            if a.engine != "pg" or any(x not in ("", "none") for x in a.mem_limits.split(",")) or a.memory_passes:
-                raise SystemExit("--pg-pooler is defined for pgvector without memory limits")
-            srv.start_pooler()
+        if a.pg_conn_modes != ["direct"] and (
+                a.engine != "pg" or any(x not in ("", "none") for x in a.mem_limits.split(",")) or a.memory_passes):
+            raise SystemExit("--pg-conn-modes other than direct are defined for pgvector without memory limits")
         result["server_info"] = srv.info()
         save_json(result, rpath)
 
@@ -263,13 +265,24 @@ def main():
                     run["conc_matched_ef"] = ok[0] if ok else rows[-1]["ef"]
                     conc_efs = sorted({a.conc_ef, run["conc_matched_ef"]})
                 run["concurrency"] = []
-                for ef, proto, c in [(e, p, c) for e in conc_efs for p in protocols for c in a.clients]:
-                    perf_path = os.path.join(out_dir, f"perf_{lim}_{proto}_ef{ef}_c{c}.csv") if a.perf else None
-                    row, r = concurrency_run(srv, proto, ef, c, a.conc_duration, a.conc_warmup,
-                                             queries, gt, a.k, perf_path)
-                    run["concurrency"].append(row)
-                    raw.update({f"{lim}_{key}": v for key, v in r.items()})
-                    save_json(result | {"runs": result["runs"] + [run]}, rpath)
+                # Connection modes (pgvector only) run on the one build, in the order given. The first mode keeps
+                # the original raw key names so a default run is unchanged.
+                modes = a.pg_conn_modes if a.engine == "pg" else ["direct"]
+                for mode in modes:
+                    if a.engine == "pg":
+                        srv.set_conn_mode(mode)
+                    tag = "" if mode == "direct" else mode
+                    for ef, proto, c in [(e, p, c) for e in conc_efs for p in protocols for c in a.clients]:
+                        perf_path = os.path.join(out_dir, f"perf_{lim}_{proto}_ef{ef}_c{c}.csv") if a.perf else None
+                        row, r = concurrency_run(srv, proto, ef, c, a.conc_duration, a.conc_warmup,
+                                                 queries, gt, a.k, perf_path, mode=tag)
+                        run["concurrency"].append(row)
+                        raw.update({f"{lim}_{key}": v for key, v in r.items()})
+                        save_json(result | {"runs": result["runs"] + [run]}, rpath)
+                if a.engine == "pg":
+                    srv.set_conn_mode("direct")
+                    if "pooled" in modes:
+                        run["pooler"] = srv.pooler_info()
             if a.open_loop_rates and lim == "none":
                 rows = sorted((x for x in run["latency"] if x["proto"] == protocols[0] and x["rep"] == 0),
                               key=lambda x: x["ef"])
