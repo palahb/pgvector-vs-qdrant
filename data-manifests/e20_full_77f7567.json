@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E20_quantization_full",
+  "code_commit": "77f75670b8fc5ee091ff54d42d2b16d1935092dd",
+  "slurm_jobs": {
+    "smoke": "7041428",
+    "pilot": "7041441",
+    "full": "7041536"
+  },
+  "superseded": {
+    "smoke": "7040356 at 913fa1d: halfvec COPY failed (numpy array instead of HalfVector); 7041303 at 15c82b5: pgvector perf record attached to an exited pid and wrote nothing. Both before the harness commits e52ff6b and 77f7567; no result used"
+  },
+  "submission": "E20_quantization-full-77f75670-c62eeb58",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E20_quantization/full/E20_quantization-full-77f75670-c62eeb58",
+  "workspace_root": "../artifacts/truba-experiments/E20/77f7567",
+  "artifact_tree": {
+    "file_count": 52,
+    "sorted_file_sha256_manifest_sha256": "8f70cb9f5c02d154eeddfd1c1fb52f5195ebb7f249b61fdabc70d0f595915085",
+    "scheme": "sha256 of the sorted lines '<sha256>  <relative path>\\n' over the local workspace copy; server logs and perf data files are not copied"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 12,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e20_full_77f7567_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "cells": 4,
+    "issues": 0,
+    "tracked_json": "results/derived/e20_full_77f7567_analysis.json",
+    "tracked_summary": "results/derived/e20_full_77f7567_summary.md"
+  },
+  "registry": {
+    "tasks": 6,
+    "attempts_per_task": 1
+  },
+  "scope": "1M vectors x 1024, M=16, efc=64; pgvector vector and halfvec, Qdrant float32 and int8 scalar quantization (always_ram, rescore on, default oversampling); 3 builds per system, both arms of a system on one node per job; engines on different nodes; Qdrant storage bytes vary 4.2-5.6 GB across float32 builds for a reason not identified"
+}

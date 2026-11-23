@@ -89,9 +89,16 @@ def build_metrics(result: dict[str, Any], raw_path: Path, targets: list[float], 
         if isinstance(build.get(key), (int, float)):
             out["build_total_s" if key == "total_s" else key] = float(build[key])
     for run in runs:
+        matched = run.get("conc_matched_ef")
         for row in run.get("concurrency", []):
             if row.get("proto") == proto and row.get("clients") in (1, 8, 32):
-                out[f"qps_c{row['clients']}"] = float(row["throughput_qps"])
+                # Two ef values run: the fixed one and the smallest swept ef reaching the recall
+                # target. They are kept apart so one never overwrites the other.
+                role = "matched" if row["ef"] == matched else f"ef{row['ef']}"
+                out[f"qps_c{row['clients']}_{role}"] = float(row["throughput_qps"])
+                if role == "matched":
+                    out[f"recall_at_concurrency_c{row['clients']}_matched"] = float(row["recall_at_k"])
+                    out["concurrency_matched_ef"] = float(row["ef"])
     if raw_path.exists():
         hits = load_hits(raw_path, proto)
         means = {ef: float(per_query_recall(h).mean()) for ef, h in hits.items()}

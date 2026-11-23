@@ -218,7 +218,7 @@ Recorded in `docs/HOCA_CEVAP_17_KASIM.md`; none has results yet.
 
 1. Causal analysis of the latency gap (E19), highest priority; bounded, since neither engine
    exposes a per-query distance count and there is no root or eBPF access.
-2. `halfvec` and `int8` quantization (E20).
+2. `halfvec` and `int8` quantization (E20): done. New subsection Quantization with three builds per arm at 1M (`data-manifests/e20_full_77f7567.json`). halfvec makes the index 0.334 times as large and the build 0.59 times as long with no detectable change in search speed or recall; int8 makes Qdrant 0.63 times as slow per query (0.55 times the CPU) with a highest recall within 0.0024, but does not shrink the storage directory. The earlier statement that pgvector needs about twice the bytes is restated as a property of the 32-bit layout (index 1.5-1.9 times Qdrant's float32 storage, 0.48-0.65 times with halfvec). Qdrant's float32 storage size varies between builds (3.94-5.24 GiB) for a reason we did not find.
 3. PgBouncer (E21).
 4. Minimal open-loop generator (E22), first to be cut.
 5. nDCG@10 with TREC DL qrels (E23), gated on qrels coverage.

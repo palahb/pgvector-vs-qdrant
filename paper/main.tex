@@ -338,6 +338,8 @@ label.
          batches, parallel streams and deferred indexing; WAL and disk writes recorded \\
     E17 & Planner plans (no query run) for 100K--1M vectors, 128--1024 dimensions and 18 values of $ef$ \\
     E18 & Per-query recall and recall across eight dimensions, three builds each, 100K vectors \\
+    E20 & Reduced precision at 1M $\times$ 1024: pgvector \texttt{halfvec} and Qdrant \texttt{int8}
+         against their float32 arms, three builds each \\
     E10 & Cold start and steady state under 16, 8 and 4\,GB memory limits, full query set in random
          order, three repetitions; pgvector with two buffer-pool settings, Qdrant memory-mapped \\
     \bottomrule
@@ -385,6 +387,9 @@ and the tables that compare them say so.
       (\texttt{hamsi107}) & fixed $ef=64$ \\
     Table~\ref{tab:perquery} & E18 & three per dimension & 24 jobs, 3 nodes & smallest swept $ef$
       whose mean recall reaches 0.95 (grid 16--384) \\
+    Table~\ref{tab:quant} & E20 & three per arm & 6 jobs (both arms of one system per job), 6 nodes,
+      the two systems on different nodes & smallest swept $ef$ reaching 0.95 on a 21-point grid
+      (interpolated); throughput at the matched and the fixed $ef=64$ \\
     Section~\ref{sec:planner} & E17 & one per size and dimension & 20 jobs, 3 nodes (E1 default-planner
       run: as above) & 18 values from 16 to 1000, plans only \\
     \bottomrule
@@ -1206,7 +1211,7 @@ The data on disk differs in size. pgvector's index takes 7.61\,GiB, while Qdrant
 storage, vectors and graph together, takes 3.94\,GiB. A 1024-dimensional vector fills about
 half of an 8\,KiB page, and pgvector stores one graph element per page
 (Section~\ref{sec:build}), so it must read and cache about twice as many bytes for the same
-vectors.
+vectors in the 32-bit layout (Section~\ref{sec:quant} gives the \texttt{halfvec} and \texttt{int8} variants).
 
 \begin{table*}[t]
   \caption{Cold start and steady state under cgroup memory limits, 1M vectors, $ef=128$,
@@ -1264,6 +1269,71 @@ query at steady state and 152\,qps, against 2.29\,ms and 435\,qps with 32\,GB, a
 2.9$\times$ for the same data in the same page cache.
 
 %% =============================================================
+\subsection{Quantization}
+\label{sec:quant}
+
+The index sizes above are for 32-bit floats. We repeated the 1M build with each system's own
+reduced-precision storage: pgvector with a \texttt{halfvec} column and \texttt{halfvec\_cosine\_ops}
+index (16-bit floats), and Qdrant with scalar \texttt{int8} quantization (quantized vectors kept in
+RAM, candidates rescored with the original vectors, Qdrant's default oversampling). Each system
+was built three times, and each job built both arms of one system, one after the other on one node.
+The two systems ran on different nodes (Table~\ref{tab:sources}). Recall is measured against the exact
+32-bit neighbors, so a recall below the float arm is the accuracy lost to quantization.
+Table~\ref{tab:quant} gives the results; the ratios below are paired within a build
+(mean of three, with 95\% intervals).
+
+\begin{table}[t]
+  \caption{Float against reduced precision, 1M vectors, 1024 dimensions, three builds each.
+  Latency and CPU are interpolated in recall to 0.95. Size is the pgvector index, then the
+  whole table with TOAST and index; for Qdrant it is the storage directory at the end of the
+  build (range over the three builds). The Qdrant float size varies between builds for a
+  reason we did not find.}
+  \label{tab:quant}
+  \small
+  \begin{tabular}{@{}lrrrrr@{}}
+    \toprule
+    & \multicolumn{2}{c}{size (GiB)} & build & latency & CPU \\
+    arm & index & total & s & ms & ms/query \\
+    \midrule
+    pgvector \texttt{vector} & 7.61 & 12.84 & 273 $\pm$ 15 & 6.73 $\pm$ 0.15 & 6.64 \\
+    pgvector \texttt{halfvec} & 2.54 & 5.20 & 160 $\pm$ 4 & 6.28 $\pm$ 0.43 & 6.19 \\
+    Qdrant float32 & \multicolumn{2}{c}{3.94--5.24} & 343 $\pm$ 54 & 2.01 $\pm$ 0.02 & 4.49 \\
+    Qdrant \texttt{int8} & \multicolumn{2}{c}{4.89--6.49} & 365 $\pm$ 39 & 1.26 $\pm$ 0.04 & 2.47 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{pgvector \texttt{halfvec}.} The index is 0.334 times as large (2.54 against 7.61\,GiB)
+and the table with its TOAST data 0.405 times (5.20 against 12.84\,GiB). The build takes 0.59
+times as long (0.49 to 0.68). Search speed at matched recall does not change measurably: the
+latency ratio is 0.93 (0.73 to 1.13) and the CPU ratio 0.93 (0.73 to 1.14), at $ef$ of 455 and 439. Closed-loop throughput at the
+matched $ef$ (512 for both) is 1.09 to 1.10 times higher (intervals 1.06 to 1.14) at one, eight and 32 clients, and
+at the fixed $ef=64$ it is not distinguishable from 1 for one and eight clients (1.02, 0.96 to 1.07; 1.02, 0.97 to 1.07) and borderline at 32 (1.04, 1.00 to 1.08).
+We did not find
+why half the vector bytes do not shorten the search. Recall does not drop: the highest recall on
+the grid differs by $-0.0009$ ($-0.007$ to $0.005$) and the share of queries with recall below 0.8 by
+$-0.0006$ ($-0.014$ to $0.012$).
+
+\paragraph{Qdrant \texttt{int8}.} Latency at matched recall is 0.63 times that of the float
+arm (0.57 to 0.69; $p99$ 0.60, 0.54 to 0.66), server CPU per query 0.55 times (0.48 to 0.62), and closed-loop throughput 1.67, 1.91 and 1.92
+times at one, eight and 32 clients at the matched $ef$ (338 and 339 on average, the
+interpolated $ef$ ratio is 1.01, 0.84 to 1.18), and 1.33 to 1.59 times at $ef=64$. Quantization costs
+little recall. The highest recall on the grid differs by $-0.0024$ ($-0.009$ to $0.004$). The share
+of queries that find all ten neighbors, however, falls by 0.025 (0.014 to 0.035) at the same mean
+recall, so the loss is spread over many queries. Build time does not change (1.07, 0.93 to 1.21). The
+storage directory is not smaller, since the original vectors stay on disk for rescoring and the
+quantized copy is added: 5.3 to 7.0\,GB against 4.2 to 5.6\,GB. The quantized copy adds about
+1\,GB (one byte per dimension and vector), which the build-to-build variation of the storage size hides,
+so we do not report a ratio.
+
+\paragraph{The size comparison.} Section~\ref{sec:memory} compares pgvector's 7.61\,GiB index with
+Qdrant's 3.94\,GiB of storage and concludes that pgvector has to cache about twice as many bytes. With three
+builds, Qdrant's float32 storage is 3.94 to 5.24\,GiB, so the index of the float layout is 1.5 to 1.9
+times its size and the whole pgvector table 2.4 to 3.3 times. With \texttt{halfvec} the index shrinks to 0.48 to 0.65
+times Qdrant's float32 storage, and the whole table to 1.0 to 1.3 times. The ``twice as large'' statement is therefore a
+property of the 32-bit layout (one graph element per 8\,KiB page, Section~\ref{sec:build}), not of
+pgvector at 1024 dimensions in general.
+
 \section{Discussion}
 %% =============================================================
 
@@ -1293,8 +1363,8 @@ default buffer pool, pgvector reads most index pages from the operating system's
 cache, and this alone made it 2.7$\times$ slower in our runs, with no disk access at all.
 Anyone deploying pgvector, or benchmarking it, should size \texttt{shared\_buffers} to
 hold the HNSW index. When the index does not fit in memory at all, pgvector is at a
-disadvantage at 1024 dimensions, because its page layout roughly doubles the size of the
-data it has to read and cache. On our spinning disks a cold query took 0.6 to 1.5
+disadvantage at 1024 dimensions, because its 32-bit page layout roughly doubles the size of the
+data it has to read and cache (a \texttt{halfvec} index is a third of it, Section~\ref{sec:quant}). On our spinning disks a cold query took 0.6 to 1.5
 seconds, so neither system is usable out of core on such hardware. Once the data had been
 read, Qdrant stayed at its in-memory latency down to a limit of 8\,GB, where pgvector needed
 hundreds of milliseconds per query. At 4\,GB, just below the size of Qdrant's data, Qdrant
@@ -1365,7 +1435,7 @@ the client path. Through the official REST client it disappears at moderate reca
 Which system builds faster depends on how each is loaded, and pgvector's performance
 depends strongly on the buffer pool. With the default setting it is
 2.7$\times$ slower even when nothing is read from disk. Under memory limits, pgvector's
-one-page-per-vector layout doubles the data it has to read. With the full query set, Qdrant keeps
+one-page-per-vector 32-bit layout doubles the data it has to read; \texttt{halfvec} removes most of that (Section~\ref{sec:quant}). With the full query set, Qdrant keeps
 its in-memory latency down to 8\,GB, where pgvector needs hundreds of milliseconds per query,
 and Qdrant's behavior at 4\,GB, just below its data size, is unstable.
 

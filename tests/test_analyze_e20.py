@@ -32,9 +32,11 @@ def write(root: Path, engine: str, tag: str, scale: float, size: int, build_s: f
     (d / "result.json").write_text(json.dumps({
         "experiment_id": f"e20-{engine}-{tag}", "engine": engine, "n": 1000, "dim": 1024, "status": "ok",
         "args": {"tag": tag, "m": 16, "efc": 64}, "build": build,
-        "runs": [{"mem_limit": "none", "latency": rows,
-                  "concurrency": [{"proto": proto, "clients": 8, "throughput_qps": 100.0 / scale,
-                                   "recall_at_k": 0.9}]}]}))
+        "runs": [{"mem_limit": "none", "latency": rows, "conc_matched_ef": 128,
+                  "concurrency": [{"proto": proto, "clients": 8, "ef": 64, "throughput_qps": 300.0 / scale,
+                                   "recall_at_k": 0.9},
+                                  {"proto": proto, "clients": 8, "ef": 128, "throughput_qps": 100.0 / scale,
+                                   "recall_at_k": 0.97}]}]}))
     np.savez(d / "raw.npz", **hits)
 
 
@@ -102,6 +104,13 @@ class AnalyzeE20Tests(unittest.TestCase):
             report = analyze(root, [0.95])
         self.assertEqual(report["verdict"], "invalid")
         self.assertTrue(any(i["problem"] == "fewer_than_three_builds" for i in report["issues"]))
+
+    def test_throughput_keeps_the_fixed_and_matched_ef_apart(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            report = analyze(self.build(tmp), [0.95])
+        self.assertAlmostEqual(self.get(report, "pg", "vector", "qps_c8_matched")["mean"], 50.0)
+        self.assertAlmostEqual(self.get(report, "pg", "vector", "qps_c8_ef64")["mean"], 150.0)
+        self.assertAlmostEqual(self.get(report, "pg", "vector", "recall_at_concurrency_c8_matched")["mean"], 0.97)
 
     def test_distribution_at_the_target_comes_from_per_query_hits(self):
         with tempfile.TemporaryDirectory() as tmp:

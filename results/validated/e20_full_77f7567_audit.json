@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-23T02:00:30.256793+00:00",
+  "root": "../artifacts/truba-experiments/E20/77f7567/full",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 12,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "E20_quantization-full-77f75670-c62eeb58": 12
+    },
+    "engines": {
+      "pg": 6,
+      "qdrant": 6
+    },
+    "statuses": {
+      "ok": 12
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0000_7041543/pg_rep1_halfvec/result.json",
+      "sha256": "32ff1025ae3ad90cdf48e10ad72d85a2b83cc3d043e605401009ab2b0e0f041c",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0000-a1-r01-pg",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7041543",
+      "raw_npz_size_bytes": 3506112,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0000_7041543/pg_rep1_vector/result.json",
+      "sha256": "e5b311e399f9614b67cdf5c54e205b9b05ad3590ad46b65edb4234c973c3119a",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0000-a1-r00-pg",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7041543",
+      "raw_npz_size_bytes": 3407053,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0001_7041591/qdrant_rep1_f32/result.json",
+      "sha256": "c2169dbce7f84a419ec4325c258c67e58423312e860fed8f8045e4fccd8efbd5",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0001-a1-r00-qdrant",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7041591",
+      "raw_npz_size_bytes": 3834212,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0001_7041591/qdrant_rep1_int8/result.json",
+      "sha256": "3aca3ea1a71310886ffeba9a40942028d670cd06a37c30c6054ace6e04664e31",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0001-a1-r01-qdrant",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7041591",
+      "raw_npz_size_bytes": 5929099,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0002_7043584/pg_rep2_halfvec/result.json",
+      "sha256": "c8b2dc88dd6da60810e2abce4f63b15bc3b0ffa015e2ce12ff9e4e6d5bd713a8",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0002-a1-r01-pg",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7043584",
+      "raw_npz_size_bytes": 3507761,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0002_7043584/pg_rep2_vector/result.json",
+      "sha256": "db725a4e16dc9b8f9489b7291f26e7c29880f9aa2ba44baf6142ce1a8129671a",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0002-a1-r00-pg",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7043584",
+      "raw_npz_size_bytes": 3442452,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0003_7043765/qdrant_rep2_f32/result.json",
+      "sha256": "7dd76690bd5b9446f09d7904c7e3baa2326e0dd63f680be128b9b2b4e4528708",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0003-a1-r00-qdrant",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7043765",
+      "raw_npz_size_bytes": 3823709,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0003_7043765/qdrant_rep2_int8/result.json",
+      "sha256": "f3efed1eb8ad37ce766433c17e6cbf5c3af5e0c79d738da2906f1f298bdffc0e",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0003-a1-r01-qdrant",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7043765",
+      "raw_npz_size_bytes": 5729824,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0004_7043994/pg_rep3_halfvec/result.json",
+      "sha256": "a529e1e426cbcdb796e2857d51efa093b0a8194fae271e4724cf75cac3a48626",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0004-a1-r01-pg",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7043994",
+      "raw_npz_size_bytes": 3556371,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0004_7043994/pg_rep3_vector/result.json",
+      "sha256": "6b1150e6ba2990f7cb7989457300d9b527c13056cf109a70f599eb1be4d95a7a",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0004-a1-r00-pg",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7043994",
+      "raw_npz_size_bytes": 3405931,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0005_7041536/qdrant_rep3_f32/result.json",
+      "sha256": "ec048edcf0ddab4063e38310e6f515723cd5529108c2f1cfadc2254ff1910dfc",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0005-a1-r00-qdrant",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7041536",
+      "raw_npz_size_bytes": 3820905,
+      "raw_array_count": 138
+    },
+    {
+      "path": "E20_quantization-full-77f75670-c62eeb58/task_0005_7041536/qdrant_rep3_int8/result.json",
+      "sha256": "a7fe1cdf3633f405f2f7836057310dd26afd7e1d49e70876988368e2c11176d1",
+      "experiment_id": "E20_quantization-full-77f75670-c62eeb58-t0005-a1-r01-qdrant",
+      "experiment": "E20_quantization-full-77f75670-c62eeb58",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7041536",
+      "raw_npz_size_bytes": 5732004,
+      "raw_array_count": 138
+    }
+  ]
+}
