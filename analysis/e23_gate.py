@@ -58,6 +58,27 @@ def passages_to_documents(qrels: dict[str, dict[str, int]], passage_doc: dict[st
     return out
 
 
+def prefix_judgments(qrels: dict[str, dict[str, int]], segment_docs: list[str | None],
+                     query_index: dict[str, int]) -> dict[str, Any]:
+    """For the queries that have a relevant (grade 2 or 3) document in the prefix: the grade of every prefix
+    segment of every judged document, by row number of the embeddings file. This is all that nDCG needs."""
+    rows_of: dict[str, list[int]] = defaultdict(list)
+    for row, doc in enumerate(segment_docs):
+        if doc:
+            rows_of[doc].append(row)
+    out: dict[str, Any] = {}
+    for query, docs in qrels.items():
+        if query not in query_index:
+            continue
+        inside = {d: g for d, g in docs.items() if d in rows_of and g >= 1}
+        if not any(g >= RELEVANT_GRADE for g in inside.values()):
+            continue
+        out[query] = {"query_index": query_index[query],
+                      "relevant_docs_in_prefix": {d: g for d, g in inside.items() if g >= RELEVANT_GRADE},
+                      "segments": {str(r): g for d, g in inside.items() for r in rows_of[d]}}
+    return out
+
+
 def load_qrels(path: Path) -> dict[str, dict[str, int]]:
     """Query id -> document id -> highest grade given."""
     out: dict[str, dict[str, int]] = defaultdict(dict)
@@ -113,6 +134,8 @@ def main() -> int:
     parser.add_argument("--passage-docs", type=Path, action="append", default=[],
                         help="pid and document id per line (map_v2_passages.py)")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--judgments-output", type=Path,
+                        help="write the grade of every prefix segment of the judged documents (input of analyze_e23)")
     args = parser.parse_args()
     segment_lines = args.segment_urls.read_text().splitlines()
     v2_lines = [line for path in args.v2_urls for line in path.read_text().splitlines()]
@@ -143,6 +166,13 @@ def main() -> int:
             report["years"][year] = {"qrels_file": Path(path).name, "level": "passage, linked to documents",
                                      "queries_with_qrels": len(qrels), **coverage(qrels, prefix_docs, by_year[year])}
             merged.update(qrels)
+    if args.judgments_output:
+        index = {str(q): i for i, q in enumerate(meta["id"])}
+        judgments = prefix_judgments(merged, segment_docs, index)
+        year_of = {str(q): str(y) for q, y in zip(meta["id"], meta["trec_year"])}
+        for query, value in judgments.items():
+            value["year"] = year_of[query]
+        args.judgments_output.write_text(json.dumps({"schema_version": 1, "queries": judgments}, indent=1) + "\n")
     all_ids = set().union(*by_year.values())
     report["total"] = coverage(merged, prefix_docs, all_ids)
     report["decision"] = decide(report["total"])

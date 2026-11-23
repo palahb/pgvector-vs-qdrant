@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from analysis.e23_gate import (coverage, decide, doc_of_segment, load_qrels, passages_to_documents,  # noqa: E402
-                               segment_v2_docs)
+                               prefix_judgments, segment_v2_docs)
 
 
 class DocIdTests(unittest.TestCase):
@@ -41,6 +41,24 @@ class PassageQrelsTests(unittest.TestCase):
     def test_a_passage_with_an_unknown_document_stays_a_document_of_its_own(self):
         out = passages_to_documents({"2": {"p9": 3}}, {})
         self.assertEqual(out["2"], {"p9": 3})   # kept, so it counts in the total, but never matches the prefix
+
+
+class PrefixJudgmentsTests(unittest.TestCase):
+    SEGMENT_DOCS = ["d1", "d1", "d2", None, "d3", "d1"]
+    QRELS = {"10": {"d1": 3, "d3": 1, "dX": 2}, "11": {"d2": 1}, "12": {"d9": 3}}
+
+    def test_each_segment_of_a_judged_prefix_document_gets_the_grade(self):
+        j = prefix_judgments(self.QRELS, self.SEGMENT_DOCS, {"10": 0, "11": 1, "12": 2})
+        self.assertEqual(j["10"]["segments"], {"0": 3, "1": 3, "5": 3, "4": 1})
+        self.assertEqual(j["10"]["relevant_docs_in_prefix"], {"d1": 3})
+        self.assertEqual(j["10"]["query_index"], 0)
+
+    def test_only_queries_with_a_grade_two_document_in_the_prefix_are_listed(self):
+        j = prefix_judgments(self.QRELS, self.SEGMENT_DOCS, {"10": 0, "11": 1, "12": 2})
+        self.assertEqual(sorted(j), ["10"])   # 11 has grade 1 only, 12's document is outside the prefix
+
+    def test_queries_outside_the_query_set_are_skipped(self):
+        self.assertEqual(prefix_judgments(self.QRELS, self.SEGMENT_DOCS, {"11": 1}), {})
 
 
 class QrelsTests(unittest.TestCase):
