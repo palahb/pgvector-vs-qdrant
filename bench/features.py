@@ -64,8 +64,9 @@ def qdrant_quantization(kind, always_ram=True, rescore=True, oversampling=None, 
 
 def perf_record_cmd(pids, path, freq=499):
     """User-space cycle sampling of the server processes. perf_event_paranoid=2 on the cluster
-    allows nothing else. Stop it with SIGINT."""
-    return ["perf", "record", "-e", "cycles:u", "-F", str(int(freq)), "-g", "-p",
+    allows nothing else. No call graphs: the analysis uses self time, and neither server is
+    built with frame pointers. Stop it with SIGINT."""
+    return ["perf", "record", "-e", "cycles:u", "-F", str(int(freq)), "-p",
             ",".join(str(p) for p in pids), "-o", path]
 
 

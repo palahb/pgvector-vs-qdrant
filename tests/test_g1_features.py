@@ -119,6 +119,7 @@ class PerfRecordTests(unittest.TestCase):
         self.assertIn("/tmp/x.data", cmd)
         self.assertIn("499", cmd)
         self.assertIn("cycles:u", cmd)  # perf_event_paranoid=2 allows user space only
+        self.assertNotIn("-g", cmd)
 
 
 class PoissonScheduleTests(unittest.TestCase):
