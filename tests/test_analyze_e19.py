@@ -93,6 +93,19 @@ class AnalyzeE19Tests(unittest.TestCase):
                                t * 1e6 / KERNEL_NS["avx2_fma"])
         self.assertAlmostEqual(self.get(report, "pg", "pg", "blocks_per_query")["mean"], 900.0)
 
+    def test_cost_per_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            report = analyze(self.build(tmp))
+        self.assertAlmostEqual(self.get(report, "pg", "pg", "cycles_per_block")["mean"], 20e6 / 900.0, places=3)
+        self.assertAlmostEqual(self.get(report, "pg", "pg", "us_per_block")["mean"], 1000 * 6.0 / 900.0, places=3)
+
+    def test_vector_reads_proxy_is_cache_misses_over_lines_per_vector(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            report = analyze(self.build(tmp))
+        # 1000 misses per query, 1024-d float32 = 64 cache lines per vector
+        self.assertAlmostEqual(self.get(report, "pg", "pg", "vector_reads_proxy")["mean"], 1000 / 64, places=4)
+        self.assertAlmostEqual(self.get(report, "pg", "pg", "cycles_per_vector_read")["mean"], 20e6 / (1000 / 64), places=2)
+
     def test_missing_profiles_are_reported_not_invented(self):
         with tempfile.TemporaryDirectory() as tmp:
             report = analyze(self.build(tmp, with_profiles=False))

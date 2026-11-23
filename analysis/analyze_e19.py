@@ -92,8 +92,20 @@ def build_metrics(result: dict[str, Any], directory: str, profiles: dict[tuple[s
                 out["instructions"] = instructions
             if cycles and instructions:
                 out["ipc"] = instructions / cycles
+            if cycles and out.get("blocks_per_query"):
+                out["cycles_per_block"] = cycles / out["blocks_per_query"]
             if misses is not None:
                 out["cache_misses_per_query"] = misses
+                # A 1024-d float32 vector is 64 cache lines. If every distance reads one vector that is
+                # not in cache, misses / lines-per-vector counts the vectors read per query. It is a
+                # proxy and an upper bound (other misses count too); for pgvector it can be checked
+                # against the block counter, which is exact for one element per page.
+                lines = result.get("dim", 1024) * 4 / 64
+                out["vector_reads_proxy"] = misses / lines
+                if cycles:
+                    out["cycles_per_vector_read"] = cycles / out["vector_reads_proxy"]
+            if "server_cpu_ms_per_query" in out and out.get("blocks_per_query"):
+                out["us_per_block"] = 1000 * out["server_cpu_ms_per_query"] / out["blocks_per_query"]
             if misses is not None and refs:
                 out["cache_miss_ratio"] = misses / refs
         else:
@@ -188,12 +200,14 @@ def markdown_report(report: dict[str, Any]) -> str:
              f"Verdict: **{report['verdict']}**; results: {report['result_count']}; issues: {len(report['issues'])}.", "",
              "One client, 1M x 1024, matched-recall ef of each build. Mean ± standard deviation over builds. "
              "Cycles are user-space counters per query; category cycles = profile share x cycles.", "",
-             "| Engine | Arm | ef | CPU ms/q | Mcycles/q | Minstr/q | IPC | blocks/q |", "|---|---|---:|---:|---:|---:|---:|---:|"]
+             "| Engine | Arm | ef | CPU ms/q | Mcycles/q | Minstr/q | IPC | blocks/q | vector reads/q (proxy) | cycles per read |",
+             "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for cell in report["cells"]:
         e, a = cell["engine"], cell["arm"]
         lines.append(f"| {e} | {a} | {fmt(get(report, e, a, 'ef'), 1, 0)} | {fmt(get(report, e, a, 'server_cpu_ms_per_query'))} | "
                      f"{fmt(get(report, e, a, 'cycles'), 1e6, 1)} | {fmt(get(report, e, a, 'instructions'), 1e6, 1)} | "
-                     f"{fmt(get(report, e, a, 'ipc'), 1, 2)} | {fmt(get(report, e, a, 'blocks_per_query'), 1, 0)} |")
+                     f"{fmt(get(report, e, a, 'ipc'), 1, 2)} | {fmt(get(report, e, a, 'blocks_per_query'), 1, 0)} | "
+                     f"{fmt(get(report, e, a, 'vector_reads_proxy'), 1, 0)} | {fmt(get(report, e, a, 'cycles_per_vector_read'), 1, 0)} |")
     lines += ["", "## Mcycles per query by category", "",
               "| Engine | Arm | " + " | ".join(CATEGORIES) + " |", "|---|---|" + "---:|" * len(CATEGORIES)]
     for cell in report["cells"]:
@@ -209,6 +223,7 @@ def markdown_report(report: dict[str, Any]) -> str:
               "| Arm | Metric | Ratio | Min | Max |", "|---|---|---:|---:|---:|"]
     for c in report["comparisons"]:
         if c["metric"] in {"server_cpu_ms_per_query", "cycles", "instructions", "ipc", "blocks_per_query", "distance_ms",
+                           "vector_reads_proxy", "cycles_per_vector_read", "cache_misses_per_query",
                            *[f"cycles_{x}" for x in CATEGORIES]}:
             lines.append(f"| {c['arm']} | {c['metric']} | {c['ratio_of_means']:.3f} | {c['pairwise_min']:.3f} | {c['pairwise_max']:.3f} |")
     if report["issues"]:
