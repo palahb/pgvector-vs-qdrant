@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E23_ranking_quality_full",
+  "code_commit": "5276f1432b9dcd5348d73b4a2f6728e2234ad75e",
+  "slurm_jobs": {
+    "smoke": "7048628",
+    "pilot": "7048634",
+    "full": "7048647"
+  },
+  "superseded": {
+    "smoke": "none"
+  },
+  "notes": [
+    "The pending tasks of the full array waited in the queue; their time limit was lowered from 1:30 to 0:40 with scontrol to help them backfill. They ran 6-9 minutes."
+  ],
+  "submission": "E23_ranking_quality-full-5276f143-09833481",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E23_ranking_quality/full/E23_ranking_quality-full-5276f143-09833481",
+  "workspace_root": "../artifacts/truba-experiments/E23/5276f14",
+  "artifact_tree": {
+    "file_count": 27,
+    "sorted_file_sha256_manifest_sha256": "2d9b0e9592f479faec201f13ca96321f90ba631762abc5e3f7846ca7fa18400c",
+    "scheme": "sha256 of the sorted lines '<sha256>  <relative path>\\n' over the local workspace copy; server logs are not copied"
+  },
+  "inputs": {
+    "gate": "docs/E23_GATE.md, docs/E23_GATE_RESULT.md, results/derived/e23_gate.json",
+    "judgments": "results/derived/e23_judgments_prefix.json",
+    "judgments_sha256": "fea9b28efc0e188d5bb6f3c8aabda55f689364dc807349d89f0744f83be5bd63",
+    "ground_truth": "cache/gt_msmarco_n1000000_d1024_q1677_k10.npy",
+    "ground_truth_sha256": "a546fe080f31e8354c3929988513b526cbe0071dc83f9c24a37360288e319d3f",
+    "data_files_sha256": {
+      "passage_ids_1m.txt": "7eb7a9642703d6c92d17f27e790a513a1e651b5c731f24259cc1c8bc12db71e8",
+      "passage_urls_1m.tsv": "a8fdc04e8f0802f04564bdad58f54a62d7c319c3e57d95efda37824ada722a0c",
+      "v2_shard00_urls.tsv": "c674a3dd88c9b4b04aa9e2ea8995fb4fb5e72b942ed213f1c0d43fd1e4077956",
+      "v2_passages_p0.tsv": "a0a01d6683ac93a8139f0e159aa440927bfc028b795e55733e74a0e9421b998f",
+      "v2_passages_p1.tsv": "bff2932f6119a74e5f6152db890ee1ec58c7fbc1638f84eba32fcc3dc03e0dc9",
+      "segment_v2_docs_1m.txt": "1eef6b0dce19d446f5ce16f982e821c12da467e5a5d036978309caf5799f9472",
+      "qrels/2021.qrels.docs.final.txt": "34a83a80453671b7c944131daabff60d657b96c53bc9b7785c83c7e28bf2660a",
+      "qrels/2021.qrels.pass.final.txt": "15d1c6e8b13fd665dd043c43213e331452213ddc70f70b8522600bcce64db427",
+      "qrels/2022.qrels.docs.inferred.txt": "65e440c9a52fc39fcbf0a5a558d035c90098670c8e2d75bad214dc130dfa7bb8",
+      "qrels/2022.qrels.pass.withDupes.txt": "6d03b5a1b0acc26925b8ba9967469a012ec0491fb55455cd36677c387366cf5f",
+      "qrels/2023.qrels.pass.withDupes.txt": "5a98a95d5714b00c5066593719e5eb7ca93dd13588d0facf7f426a4c9d6b19b8"
+    }
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 6,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e23_full_5276f14_audit.json"
+  },
+  "analysis": {
+    "queries": 63,
+    "builds": {
+      "pg": 3,
+      "qdrant": 3
+    },
+    "points": 20,
+    "tracked_json": "results/derived/e23_full_5276f14_analysis.json",
+    "tracked_summary": "results/derived/e23_full_5276f14_summary.md",
+    "paper_section_generator": "scripts/e23_section.py"
+  },
+  "registry": {
+    "tasks": 6,
+    "attempts_per_task": 1
+  },
+  "scope": "sensitivity analysis only (coverage 0.72% of judged-relevant documents; 63 queries): ratio of approximate to exact nDCG@10, MRR@10, Recall@10 on the 1M corpus; 3 builds per engine, ids of repetition 0 at 10 ef values"
+}

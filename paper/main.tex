@@ -275,7 +275,8 @@ Recall@$K$ is
 \text{Recall@}K=\frac{|\mathcal{R}_K\cap\mathcal{G}_K|}{K},
 \end{equation}
 where $\mathcal{R}_K$ is the returned set and $\mathcal{G}_K$ the exact top-$K$. We use
-$K=10$. We report mean and 99th-percentile (p99) latency, throughput, index build time,
+$K=10$. Recall is the only quality measure of the main experiments; Section~\ref{sec:ranking} relates it to
+nDCG@10 on the judged queries that the corpus can answer. We report mean and 99th-percentile (p99) latency, throughput, index build time,
 index size, and the engine-side execution time per query for every measurement window.
 Every query returns identifiers only. The pgvector query selects the \texttt{id} column. The
 three Qdrant paths set the payload off explicitly and do not request vectors, which is the
@@ -342,6 +343,8 @@ label.
     E18 & Per-query recall and recall across eight dimensions, three builds each, 100K vectors \\
     E19 & Where a query's CPU goes at 1M $\times$ 1024: perf profiles and hardware counters of pgvector,
          Qdrant with four segments and Qdrant with one segment, three builds each \\
+    E23 & Ranking quality of approximate search against exact search on the 63 judged queries that have a relevant
+         document in the 1M corpus (sensitivity analysis), three builds per engine \\
     E20 & Reduced precision at 1M $\times$ 1024: pgvector \texttt{halfvec} and Qdrant \texttt{int8}
          against their float32 arms, three builds each \\
     E10 & Cold start and steady state under 16, 8 and 4\,GB memory limits, full query set in random
@@ -394,6 +397,8 @@ and the tables that compare them say so.
     Table~\ref{tab:causal} & E19 & three per arm & 6 jobs (all arms of one system per job), 6 nodes,
       the two systems on different nodes & smallest swept $ef$ with rep-0 recall $\ge 0.95$ on an 8-point grid
       (128--640); timing from reps 1 and 2 \\
+    Table~\ref{tab:ranking} & E23 & three per engine & 6 jobs, 6 nodes, the two systems on different nodes &
+      all ten swept $ef$ values; the matched point is the smallest with recall $\ge 0.95$ over all queries \\
     Table~\ref{tab:quant} & E20 & three per arm & 6 jobs (both arms of one system per job), 6 nodes,
       the two systems on different nodes & smallest swept $ef$ reaching 0.95 on a 21-point grid
       (interpolated); throughput at the matched and the fixed $ef=64$ \\
@@ -1408,6 +1413,71 @@ times its size and the whole pgvector table 2.4 to 3.3 times. With \texttt{halfv
 times Qdrant's float32 storage, and the whole table to 1.0 to 1.3 times. The ``twice as large'' statement is therefore a
 property of the 32-bit layout (one graph element per 8\,KiB page, Section~\ref{sec:build}), not of
 pgvector at 1024 dimensions in general.
+
+\subsection{Ranking Quality}
+\label{sec:ranking}
+
+Recall@10 counts the neighbors that exact search would return. It does not say whether the lost neighbors would have
+mattered to a user. Relevance judgments exist for the TREC Deep Learning queries, so we asked how much ranking quality
+approximate search loses. The question has a limit that decides what can be claimed. Our corpus is the first million
+rows of the MS MARCO v2.1 segment stream, about 0.9\,\% of the collection the judgments were made against. We fixed a
+rule before looking (the repository file \texttt{docs/E23\_GATE.md}): absolute nDCG only if at least half of the
+relevant documents are in the corpus, a sensitivity analysis if at least 50 queries still have one.
+
+\paragraph{Coverage.} The judgments name v2 documents (2021 and 2022) or v2 passages (2023), while the stream
+holds v2.1 segments, and the numbers inside the two kinds of identifier are byte offsets in different files (the second
+document is 4806 in v2 and 4810 in v2.1). Comparing the identifiers, as we first did, finds no judged document
+in the corpus; that zero is a failed match, not a coverage. We matched documents by URL instead: all 105{,}546 documents of the corpus
+have exactly one v2 document with the same URL. Of 53{,}761 relevant documents (grade 2 or 3) of 214 judged queries, 385 are in
+the corpus, a coverage of 0.72\,\%, and 63 queries (25, 17 and 21 of the years 2021, 2022 and 2023) have at least one. The
+coverage is far below one half and the query count is above 50, so the rule allows a sensitivity analysis only.
+
+\paragraph{Setup.} We score those 63 queries. A segment takes the grade of its document, nDCG@10 uses the grades
+as gains, and the ideal ranking is the best ten segments the corpus holds, so a query is scored on what the corpus can
+contain. MRR@10 and Recall@10 count grades 2 and 3 as relevant. The reference is the exact top ten of the same corpus.
+For each engine we built the index 3 times (1M vectors, 1024 dimensions, $M=16$, $ef_{construction}=64$) and kept the
+returned identifiers at ten $ef$ values; the numbers are means over builds, and the intervals are bootstrap intervals over
+queries. Table~\ref{tab:ranking} gives the exact result and each engine at $ef=64$ and at the smallest swept $ef$ whose
+recall against the exact neighbors reaches 0.95.
+
+\begin{table}[t]
+  \caption{Ranking quality of approximate search against exact search on the same 1M corpus (sensitivity analysis,
+  63 queries with a relevant document in the corpus). Recall is against the exact neighbors over all 1{,}677 queries.
+  Ratios are the engine's value divided by the exact value; the interval is for the mean per-query difference in nDCG@10.}
+  \label{tab:ranking}
+  \small
+  \begin{tabular}{@{}lrrrrrrr@{}}
+    \toprule
+    & $ef$ & recall & nDCG@10 & ratio & difference to exact & MRR ratio & R@10 ratio \\
+    \midrule
+    exact & -- & 1.000 & 0.388 & 1.000 & -- & 1.000 & 1.000 \\
+    pgvector & 64 & 0.836 & 0.366 & 0.942 & -0.062 to +0.004 & 0.923 & 0.947 \\
+    pgvector, matched & 512 & 0.955 & 0.380 & 0.979 & -0.026 to +0.002 & 0.960 & 0.987 \\
+    Qdrant & 64 & 0.861 & 0.371 & 0.955 & -0.039 to -0.002 & 0.925 & 0.961 \\
+    Qdrant, matched & 384 & 0.954 & 0.382 & 0.984 & -0.023 to +0.004 & 0.966 & 0.994 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Result.} The exact top ten has nDCG@10 of 0.388 (95\,\% interval 0.306 to 0.472 over the queries), MRR@10 of 0.489 and
+Recall@10 of 0.364 on this corpus; these are not effectiveness numbers, because 99.3\,\% of the relevant documents are
+outside it.
+At the smallest swept $ef$ reaching a recall of 0.95 against the exact neighbors, pgvector (at $ef=512$) keeps 97.9\,\% of
+the exact nDCG@10 and Qdrant (at $ef=384$) 98.4\,\%. The 95\,\% intervals of the mean difference to exact search, -0.026 to +0.002 and -0.023 to +0.004, both contain
+zero, so at this recall neither engine is distinguishable from exact search on these queries. MRR@10 keeps 96.0\,\% and
+96.6\,\%, Recall@10 98.7\,\% and 99.4\,\%.
+
+\paragraph{Relation to recall.} Over the 20 swept points the nDCG@10 ratio is higher than the recall of the same 63 queries in 19 of them (the
+table's recall column is over all 1{,}677 queries and is lower). A missed neighbor therefore usually costs less ranking
+quality than its share of the ten suggests. At $ef=32$, with recalls of 0.76 and 0.79, the engines keep 90\,\% and 92\,\% of the exact nDCG@10 and the interval of the
+difference excludes zero; across the grid the interval lies entirely below zero at 6 of 20 points, all at or below $ef=256$.
+
+\paragraph{What this does and does not show.} Only 63 queries, uneven over the years, and a relevance
+signal taken from documents and copied to their segments. The ratios describe how much ranking quality an approximation
+at a given recall costs on a corpus that holds a small part of the relevant documents; they do not rank the two systems by
+effectiveness, which would need a corpus that holds the judged documents. Extending to the full collection of 113 million
+segments is outside this study.
+
 
 \section{Discussion}
 %% =============================================================

@@ -31,7 +31,7 @@ the referee identified design confounders.
 | C16 | `halfvec` and `int8` change index size, latency and recall (new commitment) | Section Quantization; E20 (`data-manifests/e20_full_77f7567.json`) | retain | 3 builds each. halfvec: index 0.334x, build 0.59x (0.49-0.68), latency and CPU at matched recall 0.93x (0.73-1.13, no detectable change), recall unchanged, throughput 1.09-1.10x at the matched ef. int8: latency 0.63x (0.57-0.69), CPU 0.55x (0.48-0.62), throughput 1.67-1.92x at the matched ef, highest recall -0.0024 (-0.009 to 0.004), share of perfect queries -0.025. Reasons halfvec does not speed up search were not investigated. |
 | C17 | A connection pooler (PgBouncer) changes pgvector concurrency behavior (new commitment) | none yet | rerun | E21 |
 | C18 | Tail behavior under open-loop arrivals (new commitment) | none yet | rerun | E22, minimal; first to be cut when time is short |
-| C19 | nDCG@10 can be reported with TREC DL qrels (new commitment; the sent mail said qrels were at hand, which was not verified) | none yet | rerun | E23, gated on qrels coverage of the 1M prefix; see `docs/HOCA_CEVAP_17_KASIM.md` |
+| C19 | nDCG@10 can be reported with TREC DL qrels (the status mail said the qrels were at hand; this was not verified) | Section Ranking Quality; E23 (`data-manifests/e23_full_5276f14.json`), `docs/E23_GATE_RESULT.md` | rewritten from E23 | Qrels downloaded and read. The 1M corpus holds 0.72% of the judged-relevant documents (385 of 53,761); 63 of 214 judged queries have one. Rule fixed beforehand (`docs/E23_GATE.md`): sensitivity analysis only. Ratio of ANN to exact on the 63 queries, 3 builds each: at recall 0.95 pgvector keeps 97.9% of exact nDCG@10 (ef 512) and Qdrant 98.4% (ef 384), intervals of the difference contain zero. Not an absolute effectiveness number. v2 and v2.1 document ids are not comparable (byte offsets in different files); documents matched by url. |
 
 ## Claims forbidden until their gates pass
 
@@ -45,3 +45,4 @@ the referee identified design confounders.
   measured and found sufficient (E23 gate).
 - Do not state a mechanism for the Qdrant latency gap as proven; E19 can only bound it.
 - Do not state the distance count per query as measured; it is bounded by the block counter, the cache-miss proxy and the 248 ns kernel time (E19).
+- Do not present nDCG@10, MRR@10 or Recall@10 of E23 as retrieval effectiveness; the corpus holds 0.72% of the judged-relevant documents (E23 gate).

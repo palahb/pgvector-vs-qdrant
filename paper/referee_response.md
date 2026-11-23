@@ -128,10 +128,9 @@ is subject to the author's and the referee's agreement.
 
 - No new evidence. The supervisor approved removing "RAG" from the title: unfiltered ANN search.
   Filtered and hybrid search and mixed read-write stay future work.
-- nDCG@10 (E23) is committed but gated: the statement in the earlier status mail that the qrels
-  were at hand was not verified. They are not on disk, passage IDs and returned IDs were not
-  stored, and coverage of the 1M prefix is unmeasured. If coverage is insufficient, nDCG is
-  reported as a limitation only.
+- nDCG@10 (E23): done as a sensitivity analysis (see the section of new commitments). The earlier
+  statement that the qrels were at hand had not been verified; they have now been downloaded and the
+  coverage of the 1M prefix measured (0.72%).
 
 ### M10 — Scale and model generality: partly addressed
 
@@ -220,7 +219,7 @@ Recorded in `docs/HOCA_CEVAP_17_KASIM.md`; none has results yet.
 2. `halfvec` and `int8` quantization (E20): done. New subsection Quantization with three builds per arm at 1M (`data-manifests/e20_full_77f7567.json`). halfvec makes the index 0.334 times as large and the build 0.59 times as long with no detectable change in search speed or recall; int8 makes Qdrant 0.63 times as slow per query (0.55 times the CPU) with a highest recall within 0.0024, but does not shrink the storage directory. The earlier statement that pgvector needs about twice the bytes is restated as a property of the 32-bit layout (index 1.5-1.9 times Qdrant's float32 storage, 0.48-0.65 times with halfvec). Qdrant's float32 storage size varies between builds (3.94-5.24 GiB) for a reason we did not find.
 3. PgBouncer (E21).
 4. Minimal open-loop generator (E22), first to be cut.
-5. nDCG@10 with TREC DL qrels (E23), gated on qrels coverage.
+5. nDCG@10 with TREC DL qrels (E23): done as a sensitivity analysis. The gate rule was fixed before measuring (`docs/E23_GATE.md`). The 1M corpus holds 0.72% of the judged-relevant documents (385 of 53,761), so absolute nDCG is not reported; 63 judged queries have a relevant document in it, and on those the ratio of approximate to exact search is reported (`data-manifests/e23_full_5276f14.json`). At recall 0.95 pgvector keeps 97.9% and Qdrant 98.4% of exact nDCG@10, with intervals that contain zero. The v2 and v2.1 document ids are byte offsets in different files, so documents were matched by url; comparing ids gave a false zero. The statement in the status mail that the qrels were at hand was not verified when it was written.
 
 The manuscript's harness commit will be pinned with a tag; tables are regenerated from raw
 results with the tagged analysis tools and each raw result keeps the commit that produced it.

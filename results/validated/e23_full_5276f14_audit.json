@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-23T20:48:19.467467+00:00",
+  "root": "../artifacts/truba-experiments/E23/5276f14/full",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 6,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "E23_ranking_quality-full-5276f143-09833481": 6
+    },
+    "engines": {
+      "pg": 3,
+      "qdrant": 3
+    },
+    "statuses": {
+      "ok": 6
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "E23_ranking_quality-full-5276f143-09833481/task_0000_7048649/pg_rep1/result.json",
+      "sha256": "19a6b33c5c8c2df689ba380b4ddf252ce76049b650068493e2d0ec88dc8f950b",
+      "experiment_id": "E23_ranking_quality-full-5276f143-09833481-t0000-a1-r00-pg",
+      "experiment": "E23_ranking_quality-full-5276f143-09833481",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7048649",
+      "raw_npz_size_bytes": 529210,
+      "raw_array_count": 30
+    },
+    {
+      "path": "E23_ranking_quality-full-5276f143-09833481/task_0001_7049117/qdrant_rep1/result.json",
+      "sha256": "078219c5a73e96394bbe1b9c42ddd85298892f53b31899726112dd3f94ec8e5b",
+      "experiment_id": "E23_ranking_quality-full-5276f143-09833481-t0001-a1-r00-qdrant",
+      "experiment": "E23_ranking_quality-full-5276f143-09833481",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7049117",
+      "raw_npz_size_bytes": 525574,
+      "raw_array_count": 30
+    },
+    {
+      "path": "E23_ranking_quality-full-5276f143-09833481/task_0002_7049130/pg_rep2/result.json",
+      "sha256": "9528304559597ff1df2270c032c078ff63b93ec0bf2b27c8ab3a2df9b5f41caa",
+      "experiment_id": "E23_ranking_quality-full-5276f143-09833481-t0002-a1-r00-pg",
+      "experiment": "E23_ranking_quality-full-5276f143-09833481",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7049130",
+      "raw_npz_size_bytes": 529445,
+      "raw_array_count": 30
+    },
+    {
+      "path": "E23_ranking_quality-full-5276f143-09833481/task_0003_7049155/qdrant_rep2/result.json",
+      "sha256": "d709240a0ae597ee8fbfc95c86a1f5569461f516ca499a57e12f06dc57cd2840",
+      "experiment_id": "E23_ranking_quality-full-5276f143-09833481-t0003-a1-r00-qdrant",
+      "experiment": "E23_ranking_quality-full-5276f143-09833481",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7049155",
+      "raw_npz_size_bytes": 525584,
+      "raw_array_count": 30
+    },
+    {
+      "path": "E23_ranking_quality-full-5276f143-09833481/task_0004_7049182/pg_rep3/result.json",
+      "sha256": "9961934234d344fc6320ab854c4f203a0731bf834b3774e8dad799b406252f29",
+      "experiment_id": "E23_ranking_quality-full-5276f143-09833481-t0004-a1-r00-pg",
+      "experiment": "E23_ranking_quality-full-5276f143-09833481",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7049182",
+      "raw_npz_size_bytes": 529314,
+      "raw_array_count": 30
+    },
+    {
+      "path": "E23_ranking_quality-full-5276f143-09833481/task_0005_7048647/qdrant_rep3/result.json",
+      "sha256": "9da513aa152123ecf6cb3859967da2eae87ed4b4445d7752da8dfa21bf8114b0",
+      "experiment_id": "E23_ranking_quality-full-5276f143-09833481-t0005-a1-r00-qdrant",
+      "experiment": "E23_ranking_quality-full-5276f143-09833481",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7048647",
+      "raw_npz_size_bytes": 526227,
+      "raw_array_count": 30
+    }
+  ]
+}

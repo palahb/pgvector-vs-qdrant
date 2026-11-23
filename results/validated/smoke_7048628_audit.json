@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-23T18:25:16.167948+00:00",
+  "root": "/arf/scratch/endemir/rag_bench/results/smoke/5276f1432b9d_7048628",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 4,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "pg": 1,
+      "pg_halfvec": 1,
+      "qdrant": 1,
+      "qdrant_int8": 1
+    },
+    "engines": {
+      "pg": 2,
+      "qdrant": 2
+    },
+    "statuses": {
+      "ok": 4
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "pg/result.json",
+      "sha256": "716d5397463161a55a01a639a91b32bae62fdb6a0caccc7a5a76e496ddd5c2e1",
+      "experiment_id": "cfg-be9c51f6de80feab-7048628-pg",
+      "experiment": "pg",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7048628",
+      "raw_npz_size_bytes": 231312,
+      "raw_array_count": 8
+    },
+    {
+      "path": "pg_halfvec/result.json",
+      "sha256": "c2d39cc3551a93131724e070e008d457bd29030d2a8ae9343fc20ec9d3b6579b",
+      "experiment_id": "cfg-f1ec9b38ca83c933-7048628-pg_halfvec",
+      "experiment": "pg_halfvec",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7048628",
+      "raw_npz_size_bytes": 272915,
+      "raw_array_count": 12
+    },
+    {
+      "path": "qdrant/result.json",
+      "sha256": "26df20a66ba923bd1623721871419121a873c17e62addf62b3bca41476e80e56",
+      "experiment_id": "cfg-ca9a340fc1979c9f-7048628-qdrant",
+      "experiment": "qdrant",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7048628",
+      "raw_npz_size_bytes": 147098,
+      "raw_array_count": 8
+    },
+    {
+      "path": "qdrant_int8/result.json",
+      "sha256": "666c8e7894d8a6bc4cd4bae2d02d37a294f259650e8ba14fe79d066c1cdb0db2",
+      "experiment_id": "cfg-c34d73b14c14fcab-7048628-qdrant_int8",
+      "experiment": "qdrant_int8",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7048628",
+      "raw_npz_size_bytes": 339788,
+      "raw_array_count": 22
+    }
+  ]
+}
