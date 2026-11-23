@@ -18,6 +18,7 @@ usage (on the cluster login node, where perf is installed):
 from __future__ import annotations
 
 import argparse
+import bisect
 import json
 import re
 import subprocess
@@ -99,7 +100,31 @@ def categorize(engine: str, dso: str, symbol: str) -> str:
     return "other"
 
 
-def summarize_profile(engine: str, rows: list[dict[str, Any]], meta: dict[str, Any]) -> dict[str, Any]:
+def hex_address(symbol: str) -> int:
+    return int(symbol, 16)
+
+
+def parse_nm(text: str) -> list[tuple[int, str]]:
+    """Exported (dynamic) symbols of a binary from `nm -D --defined-only`, sorted by address."""
+    out = []
+    for line in text.splitlines():
+        parts = line.split()
+        if len(parts) == 3 and re.fullmatch(r"[0-9a-fA-F]+", parts[0]):
+            out.append((int(parts[0], 16), parts[2]))
+    return sorted(out)
+
+
+def nearest_symbol(symbols: list[tuple[int, str]], address: int) -> tuple[str, int] | None:
+    """The exported symbol at or before an address and the distance to it. A hint about the
+    neighborhood of a static function in the same object file, not an attribution."""
+    index = bisect.bisect_right([a for a, _ in symbols], address) - 1
+    if index < 0:
+        return None
+    return symbols[index][1], address - symbols[index][0]
+
+
+def summarize_profile(engine: str, rows: list[dict[str, Any]], meta: dict[str, Any],
+                      hints: list[tuple[int, str]] | None = None) -> dict[str, Any]:
     totals = {name: 0.0 for name in CATEGORIES}
     top: dict[str, list[tuple[float, str]]] = {name: [] for name in CATEGORIES}
     for row in rows:
@@ -111,9 +136,20 @@ def summarize_profile(engine: str, rows: list[dict[str, Any]], meta: dict[str, A
         "engine": engine, "samples": meta.get("samples"), "event": meta.get("event"),
         "listed_percent": round(listed, 6),
         "shares": {name: (totals[name] / listed if listed else 0.0) for name in CATEGORIES},
-        "top_symbols": {name: [{"percent": p, "symbol": s} for p, s in sorted(items, reverse=True)[:5]]
+        "top_symbols": {name: [_top_entry(p, sym, name, hints) for p, sym in sorted(items, reverse=True)[:5]]
                         for name, items in top.items()},
     }
+
+
+def _top_entry(percent: float, symbol: str, category: str, hints: list[tuple[int, str]] | None) -> dict[str, Any]:
+    entry: dict[str, Any] = {"percent": percent, "symbol": symbol}
+    if category == "unresolved" and hints:
+        address = symbol.rsplit(":", 1)[-1]
+        if HEX.match(address):
+            near = nearest_symbol(hints, hex_address(address))
+            if near:
+                entry["hint"] = {"nearest_exported_symbol": near[0], "offset": near[1]}
+    return entry
 
 
 def run_report(data: Path, symfs: Path | None) -> str:
@@ -124,14 +160,26 @@ def run_report(data: Path, symfs: Path | None) -> str:
     return subprocess.run(cmd, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout
 
 
+def load_hints(symfs: Path | None, relative: str) -> list[tuple[int, str]] | None:
+    if not symfs:
+        return None
+    try:
+        out = subprocess.run(["nm", "-D", "--defined-only", str(symfs / relative)], check=True, text=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return parse_nm(out)
+
+
 def profile_tree(root: Path, symfs: dict[str, Path | None]) -> dict[str, Any]:
+    pg_hints = load_hints(symfs.get("pg"), "usr/lib/postgresql/17/bin/postgres")
     profiles = []
     for data in sorted(root.glob("**/perfrec_*.data")):
         result_json = data.parent / "result.json"
         engine = json.loads(result_json.read_text())["engine"] if result_json.exists() else (
             "pg" if "pg" in data.parent.name else "qdrant")
         rows, meta = parse_report(run_report(data, symfs.get(engine)))
-        profile = summarize_profile(engine, rows, meta)
+        profile = summarize_profile(engine, rows, meta, pg_hints if engine == "pg" else None)
         profile["file"] = str(data.relative_to(root))
         profiles.append(profile)
     return {"schema_version": 1, "generated_at": datetime.now(timezone.utc).isoformat(), "root": str(root),

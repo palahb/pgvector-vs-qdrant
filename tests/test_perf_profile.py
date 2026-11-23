@@ -6,7 +6,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from analysis.perf_profile import CATEGORIES, categorize, parse_report, summarize_profile  # noqa: E402
+from analysis.perf_profile import (CATEGORIES, categorize, nearest_symbol, parse_nm, parse_report,  # noqa: E402
+                                   summarize_profile)
 
 PG_REPORT = """\
 # To display the perf.data header info, please use --header/--header-only options.
@@ -85,6 +86,35 @@ class SummaryTests(unittest.TestCase):
         self.assertAlmostEqual(s["shares"]["distance"], 2.80 / total, places=9)
         self.assertEqual(s["samples"], 3000)
         self.assertTrue(all(name in s["shares"] for name in CATEGORIES))
+
+
+class NearestSymbolTests(unittest.TestCase):
+    NM = "0000000000001000 T alpha\n0000000000002000 T beta\n0000000000003000 T gamma\n"
+
+    def test_parse_nm_sorted_pairs(self):
+        self.assertEqual(parse_nm(self.NM), [(0x1000, "alpha"), (0x2000, "beta"), (0x3000, "gamma")])
+
+    def test_nearest_preceding_symbol_and_offset(self):
+        syms = parse_nm(self.NM)
+        self.assertEqual(nearest_symbol(syms, 0x2010), ("beta", 0x10))
+        self.assertEqual(nearest_symbol(syms, 0x3000), ("gamma", 0))
+
+    def test_address_before_every_symbol_has_no_hint(self):
+        self.assertIsNone(nearest_symbol(parse_nm(self.NM), 0x10))
+
+    def test_hex_symbol_addresses_are_parsed(self):
+        from analysis.perf_profile import hex_address
+        self.assertEqual(hex_address("0x0000000000366687"), 0x366687)
+
+
+class SummaryHintTests(unittest.TestCase):
+    def test_unresolved_top_entries_carry_a_hint_when_symbols_are_given(self):
+        rows = [{"percent": 5.0, "dso": "postgres", "symbol": "0x0000000000002010"},
+                {"percent": 1.0, "dso": "postgres", "symbol": "LWLockRelease"}]
+        s = summarize_profile("pg", rows, {"samples": 10, "event": "cycles:u"},
+                              hints=parse_nm("0000000000001000 T alpha\n0000000000002000 T beta\n"))
+        top = s["top_symbols"]["unresolved"][0]
+        self.assertEqual(top["hint"], {"nearest_exported_symbol": "beta", "offset": 16})
 
 
 if __name__ == "__main__":
