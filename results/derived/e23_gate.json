@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-23T18:20:27.675776+00:00",
+  "prefix_segments": 1000000,
+  "prefix_documents": 105546,
+  "unmapped_segments": 0,
+  "years": {
+    "2021": {
+      "qrels_file": "2021.qrels.docs.final.txt",
+      "queries_with_qrels": 57,
+      "q_judged": 56,
+      "r_total": 4025,
+      "r_in": 49,
+      "coverage": 0.01217391304347826,
+      "q_cov": 25
+    },
+    "2022": {
+      "qrels_file": "2022.qrels.docs.inferred.txt",
+      "queries_with_qrels": 76,
+      "q_judged": 76,
+      "r_total": 45651,
+      "r_in": 305,
+      "coverage": 0.006681124181288471,
+      "q_cov": 17
+    },
+    "2023": {
+      "qrels_file": "2023.qrels.pass.withDupes.txt",
+      "level": "passage, linked to documents",
+      "queries_with_qrels": 82,
+      "q_judged": 82,
+      "r_total": 4085,
+      "r_in": 31,
+      "coverage": 0.007588739290085679,
+      "q_cov": 21
+    }
+  },
+  "total": {
+    "q_judged": 214,
+    "r_total": 53761,
+    "r_in": 385,
+    "coverage": 0.007161325124160637,
+    "q_cov": 63
+  },
+  "decision": {
+    "mode": "sensitivity",
+    "min_coverage": 0.5,
+    "min_queries": 50
+  }
+}

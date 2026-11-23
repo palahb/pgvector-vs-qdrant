@@ -14,7 +14,7 @@ anything, can honestly be reported.
 
 ## Quantities (all measured on the judged queries only, relevance grade 2 or 3 counts as relevant)
 
-* `Q_judged`: queries that have judgments and whose embedding is in our 1,677-query set.
+* `Q_judged`: queries of our 1,677-query set that have at least one judged-relevant document.
 * `R_total`: judged-relevant passages of those queries, in the whole collection.
 * `R_in`: those among them whose passage ID lies in the first 1M stream rows.
 * `coverage = R_in / R_total`.
