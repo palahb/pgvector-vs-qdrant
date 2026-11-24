@@ -80,6 +80,14 @@ def poisson_arrivals(rate, duration_s, seed):
     return t[t < duration_s * 1e9].astype(np.int64)
 
 
+def choose_open_loop_ef(explicit, matched, closed_loop_ef):
+    """The open-loop ef must be one the closed loop ran at, because the load levels come from its throughput:
+    the matched-recall ef when the closed loop computed one, else the fixed closed-loop ef."""
+    if explicit:
+        return explicit
+    return matched if matched is not None else closed_loop_ef
+
+
 def parse_fractions(text):
     """Load levels as fractions of the measured capacity, e.g. "0.5,0.8,0.95,1.1"."""
     try:

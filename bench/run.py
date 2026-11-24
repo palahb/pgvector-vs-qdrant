@@ -15,7 +15,7 @@ import numpy as np
 from common import (evict_page_cache, ground_truth, host_info, load_vectors, log, pick_cores,
                     resident_bytes, save_json, sha256, stable_id, git_state)
 from engines import MODE, make_query_fn, make_server
-from features import capacity_qps, open_loop_rates, parse_conn_modes, parse_fractions
+from features import capacity_qps, choose_open_loop_ef, open_loop_rates, parse_conn_modes, parse_fractions
 from workload import (cgroup_memory_bytes, concurrency_run, latency_sweep, memory_passes,
                       open_loop_run, proc_counters)
 
@@ -288,10 +288,7 @@ def main():
                     if "pooled" in modes:
                         run["pooler"] = srv.pooler_info()
             if (a.open_loop_rates or a.open_loop_fractions) and lim == "none":
-                rows = sorted((x for x in run["latency"] if x["proto"] == protocols[0] and x["rep"] == 0),
-                              key=lambda x: x["ef"])
-                ok = [x["ef"] for x in rows if x["recall_at_k"] >= a.conc_recall]
-                ef = a.open_loop_ef or (ok[0] if ok else rows[-1]["ef"])
+                ef = choose_open_loop_ef(a.open_loop_ef, run.get("conc_matched_ef"), a.conc_ef)
                 rates, capacity = list(a.open_loop_rates), None
                 if a.open_loop_fractions:
                     capacity = capacity_qps(run.get("concurrency", []), protocols[0], ef, a.open_loop_capacity_clients)

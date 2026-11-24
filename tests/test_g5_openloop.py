@@ -12,6 +12,17 @@ import features  # noqa: E402
 from analysis.analyze_e22 import STEADY_ACHIEVED, STEADY_LAG_MS, analyze, is_steady  # noqa: E402
 
 
+class OpenLoopEfTests(unittest.TestCase):
+    def test_explicit_ef_wins(self):
+        self.assertEqual(features.choose_open_loop_ef(256, 448, 64), 256)
+
+    def test_matched_ef_of_the_closed_loop_is_used_when_there_is_one(self):
+        self.assertEqual(features.choose_open_loop_ef(0, 448, 64), 448)
+
+    def test_without_a_matched_ef_the_closed_loop_ef_is_used_so_the_capacity_row_exists(self):
+        self.assertEqual(features.choose_open_loop_ef(0, None, 64), 64)
+
+
 class LoadLevelTests(unittest.TestCase):
     def test_rates_are_fractions_of_the_measured_capacity(self):
         self.assertEqual(features.open_loop_rates(1000.0, [0.5, 0.8, 0.95, 1.1]), [500, 800, 950, 1100])
