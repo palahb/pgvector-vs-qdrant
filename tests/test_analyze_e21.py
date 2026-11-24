@@ -49,6 +49,27 @@ class RecallAgreementTests(unittest.TestCase):
         self.assertGreaterEqual(RECALL_TOLERANCE, 0.005)
 
 
+class ExtraMeasurementTests(unittest.TestCase):
+    def test_context_switches_and_active_backends_are_aggregated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for rep in ("rep1", "rep2", "rep3"):
+                write(root, rep)
+                path = root / f"pg_{rep}" / "result.json"
+                data = json.loads(path.read_text())
+                for r in data["runs"][0]["concurrency"]:
+                    r["server_ctx_switches_per_query"] = {"voluntary": 5.0, "involuntary": 1.5}
+                    r["pg_wait_events"] = {"samples": 100, "active_backend_observations": 3600,
+                                           "share": {"CPU:running": 0.99, "LWLock:LockManager": 0.01}}
+                path.write_text(json.dumps(data))
+            rep = analyze(root)
+        agg = {(a["mode"], a["ef_role"], a["clients"], a["metric"]): a["stats"] for a in rep["aggregates"]}
+        self.assertAlmostEqual(agg[("direct", "matched", 32, "ctx_voluntary_per_query")]["mean"], 5.0)
+        self.assertAlmostEqual(agg[("direct", "matched", 32, "ctx_involuntary_per_query")]["mean"], 1.5)
+        self.assertAlmostEqual(agg[("direct", "matched", 32, "active_backends")]["mean"], 36.0)
+        self.assertAlmostEqual(agg[("direct", "matched", 32, "lockmanager_share")]["mean"], 0.01)
+
+
 class AnalyzeTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E21_pgbouncer_full",
+  "code_commit": "2516ade9d6a9a99ed6b53e9a9621c9ca18062c6f",
+  "slurm_jobs": {
+    "smoke": "7049552",
+    "pilot": "7050248",
+    "full": "7050273"
+  },
+  "superseded": {
+    "smoke": "none"
+  },
+  "notes": [
+    "The G1 pooler hook (commit 913fa1d..e52ff6b) was never run on the cluster and had two defects found before use: session-level SET does not survive transaction pooling, and the pooler CPU was read from the Apptainer wrapper only. Both were fixed in this commit; see docs/E21_DESIGN.md.",
+    "Recall tolerance between connection modes was amended from 0.002 to 0.01 in docs/E21_DESIGN.md before any E21 measurement."
+  ],
+  "submission": "E21_pgbouncer-full-2516ade9-2dc53fdc",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E21_pgbouncer/full/E21_pgbouncer-full-2516ade9-2dc53fdc",
+  "workspace_root": "../artifacts/truba-experiments/E21/2516ade",
+  "pooler": {
+    "image": "docker://pgbouncer/pgbouncer@sha256:b718b48d66ddb3896da0a539c395cf7cf6da4587c733825d8983b66b27112a72",
+    "sif": "images/pgbouncer-1.25.1.sif",
+    "sif_sha256": "8b00cbdebc078eaa2b216f5791263743f4e5009149863b49681d48d22d8582bb",
+    "version": "PgBouncer 1.25.1",
+    "pool_mode": "transaction",
+    "pool_size": 8,
+    "max_client_conn": 200
+  },
+  "artifact_tree": {
+    "file_count": 17,
+    "sorted_file_sha256_manifest_sha256": "484bc8904ab0336ad4d8ec548e3f567f7b08ecf62535940471663b74b7c0c993",
+    "scheme": "sha256 of the sorted lines '<sha256>  <relative path>\\n' over the local workspace copy; server and pgbouncer logs of the cluster are in the remote root"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 3,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e21_full_2516ade_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "builds": [
+      "rep1",
+      "rep2",
+      "rep3"
+    ],
+    "tracked_json": "results/derived/e21_full_2516ade_analysis.json",
+    "tracked_summary": "results/derived/e21_full_2516ade_summary.md",
+    "paper_section_generator": "scripts/e21_section.py"
+  },
+  "registry": {
+    "tasks": 3,
+    "attempts_per_task": 1
+  },
+  "scope": "pgvector 1M x 1024, M=16, efc=64; three connection modes (direct, direct_txn, pooled) on each of 3 builds; 1, 8, 32, 48 clients; matched ef 448 and fixed ef 64; PgBouncer on the server's 8 cores, loopback"
+}

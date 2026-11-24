@@ -1,0 +1,5340 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-24T01:37:38.531111+00:00",
+  "root": "../artifacts/truba-experiments/E21/2516ade/full",
+  "recall_tolerance": 0.01,
+  "verdict": "valid",
+  "result_count": 3,
+  "builds": [
+    "rep1",
+    "rep2",
+    "rep3"
+  ],
+  "pooler": {
+    "image": "/arf/scratch/endemir/rag_bench/images/pgbouncer-1.25.1.sif",
+    "image_sha256": "8b00cbdebc078eaa2b216f5791263743f4e5009149863b49681d48d22d8582bb",
+    "pool_mode": "transaction",
+    "pool_size": 8,
+    "max_client_conn": 200,
+    "pinned_cores": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "version": "PgBouncer 1.25.1"
+  },
+  "aggregates": [
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 0.939773,
+        "sd": 0.00186,
+        "ci95_low": 0.935152,
+        "ci95_high": 0.944394,
+        "cv_percent": 0.198
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.001,
+        "sd": 0.0,
+        "ci95_low": 0.001,
+        "ci95_high": 0.001,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.148333,
+        "sd": 0.002082,
+        "ci95_low": 1.143162,
+        "ci95_high": 1.153505,
+        "cv_percent": 0.181
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.4829,
+        "sd": 0.018965,
+        "ci95_low": 1.435785,
+        "ci95_high": 1.530015,
+        "cv_percent": 1.279
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.675967,
+        "sd": 0.091983,
+        "ci95_low": 2.447451,
+        "ci95_high": 2.904483,
+        "cv_percent": 3.437
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838763,
+        "sd": 0.002041,
+        "ci95_low": 0.833693,
+        "ci95_high": 0.843834,
+        "cv_percent": 0.243
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.412492,
+        "sd": 0.017932,
+        "ci95_low": 1.367942,
+        "ci95_high": 1.457042,
+        "cv_percent": 1.27
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 670.83,
+        "sd": 8.571464,
+        "ci95_low": 649.535584,
+        "ci95_high": 692.124416,
+        "cv_percent": 1.278
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.406299,
+        "sd": 0.018225,
+        "ci95_low": 7.361022,
+        "ci95_high": 7.451576,
+        "cv_percent": 0.246
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.015667,
+        "sd": 0.000577,
+        "ci95_low": 0.014232,
+        "ci95_high": 0.017101,
+        "cv_percent": 3.685
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.02,
+        "sd": 0.0,
+        "ci95_low": 1.02,
+        "ci95_high": 1.02,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.582367,
+        "sd": 0.00365,
+        "ci95_low": 1.573299,
+        "ci95_high": 1.591435,
+        "cv_percent": 0.231
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.8744,
+        "sd": 0.076905,
+        "ci95_low": 2.683341,
+        "ci95_high": 3.065459,
+        "cv_percent": 2.676
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838453,
+        "sd": 0.001827,
+        "ci95_low": 0.833913,
+        "ci95_high": 0.842993,
+        "cv_percent": 0.218
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.501777,
+        "sd": 0.002805,
+        "ci95_low": 1.494809,
+        "ci95_high": 1.508745,
+        "cv_percent": 0.187
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 5029.82,
+        "sd": 11.820317,
+        "ci95_low": 5000.454334,
+        "ci95_high": 5059.185666,
+        "cv_percent": 0.235
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.954689,
+        "sd": 0.011378,
+        "ci95_low": 7.926421,
+        "ci95_high": 7.982956,
+        "cv_percent": 0.143
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.024,
+        "sd": 0.001,
+        "ci95_low": 0.021516,
+        "ci95_high": 0.026484,
+        "cv_percent": 4.167
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.021,
+        "sd": 0.0,
+        "ci95_low": 1.021,
+        "ci95_high": 1.021,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 6.7e-05,
+        "sd": 5.8e-05,
+        "ci95_low": -7.7e-05,
+        "ci95_high": 0.00021,
+        "cv_percent": 86.603
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.527933,
+        "sd": 0.036748,
+        "ci95_low": 6.436638,
+        "ci95_high": 6.619229,
+        "cv_percent": 0.563
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 17.1338,
+        "sd": 0.72578,
+        "ci95_low": 15.330718,
+        "ci95_high": 18.936882,
+        "cv_percent": 4.236
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.83863,
+        "sd": 0.001733,
+        "ci95_low": 0.834324,
+        "ci95_high": 0.842936,
+        "cv_percent": 0.207
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.618977,
+        "sd": 0.009129,
+        "ci95_low": 1.596296,
+        "ci95_high": 1.641657,
+        "cv_percent": 0.564
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 4895.02,
+        "sd": 27.551296,
+        "ci95_low": 4826.573263,
+        "ci95_high": 4963.466737,
+        "cv_percent": 0.563
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 8.053192,
+        "sd": 0.075478,
+        "ci95_low": 7.86568,
+        "ci95_high": 8.240704,
+        "cv_percent": 0.937
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.024,
+        "sd": 0.001,
+        "ci95_low": 0.021516,
+        "ci95_high": 0.026484,
+        "cv_percent": 4.167
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.022,
+        "sd": 0.0,
+        "ci95_low": 1.022,
+        "ci95_high": 1.022,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.001433,
+        "sd": 0.000814,
+        "ci95_low": -0.00059,
+        "ci95_high": 0.003457,
+        "cv_percent": 56.822
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 10.152467,
+        "sd": 0.025861,
+        "ci95_low": 10.088218,
+        "ci95_high": 10.216715,
+        "cv_percent": 0.255
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 21.505333,
+        "sd": 2.170886,
+        "ci95_low": 16.112118,
+        "ci95_high": 26.898548,
+        "cv_percent": 10.095
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838833,
+        "sd": 0.001738,
+        "ci95_low": 0.834516,
+        "ci95_high": 0.843151,
+        "cv_percent": 0.207
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.678707,
+        "sd": 0.003849,
+        "ci95_low": 1.669146,
+        "ci95_high": 1.688268,
+        "cv_percent": 0.229
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 4722.756667,
+        "sd": 11.753439,
+        "ci95_low": 4693.557149,
+        "ci95_high": 4751.956185,
+        "cv_percent": 0.249
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 0.983114,
+        "sd": 0.00234,
+        "ci95_low": 0.977301,
+        "ci95_high": 0.988927,
+        "cv_percent": 0.238
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.010333,
+        "sd": 0.000577,
+        "ci95_low": 0.008899,
+        "ci95_high": 0.011768,
+        "cv_percent": 5.587
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.655667,
+        "sd": 0.009504,
+        "ci95_low": 1.632055,
+        "ci95_high": 1.679279,
+        "cv_percent": 0.574
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.5975,
+        "sd": 0.094353,
+        "ci95_low": 6.363095,
+        "ci95_high": 6.831905,
+        "cv_percent": 1.43
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 10.079367,
+        "sd": 0.18284,
+        "ci95_low": 9.625129,
+        "ci95_high": 10.533604,
+        "cv_percent": 1.814
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.952303,
+        "sd": 0.001036,
+        "ci95_low": 0.949729,
+        "ci95_high": 0.954878,
+        "cv_percent": 0.109
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 6.534248,
+        "sd": 0.093117,
+        "ci95_low": 6.302913,
+        "ci95_high": 6.765583,
+        "cv_percent": 1.425
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 151.41,
+        "sd": 2.185017,
+        "ci95_low": 145.981678,
+        "ci95_high": 156.838322,
+        "cv_percent": 1.443
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.851589,
+        "sd": 0.007555,
+        "ci95_low": 7.832821,
+        "ci95_high": 7.870357,
+        "cv_percent": 0.096
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.093667,
+        "sd": 0.000577,
+        "ci95_low": 0.092232,
+        "ci95_high": 0.095101,
+        "cv_percent": 0.616
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.088,
+        "sd": 0.001,
+        "ci95_low": 1.085516,
+        "ci95_high": 1.090484,
+        "cv_percent": 0.092
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 7.106033,
+        "sd": 0.063893,
+        "ci95_low": 6.947302,
+        "ci95_high": 7.264765,
+        "cv_percent": 0.899
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 10.8877,
+        "sd": 0.148903,
+        "ci95_low": 10.517776,
+        "ci95_high": 11.257624,
+        "cv_percent": 1.368
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.951333,
+        "sd": 0.000899,
+        "ci95_low": 0.9491,
+        "ci95_high": 0.953567,
+        "cv_percent": 0.095
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.003759,
+        "sd": 0.063646,
+        "ci95_low": 6.845642,
+        "ci95_high": 7.161877,
+        "cv_percent": 0.909
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1124.596667,
+        "sd": 10.077908,
+        "ci95_low": 1099.559734,
+        "ci95_high": 1149.633599,
+        "cv_percent": 0.896
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 21.273678,
+        "sd": 0.216135,
+        "ci95_low": 20.736724,
+        "ci95_high": 21.810631,
+        "cv_percent": 1.016
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.717667,
+        "sd": 0.022723,
+        "ci95_low": 0.661215,
+        "ci95_high": 0.774118,
+        "cv_percent": 3.166
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.093,
+        "sd": 0.001,
+        "ci95_low": 1.090516,
+        "ci95_high": 1.095484,
+        "cv_percent": 0.091
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.000933,
+        "sd": 0.000929,
+        "ci95_low": -0.001375,
+        "ci95_high": 0.003242,
+        "cv_percent": 99.553
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 30.391633,
+        "sd": 0.266888,
+        "ci95_low": 29.728592,
+        "ci95_high": 31.054674,
+        "cv_percent": 0.878
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 76.3888,
+        "sd": 3.982658,
+        "ci95_low": 66.49453,
+        "ci95_high": 86.28307,
+        "cv_percent": 5.214
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.951357,
+        "sd": 0.001089,
+        "ci95_low": 0.948652,
+        "ci95_high": 0.954062,
+        "cv_percent": 0.114
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.564714,
+        "sd": 0.066742,
+        "ci95_low": 7.398903,
+        "ci95_high": 7.730524,
+        "cv_percent": 0.882
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1052.493333,
+        "sd": 9.36287,
+        "ci95_low": 1029.232798,
+        "ci95_high": 1075.753869,
+        "cv_percent": 0.89
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 35.609589,
+        "sd": 0.456679,
+        "ci95_low": 34.475044,
+        "ci95_high": 36.744134,
+        "cv_percent": 1.282
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.100333,
+        "sd": 0.244582,
+        "ci95_low": 0.492709,
+        "ci95_high": 1.707958,
+        "cv_percent": 22.228
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.097667,
+        "sd": 0.004041,
+        "ci95_low": 1.087626,
+        "ci95_high": 1.107707,
+        "cv_percent": 0.368
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0022,
+        "sd": 0.001819,
+        "ci95_low": -0.00232,
+        "ci95_high": 0.00672,
+        "cv_percent": 82.697
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 47.302267,
+        "sd": 0.717842,
+        "ci95_low": 45.518904,
+        "ci95_high": 49.08563,
+        "cv_percent": 1.518
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 130.977533,
+        "sd": 39.808592,
+        "ci95_low": 32.079527,
+        "ci95_high": 229.87554,
+        "cv_percent": 30.393
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.95148,
+        "sd": 0.001441,
+        "ci95_low": 0.947901,
+        "ci95_high": 0.955059,
+        "cv_percent": 0.151
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.853498,
+        "sd": 0.118614,
+        "ci95_low": 7.558822,
+        "ci95_high": 8.148174,
+        "cv_percent": 1.51
+      }
+    },
+    {
+      "mode": "direct",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1013.906667,
+        "sd": 15.098001,
+        "ci95_low": 976.398126,
+        "ci95_high": 1051.415207,
+        "cv_percent": 1.489
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 0.844197,
+        "sd": 0.004485,
+        "ci95_low": 0.833055,
+        "ci95_high": 0.855338,
+        "cv_percent": 0.531
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.001333,
+        "sd": 0.000577,
+        "ci95_low": -0.000101,
+        "ci95_high": 0.002768,
+        "cv_percent": 43.301
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.170667,
+        "sd": 0.000577,
+        "ci95_low": 5.169232,
+        "ci95_high": 5.172101,
+        "cv_percent": 0.011
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.6878,
+        "sd": 0.006409,
+        "ci95_low": 1.671877,
+        "ci95_high": 1.703723,
+        "cv_percent": 0.38
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.885733,
+        "sd": 0.072447,
+        "ci95_low": 2.705751,
+        "ci95_high": 3.065716,
+        "cv_percent": 2.511
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.83886,
+        "sd": 0.001926,
+        "ci95_low": 0.834075,
+        "ci95_high": 0.843645,
+        "cv_percent": 0.23
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.471057,
+        "sd": 0.003443,
+        "ci95_low": 1.462504,
+        "ci95_high": 1.479611,
+        "cv_percent": 0.234
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 589.303333,
+        "sd": 2.223361,
+        "ci95_low": 583.779753,
+        "ci95_high": 594.826914,
+        "cv_percent": 0.377
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 6.659235,
+        "sd": 0.017745,
+        "ci95_low": 6.61515,
+        "ci95_high": 6.70332,
+        "cv_percent": 0.266
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.010667,
+        "sd": 0.000577,
+        "ci95_low": 0.009232,
+        "ci95_high": 0.012101,
+        "cv_percent": 5.413
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.024,
+        "sd": 0.0,
+        "ci95_low": 5.024,
+        "ci95_high": 5.024,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.779633,
+        "sd": 0.00595,
+        "ci95_low": 1.764851,
+        "ci95_high": 1.794415,
+        "cv_percent": 0.334
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 3.076333,
+        "sd": 0.085275,
+        "ci95_low": 2.864481,
+        "ci95_high": 3.288185,
+        "cv_percent": 2.772
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838423,
+        "sd": 0.001851,
+        "ci95_low": 0.833824,
+        "ci95_high": 0.843023,
+        "cv_percent": 0.221
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.550998,
+        "sd": 0.005109,
+        "ci95_low": 1.538305,
+        "ci95_high": 1.563691,
+        "cv_percent": 0.329
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 4472.27,
+        "sd": 15.080196,
+        "ci95_low": 4434.805694,
+        "ci95_high": 4509.734306,
+        "cv_percent": 0.337
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.590442,
+        "sd": 0.013402,
+        "ci95_low": 7.557147,
+        "ci95_high": 7.623737,
+        "cv_percent": 0.177
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.024333,
+        "sd": 0.000577,
+        "ci95_low": 0.022899,
+        "ci95_high": 0.025768,
+        "cv_percent": 2.373
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.024,
+        "sd": 0.0,
+        "ci95_low": 5.024,
+        "ci95_high": 5.024,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0002,
+        "sd": 0.0001,
+        "ci95_low": -4.8e-05,
+        "ci95_high": 0.000448,
+        "cv_percent": 50.0
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.9011,
+        "sd": 0.027599,
+        "ci95_low": 6.832535,
+        "ci95_high": 6.969665,
+        "cv_percent": 0.4
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 13.0075,
+        "sd": 0.091627,
+        "ci95_low": 12.779868,
+        "ci95_high": 13.235132,
+        "cv_percent": 0.704
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838463,
+        "sd": 0.001933,
+        "ci95_low": 0.833661,
+        "ci95_high": 0.843266,
+        "cv_percent": 0.231
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.685292,
+        "sd": 0.00643,
+        "ci95_low": 1.669318,
+        "ci95_high": 1.701266,
+        "cv_percent": 0.382
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 4629.57,
+        "sd": 18.538563,
+        "ci95_low": 4583.513941,
+        "ci95_high": 4675.626059,
+        "cv_percent": 0.4
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.64213,
+        "sd": 0.016704,
+        "ci95_low": 7.600631,
+        "ci95_high": 7.683629,
+        "cv_percent": 0.219
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.024667,
+        "sd": 0.000577,
+        "ci95_low": 0.023232,
+        "ci95_high": 0.026101,
+        "cv_percent": 2.341
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.026,
+        "sd": 0.0,
+        "ci95_low": 5.026,
+        "ci95_high": 5.026,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.000533,
+        "sd": 0.000252,
+        "ci95_low": -9.2e-05,
+        "ci95_high": 0.001159,
+        "cv_percent": 47.186
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 10.692933,
+        "sd": 0.074319,
+        "ci95_low": 10.5083,
+        "ci95_high": 10.877567,
+        "cv_percent": 0.695
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 21.2156,
+        "sd": 0.588411,
+        "ci95_low": 19.753787,
+        "ci95_high": 22.677413,
+        "cv_percent": 2.773
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.839053,
+        "sd": 0.001979,
+        "ci95_low": 0.834137,
+        "ci95_high": 0.843969,
+        "cv_percent": 0.236
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.745913,
+        "sd": 0.012589,
+        "ci95_low": 1.714638,
+        "ci95_high": 1.777189,
+        "cv_percent": 0.721
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 4483.69,
+        "sd": 31.271391,
+        "ci95_low": 4406.001288,
+        "ci95_high": 4561.378712,
+        "cv_percent": 0.697
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 0.959135,
+        "sd": 0.005243,
+        "ci95_low": 0.94611,
+        "ci95_high": 0.972161,
+        "cv_percent": 0.547
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.015333,
+        "sd": 0.004619,
+        "ci95_low": 0.003859,
+        "ci95_high": 0.026808,
+        "cv_percent": 30.123
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.684,
+        "sd": 0.00781,
+        "ci95_low": 5.664597,
+        "ci95_high": 5.703403,
+        "cv_percent": 0.137
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.867667,
+        "sd": 0.076055,
+        "ci95_low": 6.67872,
+        "ci95_high": 7.056614,
+        "cv_percent": 1.107
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 10.345567,
+        "sd": 0.115562,
+        "ci95_low": 10.058471,
+        "ci95_high": 10.632662,
+        "cv_percent": 1.117
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.951797,
+        "sd": 0.000927,
+        "ci95_low": 0.949495,
+        "ci95_high": 0.954098,
+        "cv_percent": 0.097
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 6.655006,
+        "sd": 0.078281,
+        "ci95_low": 6.46053,
+        "ci95_high": 6.849482,
+        "cv_percent": 1.176
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 145.43,
+        "sd": 1.571623,
+        "ci95_low": 141.525556,
+        "ci95_high": 149.334444,
+        "cv_percent": 1.081
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.62081,
+        "sd": 0.005913,
+        "ci95_low": 7.60612,
+        "ci95_high": 7.6355,
+        "cv_percent": 0.078
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.085333,
+        "sd": 0.001528,
+        "ci95_low": 0.081538,
+        "ci95_high": 0.089128,
+        "cv_percent": 1.79
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.092,
+        "sd": 0.001,
+        "ci95_low": 5.089516,
+        "ci95_high": 5.094484,
+        "cv_percent": 0.02
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 7.3193,
+        "sd": 0.064189,
+        "ci95_low": 7.159833,
+        "ci95_high": 7.478767,
+        "cv_percent": 0.877
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 11.115933,
+        "sd": 0.149307,
+        "ci95_low": 10.745004,
+        "ci95_high": 11.486863,
+        "cv_percent": 1.343
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.951387,
+        "sd": 0.000879,
+        "ci95_low": 0.949202,
+        "ci95_high": 0.953571,
+        "cv_percent": 0.092
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.067692,
+        "sd": 0.065658,
+        "ci95_low": 6.904576,
+        "ci95_high": 7.230807,
+        "cv_percent": 0.929
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1091.676667,
+        "sd": 9.596334,
+        "ci95_low": 1067.836127,
+        "ci95_high": 1115.517207,
+        "cv_percent": 0.879
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 15.550782,
+        "sd": 0.125492,
+        "ci95_low": 15.239017,
+        "ci95_high": 15.862547,
+        "cv_percent": 0.807
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.296667,
+        "sd": 0.015535,
+        "ci95_low": 1.258073,
+        "ci95_high": 1.335261,
+        "cv_percent": 1.198
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.079,
+        "sd": 0.002646,
+        "ci95_low": 5.072427,
+        "ci95_high": 5.085573,
+        "cv_percent": 0.052
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.000333,
+        "sd": 0.000493,
+        "ci95_low": -0.000892,
+        "ci95_high": 0.001559,
+        "cv_percent": 147.986
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 30.824033,
+        "sd": 0.27001,
+        "ci95_low": 30.153237,
+        "ci95_high": 31.494829,
+        "cv_percent": 0.876
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 52.779167,
+        "sd": 0.269616,
+        "ci95_low": 52.109349,
+        "ci95_high": 53.448985,
+        "cv_percent": 0.511
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.95123,
+        "sd": 0.000915,
+        "ci95_low": 0.948956,
+        "ci95_high": 0.953504,
+        "cv_percent": 0.096
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.646777,
+        "sd": 0.065985,
+        "ci95_low": 7.482849,
+        "ci95_high": 7.810705,
+        "cv_percent": 0.863
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1037.7,
+        "sd": 8.95377,
+        "ci95_low": 1015.455807,
+        "ci95_high": 1059.944193,
+        "cv_percent": 0.863
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 25.645744,
+        "sd": 0.069217,
+        "ci95_low": 25.473785,
+        "ci95_high": 25.817703,
+        "cv_percent": 0.27
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.433667,
+        "sd": 0.007572,
+        "ci95_low": 1.414856,
+        "ci95_high": 1.452478,
+        "cv_percent": 0.528
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 5.1,
+        "sd": 0.003464,
+        "ci95_low": 5.091394,
+        "ci95_high": 5.108606,
+        "cv_percent": 0.068
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.003033,
+        "sd": 0.004738,
+        "ci95_low": -0.008739,
+        "ci95_high": 0.014805,
+        "cv_percent": 156.214
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 48.087167,
+        "sd": 0.353394,
+        "ci95_low": 47.209216,
+        "ci95_high": 48.965117,
+        "cv_percent": 0.735
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 99.1745,
+        "sd": 9.356303,
+        "ci95_low": 75.930278,
+        "ci95_high": 122.418722,
+        "cv_percent": 9.434
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.951483,
+        "sd": 0.001192,
+        "ci95_low": 0.948522,
+        "ci95_high": 0.954444,
+        "cv_percent": 0.125
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.956407,
+        "sd": 0.06143,
+        "ci95_low": 7.803795,
+        "ci95_high": 8.109019,
+        "cv_percent": 0.772
+      }
+    },
+    {
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 997.71,
+        "sd": 7.488878,
+        "ci95_low": 979.105093,
+        "ci95_high": 1016.314907,
+        "cv_percent": 0.751
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 0.793072,
+        "sd": 0.010151,
+        "ci95_low": 0.767853,
+        "ci95_high": 0.818292,
+        "cv_percent": 1.28
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.001333,
+        "sd": 0.000577,
+        "ci95_low": -0.000101,
+        "ci95_high": 0.002768,
+        "cv_percent": 43.301
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 15.208333,
+        "sd": 0.003786,
+        "ci95_low": 15.198928,
+        "ci95_high": 15.217739,
+        "cv_percent": 0.025
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.786567,
+        "sd": 0.018188,
+        "ci95_low": 1.741382,
+        "ci95_high": 1.831752,
+        "cv_percent": 1.018
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.984733,
+        "sd": 0.083408,
+        "ci95_low": 2.777519,
+        "ci95_high": 3.191947,
+        "cv_percent": 2.794
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.042667,
+        "sd": 0.000351,
+        "ci95_low": 0.041794,
+        "ci95_high": 0.043539,
+        "cv_percent": 0.823
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.076618,
+        "sd": 0.000968,
+        "ci95_low": 0.074214,
+        "ci95_high": 0.079022,
+        "cv_percent": 1.263
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838603,
+        "sd": 0.001936,
+        "ci95_low": 0.833793,
+        "ci95_high": 0.843414,
+        "cv_percent": 0.231
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.549334,
+        "sd": 0.017341,
+        "ci95_low": 1.506253,
+        "ci95_high": 1.592414,
+        "cv_percent": 1.119
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 556.91,
+        "sd": 5.711156,
+        "ci95_low": 542.721558,
+        "ci95_high": 571.098442,
+        "cv_percent": 1.026
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 5.714576,
+        "sd": 0.008794,
+        "ci95_low": 5.692729,
+        "ci95_high": 5.736423,
+        "cv_percent": 0.154
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.008333,
+        "sd": 0.001155,
+        "ci95_low": 0.005465,
+        "ci95_high": 0.011202,
+        "cv_percent": 13.856
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 9.338,
+        "sd": 0.080169,
+        "ci95_low": 9.138834,
+        "ci95_high": 9.537166,
+        "cv_percent": 0.859
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 3.3e-05,
+        "sd": 5.8e-05,
+        "ci95_low": -0.00011,
+        "ci95_high": 0.000177,
+        "cv_percent": 173.205
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 2.103767,
+        "sd": 0.013616,
+        "ci95_low": 2.069939,
+        "ci95_high": 2.137594,
+        "cv_percent": 0.647
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 4.027033,
+        "sd": 0.054553,
+        "ci95_low": 3.891506,
+        "ci95_high": 4.162561,
+        "cv_percent": 1.355
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.258767,
+        "sd": 0.002501,
+        "ci95_low": 0.252554,
+        "ci95_high": 0.264979,
+        "cv_percent": 0.966
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.068346,
+        "sd": 0.000414,
+        "ci95_low": 0.067318,
+        "ci95_high": 0.069375,
+        "cv_percent": 0.606
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838483,
+        "sd": 0.001806,
+        "ci95_low": 0.833996,
+        "ci95_high": 0.842971,
+        "cv_percent": 0.215
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.629834,
+        "sd": 0.010564,
+        "ci95_low": 1.60359,
+        "ci95_high": 1.656078,
+        "cv_percent": 0.648
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 3786.236667,
+        "sd": 24.444828,
+        "ci95_low": 3725.507446,
+        "ci95_high": 3846.965888,
+        "cv_percent": 0.646
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 5.715352,
+        "sd": 0.010026,
+        "ci95_low": 5.690445,
+        "ci95_high": 5.740259,
+        "cv_percent": 0.175
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.009,
+        "sd": 0.0,
+        "ci95_low": 0.009,
+        "ci95_high": 0.009,
+        "cv_percent": 0.0
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 8.880333,
+        "sd": 0.05577,
+        "ci95_low": 8.741781,
+        "ci95_high": 9.018886,
+        "cv_percent": 0.628
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 3.3e-05,
+        "sd": 5.8e-05,
+        "ci95_low": -0.00011,
+        "ci95_high": 0.000177,
+        "cv_percent": 173.205
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 8.472067,
+        "sd": 0.024991,
+        "ci95_low": 8.409979,
+        "ci95_high": 8.534154,
+        "cv_percent": 0.295
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 10.830733,
+        "sd": 0.069409,
+        "ci95_low": 10.658299,
+        "ci95_high": 11.003168,
+        "cv_percent": 0.641
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.264567,
+        "sd": 0.002228,
+        "ci95_low": 0.259032,
+        "ci95_high": 0.270101,
+        "cv_percent": 0.842
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.070126,
+        "sd": 0.000402,
+        "ci95_low": 0.069128,
+        "ci95_high": 0.071125,
+        "cv_percent": 0.573
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.838447,
+        "sd": 0.001885,
+        "ci95_low": 0.833764,
+        "ci95_high": 0.84313,
+        "cv_percent": 0.225
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.632042,
+        "sd": 0.01049,
+        "ci95_low": 1.605982,
+        "ci95_high": 1.658102,
+        "cv_percent": 0.643
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 3772.526667,
+        "sd": 11.155995,
+        "ci95_low": 3744.811401,
+        "ci95_high": 3800.241932,
+        "cv_percent": 0.296
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 5.687421,
+        "sd": 0.05927,
+        "ci95_low": 5.540174,
+        "ci95_high": 5.834668,
+        "cv_percent": 1.042
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.008333,
+        "sd": 0.000577,
+        "ci95_low": 0.006899,
+        "ci95_high": 0.009768,
+        "cv_percent": 6.928
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 8.971667,
+        "sd": 0.062644,
+        "ci95_low": 8.816037,
+        "ci95_high": 9.127297,
+        "cv_percent": 0.698
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 12.7379,
+        "sd": 0.070356,
+        "ci95_low": 12.563113,
+        "ci95_high": 12.912687,
+        "cv_percent": 0.552
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 15.160467,
+        "sd": 0.13804,
+        "ci95_low": 14.817528,
+        "ci95_high": 15.503406,
+        "cv_percent": 0.911
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.266,
+        "sd": 0.003161,
+        "ci95_low": 0.258148,
+        "ci95_high": 0.273852,
+        "cv_percent": 1.188
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.070652,
+        "sd": 0.000496,
+        "ci95_low": 0.069418,
+        "ci95_high": 0.071885,
+        "cv_percent": 0.703
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.8385,
+        "sd": 0.001887,
+        "ci95_low": 0.833811,
+        "ci95_high": 0.843189,
+        "cv_percent": 0.225
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.632321,
+        "sd": 0.010253,
+        "ci95_low": 1.606848,
+        "ci95_high": 1.657793,
+        "cv_percent": 0.628
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 3764.88,
+        "sd": 20.855894,
+        "ci95_low": 3713.066907,
+        "ci95_high": 3816.693093,
+        "cv_percent": 0.554
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 0.944894,
+        "sd": 0.002948,
+        "ci95_low": 0.937571,
+        "ci95_high": 0.952217,
+        "cv_percent": 0.312
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.010667,
+        "sd": 0.000577,
+        "ci95_low": 0.009232,
+        "ci95_high": 0.012101,
+        "cv_percent": 5.413
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 15.721667,
+        "sd": 0.007371,
+        "ci95_low": 15.703354,
+        "ci95_high": 15.739979,
+        "cv_percent": 0.047
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 6.8014,
+        "sd": 0.045403,
+        "ci95_low": 6.688604,
+        "ci95_high": 6.914196,
+        "cv_percent": 0.668
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 10.2975,
+        "sd": 0.010201,
+        "ci95_low": 10.272156,
+        "ci95_high": 10.322844,
+        "cv_percent": 0.099
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.011467,
+        "sd": 0.000404,
+        "ci95_low": 0.010463,
+        "ci95_high": 0.012471,
+        "cv_percent": 3.525
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.077954,
+        "sd": 0.003069,
+        "ci95_low": 0.070329,
+        "ci95_high": 0.085579,
+        "cv_percent": 3.937
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.952,
+        "sd": 0.001281,
+        "ci95_low": 0.948817,
+        "ci95_high": 0.955183,
+        "cv_percent": 0.135
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 6.583645,
+        "sd": 0.048665,
+        "ci95_low": 6.462746,
+        "ci95_high": 6.704545,
+        "cv_percent": 0.739
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 146.833333,
+        "sd": 0.985512,
+        "ci95_low": 144.384989,
+        "ci95_high": 149.281678,
+        "cv_percent": 0.671
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.396308,
+        "sd": 0.044578,
+        "ci95_low": 7.285561,
+        "ci95_high": 7.507055,
+        "cv_percent": 0.603
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 3.008333,
+        "sd": 0.197703,
+        "ci95_low": 2.517173,
+        "ci95_high": 3.499494,
+        "cv_percent": 6.572
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 13.630667,
+        "sd": 0.017214,
+        "ci95_low": 13.5879,
+        "ci95_high": 13.673433,
+        "cv_percent": 0.126
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 7.5039,
+        "sd": 0.102164,
+        "ci95_low": 7.25009,
+        "ci95_high": 7.75771,
+        "cv_percent": 1.361
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 12.301733,
+        "sd": 0.670847,
+        "ci95_low": 10.635123,
+        "ci95_high": 13.968343,
+        "cv_percent": 5.453
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.0941,
+        "sd": 0.001825,
+        "ci95_low": 0.089567,
+        "ci95_high": 0.098633,
+        "cv_percent": 1.939
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.088366,
+        "sd": 0.000553,
+        "ci95_low": 0.086993,
+        "ci95_high": 0.089739,
+        "cv_percent": 0.625
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.951363,
+        "sd": 0.000896,
+        "ci95_low": 0.949137,
+        "ci95_high": 0.95359,
+        "cv_percent": 0.094
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.087541,
+        "sd": 0.05264,
+        "ci95_low": 6.956765,
+        "ci95_high": 7.218317,
+        "cv_percent": 0.743
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1064.953333,
+        "sd": 14.394778,
+        "ci95_low": 1029.191836,
+        "ci95_high": 1100.71483,
+        "cv_percent": 1.352
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.342648,
+        "sd": 0.086465,
+        "ci95_low": 7.127838,
+        "ci95_high": 7.557457,
+        "cv_percent": 1.178
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 2.853667,
+        "sd": 0.407792,
+        "ci95_low": 1.840573,
+        "ci95_high": 3.86676,
+        "cv_percent": 14.29
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 12.861667,
+        "sd": 0.003786,
+        "ci95_low": 12.852261,
+        "ci95_high": 12.871072,
+        "cv_percent": 0.029
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 30.230433,
+        "sd": 0.654297,
+        "ci95_low": 28.604937,
+        "ci95_high": 31.85593,
+        "cv_percent": 2.164
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 36.673867,
+        "sd": 1.452237,
+        "ci95_low": 33.066019,
+        "ci95_high": 40.281714,
+        "cv_percent": 3.96
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.096533,
+        "sd": 0.002804,
+        "ci95_low": 0.089567,
+        "ci95_high": 0.1035,
+        "cv_percent": 2.905
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.091212,
+        "sd": 0.000712,
+        "ci95_low": 0.089442,
+        "ci95_high": 0.092982,
+        "cv_percent": 0.781
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.95144,
+        "sd": 0.000878,
+        "ci95_low": 0.949258,
+        "ci95_high": 0.953622,
+        "cv_percent": 0.092
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.087751,
+        "sd": 0.056578,
+        "ci95_low": 6.947191,
+        "ci95_high": 7.22831,
+        "cv_percent": 0.798
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1058.463333,
+        "sd": 22.573064,
+        "ci95_low": 1002.384207,
+        "ci95_high": 1114.54246,
+        "cv_percent": 2.133
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "active_backends",
+      "stats": {
+        "n": 3,
+        "mean": 7.353954,
+        "sd": 0.015969,
+        "ci95_low": 7.31428,
+        "ci95_high": 7.393627,
+        "cv_percent": 0.217
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "ctx_involuntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 2.896333,
+        "sd": 0.141765,
+        "ci95_low": 2.544141,
+        "ci95_high": 3.248526,
+        "cv_percent": 4.895
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "ctx_voluntary_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 12.898333,
+        "sd": 0.017243,
+        "ci95_low": 12.855495,
+        "ci95_high": 12.941172,
+        "cv_percent": 0.134
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "lockmanager_share",
+      "stats": {
+        "n": 3,
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0,
+        "cv_percent": null
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 45.307433,
+        "sd": 0.435648,
+        "ci95_low": 44.225137,
+        "ci95_high": 46.389729,
+        "cv_percent": 0.962
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 52.000733,
+        "sd": 0.661767,
+        "ci95_low": 50.356681,
+        "ci95_high": 53.644785,
+        "cv_percent": 1.273
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "pooler_cores_busy",
+      "stats": {
+        "n": 3,
+        "mean": 0.097433,
+        "sd": 0.001401,
+        "ci95_low": 0.093952,
+        "ci95_high": 0.100914,
+        "cv_percent": 1.438
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "pooler_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.09199,
+        "sd": 0.000432,
+        "ci95_low": 0.090916,
+        "ci95_high": 0.093063,
+        "cv_percent": 0.47
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "recall_at_k",
+      "stats": {
+        "n": 3,
+        "mean": 0.951393,
+        "sd": 0.000906,
+        "ci95_low": 0.949143,
+        "ci95_high": 0.953643,
+        "cv_percent": 0.095
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 7.089315,
+        "sd": 0.060888,
+        "ci95_low": 6.938047,
+        "ci95_high": 7.240583,
+        "cv_percent": 0.859
+      }
+    },
+    {
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1059.26,
+        "sd": 10.123734,
+        "ci95_low": 1034.10922,
+        "ci95_high": 1084.41078,
+        "cv_percent": 0.956
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.138263,
+        "sd": 0.010346,
+        "ci95_low": 1.112561,
+        "ci95_high": 1.163966
+      },
+      "range": [
+        1.130521954153579,
+        1.1500136873802353
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.07862,
+        "sd": 0.010556,
+        "ci95_low": 1.052395,
+        "ci95_high": 1.104845
+      },
+      "range": [
+        1.0683462299802051,
+        1.0894374591456146
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.041554,
+        "sd": 0.010867,
+        "ci95_low": 1.014557,
+        "ci95_high": 1.068552
+      },
+      "range": [
+        1.0346246480307277,
+        1.0540787345681006
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.878536,
+        "sd": 0.007893,
+        "ci95_low": 0.858926,
+        "ci95_high": 0.898146
+      },
+      "range": [
+        0.8695914079602721,
+        0.8845245437997382
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.124664,
+        "sd": 0.001929,
+        "ci95_low": 1.119872,
+        "ci95_high": 1.129457
+      },
+      "range": [
+        1.1225985844287159,
+        1.126418663303909
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.070235,
+        "sd": 0.001869,
+        "ci95_low": 1.065591,
+        "ci95_high": 1.074879
+      },
+      "range": [
+        1.0680774394121386,
+        1.0713755399568035
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.032776,
+        "sd": 0.002861,
+        "ci95_low": 1.025668,
+        "ci95_high": 1.039883
+      },
+      "range": [
+        1.029676725686562,
+        1.0353166649598409
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.88915,
+        "sd": 0.001561,
+        "ci95_low": 0.885272,
+        "ci95_high": 0.893028
+      },
+      "range": [
+        0.8877671605504129,
+        0.8908428302171889
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.057172,
+        "sd": 0.002137,
+        "ci95_low": 1.051863,
+        "ci95_high": 1.062481
+      },
+      "range": [
+        1.0547494709276655,
+        1.0587910486678833
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.760051,
+        "sd": 0.031603,
+        "ci95_low": 0.681538,
+        "ci95_high": 0.838563
+      },
+      "range": [
+        0.7243564775142727,
+        0.7844706728176862
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.040969,
+        "sd": 0.002416,
+        "ci95_low": 1.034966,
+        "ci95_high": 1.046972
+      },
+      "range": [
+        1.0382579540634458,
+        1.0428955667425894
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.945778,
+        "sd": 0.001929,
+        "ci95_low": 0.940985,
+        "ci95_high": 0.950571
+      },
+      "range": [
+        0.9443069483692602,
+        0.9479621453179087
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.05323,
+        "sd": 0.005662,
+        "ci95_low": 1.039164,
+        "ci95_high": 1.067297
+      },
+      "range": [
+        1.0468435787232366,
+        1.0576345099888032
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.992617,
+        "sd": 0.093798,
+        "ci95_low": 0.759591,
+        "ci95_high": 1.225642
+      },
+      "range": [
+        0.8843834563859286,
+        1.0502252338967388
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.04003,
+        "sd": 0.005974,
+        "ci95_low": 1.025188,
+        "ci95_high": 1.054872
+      },
+      "range": [
+        1.0333801889964305,
+        1.0449449084263014
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.949376,
+        "sd": 0.005149,
+        "ci95_low": 0.936585,
+        "ci95_high": 0.962167
+      },
+      "range": [
+        0.9453179576141448,
+        0.9551675767853101
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.041004,
+        "sd": 0.00898,
+        "ci95_low": 1.018694,
+        "ci95_high": 1.063314
+      },
+      "range": [
+        1.0330473274110907,
+        1.0507411279906513
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.026515,
+        "sd": 0.01023,
+        "ci95_low": 1.001099,
+        "ci95_high": 1.051931
+      },
+      "range": [
+        1.0172937072584303,
+        1.0375198792556801
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.018532,
+        "sd": 0.009477,
+        "ci95_low": 0.994987,
+        "ci95_high": 1.042077
+      },
+      "range": [
+        1.009540036782856,
+        1.0284298705226478
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.960558,
+        "sd": 0.008399,
+        "ci95_low": 0.939693,
+        "ci95_high": 0.981423
+      },
+      "range": [
+        0.9513671875,
+        0.9678335535006605
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.030014,
+        "sd": 0.00085,
+        "ci95_low": 1.027902,
+        "ci95_high": 1.032125
+      },
+      "range": [
+        1.029119238138172,
+        1.0308104962888325
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.020965,
+        "sd": 0.000288,
+        "ci95_low": 1.02025,
+        "ci95_high": 1.02168
+      },
+      "range": [
+        1.0206385798043236,
+        1.0211831616241667
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.009127,
+        "sd": 0.001064,
+        "ci95_low": 1.006484,
+        "ci95_high": 1.011771
+      },
+      "range": [
+        1.0078990490609536,
+        1.0097693141878648
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.970728,
+        "sd": 0.000757,
+        "ci95_low": 0.968848,
+        "ci95_high": 0.972609
+      },
+      "range": [
+        0.970054494471192,
+        0.9715473514963624
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.014228,
+        "sd": 0.000898,
+        "ci95_low": 1.011996,
+        "ci95_high": 1.01646
+      },
+      "range": [
+        1.0136894038175057,
+        1.0152651894398483
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.692238,
+        "sd": 0.037943,
+        "ci95_low": 0.597974,
+        "ci95_high": 0.786502
+      },
+      "range": [
+        0.6594799731528219,
+        0.7338137963501427
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.01085,
+        "sd": 0.000939,
+        "ci95_low": 1.008516,
+        "ci95_high": 1.013184
+      },
+      "range": [
+        1.0101368053461424,
+        1.0119141646797378
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.985946,
+        "sd": 0.000754,
+        "ci95_low": 0.984074,
+        "ci95_high": 0.987818
+      },
+      "range": [
+        0.9851290524756425,
+        0.986613735304835
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.016715,
+        "sd": 0.01376,
+        "ci95_low": 0.982529,
+        "ci95_high": 1.0509
+      },
+      "range": [
+        1.0077803518017823,
+        1.0325609136021248
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.816486,
+        "sd": 0.3073,
+        "ci95_low": 0.053048,
+        "ci95_high": 1.579924
+      },
+      "range": [
+        0.5329777991862855,
+        1.1430392487138217
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.013221,
+        "sd": 0.013569,
+        "ci95_low": 0.97951,
+        "ci95_high": 1.046932
+      },
+      "range": [
+        1.004844471392305,
+        1.028876463337783
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "direct_txn",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.984138,
+        "sd": 0.013048,
+        "ci95_low": 0.951722,
+        "ci95_high": 1.016554
+      },
+      "range": [
+        0.9690850937654939,
+        0.9922280311679987
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.058543,
+        "sd": 0.013372,
+        "ci95_low": 1.025321,
+        "ci95_high": 1.091765
+      },
+      "range": [
+        1.043868984273383,
+        1.0700428469412047
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.03432,
+        "sd": 0.014246,
+        "ci95_low": 0.998929,
+        "ci95_high": 1.069711
+      },
+      "range": [
+        1.01933111539135,
+        1.0476829139166344
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.053227,
+        "sd": 0.013554,
+        "ci95_low": 1.019554,
+        "ci95_high": 1.0869
+      },
+      "range": [
+        1.039177738754412,
+        1.0662247547900294
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.945053,
+        "sd": 0.011918,
+        "ci95_low": 0.915444,
+        "ci95_high": 0.974661
+      },
+      "range": [
+        0.9350026188183216,
+        0.9582192596119509
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.182127,
+        "sd": 0.003714,
+        "ci95_low": 1.1729,
+        "ci95_high": 1.191354
+      },
+      "range": [
+        1.1793355855855856,
+        1.1863420095158133
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.309375,
+        "sd": 0.018374,
+        "ci95_low": 1.263729,
+        "ci95_high": 1.355022
+      },
+      "range": [
+        1.288310706523451,
+        1.3220983693315251
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.050822,
+        "sd": 0.003398,
+        "ci95_low": 1.04238,
+        "ci95_high": 1.059263
+      },
+      "range": [
+        1.0483325702396027,
+        1.0546929295498544
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.846597,
+        "sd": 0.002637,
+        "ci95_low": 0.840046,
+        "ci95_high": 0.853148
+      },
+      "range": [
+        0.8436090023031028,
+        0.8485983852755697
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.227657,
+        "sd": 0.007084,
+        "ci95_low": 1.210057,
+        "ci95_high": 1.245257
+      },
+      "range": [
+        1.2195100827114338,
+        1.2323720280534294
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.832695,
+        "sd": 0.009903,
+        "ci95_low": 0.808092,
+        "ci95_high": 0.857297
+      },
+      "range": [
+        0.8214165699272927,
+        0.8399683995290911
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.9684,
+        "sd": 0.003849,
+        "ci95_low": 0.958837,
+        "ci95_high": 0.977962
+      },
+      "range": [
+        0.9643922493485664,
+        0.9720680762304318
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.814887,
+        "sd": 0.004719,
+        "ci95_low": 0.803165,
+        "ci95_high": 0.82661
+      },
+      "range": [
+        0.8117497999466524,
+        0.8203137197078773
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.191285,
+        "sd": 0.010893,
+        "ci95_low": 1.164223,
+        "ci95_high": 1.218347
+      },
+      "range": [
+        1.1838836404452342,
+        1.2037929865531658
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.715,
+        "sd": 0.023091,
+        "ci95_low": 0.657634,
+        "ci95_high": 0.772367
+      },
+      "range": [
+        0.6955137017688572,
+        0.7405046738024895
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.934946,
+        "sd": 0.003244,
+        "ci95_low": 0.926886,
+        "ci95_high": 0.943005
+      },
+      "range": [
+        0.931727538018577,
+        0.9382152851449131
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.839712,
+        "sd": 0.007656,
+        "ci95_low": 0.820693,
+        "ci95_high": 0.858731
+      },
+      "range": [
+        0.8309193082871313,
+        0.8449007898457325
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.990426,
+        "sd": 0.012092,
+        "ci95_low": 0.960386,
+        "ci95_high": 1.020465
+      },
+      "range": [
+        0.977857019612354,
+        1.00197553266214
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.995439,
+        "sd": 0.011464,
+        "ci95_low": 0.966958,
+        "ci95_high": 1.02392
+      },
+      "range": [
+        0.983496490138962,
+        1.0063558701488895
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.989359,
+        "sd": 0.012757,
+        "ci95_low": 0.957666,
+        "ci95_high": 1.021053
+      },
+      "range": [
+        0.9759653880235303,
+        1.0013669806318997
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.009724,
+        "sd": 0.012339,
+        "ci95_low": 0.979069,
+        "ci95_high": 1.040379
+      },
+      "range": [
+        0.9979470334633547,
+        1.022557961428671
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.025203,
+        "sd": 0.007583,
+        "ci95_low": 1.006365,
+        "ci95_high": 1.044041
+      },
+      "range": [
+        1.0166732830488288,
+        1.0311797980891546
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.10675,
+        "sd": 0.060302,
+        "ci95_low": 0.95694,
+        "ci95_high": 1.256559
+      },
+      "range": [
+        1.0372393380869098,
+        1.1450433947499465
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.00282,
+        "sd": 0.002165,
+        "ci95_low": 0.997441,
+        "ci95_high": 1.008199
+      },
+      "range": [
+        1.0010369756613242,
+        1.0052294800170056
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.975504,
+        "sd": 0.007238,
+        "ci95_low": 0.957523,
+        "ci95_high": 0.993485
+      },
+      "range": [
+        0.9698491532791359,
+        0.9836609673585077
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.980685,
+        "sd": 0.014349,
+        "ci95_low": 0.945037,
+        "ci95_high": 1.016333
+      },
+      "range": [
+        0.9686505529297654,
+        0.9965651101383927
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.694832,
+        "sd": 0.026363,
+        "ci95_low": 0.629337,
+        "ci95_high": 0.760326
+      },
+      "range": [
+        0.6794490306146516,
+        0.725272500955314
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.926899,
+        "sd": 0.002064,
+        "ci95_low": 0.921772,
+        "ci95_high": 0.932025
+      },
+      "range": [
+        0.9246896754386401,
+        0.9287768285389303
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.019952,
+        "sd": 0.014988,
+        "ci95_low": 0.982716,
+        "ci95_high": 1.057188
+      },
+      "range": [
+        1.0034016911264456,
+        1.0326103720840563
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.942184,
+        "sd": 0.002368,
+        "ci95_low": 0.9363,
+        "ci95_high": 0.948067
+      },
+      "range": [
+        0.939459035770872,
+        0.9437488572330913
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.527111,
+        "sd": 0.044633,
+        "ci95_low": 0.416228,
+        "ci95_high": 0.637993
+      },
+      "range": [
+        0.4770861266912512,
+        0.5628574748557189
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.891018,
+        "sd": 0.002542,
+        "ci95_low": 0.884704,
+        "ci95_high": 0.897332
+      },
+      "range": [
+        0.8881532645077933,
+        0.8930020269422992
+      ]
+    },
+    {
+      "baseline": "direct_txn",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.061681,
+        "sd": 0.002466,
+        "ci95_low": 1.055555,
+        "ci95_high": 1.067806
+      },
+      "range": [
+        1.0599199462295477,
+        1.0644988066825776
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.204957,
+        "sd": 0.023623,
+        "ci95_low": 1.146269,
+        "ci95_high": 1.263645
+      },
+      "range": [
+        1.1840128755364807,
+        1.2305639200656995
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.115683,
+        "sd": 0.0226,
+        "ci95_low": 1.059537,
+        "ci95_high": 1.17183
+      },
+      "range": [
+        1.098916449579039,
+        1.1413850117276119
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.097071,
+        "sd": 0.024288,
+        "ci95_low": 1.036732,
+        "ci95_high": 1.15741
+      },
+      "range": [
+        1.0765463364532661,
+        1.1238848402942576
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.8303,
+        "sd": 0.01599,
+        "ci95_low": 0.790575,
+        "ci95_high": 0.870024
+      },
+      "range": [
+        0.8130702437447659,
+        0.8446629592433259
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.329499,
+        "sd": 0.005939,
+        "ci95_low": 1.314744,
+        "ci95_high": 1.344254
+      },
+      "range": [
+        1.3254550050556118,
+        1.3363177805800757
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.401325,
+        "sd": 0.01824,
+        "ci95_low": 1.356009,
+        "ci95_high": 1.44664
+      },
+      "range": [
+        1.3802645788336931,
+        1.4121034409665796
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.085267,
+        "sd": 0.005935,
+        "ci95_low": 1.070523,
+        "ci95_high": 1.100011
+      },
+      "range": [
+        1.080583048790549,
+        1.0919411663782796
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.752754,
+        "sd": 0.003337,
+        "ci95_low": 0.744464,
+        "ci95_high": 0.761043
+      },
+      "range": [
+        0.7489283685893923,
+        0.7550639001773458
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.297853,
+        "sd": 0.010026,
+        "ci95_low": 1.272944,
+        "ci95_high": 1.322763
+      },
+      "range": [
+        1.2862776145308383,
+        1.3038177339901476
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.632778,
+        "sd": 0.023198,
+        "ci95_low": 0.575147,
+        "ci95_high": 0.690409
+      },
+      "range": [
+        0.6060685311105423,
+        0.6478881653623275
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.008068,
+        "sd": 0.001999,
+        "ci95_low": 1.003102,
+        "ci95_high": 1.013035
+      },
+      "range": [
+        1.0057604014465338,
+        1.0092574120373978
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.770708,
+        "sd": 0.005992,
+        "ci95_low": 0.755822,
+        "ci95_high": 0.785595
+      },
+      "range": [
+        0.7671554526437339,
+        0.7776263535679929
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.254658,
+        "sd": 0.005467,
+        "ci95_low": 1.241075,
+        "ci95_high": 1.268242
+      },
+      "range": [
+        1.2492498716885783,
+        1.260182958085249
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.709995,
+        "sd": 0.074881,
+        "ci95_low": 0.523965,
+        "ci95_high": 0.896024
+      },
+      "range": [
+        0.6270128286506531,
+        0.7725251626985731
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.972362,
+        "sd": 0.00398,
+        "ci95_low": 0.962476,
+        "ci95_high": 0.982249
+      },
+      "range": [
+        0.9695330886823902,
+        0.9769128754569179
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "fixed",
+      "ef": 64,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.797177,
+        "sd": 0.003498,
+        "ci95_low": 0.788487,
+        "ci95_high": 0.805867
+      },
+      "range": [
+        0.7936671822007453,
+        0.8006631179221461
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.03108,
+        "sd": 0.019245,
+        "ci95_low": 0.983269,
+        "ci95_high": 1.078891
+      },
+      "range": [
+        1.016212662313405,
+        1.0528169014084507
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.021877,
+        "sd": 0.019481,
+        "ci95_low": 0.97348,
+        "ci95_high": 1.070274
+      },
+      "range": [
+        1.0078196872125116,
+        1.0441142208851208
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.007734,
+        "sd": 0.019461,
+        "ci95_low": 0.959388,
+        "ci95_high": 1.056081
+      },
+      "range": [
+        0.9931687652383222,
+        1.0298357142369194
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 1,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.96994,
+        "sd": 0.018217,
+        "ci95_low": 0.924684,
+        "ci95_high": 1.015197
+      },
+      "range": [
+        0.9494140625000002,
+        0.9841854854921933
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.055976,
+        "sd": 0.008516,
+        "ci95_low": 1.034821,
+        "ci95_high": 1.077132
+      },
+      "range": [
+        1.046278034486645,
+        1.062229904926534
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 1.129948,
+        "sd": 0.061448,
+        "ci95_low": 0.977291,
+        "ci95_high": 1.282605
+      },
+      "range": [
+        1.0590966536622892,
+        1.168675464231907
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 1.011974,
+        "sd": 0.002639,
+        "ci95_low": 1.005417,
+        "ci95_high": 1.018531
+      },
+      "range": [
+        1.010111160154785,
+        1.0149942471051923
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 8,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 0.946953,
+        "sd": 0.007659,
+        "ci95_low": 0.927926,
+        "ci95_high": 0.965979
+      },
+      "range": [
+        0.9413195691202874,
+        0.955673207607508
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.994632,
+        "sd": 0.013941,
+        "ci95_low": 0.959999,
+        "ci95_high": 1.029266
+      },
+      "range": [
+        0.983437187121252,
+        1.010247264570482
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.480488,
+        "sd": 0.017114,
+        "ci95_low": 0.43797,
+        "ci95_high": 0.523005
+      },
+      "range": [
+        0.4645708257908239,
+        0.49858907258176177
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.936954,
+        "sd": 0.001438,
+        "ci95_low": 0.933382,
+        "ci95_high": 0.940527
+      },
+      "range": [
+        0.9357065805094694,
+        0.9385269080267448
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 32,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.005611,
+        "sd": 0.014075,
+        "ci95_low": 0.970645,
+        "ci95_high": 1.040577
+      },
+      "range": [
+        0.9899698904934509,
+        1.017254477427687
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "mean_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.957943,
+        "sd": 0.014355,
+        "ci95_low": 0.92228,
+        "ci95_high": 0.993606
+      },
+      "range": [
+        0.9486684048794114,
+        0.9744781822355619
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "p99_ms",
+      "stats": {
+        "n": 3,
+        "mean": 0.42135,
+        "sd": 0.12269,
+        "ci95_low": 0.116547,
+        "ci95_high": 0.726153
+      },
+      "range": [
+        0.2999905382041511,
+        0.545328167824955
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "server_cpu_ms_per_query",
+      "stats": {
+        "n": 3,
+        "mean": 0.902775,
+        "sd": 0.009548,
+        "ci95_low": 0.879055,
+        "ci95_high": 0.926496
+      },
+      "range": [
+        0.8971973456977461,
+        0.9137999896886849
+      ]
+    },
+    {
+      "baseline": "direct",
+      "mode": "pooled",
+      "ef_role": "matched",
+      "ef": 448,
+      "clients": 48,
+      "metric": "throughput_qps",
+      "stats": {
+        "n": 3,
+        "mean": 1.044853,
+        "sd": 0.015386,
+        "ci95_low": 1.00663,
+        "ci95_high": 1.083076
+      },
+      "range": [
+        1.0271526204757784,
+        1.0550249844771
+      ]
+    }
+  ],
+  "issues": []
+}

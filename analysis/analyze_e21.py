@@ -48,6 +48,21 @@ def recall_disagreements(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
+def extra_measurements(row: dict[str, Any]) -> dict[str, float]:
+    """Context switches per query and, from the wait-event sampler, the mean number of active backends per sample and the
+    share of active-backend observations waiting on the lock manager."""
+    out: dict[str, float] = {}
+    cs = row.get("server_ctx_switches_per_query") or {}
+    for key, name in (("voluntary", "ctx_voluntary_per_query"), ("involuntary", "ctx_involuntary_per_query")):
+        if isinstance(cs.get(key), (int, float)):
+            out[name] = float(cs[key])
+    wait = row.get("pg_wait_events") or {}
+    if wait.get("samples") and isinstance(wait.get("active_backend_observations"), (int, float)):
+        out["active_backends"] = wait["active_backend_observations"] / wait["samples"]
+        out["lockmanager_share"] = float((wait.get("share") or {}).get("LWLock:LockManager", 0.0))
+    return out
+
+
 def analyze(root: Path) -> dict[str, Any]:
     issues: list[dict[str, Any]] = []
     # (mode, ef_role, ef, clients, metric) -> rep -> value
@@ -74,6 +89,8 @@ def analyze(root: Path) -> dict[str, Any]:
                 for metric in METRICS + POOLER_METRICS:
                     if isinstance(r.get(metric), (int, float)):
                         table[(mode_of(r), role, r["ef"], r["clients"], metric)][rep] = float(r[metric])
+                for metric, value in extra_measurements(r).items():
+                    table[(mode_of(r), role, r["ef"], r["clients"], metric)][rep] = value
 
     aggregates = []
     for (mode, role, ef, clients, metric), by_rep in sorted(table.items()):
@@ -86,7 +103,7 @@ def analyze(root: Path) -> dict[str, Any]:
     comparisons = []
     for base, mode in BASELINES:
         for (m, role, ef, clients, metric), by_rep in sorted(table.items()):
-            if m != mode or metric in POOLER_METRICS or metric == "recall_at_k":
+            if m != mode or metric in POOLER_METRICS or metric == "recall_at_k" or metric not in METRICS:
                 continue
             ref = table.get((base, role, ef, clients, metric))
             if not ref:

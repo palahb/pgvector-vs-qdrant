@@ -343,6 +343,8 @@ label.
     E18 & Per-query recall and recall across eight dimensions, three builds each, 100K vectors \\
     E19 & Where a query's CPU goes at 1M $\times$ 1024: perf profiles and hardware counters of pgvector,
          Qdrant with four segments and Qdrant with one segment, three builds each \\
+    E21 & pgvector through PgBouncer (transaction pooling, pool equal to the server cores) against direct connections,
+         1, 8, 32 and 48 clients, three builds \\
     E23 & Ranking quality of approximate search against exact search on the 63 judged queries that have a relevant
          document in the 1M corpus (sensitivity analysis), three builds per engine \\
     E20 & Reduced precision at 1M $\times$ 1024: pgvector \texttt{halfvec} and Qdrant \texttt{int8}
@@ -397,6 +399,8 @@ and the tables that compare them say so.
     Table~\ref{tab:causal} & E19 & three per arm & 6 jobs (all arms of one system per job), 6 nodes,
       the two systems on different nodes & smallest swept $ef$ with rep-0 recall $\ge 0.95$ on an 8-point grid
       (128--640); timing from reps 1 and 2 \\
+    Table~\ref{tab:pooling} & E21 & three, one pgvector build per job & 3 jobs, 3 nodes; the three connection modes run
+      one after the other on each build & $ef=448$ (smallest swept with recall $\ge 0.95$ on every build) and $ef=64$ \\
     Table~\ref{tab:ranking} & E23 & three per engine & 6 jobs, 6 nodes, the two systems on different nodes &
       all ten swept $ef$ values; the matched point is the smallest with recall $\ge 0.95$ over all queries \\
     Table~\ref{tab:quant} & E20 & three per arm & 6 jobs (both arms of one system per job), 6 nodes,
@@ -1479,6 +1483,87 @@ effectiveness, which would need a corpus that holds the judged documents. Extend
 segments is outside this study.
 
 
+\subsection{Connection Pooling}
+\label{sec:pooling}
+
+A common recommendation for PostgreSQL with more clients than cores is to put a connection pooler in front of it. We tested
+it for pgvector. The pooler is PgBouncer 1.25.1 from the project's container image, pulled by digest (the digest and the
+image checksum are in the run record), in transaction pooling mode with a pool of 8 server connections, equal to the 8 cores of the server, and
+pinned to those same cores, so that its CPU time competes with PostgreSQL's and is counted in the server CPU per query. The
+index is the 1M $\times$ 1024 index of the other experiments, built 3 times. Each build serves three connection modes one
+after the other, so a comparison is within a build: \emph{direct}, the baseline of the rest of this paper (one session, settings
+made once with \texttt{SET}); \emph{transaction}, where every query is a transaction of its own that starts with
+\texttt{SET LOCAL hnsw.ef\_search} and \texttt{SET LOCAL enable\_seqscan}, without a pooler; and \emph{PgBouncer}, the same
+transactions through the pooler. The transaction arm exists because a transaction pooler does not keep session settings: the
+next statement may reach another server connection, and a session-level \texttt{SET} would silently run the query at the wrong
+$ef$. It separates the cost of the per-query transaction from the cost of the pooler. We ran closed-loop windows of 30\,s with 1,
+8, 32 and 48 clients at $ef=448$, the smallest swept value with Recall@10 of 0.95 on every build, and at $ef=64$. Recall
+in the three modes agrees ($0.951$ to $0.952$ at $ef=448$), which shows that the settings reached the queries.
+
+\begin{table}[t]
+  \caption{pgvector at $ef=448$ (Recall@10 about 0.95), 1M vectors, mean of 3 builds. CPU is server CPU per query in ms,
+  including the pooler. Active is the mean number of backends working at a sample of the wait-event sampler.}
+  \label{tab:pooling}
+  \small
+  \begin{tabular}{@{}rlrrrrr@{}}
+    \toprule
+    clients & mode & qps & mean ms & p99 ms & CPU & active \\
+    \midrule
+    1 & direct & 151 & 6.6 & 10.1 & 6.53 & 1.0 \\
+     & transaction & 145 & 6.9 & 10.3 & 6.66 & 1.0 \\
+     & PgBouncer & 147 & 6.8 & 10.3 & 6.58 & 0.9 \\
+    \addlinespace
+    8 & direct & 1125 & 7.1 & 10.9 & 7.00 & 7.9 \\
+     & transaction & 1092 & 7.3 & 11.1 & 7.07 & 7.6 \\
+     & PgBouncer & 1065 & 7.5 & 12.3 & 7.09 & 7.4 \\
+    \addlinespace
+    32 & direct & 1052 & 30.4 & 76.4 & 7.56 & 21.3 \\
+     & transaction & 1038 & 30.8 & 52.8 & 7.65 & 15.6 \\
+     & PgBouncer & 1058 & 30.2 & 36.7 & 7.09 & 7.3 \\
+    \addlinespace
+    48 & direct & 1014 & 47.3 & 131.0 & 7.85 & 35.6 \\
+     & transaction & 998 & 48.1 & 99.2 & 7.96 & 25.6 \\
+     & PgBouncer & 1059 & 45.3 & 52.0 & 7.09 & 7.4 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{With fewer clients than cores the pooler does not help.} With one client the throughput through the pooler is 0.97 (0.92 to 1.02)
+times the direct one, which is not distinguishable from 1, and with eight clients 0.95 (0.93 to 0.97) (ratios of the same build, mean of three, 95\,\% interval). The pooler
+uses 0.088\,ms of CPU per query at eight clients, 1.2\,\% of the server CPU per query, and 0.09 of a core; at 32 and 48
+clients it uses 0.10 and 0.10 of a core, so a single-threaded pooler is far from its own limit. The per-query
+transaction accounts for part of the loss (throughput 0.96 (0.94 to 0.98) and 0.97 (0.97 to 0.97) of direct at one and eight clients).
+
+\paragraph{With more clients than cores it cuts the tail, not the throughput.} At 32 and 48 clients, throughput through the pooler is
+1.01 (0.97 to 1.04) and 1.04 (1.01 to 1.08) times the direct one, so the plateau of about 1{,}050 queries per second is the server's and
+hardly moves. Mean latency is 0.99 (0.96 to 1.03) and 0.96 (0.92 to 0.99) times the direct one, and p99 latency is 0.48 (0.44 to 0.52) and 0.42 (0.12 to 0.73)
+times, from 76 to 37\,ms at 32 clients and from 131 to 52\,ms at 48. The direct p99
+at 48 clients is unstable across builds (standard deviation 40\,ms), which is why its interval is wide. Server CPU per query,
+with the pooler's share included, is 0.94 (0.93 to 0.94) and 0.90 (0.88 to 0.93) times the direct one. The wait-event sampler shows what changes:
+with direct connections 21 and 36 backends are active on average at 32 and 48 clients, with the
+pooler 7.3 and 7.4. The lock manager takes 0.09\,\% and 0.22\,\% of the active-backend observations in the direct
+runs and none behind the pooler, which is too little to explain the CPU difference; we did not isolate its cause. Voluntary context
+switches per query rise from 1.1 (direct) to 5.1 (transaction) and 12.9 (pooler) at 48 clients, so the pooler adds wake-ups
+and does not save scheduler work.
+
+\paragraph{Part of the tail effect is the per-query transaction.} Comparing the transaction arm with the direct one, p99 at 32 and
+48 clients is 0.69 (0.60 to 0.79) and 0.82 (0.05 to 1.58) times the direct value; the pooler lowers it by a further 0.69 (0.63 to 0.76) and 0.53 (0.42 to 0.64)
+times, and throughput through the pooler is 1.02 (0.98 to 1.06) and 1.06 (1.06 to 1.07) times that of the transaction arm. The tail
+improvement of the pooler alone is therefore smaller than the figures against direct connections suggest, and at 48 clients the
+interval of the transaction arm is too wide to apportion it.
+
+\paragraph{With short queries the overhead weighs more.} At $ef=64$ (recall 0.84), where a query is short, the throughput
+through the pooler is 0.75 to 0.83 times the direct throughput across the four client counts: this
+fits a fixed cost per query, from the extra statements and the extra hop, that weighs more when the query is short; we did not isolate it.
+
+\paragraph{Reading.} For this workload, a pooler with a pool equal to the number of cores is a tail-latency control, not a
+throughput gain. When clients outnumber cores it brings p99 latency to 0.48 (0.44 to 0.52) and 0.42 (0.12 to 0.73) times that of direct connections
+at 32 and 48 clients (0.69 (0.63 to 0.76) and 0.53 (0.42 to 0.64) times that of the same transactions without a pooler), costs about
+0.091\,ms of CPU per query, and costs throughput when the system is not saturated or the queries are short. Using it also changes how the index must be configured, since
+settings have to travel with each transaction. We did not test other pool sizes, session pooling, a pooler on separate cores
+or a separate host (the pooler here is on the loopback interface and on the server's cores), open-loop load or other clients.
+
+
 \section{Discussion}
 %% =============================================================
 
@@ -1495,8 +1580,10 @@ protocol it will use, and not only which engine is faster.
 Under load, both systems are limited by CPU and not by locking. They differ in how they
 handle overload. Qdrant's fixed thread pool keeps latency predictable when there are more
 clients than cores. pgvector's process-per-connection model loses some throughput and
-develops a long latency tail in that situation, so a deployment would benefit from a
-connection pooler sized to the number of cores. Build time depends on how each system is
+develops a long latency tail in that situation, so a deployment with more clients than cores
+can put a connection pooler with a pool of that size in front of it. The measurement shows what this buys
+(Section~\ref{sec:pooling}): p99 latency falls to about half of that with direct connections, but throughput
+does not rise, and below saturation the pooler costs a few per cent. Build time depends on how each system is
 loaded. Against Qdrant's single-stream upload, pgvector with its build parallelism
 configured built faster, but with parallel streams and deferred indexing Qdrant is
 1.4$\times$ faster at 1M, and pgvector's own load is limited by write-ahead logging on this
