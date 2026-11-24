@@ -9,7 +9,8 @@ sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "bench"))
 
 import features  # noqa: E402
-from analysis.analyze_e22 import STEADY_ACHIEVED, STEADY_LAG_MS, analyze, is_steady  # noqa: E402
+from analysis.analyze_e22 import (STEADY_ACHIEVED, STEADY_LAG_MS, achieved_in_window, analyze,  # noqa: E402
+                                  is_steady)
 
 
 class OpenLoopEfTests(unittest.TestCase):
@@ -74,6 +75,19 @@ def write(root, engine, rep, closed_p99=40.0, overload_lag=5000.0):
         "runs": [{"mem_limit": "none", "conc_matched_ef": 448, "open_loop": ol,
                   "concurrency": [{"proto": proto, "ef": 448, "clients": 32, "throughput_qps": 1000.0,
                                    "p99_ms": closed_p99, "mean_ms": 30.0, "recall_at_k": 0.95}]}]}))
+
+
+class AchievedInWindowTests(unittest.TestCase):
+    def test_only_queries_finished_inside_the_window_count(self):
+        import numpy as np
+        planned = np.array([0, 1e9, 2e9, 3e9])           # ns after the start
+        latency = np.array([1e6, 1e6, 2.5e9, 5e9])      # the last two finish at 4.5 s and 8 s
+        self.assertAlmostEqual(achieved_in_window(planned, latency, window_s=4.0), 2 / 4.0)
+
+    def test_a_server_that_keeps_up_completes_everything_in_the_window(self):
+        import numpy as np
+        planned = np.arange(0, 4e9, 1e8)
+        self.assertAlmostEqual(achieved_in_window(planned, np.full(len(planned), 1e6), window_s=4.0), len(planned) / 4.0)
 
 
 class SteadyTests(unittest.TestCase):

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "experiment_id": "smoke_7055997",
+  "purpose": "Commit-specific smoke gate for 78fdc6e",
+  "slurm": {
+    "job_id": "7055997",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:02:15",
+    "node": "hamsi30"
+  },
+  "code_commit": "78fdc6e7ed89c7450a9ed7f2e02de68dc465744e",
+  "remote_path": "/arf/scratch/endemir/rag_bench/results/smoke/78fdc6e7ed89_7055997",
+  "workspace_path": "../artifacts/truba-smoke/7055997",
+  "audit": {
+    "verdict": "validated",
+    "result_files": 5,
+    "errors": 0,
+    "warnings": 0,
+    "tracked_report": "results/validated/smoke_7055997_audit.json"
+  },
+  "provenance_assertions": {
+    "schema_version": 2,
+    "provenance_status": "native",
+    "code_dirty": false,
+    "unique_experiment_ids": true
+  },
+  "files": {
+    "pg/result.json": "f3ce859e034c05b5a722c79385b0997fe58b418c792bf9e8302c839664fa83e0",
+    "pg/raw.npz": "eb29e31ca522c56dff18e245f9274d2bf0ab7d93c7c5ba0289dfbb690cf24c6e",
+    "pg_halfvec/result.json": "a3f44f2d74db956b6f4b3cfb9a2b6c641f2b72e883c8b22bf9f9472f7e7d6aee",
+    "pg_halfvec/raw.npz": "cc93d17c15826cf28553ad0012799587495563254a8657431d1c251517208aae",
+    "pg_pooler/result.json": "a3f4fc1d2f106d4bfff428eea9acc742ce205d41a1e90c08707ceb272ec353df",
+    "pg_pooler/raw.npz": "f00b403f3486e576ec49355444e5e09b443356b5b2d8588d7a10099de88bcf15",
+    "qdrant/result.json": "f3c85c11be24a4b4e52d59eab6b96e102fa8fa2911b21df27e8272174fc1176e",
+    "qdrant/raw.npz": "9ecbe43ba3ef196565616d6bf15ebf84a0c26ca946f03312921d00cf82cb9c30",
+    "qdrant_int8/result.json": "4b815e5748c116804645e5d91ac6b42176f5a667df1f2e768095c0b11875086b",
+    "qdrant_int8/raw.npz": "11f16349048c1b1da958dc3f5b3e7e8dd024b7cdec8bea17e8858cad7254483d"
+  }
+}

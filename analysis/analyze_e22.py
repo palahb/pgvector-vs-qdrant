@@ -21,13 +21,35 @@ from analysis.analyze_e6 import interval
 STEADY_ACHIEVED = 0.98
 STEADY_LAG_MS = 1000.0
 RECALL_TOLERANCE = 0.01
-METRICS = ("offered_qps", "achieved_qps", "mean_ms", "p99_ms", "p999_ms", "max_send_lag_ms", "mean_send_lag_ms",
+METRICS = ("offered_qps", "achieved_qps", "achieved_in_window_qps", "mean_ms", "p99_ms", "p999_ms", "max_send_lag_ms", "mean_send_lag_ms",
            "service_mean_ms", "recall_at_k", "server_cpu_ms_per_query", "server_cores_busy")
 CAPACITY_CLIENTS = 32
 
 
 def is_steady(row: dict[str, Any]) -> bool:
-    return row["achieved_qps"] >= STEADY_ACHIEVED * row["offered_qps"] and row["max_send_lag_ms"] < STEADY_LAG_MS
+    achieved = row.get("achieved_in_window_qps", row["achieved_qps"])
+    return achieved >= STEADY_ACHIEVED * row["offered_qps"] and row["max_send_lag_ms"] < STEADY_LAG_MS
+
+
+def achieved_in_window(planned_ns, latency_ns, window_s: float) -> float:
+    """Queries that finished inside the window per second. Every query eventually completes, so the harness's own
+    `achieved_qps` (all completions over the window length) equals the offered rate even when the server is behind;
+    this counts only those finished by the end of the window."""
+    import numpy as np
+    finished = np.asarray(planned_ns, dtype=float) + np.asarray(latency_ns, dtype=float)
+    return float((finished <= window_s * 1e9).sum()) / window_s
+
+
+def load_in_window(raw_path: Path, row: dict[str, Any], window_s: float) -> float | None:
+    import numpy as np
+    if not raw_path.exists():
+        return None
+    suffix = f"{row['proto']}_ef{row['ef']}_r{row['offered_qps']}"
+    with np.load(raw_path) as raw:
+        lat, planned = raw.get(f"none_open_{suffix}_lat"), raw.get(f"none_open_{suffix}_planned")
+        if lat is None or planned is None:
+            return None
+        return achieved_in_window(planned, lat, window_s)
 
 
 def analyze(root: Path) -> dict[str, Any]:
@@ -58,6 +80,9 @@ def analyze(root: Path) -> dict[str, Any]:
                 fraction = row.get("load_fraction")
                 if fraction is None:
                     continue
+                in_window = load_in_window(path.with_name("raw.npz"), row, float(result["args"].get("open_loop_duration", 30)))
+                if in_window is not None:
+                    row = {**row, "achieved_in_window_qps": in_window}
                 if ref and abs(row["recall_at_k"] - ref["recall_at_k"]) > RECALL_TOLERANCE:
                     issues.append({"experiment_id": result.get("experiment_id"), "problem": "recall_disagrees_with_closed_loop",
                                    "load_fraction": fraction, "open": row["recall_at_k"], "closed": ref["recall_at_k"]})
@@ -110,7 +135,7 @@ def markdown_report(report: dict[str, Any]) -> str:
     lines = ["# E22 open-loop load", "", f"Verdict: **{report['verdict']}**; builds: {report['builds']}.", "",
              "Mean ± sd over builds. A level is steady if achieved >= 98% of offered and the largest send lag < 1 s; "
              "overload levels are shown for completeness and carry no tail claim.", "",
-             "| Engine | Load | Offered qps | Achieved qps | steady builds | mean ms | p99 ms | p99.9 ms | max send lag ms | CPU ms/q |",
+             "| Engine | Load | Offered qps | Finished in window qps | steady builds | mean ms | p99 ms | p99.9 ms | max send lag ms | CPU ms/q |",
              "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
 
     def cell(e, f, m, d):
@@ -118,7 +143,7 @@ def markdown_report(report: dict[str, Any]) -> str:
         return "n/a" if not s else (f"{s['mean']:.{d}f} ± {s['sd']:.{d}f}" if s["sd"] is not None else f"{s['mean']:.{d}f}")
     for st in report["status"]:
         e, f = st["engine"], st["load_fraction"]
-        lines.append(f"| {e} | {f:.2f} | {cell(e, f, 'offered_qps', 0)} | {cell(e, f, 'achieved_qps', 0)} | "
+        lines.append(f"| {e} | {f:.2f} | {cell(e, f, 'offered_qps', 0)} | {cell(e, f, 'achieved_in_window_qps', 0)} | "
                      f"{st['steady_builds']}/{st['builds']} | {cell(e, f, 'mean_ms', 1)} | {cell(e, f, 'p99_ms', 1)} | "
                      f"{cell(e, f, 'p999_ms', 1)} | {cell(e, f, 'max_send_lag_ms', 0)} | {cell(e, f, 'server_cpu_ms_per_query', 2)} |")
     lines += ["", "## Closed loop (32 clients) against open loop at 95% of capacity, same builds", "",

@@ -21,7 +21,7 @@ first query is sent. 110% is above the measured plateau by construction.
 
 ## Interpretation rules (decided now)
 
-* A level is **steady** if the achieved rate is at least 98% of the offered rate and the largest send lag is below 1 s. For steady
+* A level is **steady** if the rate of queries finished inside the window is at least 98% of the offered rate and the largest send lag is below 1 s. (Counting every completion over the window would equal the offered rate even for a server that is behind, because all queries finish eventually; the smoke test showed this. The wording was sharpened before any E22 measurement; the thresholds are unchanged.) For steady
   levels p99 and p99.9 describe the system at that load.
 * A level that is not steady is **overload**. Its latency depends on the length of the window (the queue grows as long as the
   overload lasts), so no p99 is claimed from it; the achieved rate and the growth of the lag are reported.
