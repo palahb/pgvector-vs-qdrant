@@ -19,6 +19,15 @@ Capacity of a build is its closed-loop throughput at 32 clients at the matched-r
 capacity, rounded to whole queries per second, 60 s each, after a 2 s start-up where the connections are made and the
 first query is sent. 110% is above the measured plateau by construction.
 
+## Start-up and CPU accounting (added after the pilot, before any full measurement)
+
+The pilot (100K) showed a start-up transient for pgvector only: in the first seconds of a window the p99 was about ten times
+that of the rest (95 ms against 7 ms at 50% load), which is the first queries of 64 new backends. Two measures: every worker
+runs 20 untimed queries on its connection before the window (harness), and the tail statistics leave out the first 5 s of the
+planned arrivals (analysis; `p99_ms_all` keeps the whole window). The pilot also showed an impossible server CPU per query for
+pgvector: the backends exit when the client workers exit, and the CPU time of an exited process is not visible. The workers now
+stay connected until the parent has read the CPU time.
+
 ## Interpretation rules (decided now)
 
 * A level is **steady** if the rate of queries finished inside the window is at least 98% of the offered rate and the largest send lag is below 1 s. (Counting every completion over the window would equal the offered rate even for a server that is behind, because all queries finish eventually; the smoke test showed this. The wording was sharpened before any E22 measurement; the thresholds are unchanged.) For steady

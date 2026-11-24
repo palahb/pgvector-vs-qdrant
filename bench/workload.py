@@ -431,13 +431,19 @@ def _cpu(pids):
     return total
 
 
-def _open_loop_worker(spec, queries, gt, jobs, t_zero, go, ready, results):
+def _open_loop_worker(spec, queries, gt, jobs, t_zero, go, ready, results, release, warm_queries):
     """Sends each of its planned queries at its planned time (monotonic ns from t_zero) and never
     waits for an earlier reply of another worker. One worker handles one query at a time, so the
-    pool size bounds the in-flight queries; a saturated server shows as send lag."""
+    pool size bounds the in-flight queries; a saturated server shows as send lag.
+
+    The worker first runs `warm_queries` untimed queries on its own connection: a fresh PostgreSQL backend is slow on its
+    first queries, and 64 of them starting together made the first seconds of a window look like a latency spike.
+    After sending its results it keeps its connection open until `release`, so the parent can read the server CPU time
+    while the backends still exist (the CPU time of a backend that has exited is no longer visible)."""
     try:
         q = make_query_fn(spec)
-        q(queries[0])
+        for i in range(max(warm_queries, 1)):
+            q(queries[i % len(queries)])
     except Exception as e:
         ready.put(("err", repr(e)))
         return
@@ -458,19 +464,20 @@ def _open_loop_worker(spec, queries, gt, jobs, t_zero, go, ready, results):
         hits.append(recall_hits(ids, gt[j]))
     results.put((np.array(planned, dtype=np.int64), np.array(started, dtype=np.int64),
                  np.array(finished, dtype=np.int64), np.array(hits, dtype=np.int16)))
+    release.wait(300)
 
 
-def open_loop_run(server, proto, ef, rate, duration, workers, queries, gt, k, seed):
+def open_loop_run(server, proto, ef, rate, duration, workers, queries, gt, k, seed, warm_queries=20):
     """Open loop: Poisson arrivals at `rate` per second for `duration` seconds, served by a pool
     of `workers` client processes. Latency is measured from the planned send time."""
     ctx = mp.get_context("spawn")
     ready, results = ctx.Queue(), ctx.Queue()
     arrivals = poisson_arrivals(rate, duration, seed)
     qidx = np.random.default_rng([seed, 1]).integers(0, len(queries), size=len(arrivals))
-    t_zero, go = ctx.Value("q", 0), ctx.Event()
+    t_zero, go, release = ctx.Value("q", 0), ctx.Event(), ctx.Event()
     spec = server.query_spec(ef, proto, k)
     chunks = [list(zip(arrivals[w::workers].tolist(), qidx[w::workers].tolist())) for w in range(workers)]
-    procs = [ctx.Process(target=_open_loop_worker, args=(spec, queries, gt, chunks[w], t_zero, go, ready, results),
+    procs = [ctx.Process(target=_open_loop_worker, args=(spec, queries, gt, chunks[w], t_zero, go, ready, results, release, warm_queries),
                          daemon=True) for w in range(workers)]
     for p in procs:
         p.start()
@@ -488,6 +495,7 @@ def open_loop_run(server, proto, ef, rate, duration, workers, queries, gt, k, se
     parts = [results.get(timeout=duration + 600) for _ in procs]
     cpu1 = server.cpu_seconds()
     srv = server.stats_end(proto)
+    release.set()
     for p in procs:
         p.join(30)
     planned, started, finished, hits = (np.concatenate([x[i] for x in parts]) for i in range(4))

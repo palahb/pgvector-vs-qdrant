@@ -9,8 +9,61 @@ sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "bench"))
 
 import features  # noqa: E402
-from analysis.analyze_e22 import (STEADY_ACHIEVED, STEADY_LAG_MS, achieved_in_window, analyze,  # noqa: E402
+from analysis.analyze_e22 import (STEADY_ACHIEVED, STEADY_LAG_MS, TRIM_S, achieved_in_window, analyze,  # noqa: E402
                                   is_steady)
+
+
+class WorkerLifecycleTests(unittest.TestCase):
+    def run_worker(self, jobs, warm, release_set):
+        import queue
+        import threading
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import numpy as np
+        import workload
+        from common import now_ns
+        calls = []
+
+        def fake_query(v):
+            calls.append(int(v[0]))
+            return [int(v[0])]
+        queries = np.arange(5, dtype=np.float32).reshape(5, 1)
+        gt = np.arange(5).reshape(5, 1)
+        go, release = threading.Event(), threading.Event()
+        go.set()
+        if release_set:
+            release.set()
+        zero = SimpleNamespace(value=now_ns() + 20_000_000)
+        ready, results = queue.Queue(), queue.Queue()
+        with patch.object(workload, "make_query_fn", lambda spec: fake_query):
+            thread = threading.Thread(target=workload._open_loop_worker,
+                                      args=({}, queries, gt, jobs, zero, go, ready, results, release, warm))
+            thread.start()
+        return thread, calls, ready, results, release
+
+    def test_warm_up_queries_run_before_the_worker_reports_ready(self):
+        thread, calls, ready, results, release = self.run_worker([(0, 4)], warm=6, release_set=True)
+        thread.join(5)
+        self.assertEqual(ready.get()[0], "ok")
+        self.assertEqual(len(calls), 6 + 1)          # six warm-up queries, then the one planned query
+        self.assertEqual(calls[-1], 4)
+
+    def test_zero_warm_up_keeps_one_connection_check_only(self):
+        thread, calls, ready, results, release = self.run_worker([(0, 3)], warm=0, release_set=True)
+        thread.join(5)
+        self.assertEqual(len(calls), 1 + 1)
+
+    def test_the_worker_stays_alive_after_its_results_until_it_is_released(self):
+        import time
+        thread, calls, ready, results, release = self.run_worker([(0, 2)], warm=0, release_set=False)
+        deadline = time.time() + 5
+        while results.empty() and time.time() < deadline:
+            time.sleep(0.01)
+        self.assertFalse(results.empty())            # the parent can read the results
+        self.assertTrue(thread.is_alive())           # ...while the connection (and the backend's CPU time) still exists
+        release.set()
+        thread.join(5)
+        self.assertFalse(thread.is_alive())
 
 
 class OpenLoopEfTests(unittest.TestCase):
@@ -90,6 +143,29 @@ class AchievedInWindowTests(unittest.TestCase):
         self.assertAlmostEqual(achieved_in_window(planned, np.full(len(planned), 1e6), window_s=4.0), len(planned) / 4.0)
 
 
+class TrimmedStatsTests(unittest.TestCase):
+    def test_the_start_up_seconds_are_left_out_of_the_tail(self):
+        import numpy as np
+        from analysis.analyze_e22 import trimmed_latency
+        planned = np.arange(0, 20e9, 1e7)                     # 100 arrivals per second for 20 s
+        lat = np.full(len(planned), 5e6)                       # 5 ms everywhere...
+        lat[planned < 2e9] = 400e6                             # ...except 400 ms in the first two seconds
+        all_ = trimmed_latency(planned, lat, trim_s=0.0, window_s=20.0)
+        cut = trimmed_latency(planned, lat, trim_s=3.0, window_s=20.0)
+        self.assertGreater(all_["p99_ms"], 100)
+        self.assertAlmostEqual(cut["p99_ms"], 5.0)
+        self.assertEqual(cut["count"], int(((planned >= 3e9) & (planned < 20e9)).sum()))
+
+    def test_p999_and_mean_are_reported(self):
+        import numpy as np
+        from analysis.analyze_e22 import trimmed_latency
+        planned = np.arange(0, 10e9, 1e7)
+        lat = np.full(len(planned), 2e6)
+        out = trimmed_latency(planned, lat, trim_s=1.0, window_s=10.0)
+        self.assertAlmostEqual(out["mean_ms"], 2.0)
+        self.assertAlmostEqual(out["p999_ms"], 2.0)
+
+
 class SteadyTests(unittest.TestCase):
     def test_a_level_that_keeps_up_is_steady(self):
         self.assertTrue(is_steady(level(0.5, 500, 499, 10, 20, 5)))
@@ -102,6 +178,7 @@ class SteadyTests(unittest.TestCase):
 
     def test_thresholds_are_the_ones_in_the_design(self):
         self.assertEqual((STEADY_ACHIEVED, STEADY_LAG_MS), (0.98, 1000.0))
+        self.assertEqual(TRIM_S, 5.0)
 
 
 class AnalyzeTests(unittest.TestCase):

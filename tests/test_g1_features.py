@@ -232,13 +232,14 @@ class OpenLoopWorkerTests(unittest.TestCase):
                 time.sleep(0.05)  # a slow query delays the next planned one
             return [int(v[0])]
 
-        go = threading.Event()
+        go, release = threading.Event(), threading.Event()
         go.set()
+        release.set()
         zero = SimpleNamespace(value=now_ns() + 20_000_000)
         ready, results = queue.Queue(), queue.Queue()
         jobs = [(0, 0), (10_000_000, 1), (20_000_000, 2)]
         with patch.object(workload, "make_query_fn", lambda spec: fake_query):
-            workload._open_loop_worker({}, queries, gt, jobs, zero, go, ready, results)
+            workload._open_loop_worker({}, queries, gt, jobs, zero, go, ready, results, release, 0)
         self.assertEqual(ready.get()[0], "ok")
         planned, started, finished, hits = results.get()
         self.assertEqual((planned - zero.value).tolist(), [0, 10_000_000, 20_000_000])
