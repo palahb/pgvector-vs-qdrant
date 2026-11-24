@@ -42,7 +42,8 @@ bench --engine qdrant "${common[@]}" --protocols grpc_raw
 
 # Optional features of the single harness package: returned IDs, perf record, halfvec, int8
 # quantization and the open-loop generator (default runs above are unchanged).
-feat=(--store-ids --perf-record --open-loop-rates 50 --open-loop-duration 3 --open-loop-workers 4)
+feat=(--store-ids --perf-record --open-loop-rates 50 --open-loop-fractions 0.5,1.1 --open-loop-capacity-clients 4
+      --open-loop-duration 3 --open-loop-workers 4)
 bench --engine pg "${common[@]}" "${feat[@]}" --tag halfvec --pg-vector-type halfvec \
     --pg-shared-buffers 256MB --pg-effective-cache 512MB --pg-maintenance-mem 512MB
 # pgvector through PgBouncer: three connection modes on one build, and the recall agreement between them

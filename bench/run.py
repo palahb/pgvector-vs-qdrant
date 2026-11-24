@@ -15,7 +15,7 @@ import numpy as np
 from common import (evict_page_cache, ground_truth, host_info, load_vectors, log, pick_cores,
                     resident_bytes, save_json, sha256, stable_id, git_state)
 from engines import MODE, make_query_fn, make_server
-from features import parse_conn_modes
+from features import capacity_qps, open_loop_rates, parse_conn_modes, parse_fractions
 from workload import (cgroup_memory_bytes, concurrency_run, latency_sweep, memory_passes,
                       open_loop_run, proc_counters)
 
@@ -29,7 +29,7 @@ ADDED_DEFAULTS = {
     "qdrant_quantization": "none", "qdrant_quant_on_disk": False, "qdrant_no_rescore": False,
     "qdrant_oversampling": None, "pg_conn_modes": ["direct"], "pg_pooler_pool_size": 16,
     "pg_pooler_max_client_conn": 200, "open_loop_rates": [], "open_loop_duration": 30,
-    "open_loop_workers": 64, "open_loop_ef": 0,
+    "open_loop_workers": 64, "open_loop_ef": 0, "open_loop_fractions": [], "open_loop_capacity_clients": 32,
 }
 
 
@@ -121,6 +121,10 @@ def parse():
     ap.add_argument("--pg-pooler-max-client-conn", type=int, default=200)
     ap.add_argument("--open-loop-rates", type=ints, default=[],
                     help="offered rates (queries per second) for the open-loop runs; empty disables")
+    ap.add_argument("--open-loop-fractions", type=parse_fractions, default=[],
+                    help="open-loop offered rates as fractions of the closed-loop throughput of the same build "
+                         "(at --open-loop-capacity-clients clients, at the matched-recall ef); e.g. 0.5,0.8,0.95,1.1")
+    ap.add_argument("--open-loop-capacity-clients", type=int, default=32)
     ap.add_argument("--open-loop-duration", type=float, default=30)
     ap.add_argument("--open-loop-workers", type=int, default=64,
                     help="client processes serving the open-loop arrivals (bounds the in-flight queries)")
@@ -283,15 +287,22 @@ def main():
                     srv.set_conn_mode("direct")
                     if "pooled" in modes:
                         run["pooler"] = srv.pooler_info()
-            if a.open_loop_rates and lim == "none":
+            if (a.open_loop_rates or a.open_loop_fractions) and lim == "none":
                 rows = sorted((x for x in run["latency"] if x["proto"] == protocols[0] and x["rep"] == 0),
                               key=lambda x: x["ef"])
                 ok = [x["ef"] for x in rows if x["recall_at_k"] >= a.conc_recall]
                 ef = a.open_loop_ef or (ok[0] if ok else rows[-1]["ef"])
+                rates, capacity = list(a.open_loop_rates), None
+                if a.open_loop_fractions:
+                    capacity = capacity_qps(run.get("concurrency", []), protocols[0], ef, a.open_loop_capacity_clients)
+                    rates += open_loop_rates(capacity, a.open_loop_fractions)
                 run["open_loop"] = []
-                for rate in a.open_loop_rates:
+                for i, rate in enumerate(rates):
                     row, r = open_loop_run(srv, protocols[0], ef, rate, a.open_loop_duration,
                                            a.open_loop_workers, queries, gt, a.k, a.seed)
+                    if capacity is not None and i >= len(a.open_loop_rates):
+                        row["load_fraction"] = a.open_loop_fractions[i - len(a.open_loop_rates)]
+                        row["capacity_qps"] = capacity
                     run["open_loop"].append(row)
                     raw.update({f"{lim}_{key}": v for key, v in r.items()})
                     save_json(result | {"runs": result["runs"] + [run]}, rpath)

@@ -80,6 +80,32 @@ def poisson_arrivals(rate, duration_s, seed):
     return t[t < duration_s * 1e9].astype(np.int64)
 
 
+def parse_fractions(text):
+    """Load levels as fractions of the measured capacity, e.g. "0.5,0.8,0.95,1.1"."""
+    try:
+        values = [float(x) for x in text.split(",") if x]
+    except ValueError as exc:
+        raise ValueError(f"load fractions must be numbers: {text!r}") from exc
+    if any(v <= 0 for v in values):
+        raise ValueError(f"load fractions must be positive: {text!r}")
+    return values
+
+
+def open_loop_rates(capacity, fractions):
+    """Offered rates (queries per second) as fractions of the capacity of a build, whole numbers, at least 1."""
+    if capacity is None or capacity <= 0:
+        raise ValueError("the capacity of the build was not measured; no open-loop rate can be derived")
+    return [max(1, int(round(capacity * f))) for f in fractions]
+
+
+def capacity_qps(rows, proto, ef, clients):
+    """Closed-loop throughput of the window with `clients` clients at `ef`, or None."""
+    for r in rows:
+        if r.get("proto") == proto and r.get("ef") == ef and r.get("clients") == clients:
+            return r.get("throughput_qps")
+    return None
+
+
 def open_loop_summary(planned, started, finished, hits, k, offered_rate, window_s):
     """Latency is taken from the planned send time, so a sender that falls behind (a saturated
     server) shows up as queueing delay instead of being hidden by the closed loop."""
