@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-25T03:05:55.717472+00:00",
+  "root": "/arf/scratch/endemir/rag_bench/results/smoke/6e94ecd5553f_7058238",
+  "verdict": "validated",
+  "summary": {
+    "result_files": 5,
+    "errors": 0,
+    "warnings": 0,
+    "experiments": {
+      "pg": 1,
+      "pg_halfvec": 1,
+      "pg_pooler": 1,
+      "qdrant": 1,
+      "qdrant_int8": 1
+    },
+    "engines": {
+      "pg": 3,
+      "qdrant": 2
+    },
+    "statuses": {
+      "ok": 5
+    }
+  },
+  "issues": {},
+  "files": [
+    {
+      "path": "pg/result.json",
+      "sha256": "85c248d76469ddf7c0c817a6f8a477a7bda4dec84477471cb6595bf6a61f1b18",
+      "experiment_id": "cfg-be9c51f6de80feab-7058238-pg",
+      "experiment": "pg",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7058238",
+      "raw_npz_size_bytes": 237080,
+      "raw_array_count": 8
+    },
+    {
+      "path": "pg_halfvec/result.json",
+      "sha256": "f494b813670f33b8e76de144f98efe4e9f4d8a4f8980d51dbd42d56cfce769e8",
+      "experiment_id": "cfg-5bab873a02855597-7058238-pg_halfvec",
+      "experiment": "pg_halfvec",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7058238",
+      "raw_npz_size_bytes": 729596,
+      "raw_array_count": 16
+    },
+    {
+      "path": "pg_pooler/result.json",
+      "sha256": "e9a3f0f436f75cc790600f434c83114ec29f35767a79e4bb33eaadd49a80daea",
+      "experiment_id": "cfg-2724f1009f473815-7058238-pg_pooler",
+      "experiment": "pg_pooler",
+      "engine": "pg",
+      "status": "ok",
+      "slurm_job_id": "7058238",
+      "raw_npz_size_bytes": 484538,
+      "raw_array_count": 16
+    },
+    {
+      "path": "qdrant/result.json",
+      "sha256": "bcc084b92a8297e13e71ed6b81a71ee8568961300fcb5b2f47f28bc8b4434117",
+      "experiment_id": "cfg-ca9a340fc1979c9f-7058238-qdrant",
+      "experiment": "qdrant",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7058238",
+      "raw_npz_size_bytes": 146760,
+      "raw_array_count": 8
+    },
+    {
+      "path": "qdrant_int8/result.json",
+      "sha256": "83c2ea0200da13e1a92e266a009531d2e8cbf350daca0aa20456a1a6c274bdc5",
+      "experiment_id": "cfg-fc6045ae5a7cb4f7-7058238-qdrant_int8",
+      "experiment": "qdrant_int8",
+      "engine": "qdrant",
+      "status": "ok",
+      "slurm_job_id": "7058238",
+      "raw_npz_size_bytes": 620414,
+      "raw_array_count": 26
+    }
+  ]
+}
