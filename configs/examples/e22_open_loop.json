@@ -189,7 +189,7 @@
                 "tag": "rep1",
                 "conc_duration": 30,
                 "conc_warmup": 5,
-                "open_loop_duration": 60
+                "open_loop_duration": 90
               }
             }
           ]
@@ -248,7 +248,7 @@
                 "tag": "rep1",
                 "conc_duration": 30,
                 "conc_warmup": 5,
-                "open_loop_duration": 60
+                "open_loop_duration": 90
               }
             }
           ]
@@ -305,7 +305,7 @@
                 "tag": "rep2",
                 "conc_duration": 30,
                 "conc_warmup": 5,
-                "open_loop_duration": 60
+                "open_loop_duration": 90
               }
             }
           ]
@@ -364,7 +364,7 @@
                 "tag": "rep2",
                 "conc_duration": 30,
                 "conc_warmup": 5,
-                "open_loop_duration": 60
+                "open_loop_duration": 90
               }
             }
           ]
@@ -421,7 +421,7 @@
                 "tag": "rep3",
                 "conc_duration": 30,
                 "conc_warmup": 5,
-                "open_loop_duration": 60
+                "open_loop_duration": 90
               }
             }
           ]
@@ -480,7 +480,7 @@
                 "tag": "rep3",
                 "conc_duration": 30,
                 "conc_warmup": 5,
-                "open_loop_duration": 60
+                "open_loop_duration": 90
               }
             }
           ]

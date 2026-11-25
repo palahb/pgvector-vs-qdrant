@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Aggregate E22: open-loop (Poisson arrivals) load levels as fractions of each build's closed-loop capacity.
 
-Design and the rules used here are in docs/E22_DESIGN.md. A level is steady if the achieved rate is at least 98% of the offered rate
-and the largest send lag is under 1 s; otherwise it is overload, where latency depends on the length of the window, so its tail is
-recorded but not used for claims (the aggregate carries `steady: false`).
+Design and the rules used here are in docs/E22_DESIGN.md (run 2: a 30 s ramp that is left out, then a steady/overload decision by the
+finished share and by whether latency grows). An overload level's tail is recorded but not used for claims (`steady: false`).
 """
 
 from __future__ import annotations
@@ -20,9 +19,12 @@ from analysis.analyze_e6 import interval
 
 STEADY_ACHIEVED = 0.98
 STEADY_LAG_MS = 1000.0
-# The first seconds of a window are left out of the tail statistics. A fresh PostgreSQL backend is slow for its first queries;
-# the harness warms each connection up, and this is the second line of defence. Qdrant showed no such effect in the pilot.
-TRIM_S = 5.0
+# The first TRIM_S seconds of a window are a ramp at the target rate and are left out of every statistic. Fresh PostgreSQL backends
+# are slow for a while (docs/E22_DESIGN.md, run 2); Qdrant showed no such effect.
+TRIM_S = 30.0
+# Latency growth that still counts as steady: last quarter of the measured part against its first quarter.
+TREND_FACTOR = 2.0
+TREND_SLACK_MS = 10.0
 RECALL_TOLERANCE = 0.01
 METRICS = ("offered_qps", "achieved_qps", "achieved_in_window_qps", "mean_ms", "p99_ms", "p999_ms", "p99_ms_all", "p999_ms_all", "max_send_lag_ms", "mean_send_lag_ms",
            "service_mean_ms", "recall_at_k", "server_cpu_ms_per_query", "server_cores_busy")
@@ -30,17 +32,37 @@ CAPACITY_CLIENTS = 32
 
 
 def is_steady(row: dict[str, Any]) -> bool:
+    """With the raw arrays: the finished share of the measured part and a latency trend (see docs/E22_DESIGN.md, run 2).
+    Without them (rows of other experiments): the achieved rate and the largest send lag of the whole window."""
     achieved = row.get("achieved_in_window_qps", row["achieved_qps"])
+    if "trend_ok" in row:
+        return achieved >= STEADY_ACHIEVED * row["offered_qps"] and bool(row["trend_ok"])
     return achieved >= STEADY_ACHIEVED * row["offered_qps"] and row["max_send_lag_ms"] < STEADY_LAG_MS
 
 
-def achieved_in_window(planned_ns, latency_ns, window_s: float) -> float:
-    """Queries that finished inside the window per second. Every query eventually completes, so the harness's own
-    `achieved_qps` (all completions over the window length) equals the offered rate even when the server is behind;
-    this counts only those finished by the end of the window."""
+def latency_trend_ok(planned_ns, latency_ns, trim_s: float, window_s: float) -> bool:
+    """Latency is not growing over the measured part: median of its last quarter at most TREND_FACTOR times the median of its
+    first quarter plus TREND_SLACK_MS."""
     import numpy as np
-    finished = np.asarray(planned_ns, dtype=float) + np.asarray(latency_ns, dtype=float)
-    return float((finished <= window_s * 1e9).sum()) / window_s
+    planned = np.asarray(planned_ns, dtype=float) / 1e9
+    lat = np.asarray(latency_ns, dtype=float) / 1e6
+    span = window_s - trim_s
+    first = lat[(planned >= trim_s) & (planned < trim_s + span / 4)]
+    last = lat[(planned >= window_s - span / 4) & (planned < window_s)]
+    if len(first) == 0 or len(last) == 0:
+        return False
+    return float(np.median(last)) <= TREND_FACTOR * float(np.median(first)) + TREND_SLACK_MS
+
+
+def achieved_in_window(planned_ns, latency_ns, window_s: float, trim_s: float = 0.0) -> float:
+    """Queries planned in the measured part [trim_s, window_s) that finished by the end of the window, per second of the measured
+    part. Every query eventually completes, so the harness's own `achieved_qps` (all completions over the window length) equals the
+    offered rate even when the server is behind; this counts only those finished by the end of the window."""
+    import numpy as np
+    planned = np.asarray(planned_ns, dtype=float)
+    finished = planned + np.asarray(latency_ns, dtype=float)
+    keep = (planned >= trim_s * 1e9) & (planned < window_s * 1e9)
+    return float(((finished <= window_s * 1e9) & keep).sum()) / (window_s - trim_s)
 
 
 def trimmed_latency(planned_ns, latency_ns, trim_s: float, window_s: float) -> dict[str, float]:
@@ -102,7 +124,8 @@ def analyze(root: Path) -> dict[str, Any]:
                 arrays = level_arrays(path.with_name("raw.npz"), row)
                 if arrays is not None:
                     trimmed = trimmed_latency(arrays[0], arrays[1], TRIM_S, window_s)
-                    row = {**row, "achieved_in_window_qps": achieved_in_window(arrays[0], arrays[1], window_s),
+                    row = {**row, "achieved_in_window_qps": achieved_in_window(arrays[0], arrays[1], window_s, TRIM_S),
+                           "trend_ok": latency_trend_ok(arrays[0], arrays[1], TRIM_S, window_s),
                            "mean_ms_all": row["mean_ms"], "p99_ms_all": row["p99_ms"], "p999_ms_all": row["p999_ms"],
                            "mean_ms": trimmed["mean_ms"], "p99_ms": trimmed["p99_ms"], "p999_ms": trimmed["p999_ms"]}
                 if ref and abs(row["recall_at_k"] - ref["recall_at_k"]) > RECALL_TOLERANCE:
@@ -155,7 +178,7 @@ def get(report: dict[str, Any], engine: str, fraction: float, metric: str) -> di
 
 def markdown_report(report: dict[str, Any]) -> str:
     lines = ["# E22 open-loop load", "", f"Verdict: **{report['verdict']}**; builds: {report['builds']}.", "",
-             "Mean ± sd over builds; mean and tail leave out the first 5 s of each window. A level is steady if the queries finished inside the window are >= 98% of offered and the largest send lag is < 1 s; "
+             "Mean ± sd over builds; mean and tail leave out the first 30 s of each window (the ramp). A level is steady if >= 98% of the measured queries finished inside the window and latency is not growing; "
              "overload levels are shown for completeness and carry no tail claim.", "",
              "| Engine | Load | Offered qps | Finished in window qps | steady builds | mean ms | p99 ms | p99.9 ms | max send lag ms | CPU ms/q |",
              "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]

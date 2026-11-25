@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E22_open_loop_run1",
+  "code_commit": "6e94ecd5553f683c446ed14065eae87fc541c930",
+  "slurm_jobs": {
+    "smoke": "7058238",
+    "pilot": "7060091",
+    "full": "7060149"
+  },
+  "status": "superseded by run 2 for the claims of the paper; kept as a record",
+  "reason": "60 s windows with a 5 s trim: the pgvector rows at 80% and above are dominated by a start-up backlog (docs/E22_DESIGN.md, section 'What the first full run showed'). The qdrant rows and the pgvector 50% row are consistent with run 2.",
+  "config": "configs/examples/e22_open_loop_run1.json",
+  "submission": "E22_open_loop-full-6e94ecd5-7f3ad45d",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E22_open_loop/full/E22_open_loop-full-6e94ecd5-7f3ad45d",
+  "workspace_root": "../artifacts/truba-experiments/E22/6e94ecd-run1",
+  "artifact_tree": {
+    "file_count": 26,
+    "sorted_file_sha256_manifest_sha256": "b800c9abd726638f8905c1c120623c4e2c986d73bcd2bd3e28315a46a83acf3d"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 6,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e22_run1_6e94ecd_audit.json"
+  },
+  "analysis": {
+    "tracked_json": "results/derived/e22_run1_6e94ecd_analysis.json",
+    "tracked_summary": "results/derived/e22_run1_6e94ecd_summary.md",
+    "note": "produced with the 5 s trim of the first analyzer version; the current analyzer applied to these data gives pgvector 80% steady (p99 53 ms over the last 30 s) and 95% overload"
+  },
+  "notes": [
+    "Time limits of the pending tasks were lowered with scontrol (1:30 to 0:50)."
+  ]
+}

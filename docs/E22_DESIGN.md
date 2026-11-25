@@ -28,6 +28,29 @@ planned arrivals (analysis; `p99_ms_all` keeps the whole window). The pilot also
 pgvector: the backends exit when the client workers exit, and the CPU time of an exited process is not visible. The workers now
 stay connected until the parent has read the CPU time.
 
+## What the first full run showed, and the second protocol (written 25 November 2026, before the second run)
+
+The first full run (job 7060149, commit `6e94ecd`, 60 s windows, first 5 s left out) is kept as **run 1**
+(`results/derived/e22_run1_6e94ecd_*`). Its pgvector rows are not usable as steady-state results: at 80% of the closed-loop
+capacity the latency over time was a start-up backlog followed by a flat 9 ms median (median latency 210 ms in the first seconds and
+9 ms after the tenth second, in build 1), and a 5 s trim does not cover it. At 50% load, where the backlog drains within a second, the
+tail is flat. Qdrant has no such effect. In 200 ms bins the pgvector latency is above 100 ms from the first bin, so the server falls behind
+at the start, not later.
+
+Our reading, not verified directly: connections that are new to the experiment start with backends whose page tables
+have not yet mapped the shared buffers they will touch (the hot index is about 8 GB and a query touches about 5,000 blocks, so a
+backend needs a few hundred queries to map most of it), which makes the first seconds slow at any load that leaves little spare capacity. The
+closed-loop windows of the other experiments do not show it because their backends have been alive for a long time. A deployment with
+long-lived connections would not see it either. What can be checked in the second run: the latency over time during the ramp.
+
+**Run 2** keeps the harness and the load levels (50, 80, 95, 110% of the closed-loop capacity of the same build) and changes only two
+parameters: the window is 90 s long and the first 30 s of planned arrivals, at the same rate, are a ramp that is left out of every
+statistic. The steady rule no longer uses the largest send lag (which the ramp inflates). A level is **steady** if (a) at least 98% of the
+queries planned in the measured part finished by the end of the window, and (b) the median latency in the last quarter of the measured
+part is at most 2 times the median in its first quarter plus 10 ms, that is, latency is not growing. Otherwise it is **overload**: its
+tail is shown but is not a claim. Run 2 uses the same code commit as run 1 (the smoke and the pilot of that commit stand); the
+configuration differs only in `open_loop_duration`, 90 instead of 60.
+
 ## Interpretation rules (decided now)
 
 * A level is **steady** if the rate of queries finished inside the window is at least 98% of the offered rate and the largest send lag is below 1 s. (Counting every completion over the window would equal the offered rate even for a server that is behind, because all queries finish eventually; the smoke test showed this. The wording was sharpened before any E22 measurement; the thresholds are unchanged.) For steady

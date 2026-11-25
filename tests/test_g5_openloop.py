@@ -9,8 +9,8 @@ sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "bench"))
 
 import features  # noqa: E402
-from analysis.analyze_e22 import (STEADY_ACHIEVED, STEADY_LAG_MS, TRIM_S, achieved_in_window, analyze,  # noqa: E402
-                                  is_steady)
+from analysis.analyze_e22 import (STEADY_ACHIEVED, STEADY_LAG_MS, TREND_FACTOR, TRIM_S, achieved_in_window,  # noqa: E402
+                                  analyze, is_steady, latency_trend_ok)
 
 
 class WorkerLifecycleTests(unittest.TestCase):
@@ -166,6 +166,32 @@ class TrimmedStatsTests(unittest.TestCase):
         self.assertAlmostEqual(out["p999_ms"], 2.0)
 
 
+class TrendTests(unittest.TestCase):
+    def arrays(self, lat_of_t, seconds=90, rate=100):
+        import numpy as np
+        planned = np.arange(0, seconds * 1e9, 1e9 / rate)
+        return planned, np.array([lat_of_t(t / 1e9) for t in planned]) * 1e6
+
+    def test_flat_latency_after_the_ramp_is_steady(self):
+        planned, lat = self.arrays(lambda t: 400.0 if t < 20 else 9.0)   # a start-up backlog that has drained by 30 s
+        self.assertTrue(latency_trend_ok(planned, lat, trim_s=30.0, window_s=90.0))
+
+    def test_latency_that_keeps_growing_is_overload(self):
+        planned, lat = self.arrays(lambda t: 10.0 + 50.0 * t)
+        self.assertFalse(latency_trend_ok(planned, lat, trim_s=30.0, window_s=90.0))
+
+    def test_small_absolute_growth_is_not_overload(self):
+        planned, lat = self.arrays(lambda t: 3.0 if t < 60 else 8.0)   # 3 ms to 8 ms: within factor 2 plus 10 ms
+        self.assertTrue(latency_trend_ok(planned, lat, trim_s=30.0, window_s=90.0))
+
+    def test_the_steady_flag_follows_the_trend_when_the_arrays_exist(self):
+        row = level(0.95, 950, 949, 100, 200, 5000.0)       # a huge lag from the ramp must not decide it any more
+        row["trend_ok"] = True
+        self.assertTrue(is_steady(row))
+        row["trend_ok"] = False
+        self.assertFalse(is_steady(row))
+
+
 class SteadyTests(unittest.TestCase):
     def test_a_level_that_keeps_up_is_steady(self):
         self.assertTrue(is_steady(level(0.5, 500, 499, 10, 20, 5)))
@@ -178,7 +204,8 @@ class SteadyTests(unittest.TestCase):
 
     def test_thresholds_are_the_ones_in_the_design(self):
         self.assertEqual((STEADY_ACHIEVED, STEADY_LAG_MS), (0.98, 1000.0))
-        self.assertEqual(TRIM_S, 5.0)
+        self.assertEqual(TRIM_S, 30.0)
+        self.assertEqual(TREND_FACTOR, 2.0)
 
 
 class AnalyzeTests(unittest.TestCase):
@@ -257,6 +284,8 @@ class ConfigTests(unittest.TestCase):
                     self.assertEqual(a.open_loop_capacity_clients, 32)
                     self.assertIn(32, a.clients)
                     self.assertEqual(a.open_loop_rates, [])
+                    if stage == "full":
+                        self.assertEqual(a.open_loop_duration, 90)
 
 
 if __name__ == "__main__":

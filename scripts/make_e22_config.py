@@ -3,7 +3,8 @@
 
 1M x 1024, M=16, efc=64, pgvector (direct connection) and Qdrant (four segments, lean gRPC), three builds each. After the
 one-repetition sweep fixes the matched-recall ef, a closed-loop window at 32 clients measures the capacity of the build, then
-Poisson-arrival windows run at 50%, 80%, 95% and 110% of it, 60 s each. Pilot: 100K, one build per engine.
+Poisson-arrival windows run at 50%, 80%, 95% and 110% of it, 90 s each, of which the first 30 s are a ramp that the analysis leaves out
+(docs/E22_DESIGN.md, run 2; run 1 used 60 s and is kept as e22_open_loop_run1.json). Pilot: 100K, one build per engine.
 """
 import json
 from pathlib import Path
@@ -20,7 +21,7 @@ QDRANT = {"protocols": ["grpc_raw"], "qdrant_indexing_threshold_kb": 1, "qdrant_
 def job(system, rep, n, pilot):
     args = {**COMMON, **(PG if system == "pg" else QDRANT), "n": n, "tag": f"rep{rep}",
             "conc_duration": 5 if pilot else 30, "conc_warmup": 2 if pilot else 5,
-            "open_loop_duration": 10 if pilot else 60}
+            "open_loop_duration": 10 if pilot else 90}
     if pilot:
         args["ef"] = [64, 128, 192, 256, 384, 512]
     return {"job_key": f"n-{n}_sys-{system}_tag-rep{rep}", "factors": {"n": n, "system": system, "tag": f"rep{rep}"},
