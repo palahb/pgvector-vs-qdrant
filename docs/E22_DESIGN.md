@@ -51,6 +51,23 @@ part is at most 2 times the median in its first quarter plus 10 ms, that is, lat
 tail is shown but is not a claim. Run 2 uses the same code commit as run 1 (the smoke and the pilot of that commit stand); the
 configuration differs only in `open_loop_duration`, 90 instead of 60.
 
+## What run 2 showed, and one more criterion (written 25 November 2026, after seeing run 2, before using it)
+
+Run 2 (job 7061154; `data-manifests/e22_full_6e94ecd.json`) applied the rule written above. It labelled pgvector at 95% load "steady" in
+3 of 3 builds, yet its mean latency is 574 ms and its p99 4.0 s. The time series explains it: the median latency in 10 s slices of the
+window is 1261, 1118, 1082, 578, 493, 412, 179, 59 and 21 ms (build 1), a **backlog that built up in the ramp and drains during the
+whole window**. Spare capacity at 95% is about 5%, so a backlog of a second takes tens of seconds to go. The rule asked only that latency
+not *grow*, and a draining backlog does not grow. So the label "steady" was too weak, and the tail of that level describes the
+recovery from the start-up backlog and not a steady state.
+
+The rule is kept and its label stays in the data (`steady`). A second label is added, `settled`, which needs the trend to be flat in both
+directions: median of the last quarter of the measured part at most 2 times the median of the first quarter plus 10 ms, **and** the first
+quarter at most 2 times the last plus 10 ms. Claims in the paper about a tail at a load level use only levels that are `settled` in all
+builds, and the paper says that the first label was too weak. This criterion was chosen after seeing run 2, which is a disclosed
+choice: the alternative of reporting 4.0 s as the p99 of pgvector at 95% load would describe the backlog, not the load. What run 2 can say about
+pgvector at 95% is therefore the recovery time, not a tail: with a start-up backlog it needed more than 60 s to get back to its
+steady latency, which Qdrant's windows at the same relative load never needed.
+
 ## Interpretation rules (decided now)
 
 * A level is **steady** if the rate of queries finished inside the window is at least 98% of the offered rate and the largest send lag is below 1 s. (Counting every completion over the window would equal the offered rate even for a server that is behind, because all queries finish eventually; the smoke test showed this. The wording was sharpened before any E22 measurement; the thresholds are unchanged.) For steady

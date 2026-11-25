@@ -141,7 +141,8 @@ This paper makes the following contributions.
     (Section~\ref{sec:causal}).
   \item A concurrency analysis using closed-loop multi-process clients, per-query engine
     time, server CPU accounting and PostgreSQL wait-event sampling, which shows what
-    limits each system's throughput.
+    limits each system's throughput, and a Poisson open-loop experiment at fixed fractions of that capacity
+    (Section~\ref{sec:openloop}).
   \item A memory-pressure study that separates the effect of PostgreSQL's buffer pool
     from that of the operating system's page cache, using per-query buffer statistics,
     and that compares both systems under cgroup memory limits with a cold cache.
@@ -345,6 +346,8 @@ label.
          Qdrant with four segments and Qdrant with one segment, three builds each \\
     E21 & pgvector through PgBouncer (transaction pooling, pool equal to the server cores) against direct connections,
          1, 8, 32 and 48 clients, three builds \\
+    E22 & Poisson arrivals at 50, 80, 95 and 110\,\% of each build's closed-loop capacity, 90\,s windows with a 30\,s ramp,
+         both engines, three builds each \\
     E23 & Ranking quality of approximate search against exact search on the 63 judged queries that have a relevant
          document in the 1M corpus (sensitivity analysis), three builds per engine \\
     E20 & Reduced precision at 1M $\times$ 1024: pgvector \texttt{halfvec} and Qdrant \texttt{int8}
@@ -399,6 +402,8 @@ and the tables that compare them say so.
     Table~\ref{tab:causal} & E19 & three per arm & 6 jobs (all arms of one system per job), 6 nodes,
       the two systems on different nodes & smallest swept $ef$ with rep-0 recall $\ge 0.95$ on an 8-point grid
       (128--640); timing from reps 1 and 2 \\
+    Table~\ref{tab:openloop} & E22 & three per engine & 6 jobs, 6 nodes, the two engines on different nodes & matched-recall $ef$ of each build;
+      load as a fraction of the closed-loop throughput at 32 clients \\
     Table~\ref{tab:pooling} & E21 & three, one pgvector build per job & 3 jobs, 3 nodes; the three connection modes run
       one after the other on each build & $ef=448$ (smallest swept with recall $\ge 0.95$ on every build) and $ef=64$ \\
     Table~\ref{tab:ranking} & E23 & three per engine & 6 jobs, 6 nodes, the two systems on different nodes &
@@ -1083,6 +1088,7 @@ an application that retrieves ten passages, a mean of 0.95 at high dimension mea
 one query in sixteen has a recall below 0.8.
 
 \subsection{Concurrency}
+\label{sec:concurrency}
 
 Figure~\ref{fig:throughput} shows closed-loop throughput at matched recall, that is, at
 the smallest swept $ef$ reaching Recall@10 $\geq 0.95$: $ef=192$, 384 and 512 for pgvector and
@@ -1564,6 +1570,72 @@ settings have to travel with each transaction. We did not test other pool sizes,
 or a separate host (the pooler here is on the loopback interface and on the server's cores), open-loop load or other clients.
 
 
+\subsection{Open-Loop Load}
+\label{sec:openloop}
+
+The concurrency results above are closed loop: a client sends its next query when the last one returns, so a server that slows
+down also slows the load. Real traffic arrives whether or not the server keeps up. We therefore sent Poisson arrivals at fixed rates,
+and measured latency from the planned send time, so that a server that falls behind shows its queue as latency. The load levels are
+fractions of each build's own closed-loop throughput at 32 clients at its matched-recall $ef$ ($ef=448$ and a mean of $363$ for
+pgvector and Qdrant; capacity 1{,}028 and 1{,}566 queries per second), so the two engines are compared at the same relative load and
+not at the same absolute rate. A level is a window of 90\,s after the connections have been made and warmed up; the first 30\,s are a ramp at the
+target rate and are left out of every statistic. 3 builds per engine, 1M $\times$ 1024, 64 client processes (which bounds the
+queries in flight at 64). A level is \emph{settled} if at least 98\,\% of the measured queries finish inside the window and the median
+latency of the last quarter of the measured part is within a factor of two (plus 10\,ms) of that of the first quarter in both directions. The
+rule, its history and the data it was fixed on are in \texttt{docs/E22\_DESIGN.md}; we state in the next paragraphs where it changed.
+
+\begin{table}[t]
+  \caption{Poisson arrivals at fractions of the closed-loop capacity of each build, mean of 3 builds. Done is the
+  share of the queries planned in the measured part that finished before the window ended. Latency is given only for settled levels.}
+  \label{tab:openloop}
+  \small
+  \begin{tabular}{@{}llrrlrrr@{}}
+    \toprule
+    & load & qps & done & settled & mean ms & p99 ms & p99.9 ms \\
+    \midrule
+    pgvector & 50\,\% & 514 & 100\,\% & yes & 8.1 & 16.2 & 22.8 \\
+     & 80\,\% & 823 & 100\,\% & yes & 11.9 & 54.5 & 86.8 \\
+     & 95\,\% & 977 & 100\,\% & no & \multicolumn{3}{c}{not a steady state} \\
+     & 110\,\% & 1131 & 79\,\% & overload & \multicolumn{3}{c}{not a steady state} \\
+    \addlinespace
+    Qdrant & 50\,\% & 783 & 100\,\% & yes & 3.0 & 7.4 & 11.2 \\
+     & 80\,\% & 1253 & 100\,\% & yes & 5.5 & 25.7 & 36.1 \\
+     & 95\,\% & 1488 & 100\,\% & yes & 8.6 & 30.2 & 45.3 \\
+     & 110\,\% & 1723 & 86\,\% & overload & \multicolumn{3}{c}{not a steady state} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Where both systems are settled, pgvector's tail is wider.} At 50\,\% of capacity the p99 latency is 16.2\,ms for pgvector and
+7.4\,ms for Qdrant. At 80\,\% (823 and 1253 queries per second, so pgvector is at a lower absolute rate) it is 54.5
+and 25.7\,ms, a factor of 2.1, and the p99.9 latency is 86.8 and 36.1\,ms. Server CPU per query is
+7.9 and 5.1\,ms at that load, the pattern of the closed-loop measurements (Section~\ref{sec:cpu}). Qdrant is still settled at
+95\,\%, with a p99 of 30.2\,ms and a p99.9 of 45.3\,ms.
+
+\paragraph{The closed loop shows a different tail.} The closed-loop p99 at 32 clients is 71.1\,ms for pgvector and 22.4\,ms for Qdrant. A closed loop bounds the
+queue at the number of clients and an open loop does not. For Qdrant the open-loop p99 at the highest settled level, 95\,\%, is 1.35 times the closed-loop value, so
+although the closed loop keeps the server saturated, its tail is the smaller one. For pgvector the open-loop p99 at its highest settled level, 80\,\%, is
+0.77 times the closed-loop value, which is not a contradiction: its 95\,\% level did not settle (next paragraph), so the highest level we can compare is a lighter one than for Qdrant.
+The closed-loop tail of Section~\ref{sec:concurrency} should be read as that of a server held at saturation by a fixed number of clients, not as the tail at a given load.
+
+\paragraph{pgvector did not settle at 95\,\%.} The first reading of the data labelled this level steady, because the rule then asked only that latency
+not grow. The median latency in the first quarter of the measured part is 656\,ms and in the last quarter 36\,ms:
+a backlog that built up during the ramp was still draining throughout the window (mean 574\,ms, p99 4.0\,s over the whole measured part).
+With 5\,\% spare capacity a backlog of a second takes a long time to go. We therefore added the second direction to the rule (after seeing these
+data, which is why it is described here) and do not give a tail for this level. What it does show is slow recovery: at 95\,\% load pgvector had not returned to the median latency of its 80\,\% level
+(9\,ms) by the end of the 90\,s window, while Qdrant's windows at the same relative load carried no backlog. The backlog builds in the first
+seconds of a window (a first run with 60\,s windows and a 5\,s ramp showed it already at 80\,\%, and is kept as a record in the repository).
+Our reading is that new PostgreSQL backends are slow for their first queries; we did not establish why, and a deployment with long-lived connections
+may not see it, as the closed-loop windows of the other experiments, whose backends have been running for a long time, do not.
+
+\paragraph{Beyond capacity.} At 110\,\% neither engine settles, as expected. Of the queries planned in the measured part, 79\,\% (pgvector) and 86\,\% (Qdrant)
+finished before the window ended, and the median latency grows from 7.0\,s to 12.9\,s and from 3.8\,s to 8.2\,s over the
+measured part. Those numbers depend on the length of the window and carry no tail claim.
+
+\paragraph{Limits.} One $ef$ per build, one query mix, Poisson arrivals only, at most 64 queries in flight, a client on the other socket of the same node, 90\,s windows. The
+engines ran on different nodes. We did not vary the number of cores, and we did not test long-lived connections that had been warmed for minutes before the window.
+
+
 \section{Discussion}
 %% =============================================================
 
@@ -1580,7 +1652,9 @@ protocol it will use, and not only which engine is faster.
 Under load, both systems are limited by CPU and not by locking. They differ in how they
 handle overload. Qdrant's fixed thread pool keeps latency predictable when there are more
 clients than cores. pgvector's process-per-connection model loses some throughput and
-develops a long latency tail in that situation, so a deployment with more clients than cores
+develops a long latency tail in that situation. With Poisson arrivals instead of a closed loop the difference
+already shows at 80\,\% of each system's capacity, where pgvector's p99 latency is about twice Qdrant's, and at 95\,\% pgvector did not
+settle within the 90\,s window (Section~\ref{sec:openloop}). A deployment with more clients than cores
 can put a connection pooler with a pool of that size in front of it. The measurement shows what this buys
 (Section~\ref{sec:pooling}): p99 latency falls to about half of that with direct connections, but throughput
 does not rise, and below saturation the pooler costs a few per cent. Build time depends on how each system is

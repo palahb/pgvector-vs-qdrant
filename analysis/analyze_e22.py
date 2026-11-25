@@ -26,7 +26,8 @@ TRIM_S = 30.0
 TREND_FACTOR = 2.0
 TREND_SLACK_MS = 10.0
 RECALL_TOLERANCE = 0.01
-METRICS = ("offered_qps", "achieved_qps", "achieved_in_window_qps", "mean_ms", "p99_ms", "p999_ms", "p99_ms_all", "p999_ms_all", "max_send_lag_ms", "mean_send_lag_ms",
+METRICS = ("offered_qps", "achieved_qps", "achieved_in_window_qps", "mean_ms", "p99_ms", "p999_ms", "p99_ms_all", "p999_ms_all", "ef", "capacity_qps",
+           "median_first_quarter_ms", "median_last_quarter_ms", "max_send_lag_ms", "mean_send_lag_ms",
            "service_mean_ms", "recall_at_k", "server_cpu_ms_per_query", "server_cores_busy")
 CAPACITY_CLIENTS = 32
 
@@ -52,6 +53,37 @@ def latency_trend_ok(planned_ns, latency_ns, trim_s: float, window_s: float) -> 
     if len(first) == 0 or len(last) == 0:
         return False
     return float(np.median(last)) <= TREND_FACTOR * float(np.median(first)) + TREND_SLACK_MS
+
+
+def latency_trend_settled(planned_ns, latency_ns, trim_s: float, window_s: float) -> bool:
+    """Flat in both directions: the last quarter is not above, and the first quarter is not above, the other by more than
+    TREND_FACTOR plus TREND_SLACK_MS. A backlog that drains during the window fails the second half (docs/E22_DESIGN.md)."""
+    import numpy as np
+    planned = np.asarray(planned_ns, dtype=float) / 1e9
+    lat = np.asarray(latency_ns, dtype=float) / 1e6
+    span = window_s - trim_s
+    first = lat[(planned >= trim_s) & (planned < trim_s + span / 4)]
+    last = lat[(planned >= window_s - span / 4) & (planned < window_s)]
+    if len(first) == 0 or len(last) == 0:
+        return False
+    a, b = float(np.median(first)), float(np.median(last))
+    return b <= TREND_FACTOR * a + TREND_SLACK_MS and a <= TREND_FACTOR * b + TREND_SLACK_MS
+
+
+def quarter_medians(planned_ns, latency_ns, trim_s: float, window_s: float) -> tuple[float, float]:
+    """Median latency (ms) of the first and of the last quarter of the measured part."""
+    import numpy as np
+    planned = np.asarray(planned_ns, dtype=float) / 1e9
+    lat = np.asarray(latency_ns, dtype=float) / 1e6
+    span = window_s - trim_s
+    first = lat[(planned >= trim_s) & (planned < trim_s + span / 4)]
+    last = lat[(planned >= window_s - span / 4) & (planned < window_s)]
+    return float(np.median(first)), float(np.median(last))
+
+
+def is_settled(row: dict[str, Any]) -> bool:
+    achieved = row.get("achieved_in_window_qps", row["achieved_qps"])
+    return achieved >= STEADY_ACHIEVED * row["offered_qps"] and bool(row.get("settled_ok", False))
 
 
 def achieved_in_window(planned_ns, latency_ns, window_s: float, trim_s: float = 0.0) -> float:
@@ -97,8 +129,9 @@ def analyze(root: Path) -> dict[str, Any]:
     # (engine, fraction, metric) -> rep -> value
     table: dict[tuple[Any, ...], dict[str, float]] = defaultdict(dict)
     steady: dict[tuple[Any, ...], dict[str, bool]] = defaultdict(dict)
+    settled: dict[tuple[Any, ...], dict[str, bool]] = defaultdict(dict)
     closed: dict[str, dict[str, float]] = defaultdict(dict)
-    open95: dict[str, dict[str, float]] = defaultdict(dict)
+    settled_p99: dict[tuple[Any, ...], dict[str, float]] = defaultdict(dict)
     reps: dict[str, set[str]] = defaultdict(set)
     count = 0
     for path in sorted(root.glob("**/result.json")):
@@ -126,6 +159,9 @@ def analyze(root: Path) -> dict[str, Any]:
                     trimmed = trimmed_latency(arrays[0], arrays[1], TRIM_S, window_s)
                     row = {**row, "achieved_in_window_qps": achieved_in_window(arrays[0], arrays[1], window_s, TRIM_S),
                            "trend_ok": latency_trend_ok(arrays[0], arrays[1], TRIM_S, window_s),
+                           "settled_ok": latency_trend_settled(arrays[0], arrays[1], TRIM_S, window_s),
+                           **dict(zip(("median_first_quarter_ms", "median_last_quarter_ms"),
+                                      quarter_medians(arrays[0], arrays[1], TRIM_S, window_s))),
                            "mean_ms_all": row["mean_ms"], "p99_ms_all": row["p99_ms"], "p999_ms_all": row["p999_ms"],
                            "mean_ms": trimmed["mean_ms"], "p99_ms": trimmed["p99_ms"], "p999_ms": trimmed["p999_ms"]}
                 if ref and abs(row["recall_at_k"] - ref["recall_at_k"]) > RECALL_TOLERANCE:
@@ -135,8 +171,9 @@ def analyze(root: Path) -> dict[str, Any]:
                     if isinstance(row.get(metric), (int, float)):
                         table[(engine, fraction, metric)][rep] = float(row[metric])
                 steady[(engine, fraction)][rep] = is_steady(row)
-                if abs(fraction - 0.95) < 1e-9 and is_steady(row):
-                    open95[engine][rep] = row["p99_ms"]
+                settled[(engine, fraction)][rep] = is_settled(row)
+                if is_settled(row):
+                    settled_p99[(engine, fraction)][rep] = row["p99_ms"]
 
     aggregates = []
     for (engine, fraction, metric), by_rep in sorted(table.items()):
@@ -144,21 +181,27 @@ def analyze(root: Path) -> dict[str, Any]:
         stats = interval(values)
         mean = statistics.mean(values)
         stats["cv_percent"] = round(100 * statistics.stdev(values) / mean, 3) if len(values) > 1 and mean else None
-        flags = steady[(engine, fraction)]
+        flags, sflags = steady[(engine, fraction)], settled[(engine, fraction)]
         aggregates.append({"engine": engine, "load_fraction": fraction, "metric": metric, "stats": stats,
-                           "steady": bool(flags) and all(flags.values())})
-    status = [{"engine": e, "load_fraction": f, "builds": len(flags), "steady_builds": sum(flags.values())}
-              for (e, f), flags in sorted(steady.items())]
+                           "steady": bool(flags) and all(flags.values()),
+                           "settled": bool(sflags) and all(sflags.values())})
+    status = [{"engine": e, "load_fraction": f, "builds": len(flags), "steady_builds": sum(flags.values()),
+               "settled_builds": sum(settled[(e, f)].values())} for (e, f), flags in sorted(steady.items())]
 
     comparison = []
     for engine in sorted(closed):
-        shared = sorted(set(closed[engine]) & set(open95[engine]))
-        entry = {"engine": engine, "closed_p99_ms": statistics.mean(closed[engine].values()),
-                 "open_p99_ms_at_95": statistics.mean(open95[engine][r] for r in shared) if shared else None,
-                 "builds_with_steady_95": len(shared)}
-        entry["ratio_open_to_closed"] = (statistics.mean(open95[engine][r] / closed[engine][r] for r in shared)
-                                         if shared else None)
-        comparison.append(entry)
+        levels = [f for (e, f), by_rep in settled_p99.items() if e == engine and len(by_rep) == len(reps[engine])]
+        if not levels:
+            comparison.append({"engine": engine, "closed_p99_ms": statistics.mean(closed[engine].values()),
+                               "highest_settled_fraction": None, "open_p99_ms": None, "ratio_open_to_closed": None})
+            continue
+        top = max(levels)
+        by_rep = settled_p99[(engine, top)]
+        shared = sorted(set(closed[engine]) & set(by_rep))
+        comparison.append({"engine": engine, "closed_p99_ms": statistics.mean(closed[engine].values()),
+                           "highest_settled_fraction": top, "open_p99_ms": statistics.mean(by_rep[r] for r in shared),
+                           "ratio_open_to_closed": statistics.mean(by_rep[r] / closed[engine][r] for r in shared),
+                           "builds": len(shared)})
     for engine, found in reps.items():
         if len(found) < 3:
             issues.append({"cell": {"engine": engine, "builds": sorted(found)}, "problem": "fewer_than_three_builds"})
@@ -180,8 +223,8 @@ def markdown_report(report: dict[str, Any]) -> str:
     lines = ["# E22 open-loop load", "", f"Verdict: **{report['verdict']}**; builds: {report['builds']}.", "",
              "Mean ± sd over builds; mean and tail leave out the first 30 s of each window (the ramp). A level is steady if >= 98% of the measured queries finished inside the window and latency is not growing; "
              "overload levels are shown for completeness and carry no tail claim.", "",
-             "| Engine | Load | Offered qps | Finished in window qps | steady builds | mean ms | p99 ms | p99.9 ms | max send lag ms | CPU ms/q |",
-             "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+             "| Engine | Load | Offered qps | Finished in window qps | steady builds | settled builds | mean ms | p99 ms | p99.9 ms | max send lag ms | CPU ms/q |",
+             "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
 
     def cell(e, f, m, d):
         s = get(report, e, f, m)
@@ -189,14 +232,15 @@ def markdown_report(report: dict[str, Any]) -> str:
     for st in report["status"]:
         e, f = st["engine"], st["load_fraction"]
         lines.append(f"| {e} | {f:.2f} | {cell(e, f, 'offered_qps', 0)} | {cell(e, f, 'achieved_in_window_qps', 0)} | "
-                     f"{st['steady_builds']}/{st['builds']} | {cell(e, f, 'mean_ms', 1)} | {cell(e, f, 'p99_ms', 1)} | "
+                     f"{st['steady_builds']}/{st['builds']} | {st['settled_builds']}/{st['builds']} | {cell(e, f, 'mean_ms', 1)} | {cell(e, f, 'p99_ms', 1)} | "
                      f"{cell(e, f, 'p999_ms', 1)} | {cell(e, f, 'max_send_lag_ms', 0)} | {cell(e, f, 'server_cpu_ms_per_query', 2)} |")
-    lines += ["", "## Closed loop (32 clients) against open loop at 95% of capacity, same builds", "",
-              "| Engine | closed p99 ms | open p99 ms at 95% | ratio | builds steady at 95% |", "|---|---:|---:|---:|---:|"]
+    lines += ["", "## Closed loop (32 clients) against the highest settled open-loop level, same builds", "",
+              "| Engine | closed p99 ms | highest settled load | open p99 ms | ratio |", "|---|---:|---:|---:|---:|"]
     for c in report["closed_loop_comparison"]:
-        op = "n/a" if c["open_p99_ms_at_95"] is None else f"{c['open_p99_ms_at_95']:.1f}"
+        lvl = "none" if c["highest_settled_fraction"] is None else f"{c['highest_settled_fraction']:.2f}"
+        op = "n/a" if c["open_p99_ms"] is None else f"{c['open_p99_ms']:.1f}"
         ra = "n/a" if c["ratio_open_to_closed"] is None else f"{c['ratio_open_to_closed']:.2f}"
-        lines.append(f"| {c['engine']} | {c['closed_p99_ms']:.1f} | {op} | {ra} | {c['builds_with_steady_95']} |")
+        lines.append(f"| {c['engine']} | {c['closed_p99_ms']:.1f} | {lvl} | {op} | {ra} |")
     if report["issues"]:
         lines += ["", "## Issues", ""] + [f"- {json.dumps(i)}" for i in report["issues"]]
     lines.append("")

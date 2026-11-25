@@ -10,7 +10,8 @@ sys.path.insert(0, str(REPO / "bench"))
 
 import features  # noqa: E402
 from analysis.analyze_e22 import (STEADY_ACHIEVED, STEADY_LAG_MS, TREND_FACTOR, TRIM_S, achieved_in_window,  # noqa: E402
-                                  analyze, is_steady, latency_trend_ok)
+                                  analyze, is_settled, is_steady, latency_trend_ok, latency_trend_settled,
+                                  quarter_medians)
 
 
 class WorkerLifecycleTests(unittest.TestCase):
@@ -121,6 +122,7 @@ def write(root, engine, rep, closed_p99=40.0, overload_lag=5000.0):
           level(0.95, 950, 948, 60.0, 120.0, 50.0), level(1.1, 1100, 1004, 4000.0, 8000.0, overload_lag)]
     for row in ol:
         row["proto"] = proto
+        row["settled_ok"] = row["load_fraction"] < 1.0
     d = root / f"{engine}_{rep}"
     d.mkdir(parents=True)
     (d / "result.json").write_text(json.dumps({
@@ -184,12 +186,42 @@ class TrendTests(unittest.TestCase):
         planned, lat = self.arrays(lambda t: 3.0 if t < 60 else 8.0)   # 3 ms to 8 ms: within factor 2 plus 10 ms
         self.assertTrue(latency_trend_ok(planned, lat, trim_s=30.0, window_s=90.0))
 
+    def test_a_draining_backlog_is_steady_by_the_first_rule_but_not_settled(self):
+        planned, lat = self.arrays(lambda t: 1200.0 if t < 45 else (200.0 if t < 70 else 20.0))
+        self.assertTrue(latency_trend_ok(planned, lat, trim_s=30.0, window_s=90.0))
+        self.assertFalse(latency_trend_settled(planned, lat, trim_s=30.0, window_s=90.0))
+
+    def test_flat_latency_is_settled(self):
+        planned, lat = self.arrays(lambda t: 9.0)
+        self.assertTrue(latency_trend_settled(planned, lat, trim_s=30.0, window_s=90.0))
+
+    def test_growing_latency_is_not_settled(self):
+        planned, lat = self.arrays(lambda t: 10.0 + 50.0 * t)
+        self.assertFalse(latency_trend_settled(planned, lat, trim_s=30.0, window_s=90.0))
+
+    def test_settled_needs_the_finished_share_too(self):
+        row = level(0.8, 800, 700, 50, 90, 10.0)
+        row["settled_ok"] = True
+        self.assertFalse(is_settled(row))
+        row["achieved_in_window_qps"] = 799
+        self.assertTrue(is_settled(row))
+
     def test_the_steady_flag_follows_the_trend_when_the_arrays_exist(self):
         row = level(0.95, 950, 949, 100, 200, 5000.0)       # a huge lag from the ramp must not decide it any more
         row["trend_ok"] = True
         self.assertTrue(is_steady(row))
         row["trend_ok"] = False
         self.assertFalse(is_steady(row))
+
+
+class QuarterMedianTests(unittest.TestCase):
+    def test_first_and_last_quarter_of_the_measured_part(self):
+        import numpy as np
+        planned = np.arange(0, 90e9, 1e7)
+        lat = np.where(planned < 45e9, 800e6, np.where(planned < 70e9, 200e6, 20e6))   # 800, 200 then 20 ms
+        first, last = quarter_medians(planned, lat, trim_s=30.0, window_s=90.0)
+        self.assertAlmostEqual(first, 800.0)       # 30-45 s
+        self.assertAlmostEqual(last, 20.0)         # 75-90 s
 
 
 class SteadyTests(unittest.TestCase):
@@ -245,8 +277,22 @@ class AnalyzeTests(unittest.TestCase):
         r = analyze(self.root)
         ref = {c["engine"]: c for c in r["closed_loop_comparison"]}
         self.assertAlmostEqual(ref["pg"]["closed_p99_ms"], 40.0)
-        self.assertAlmostEqual(ref["pg"]["open_p99_ms_at_95"], 60.0)
+        self.assertEqual(ref["pg"]["highest_settled_fraction"], 0.95)   # 110% is overload in the fixture
+        self.assertAlmostEqual(ref["pg"]["open_p99_ms"], 60.0)
         self.assertAlmostEqual(ref["pg"]["ratio_open_to_closed"], 1.5)
+
+    def test_a_level_that_is_not_settled_in_every_build_is_not_used_for_the_comparison(self):
+        bad = Path(self.tmp.name) / "partial"
+        for rep in ("rep1", "rep2", "rep3"):
+            write(bad, "pg", rep)
+        path = bad / "pg_rep2" / "result.json"
+        data = json.loads(path.read_text())
+        for row in data["runs"][0]["open_loop"]:
+            if row["load_fraction"] == 0.95:
+                row["settled_ok"] = False
+        path.write_text(json.dumps(data))
+        r = analyze(bad)
+        self.assertEqual({c["engine"]: c for c in r["closed_loop_comparison"]}["pg"]["highest_settled_fraction"], 0.8)
 
     def test_recall_disagreement_with_the_closed_loop_is_an_issue(self):
         bad = Path(self.tmp.name) / "bad"

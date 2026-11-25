@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "experiment_id": "E22_open_loop_full",
+  "code_commit": "6e94ecd5553f683c446ed14065eae87fc541c930",
+  "slurm_jobs": {
+    "smoke": "7058238",
+    "pilot": "7060091",
+    "full": "7061154"
+  },
+  "superseded": {
+    "smoke": "7055594 at 5266eae (open loop ran at an ef the closed loop never ran at); 7055997 at 78fdc6e (passed, but its pilot 7056826 showed a start-up transient and impossible CPU per query, fixed in 6e94ecd)",
+    "full": "7060149 (run 1, 60 s windows) kept as data-manifests/e22_run1_6e94ecd.json; its pgvector 80% and above are dominated by a start-up backlog"
+  },
+  "notes": [
+    "Run 2 uses the code of run 1 (same commit, same smoke and pilot) with open_loop_duration 90 instead of 60 (configs/examples/e22_open_loop.json; run 1: e22_open_loop_run1.json). The protocol change was written in docs/E22_DESIGN.md after run 1 and before run 2.",
+    "After run 2 a second label, 'settled' (flat latency in both directions), was added because the first rule labelled a draining backlog steady (pgvector at 95%). Both labels are in the analysis; the paper's claims use 'settled'. Written in docs/E22_DESIGN.md after seeing run 2.",
+    "Time limits of the pending tasks were lowered with scontrol (1:30 to 0:55)."
+  ],
+  "submission": "E22_open_loop-full-6e94ecd5-6bc12b26",
+  "remote_root": "/arf/scratch/endemir/rag_bench/results/E22_open_loop/full/E22_open_loop-full-6e94ecd5-6bc12b26",
+  "workspace_root": "../artifacts/truba-experiments/E22/6e94ecd",
+  "artifact_tree": {
+    "file_count": 26,
+    "sorted_file_sha256_manifest_sha256": "8fca5ea3fd85911c56e75b43dfc6d26b5585038f912786ee3b341132b5f98370",
+    "scheme": "sha256 of the sorted lines '<sha256>  <relative path>\\n' over the local workspace copy; server logs and perf data are not copied"
+  },
+  "result_audit": {
+    "verdict": "validated",
+    "result_files": 6,
+    "errors": 0,
+    "warnings": 0,
+    "strict_warnings": true,
+    "tracked_report": "results/validated/e22_full_6e94ecd_audit.json"
+  },
+  "analysis": {
+    "verdict": "valid",
+    "builds": {
+      "pg": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ],
+      "qdrant": [
+        "rep1",
+        "rep2",
+        "rep3"
+      ]
+    },
+    "tracked_json": "results/derived/e22_full_6e94ecd_analysis.json",
+    "tracked_summary": "results/derived/e22_full_6e94ecd_summary.md",
+    "paper_section_generator": "scripts/e22_section.py"
+  },
+  "registry": {
+    "tasks": 6,
+    "attempts_per_task": 1
+  },
+  "scope": "1M x 1024, M=16, efc=64; Poisson arrivals at 50/80/95/110% of the closed-loop throughput (32 clients, matched-recall ef) of each build; 90 s windows, first 30 s a ramp that is left out; 64 client processes; pgvector direct connection, Qdrant four segments lean gRPC; 3 builds per engine"
+}
