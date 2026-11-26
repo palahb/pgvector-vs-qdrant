@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-26T20:39:52.017904+00:00",
+  "commit": "2837c28a87b515eb3f4aed9e1eaef5b357b889f9",
+  "tag": "analysis-v1",
+  "worktree_dirty": false,
+  "verdict": "ok",
+  "failed": [],
+  "steps": [
+    {
+      "id": "e6_full",
+      "kind": "analysis",
+      "derived": "results/derived/e6_full_9050d65_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e6_pilot",
+      "kind": "analysis",
+      "derived": "results/derived/e6_pilot_9050d65_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e8_full",
+      "kind": "analysis",
+      "derived": "results/derived/e8_full_fe88da1_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e9_full",
+      "kind": "analysis",
+      "derived": "results/derived/e9_full_31de7f4_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e10_full",
+      "kind": "analysis",
+      "derived": "results/derived/e10_full_0b0b905_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e17_full",
+      "kind": "analysis",
+      "derived": "results/derived/e17_full_a5bb141_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e18_full",
+      "kind": "analysis",
+      "derived": "results/derived/e18_full_7d1b1c4_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e19_full",
+      "kind": "analysis",
+      "derived": "results/derived/e19_full_518a444_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e20_full",
+      "kind": "analysis",
+      "derived": "results/derived/e20_full_77f7567_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e21_full",
+      "kind": "analysis",
+      "derived": "results/derived/e21_full_2516ade_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e22_full",
+      "kind": "analysis",
+      "derived": "results/derived/e22_full_6e94ecd_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e22_run1",
+      "kind": "analysis",
+      "derived": "results/derived/e22_run1_6e94ecd_analysis.json",
+      "tool_commit": "936736e",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "e23_full",
+      "kind": "analysis",
+      "derived": "results/derived/e23_full_5276f14_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "m7_e20",
+      "kind": "analysis",
+      "derived": "results/derived/m7_e20_77f7567_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "m7_e8",
+      "kind": "analysis",
+      "derived": "results/derived/m7_e8_fe88da1_analysis.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "m6_reconciliation",
+      "kind": "analysis",
+      "derived": "results/derived/m6_throughput_reconciliation.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "paper_source_index",
+      "kind": "analysis",
+      "derived": "results/derived/paper_source_index.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "baseline_figures",
+      "kind": "analysis",
+      "derived": "results/derived/baseline_figure_reproduction.json",
+      "status": "ok",
+      "tool_exit": 0,
+      "differences": [],
+      "difference_count": 0
+    },
+    {
+      "id": "causal_decomposition",
+      "kind": "generated section",
+      "script": "scripts/e19_section.py",
+      "status": "ok",
+      "problem": null,
+      "characters": 5408
+    },
+    {
+      "id": "connection_pooling",
+      "kind": "generated section",
+      "script": "scripts/e21_section.py",
+      "status": "ok",
+      "problem": null,
+      "characters": 6578
+    },
+    {
+      "id": "open_loop_load",
+      "kind": "generated section",
+      "script": "scripts/e22_section.py",
+      "status": "ok",
+      "problem": null,
+      "characters": 5822
+    },
+    {
+      "id": "ranking_quality",
+      "kind": "generated section",
+      "script": "scripts/e23_section.py",
+      "status": "ok",
+      "problem": null,
+      "characters": 5101
+    },
+    {
+      "id": "throughput_at_matched_recall",
+      "kind": "generated section",
+      "script": "scripts/m7_section.py",
+      "status": "ok",
+      "problem": null,
+      "characters": 2015
+    },
+    {
+      "id": "commit_job_node_table",
+      "kind": "generated section",
+      "script": "scripts/commits_table.py",
+      "status": "ok",
+      "problem": null,
+      "characters": 1211
+    },
+    {
+      "id": "paper_structure",
+      "kind": "structure",
+      "status": "ok",
+      "env_mismatch": {},
+      "undefined_refs": [],
+      "unused_labels": [],
+      "todo_calls": 0
+    },
+    {
+      "id": "manifests",
+      "kind": "manifests",
+      "status": "ok",
+      "checked": 37,
+      "problems": []
+    },
+    {
+      "id": "table_sources",
+      "kind": "table sources",
+      "status": "ok",
+      "uncovered": [],
+      "stale_entries": [],
+      "problems": [],
+      "bound": 19,
+      "exempt": [
+        "tab:checklist",
+        "tab:confounders",
+        "tab:dataset",
+        "tab:expmap",
+        "tab:sources"
+      ]
+    },
+    {
+      "id": "unit_tests",
+      "kind": "tests",
+      "status": "ok",
+      "summary": [
+        "Ran 286 tests in 4.678s",
+        "",
+        "OK"
+      ]
+    }
+  ]
+}
