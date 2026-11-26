@@ -6,8 +6,8 @@
 #SBATCH --exclude=hamsi20,hamsi65
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -c 2
-#SBATCH --mem=4G
+#SBATCH -c 56
+#SBATCH --mem=170G
 #SBATCH -t 00:05:00
 #SBATCH -o logs/%x_%j.out
 set -uo pipefail
