@@ -14,9 +14,10 @@ different promise, in two parts:
 | Tag | Commit | Meaning |
 |---|---|---|
 | `harness-v1` | `6e94ecd` | The last commit that changed what the harness does (`bench/`): the one that produced E22. Later commits under `bench/` only add the read-only `storage_check.sbatch`. The harness commits of E6-E21 and E23 are ancestors of it. |
-| `analysis-v1` | see `git show analysis-v1` | The commit at which `make verify-paper` passes: analysis tools, generators of paper sections, registry (`docs/PAPER_VERIFY.json`) and tracked analysis files agree with the raw results. |
+| `analysis-v1` | `2837c28` | The commit at which `make verify-paper` first passed (28 steps): analysis tools, generators of paper sections, registry (`docs/PAPER_VERIFY.json`) and tracked analysis files agree with the raw results. Superseded by `analysis-v2`; kept. |
+| `analysis-v2` | `d39f64f` | `analysis-v1` plus the checks of the headline numbers (`docs/PAPER_CLAIMS.json`) and of the table cells (`analysis/check_tables.py`); passes 30 steps. The one the paper cites. |
 
-If an analysis tool, a generator or a tracked analysis file changes after `analysis-v1`, the tag is not moved: a new tag `analysis-v2` is made and the change is
+If an analysis tool, a generator or a tracked analysis file changes after `analysis-v2`, the tag is not moved: a new tag `analysis-v3` is made and the change is
 recorded here. The paper text may change after the tag (G9 rewrites it), because `verify-paper` checks the generated sections and the structure of whatever text is in
 `paper/main.tex`, not the prose.
 

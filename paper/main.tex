@@ -403,7 +403,7 @@ and the tables that compare them say so.
 
 Table~\ref{tab:commits} gives the code commit, the Slurm jobs and the number of tasks and nodes behind each experiment, and the result of its strict audit.
 The commit of the harness that produced the raw results is kept in each manifest; the tables and figures are regenerated from the raw results by the analysis
-tools of the tag \texttt{analysis-v1} (the command \texttt{make verify-paper} does this and compares with the tracked files).
+tools of the tag \texttt{analysis-v2} (the command \texttt{make verify-paper} does this and compares with the tracked files).
 
 \begin{table}[t]
   \caption{The code commit, Slurm job (array) and number of tasks and distinct nodes behind each experiment of the main text, and the strict
@@ -534,12 +534,11 @@ The results come from many commits of the harness, one per experiment, because e
 commit that ran it. Re-running everything with one commit would take days of queue time and would not change a number, so we make a narrower promise in two parts.
 Every raw result keeps the commit that produced it (\texttt{code\_commit}, with the worktree clean) in its file and in the manifest of its experiment, together with the Slurm jobs, the node,
 the image digests and the checksums of the files (Table~\ref{tab:commits}). And every analysis, table and generated section of this paper is regenerated from the raw results by one set of
-analysis tools, the one at the tag \texttt{analysis-v1}; the harness itself is pinned by the tag \texttt{harness-v1}, the last commit that changed what it does. The command \texttt{make verify-paper} regenerates the 18 tracked
+analysis tools, the one at the tag \texttt{analysis-v2}; the harness itself is pinned by the tag \texttt{harness-v1}, the last commit that changed what it does. The command \texttt{make verify-paper} regenerates the 18 tracked
 analysis files and compares them with the tracked ones, checks that the generated sections of this paper are in it verbatim, checks the structure of the text, checks that every table and figure is bound to an experiment,
-a manifest and an analysis file, and runs the unit tests. At the tag it passes all 28 steps.
+a manifest and an analysis file, recomputes the headline numbers of the abstract, discussion and conclusion and the cells of the hand-typed result tables from the analysis files, and runs the unit tests. At the tag it passes all 30 steps.
 
-The command has limits that the paper states. It does not check the numbers that were typed into the prose of sections without a generator; those were copied from the analysis summaries by hand and audited once against
-them (the audit is in the repository). The first experiments, E1 to E5, predate the provenance system and are bound to the archived results only through their checksums and the figure reproduction. One analysis, of the first open-loop
+The command has limits that the paper states. It does not check the numbers that were typed into the prose of sections without a generator, apart from the headline numbers; those were copied from the analysis summaries by hand. The first run of the table check found four values that had been copied from a rounded display or computed from rounded cells, and they were corrected. The first experiments, E1 to E5, predate the provenance system and are bound to the archived results only through their checksums and the figure reproduction. One analysis, of the first open-loop
 run, is regenerated with the tools of the commit that produced it, because the later tools implement a second protocol. The raw results themselves (about 3\,GB) are not in the repository; their checksums are in the manifests.
 
 %% =============================================================
@@ -1799,7 +1798,7 @@ over to native 384- or 768-dimensional models.
 
 \textbf{Reduced precision.} One embedding model, one dimension, one quantization setting per engine (\texttt{halfvec}; \texttt{int8} with rescoring and Qdrant's default oversampling). Qdrant's storage size varied between builds, so we report ranges and no size ratio for \texttt{int8}.
 
-\textbf{Provenance.} The first experiments (E1--E5) were archived before the provenance system existed and have no commit or seed in their files. The numbers in the prose of the sections that are not written from analysis files were copied from the analysis summaries by hand; the analysis files are regenerated and checked, the copying was audited once (Section~\ref{sec:provenance}).
+\textbf{Provenance.} The first experiments (E1--E5) were archived before the provenance system existed and have no commit or seed in their files. The numbers in the prose of the sections that are not written from analysis files were copied from the analysis summaries by hand; the analysis files are regenerated and checked, only the headline numbers and the cells of the result tables are recomputed (Section~\ref{sec:provenance}).
 
 \textbf{Engine-side timing.} The two systems measure engine time at different points
 (statement execution in PostgreSQL, request handling in Qdrant), so we use it to break
@@ -1846,7 +1845,7 @@ ULAKBİM, High Performance and Grid Computing Center (TRUBA resources).
 
 \section*{Data and code availability}
 The benchmarking harness, job scripts, analysis tools, the manifests of every experiment and the tracked analysis results are available at
-\url{https://github.com/palahb/pgvector-vs-qdrant} (tags \texttt{harness-v1} and \texttt{analysis-v1}). The raw per-query results (about 3\,GB) are not in the
+\url{https://github.com/palahb/pgvector-vs-qdrant} (tags \texttt{harness-v1} and \texttt{analysis-v2}). The raw per-query results (about 3\,GB) are not in the
 repository; the checksums in the manifests identify them, and the authors will provide them on request.
 % AUTHORS: confirm the last sentence, or name the archive in which the raw results will be deposited.
 
