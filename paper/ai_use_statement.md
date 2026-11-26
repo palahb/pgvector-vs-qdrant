@@ -1,9 +1,11 @@
-# Generative-AI use statement (DRAFT for the authors)
+# Generative-AI use statement (DRAFT for the authors, updated 27 November 2026)
 
 This is a draft. The authors are the ones who attest to it, so every sentence in the
 "Statement" section has to be true before it is used, and the journal's own wording and
 placement rules (the target journal is not final) have to be checked against its current
-author guidelines. Nothing here has been sent anywhere.
+author guidelines. Nothing here has been sent anywhere. The statement is already in the manuscript (`paper/main.tex`, before the references, as
+Elsevier's policy asks: section "Declaration of generative AI and AI-assisted technologies in the writing process", after the acknowledgements and the funding and
+competing-interest statements); the attestation in it still has to be made by the authors.
 
 ## Statement (English, for the manuscript)
 
@@ -24,10 +26,13 @@ the checklist below.
 |---|---|---|
 | Claude (chat) | Sep-Oct 2026 | Review of the course-project scripts; the first version of the ARF harness (`bench/`), data preparation, summaries and figure scripts; drafts of the paper rewrite and of e-mails to the supervisor |
 | GPT / Codex | Nov 2026 | Review of the project state against the review report; the working plan (`MAKALE_CALISMA_PLANI.md`); the provenance schema and validator, the Slurm orchestration layer, and the first E6/E7 code |
-| Claude Code | Nov 2026 | Experiments E6-E10 and E17 (harness changes, tests, submission, analysis tools); rewrites of the Results, Confounders, Related Work and Abstract text; the referee-response draft; literature checks |
+| Claude Code | Nov 2026 | Experiments E6-E23 (harness changes, tests, submission, analysis tools, section generators); the verification command (`make verify-paper`), its claim and table checks and the tags; rewrites of the Results, Confounders, Related Work, Discussion, Conclusion and Abstract text and the conversion to the Elsevier template; the referee-response draft; literature checks |
 
 ## What guards the content (also facts)
 
+- `make verify-paper` regenerates the analyses from the raw results, checks the sections written from analysis files verbatim, recomputes the 27 headline
+  numbers and the cells of the nine hand-typed result tables, and runs the tests (`docs/TAG_POLICY.md`). Its first run of the table check found four numbers that had been
+  copied from rounded displays; they were corrected.
 - Every number in the Results sections comes from a result set that passed the strict
   validator (`analysis/validate_results.py`) with zero errors and zero warnings, and each set
   has a manifest under `data-manifests/` with its commit, job IDs and file checksums.

@@ -319,24 +319,25 @@ label.
     E6 & Qdrant segment count (1, 2, 4, 8) and search threads (one or automatic), with
          server CPU time per query, against a one-graph pgvector reference; three builds
          per cell \\
+    E7 & Distance-kernel probe on a pinned core (scalar, AVX2 and AVX-512 time per 1024-dimensional distance) and a pilot of the hardware counters \\
     E8 & The E2 settings rebuilt three times each with a 21-point $ef$ grid, interpolated
          to matched recall \\
     E9 & Ingestion configurations: pgvector logged and unlogged, Qdrant with larger
          batches, parallel streams and deferred indexing; WAL and disk writes recorded \\
+    E10 & Cold start and steady state under 16, 8 and 4\,GB memory limits, full query set in random
+         order, three repetitions; pgvector with two buffer-pool settings, Qdrant memory-mapped \\
     E17 & Planner plans (no query run) for 100K--1M vectors, 128--1024 dimensions and 18 values of $ef$ \\
     E18 & Per-query recall and recall across eight dimensions, three builds each, 100K vectors \\
     E19 & Where a query's CPU goes at 1M $\times$ 1024: perf profiles and hardware counters of pgvector,
          Qdrant with four segments and Qdrant with one segment, three builds each \\
+    E20 & Reduced precision at 1M $\times$ 1024: pgvector \texttt{halfvec} and Qdrant \texttt{int8}
+         against their float32 arms, three builds each \\
     E21 & pgvector through PgBouncer (transaction pooling, pool equal to the server cores) against direct connections,
          1, 8, 32 and 48 clients, three builds \\
     E22 & Poisson arrivals at 50, 80, 95 and 110\,\% of each build's closed-loop capacity, 90\,s windows with a 30\,s ramp,
          both engines, three builds each \\
     E23 & Ranking quality of approximate search against exact search on the 63 judged queries that have a relevant
          document in the 1M corpus (sensitivity analysis), three builds per engine \\
-    E20 & Reduced precision at 1M $\times$ 1024: pgvector \texttt{halfvec} and Qdrant \texttt{int8}
-         against their float32 arms, three builds each \\
-    E10 & Cold start and steady state under 16, 8 and 4\,GB memory limits, full query set in random
-         order, three repetitions; pgvector with two buffer-pool settings, Qdrant memory-mapped \\
     \bottomrule
   \end{tabular}
 \end{table}
