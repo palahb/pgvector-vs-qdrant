@@ -417,6 +417,35 @@ and the tables that compare them say so.
   \end{tabular}
 \end{table*}
 
+Table~\ref{tab:commits} gives the code commit, the Slurm jobs and the number of tasks and nodes behind each experiment, and the result of its strict audit.
+The commit of the harness that produced the raw results is kept in each manifest; the tables and figures are regenerated from the raw results by the analysis
+tools of the tag \texttt{analysis-v1} (the command \texttt{make verify-paper} does this and compares with the tracked files).
+
+\begin{table}[t]
+  \caption{The code commit, Slurm job (array) and number of tasks and distinct nodes behind each experiment of the main text, and the strict
+  audit of its raw results (files / errors / warnings). The records of E1--E5 predate the provenance system and have none of these fields.
+  Every manifest is in \texttt{data-manifests/}.}
+  \label{tab:commits}
+  \small
+  \begin{tabular}{@{}llrrrr@{}}
+    \toprule
+    Exp. & commit & job(s) & tasks & nodes & audit \\
+    \midrule
+    E6 & \texttt{9050d65} & 6985667/6985669 & 54 & 11 & 54 / 0 / 0 \\
+    E8 & \texttt{fe88da1} & 6996492 & 24 & 7 & 48 / 0 / 0 \\
+    E9 & \texttt{31de7f4} & 6998157 & 6 & 3 & 36 / 0 / 0 \\
+    E10 & \texttt{0b0b905} & 7008319 & 32 & 8 & 30 / 0 / 0 \\
+    E17 & \texttt{a5bb141} & 7013754 & 20 & 3 & 20 / 0 / 0 \\
+    E18 & \texttt{7d1b1c4} & 7014911 & 24 & 3 & 48 / 0 / 0 \\
+    E19 & \texttt{518a444} & 7045635 & 6 & 6 & 9 / 0 / 0 \\
+    E20 & \texttt{77f7567} & 7041536 & 6 & 6 & 12 / 0 / 0 \\
+    E21 & \texttt{2516ade} & 7050273 & 3 & 3 & 3 / 0 / 0 \\
+    E22 & \texttt{6e94ecd} & 7061154 & 6 & 4 & 6 / 0 / 0 \\
+    E23 & \texttt{5276f14} & 7048647 & 6 & 2 & 6 / 0 / 0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 \subsection{Environment}
 
 All experiments run on compute nodes of the TRUBA/ARF cluster, and each measurement has

@@ -143,8 +143,9 @@ def step_analysis(entry: dict[str, Any], artifacts: Path, repo_head: Path) -> di
             "differences": diffs[:8], "difference_count": len(diffs)}
 
 
-def step_section(entry: dict[str, Any], tex: str) -> dict[str, Any]:
-    proc = run([sys.executable, str(REPO / entry["script"]), *[str(REPO / a) for a in entry["args"]]])
+def step_section(entry: dict[str, Any], tex: str, artifacts: Path) -> dict[str, Any]:
+    args = [expand(a, artifacts) if "{" in a else str(REPO / a) for a in entry["args"]]
+    proc = run([sys.executable, str(REPO / entry["script"]), *args])
     result = {"id": entry["id"], "kind": "generated section", "script": entry["script"]}
     if proc.returncode:
         return {**result, "status": "fail", "problem": "generator failed", "stderr": proc.stderr[-400:]}
@@ -211,7 +212,7 @@ def main() -> int:
         print(f"  {steps[-1]['status']:4s} analysis {entry['id']}", flush=True)
     if not args.only:
         for entry in registry["sections"]:
-            steps.append(step_section(entry, tex))
+            steps.append(step_section(entry, tex, args.artifacts))
             print(f"  {steps[-1]['status']:4s} section  {entry['id']}", flush=True)
         structure = paper_structure(tex)
         bad = structure["env_mismatch"] or structure["undefined_refs"] or structure["unused_labels"] or structure["todo_calls"]

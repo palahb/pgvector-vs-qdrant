@@ -200,6 +200,13 @@
     "results/derived/m7_e20_77f7567_analysis.json",
     "results/derived/m7_e8_fe88da1_analysis.json"
    ]
+  },
+  {
+   "id": "commit_job_node_table",
+   "script": "scripts/commits_table.py",
+   "args": [
+    "{artifacts}"
+   ]
   }
  ],
  "table_sources": {
@@ -385,6 +392,24 @@
     "results/derived/e23_gate.json"
    ],
    "generator": "scripts/e23_section.py"
+  },
+  "tab:commits": {
+   "experiment": "E6-E23",
+   "manifests": [
+    "data-manifests/e6_full_9050d65.json",
+    "data-manifests/e8_full_fe88da1.json",
+    "data-manifests/e9_full_31de7f4.json",
+    "data-manifests/e10_full_0b0b905.json",
+    "data-manifests/e17_full_a5bb141.json",
+    "data-manifests/e18_full_7d1b1c4.json",
+    "data-manifests/e19_full_518a444.json",
+    "data-manifests/e20_full_77f7567.json",
+    "data-manifests/e21_full_2516ade.json",
+    "data-manifests/e22_full_6e94ecd.json",
+    "data-manifests/e23_full_5276f14.json"
+   ],
+   "analysis": [],
+   "generator": "scripts/commits_table.py"
   }
  },
  "exempt_labels": [
