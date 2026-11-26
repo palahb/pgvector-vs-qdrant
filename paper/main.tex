@@ -1,92 +1,69 @@
-% Working draft of the journal version. Built from the v2 harness in ../ (see ../README.md).
-% Conventions while the draft is in progress:
-%   \todo{...}    red: missing content or a pending experiment
-%   \prelim{...}  blue: a number from a preliminary run that the final runs will replace
-% Set \draftfalse below to hide both before submission (the build then fails loudly if a
-% \todo is left, see the definition).
-\documentclass[sigconf, nonacm]{acmart}
-
-\AtBeginDocument{%
-  \providecommand\BibTeX{{Bib\TeX}}}
-\setcopyright{none}
-\settopmatter{printacmref=false}
+% Manuscript for Information Systems (Elsevier), class elsarticle.
+% The ACM sigconf version of the same text is kept in alt/main_acmsigconf.tex.
+% Review copy: change the class options to [preprint,review,12pt] for double line spacing.
+\documentclass[preprint,12pt]{elsarticle}
 
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{xcolor}
 \usepackage{url}
 
-\newif\ifdraft
-\drafttrue
-\ifdraft
-  \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
-  \newcommand{\prelim}[1]{\textcolor{blue}{#1}}
-\else
-  \newcommand{\todo}[1]{\errmessage{Unresolved TODO: #1}}
-  \newcommand{\prelim}[1]{#1}
-\fi
+\journal{Information Systems}
 
-% long \texttt names (settings, image tags) otherwise overflow the narrow columns
+% long \texttt names (settings, image tags) otherwise overflow the page
 \sloppy
 
 \begin{document}
 
-% Title candidates (decide with co-author):
-%   pgvector vs. Qdrant Revisited: How Protocol, Client and Configuration Choices Shape
-%   Vector Search Benchmarks for RAG
-\title{pgvector vs.\ Qdrant: An Empirical Evaluation of Vector Search\\
-Performance and Concurrency Behavior in RAG Workloads}
+\begin{frontmatter}
 
-\author{Engin Demir}
-\email{engindemir@cs.hacettepe.edu.tr}
-\affiliation{%
-  \institution{Hacettepe University}
-  \department{Department of Computer Engineering}
-  \city{Ankara}
-  \country{Turkey}
-}
+\title{Where Vector Search Benchmarks Go Wrong:\\
+A Controlled Comparison of pgvector and Qdrant}
 
-\author{Halil Burak Pala}
-\email{halilburakpala26@hacettepe.edu.tr}
-\affiliation{%
-  \institution{Hacettepe University}
-  \department{Department of Computer Engineering}
-  \city{Ankara}
-  \country{Turkey}
-}
+\author[hu]{Engin Demir}
+\ead{engindemir@cs.hacettepe.edu.tr}
 
-\renewcommand{\shortauthors}{Demir and Pala}
+\author[hu]{Halil Burak Pala}
+\ead{halilburakpala26@hacettepe.edu.tr}
+
+\affiliation[hu]{organization={Hacettepe University, Department of Computer Engineering},
+            city={Ankara},
+            country={Turkey}}
 
 \begin{abstract}
-Teams that build Retrieval-Augmented Generation (RAG) applications often choose between
-adding vector search to a relational database they already run, such as PostgreSQL with
-pgvector, and deploying a dedicated vector database such as Qdrant. Benchmarks of this
-choice are easy to get wrong. We compare the two, both using HNSW, on dedicated
-bare-metal nodes with 100K to 1M MS MARCO v2.1 passages in 1024 dimensions and the
-1{,}677 TREC Deep Learning 2021--2023 queries. We compare at matched recall and record
-engine time, end-to-end time and server CPU time for every query. Latency and cost per
-query give different answers. At matched recall, Qdrant's single-client latency is
-3.1--3.4$\times$ lower than pgvector's with its default four segments, but its CPU time
-per query is only about 1.4$\times$ lower. With eight segments the CPU cost is about
-equal, so the latency gain comes from searching segments in parallel. The end-to-end
-difference also depends on the client library, from 1.7--3.3$\times$ in Qdrant's favor
-with a lean gRPC client to 0.5--1.7$\times$ with the official REST client. We catalog ten
-measurement confounders and quantify each one. Three of them overturned our own earlier
-laptop conclusions. Others include Qdrant reporting a collection as green while segments
-remain unindexed, PostgreSQL's default shared buffers making pgvector 2.7$\times$ slower
-with all data in memory, and a gap in pgvector's cost model for TOASTed vectors that can
-replace an index scan with an exact scan more than 200$\times$ slower.
+Teams that build retrieval-augmented applications choose between adding vector search to a relational
+database they already run, such as PostgreSQL with pgvector, and deploying a dedicated vector database
+such as Qdrant. Benchmarks of this choice are easy to get wrong, and we use the two systems, both with
+HNSW, to show how. On dedicated bare-metal nodes with 100K to 1M MS MARCO v2.1 passages in 1024 dimensions
+and the 1{,}677 TREC Deep Learning 2021--2023 queries, we compare at matched recall and record engine time,
+end-to-end time and server CPU time of every query. Latency and cost per query give different answers.
+Qdrant's single-client latency is 3.1--3.4$\times$ lower than pgvector's with its default four segments, but
+its CPU time per query is only about 1.4$\times$ lower, and about equal with eight segments, so most of the gap
+is parallelism inside a query. A profile and counter decomposition at 1M vectors shows that pgvector reads
+fewer vectors per query than Qdrant but spends about 2.3$\times$ the cycles per vector read, half of its cycles
+outside distance computation and element loading. Storing pgvector vectors in half precision makes its index a
+third of the size with no detectable loss of speed or recall; int8 quantization makes Qdrant 1.6$\times$ faster
+per query. A connection pooler halves pgvector's p99 latency when clients outnumber cores but adds no throughput. With the
+exact search of the same corpus as reference, approximate search at recall 0.95 keeps 98\,\% of the nDCG@10 on the judged
+queries that the corpus can answer. We catalog ten measurement confounders and quantify each one; three of them overturned our own
+earlier laptop conclusions. Every table is bound to a manifest, and one command regenerates the analyses from the raw results.
 \end{abstract}
 
-\keywords{vector databases, approximate nearest neighbor search, HNSW, pgvector,
-Qdrant, retrieval-augmented generation, benchmarking methodology, concurrency}
+\begin{highlights}
+\item Latency and CPU per query give different answers for pgvector and Qdrant
+\item pgvector's CPU gap is a cost per vector read, not a number of distances
+\item Half-precision storage cuts the pgvector index to a third at no loss of speed
+\item A connection pooler halves pgvector's p99 under overload but adds no throughput
+\item Every table is bound to a manifest and regenerated from the raw results
+\end{highlights}
 
-\maketitle
+\begin{keyword}
+vector databases \sep approximate nearest neighbor search \sep HNSW \sep pgvector \sep Qdrant \sep benchmarking methodology \sep concurrency \sep retrieval-augmented generation
+\end{keyword}
 
-\begingroup\small\noindent\raggedright\textbf{Artifact Availability:}\\
-The benchmarking harness, job scripts, raw per-query latencies and all result files
-are available at \url{https://github.com/palahb/pgvector-vs-qdrant}.
-\endgroup
+\end{frontmatter}
 
 %% =============================================================
 \section{Introduction}
@@ -135,21 +112,26 @@ This paper makes the following contributions.
     indexing thresholds, build memory and parallelism, buffer pool size, the client
     stack and protocol, and client-side saturation (Section~\ref{sec:confounders}).
   \item A separation of latency from CPU cost per query at matched recall, using
-    controlled Qdrant segment counts and search-thread limits, which shows how much of
-    the latency gap comes from intra-query parallelism (Section~\ref{sec:cpu}), and a
-    profile and counter decomposition of where a query's CPU goes in each engine
-    (Section~\ref{sec:causal}).
-  \item A concurrency analysis using closed-loop multi-process clients, per-query engine
-    time, server CPU accounting and PostgreSQL wait-event sampling, which shows what
-    limits each system's throughput, and a Poisson open-loop experiment at fixed fractions of that capacity
-    (Section~\ref{sec:openloop}).
-  \item A memory-pressure study that separates the effect of PostgreSQL's buffer pool
-    from that of the operating system's page cache, using per-query buffer statistics,
-    and that compares both systems under cgroup memory limits with a cold cache.
+    controlled Qdrant segment counts and search-thread limits, and a profile and counter
+    decomposition of where a query's CPU goes in each engine, which shows that the gap in
+    CPU is a cost per vector read and not a number of distances
+    (Sections~\ref{sec:cpu} and~\ref{sec:causal}).
+  \item A load study that adds to closed-loop throughput a Poisson open-loop experiment at
+    fixed fractions of each system's capacity and a test of a connection pooler, which shows
+    what limits each system's throughput and tail latency
+    (Sections~\ref{sec:concurrency}, \ref{sec:openloop} and~\ref{sec:pooling}).
+  \item A memory and storage study: the effect of PostgreSQL's buffer pool apart from the operating
+    system's page cache, both systems under cgroup memory limits with a cold cache, and the
+    effect of reduced-precision storage (\texttt{halfvec} and \texttt{int8}) on size, speed and recall
+    (Sections~\ref{sec:memory} and~\ref{sec:quant}).
+  \item A sensitivity analysis of ranking quality: how much nDCG@10 approximate search loses against
+    exact search on the judged TREC queries that a 1M-passage corpus can answer, with a rule fixed before
+    looking and an account of why absolute nDCG cannot be reported (Section~\ref{sec:ranking}).
   \item Measurements of sensitivity to HNSW construction parameters and to embedding
     dimensionality (prefix truncation of a single model).
-  \item An open harness for Slurm clusters, with container images pinned by digest, so
-    that the experiments can be repeated.
+  \item Provenance that can be checked: every experiment has a manifest with its code commit, jobs and
+    file checksums, the harness and the analysis tools are pinned by tags, and one command regenerates
+    the analyses and the generated sections of this paper from the raw results (Section~\ref{sec:provenance}).
 \end{itemize}
 
 %% =============================================================
@@ -216,6 +198,7 @@ configurations and client libraries. We instead ask which measurement choices ch
 ranking, and we hold the protocol, recall level and hardware fixed while varying them.
 
 \subsection{Systems and Indexes Outside This Study}
+\label{sec:outside}
 
 The comparison here is between two systems that both use an in-memory HNSW graph with
 float32 vectors, so that the measurement choices can be isolated. Several lines of work
@@ -447,6 +430,7 @@ tools of the tag \texttt{analysis-v1} (the command \texttt{make verify-paper} do
 \end{table}
 
 \subsection{Environment}
+\label{sec:env}
 
 All experiments run on compute nodes of the TRUBA/ARF cluster, and each measurement has
 a node to itself. A node has two Intel Xeon Gold 6258R processors (2$\times$28 cores,
@@ -541,6 +525,21 @@ latency, recall, major and minor page faults, bytes read from storage and reside
 of the server, and for each run the memory use of the server's cgroup. Each configuration
 is run three times. A 2\,GB limit, which the earlier study included, is not repeated,
 because with a spinning disk both systems did not leave the cold start in it.
+
+\subsection{Provenance and Reproducibility}
+\label{sec:provenance}
+
+The results come from many commits of the harness, one per experiment, because each experiment was gated by a smoke test, a pilot and a full run of the exact
+commit that ran it. Re-running everything with one commit would take days of queue time and would not change a number, so we make a narrower promise in two parts.
+Every raw result keeps the commit that produced it (\texttt{code\_commit}, with the worktree clean) in its file and in the manifest of its experiment, together with the Slurm jobs, the node,
+the image digests and the checksums of the files (Table~\ref{tab:commits}). And every analysis, table and generated section of this paper is regenerated from the raw results by one set of
+analysis tools, the one at the tag \texttt{analysis-v1}; the harness itself is pinned by the tag \texttt{harness-v1}, the last commit that changed what it does. The command \texttt{make verify-paper} regenerates the 18 tracked
+analysis files and compares them with the tracked ones, checks that the generated sections of this paper are in it verbatim, checks the structure of the text, checks that every table and figure is bound to an experiment,
+a manifest and an analysis file, and runs the unit tests. At the tag it passes all 28 steps.
+
+The command has limits that the paper states. It does not check the numbers that were typed into the prose of sections without a generator; those were copied from the analysis summaries by hand and audited once against
+them (the audit is in the repository). The first experiments, E1 to E5, predate the provenance system and are bound to the archived results only through their checksums and the figure reproduction. One analysis, of the first open-loop
+run, is regenerated with the tools of the commit that produced it, because the later tools implement a second protocol. The raw results themselves (about 3\,GB) are not in the repository; their checksums are in the manifests.
 
 %% =============================================================
 \section{Measurement Confounders}
@@ -985,7 +984,7 @@ segment, and all vectors were indexed in every run.
     $N$ & Configuration & Latency & CPU & Lat.\ ratio & CPU ratio \\
     \midrule
     500K & pgvector              & 5.64 & 5.55 & --- & --- \\
-         & Qdrant, 1 seg., auto  & 2.60 & 2.36 & 2.2 & 2.4 \\
+         & Qdrant, 1 seg., auto  & 2.60 & 2.36 & 2.2 & 2.3 \\
          & Qdrant, 4 seg., auto  & 1.79 & 3.86 & 3.1 & 1.4 \\
          & Qdrant, 4 seg., 1 thr.& 3.93 & 3.68 & 1.4 & 1.5 \\
          & Qdrant, 8 seg., auto  & 1.49 & 6.00 & 3.8 & 0.9 \\
@@ -1003,7 +1002,7 @@ Two findings stand out. First, the latency advantage grows with the number of se
 (up to 3.8$\times$ at 500K and 4.4$\times$ at 1M with eight segments), while the CPU
 advantage shrinks and disappears at eight segments (0.9$\times$ and 1.0$\times$). The
 latency ratio is therefore largely a measure of intra-query parallelism. Second, Qdrant
-is still cheaper per query than pgvector with one segment (2.4$\times$ at 500K and
+is still cheaper per query than pgvector with one segment (2.3$\times$ at 500K and
 1.7$\times$ at 1M) and with the search pool limited to one thread (1.4--1.5$\times$ at
 four segments), so the gap is not only parallelism. At the default of four segments the
 work ratio is 1.4--1.5$\times$, much lower than the 3.1--3.4$\times$ latency ratio. The
@@ -1369,7 +1368,7 @@ vectors in the 32-bit layout (Section~\ref{sec:quant} gives the \texttt{halfvec}
     \midrule
     none & 1132 & 6.56 & 972 & 2.29 & 611 & 1.19 \\
     16\,GB & 1065 & 6.52 & 1051 & 4.21 & 656 & 1.24 \\
-    8\,GB & 1246 & 636 & 1503 & 1171 & 571 & 1.22 \\
+    8\,GB & 1246 & 636 & 1503 & 1171 & 570 & 1.22 \\
     4\,GB & \multicolumn{2}{c|}{not finished} & \multicolumn{2}{c|}{not finished} & 766 & 1.20, 1.43, 34.6 \\
     \bottomrule
   \end{tabular}
@@ -1435,7 +1434,7 @@ Table~\ref{tab:quant} gives the results; the ratios below are paired within a bu
     \midrule
     pgvector \texttt{vector} & 7.61 & 12.84 & 273 $\pm$ 15 & 6.73 $\pm$ 0.15 & 6.64 \\
     pgvector \texttt{halfvec} & 2.54 & 5.20 & 160 $\pm$ 4 & 6.28 $\pm$ 0.43 & 6.19 \\
-    Qdrant float32 & \multicolumn{2}{c}{3.94--5.24} & 343 $\pm$ 54 & 2.01 $\pm$ 0.02 & 4.49 \\
+    Qdrant float32 & \multicolumn{2}{c}{3.93--5.24} & 343 $\pm$ 54 & 2.00 $\pm$ 0.02 & 4.49 \\
     Qdrant \texttt{int8} & \multicolumn{2}{c}{4.89--6.49} & 365 $\pm$ 39 & 1.26 $\pm$ 0.04 & 2.47 \\
     \bottomrule
   \end{tabular}
@@ -1466,7 +1465,7 @@ so we do not report a ratio.
 
 \paragraph{The size comparison.} Section~\ref{sec:memory} compares pgvector's 7.61\,GiB index with
 Qdrant's 3.94\,GiB of storage and concludes that pgvector has to cache about twice as many bytes. With three
-builds, Qdrant's float32 storage is 3.94 to 5.24\,GiB, so the index of the float layout is 1.5 to 1.9
+builds, Qdrant's float32 storage is 3.93 to 5.24\,GiB, so the index of the float layout is 1.5 to 1.9
 times its size and the whole pgvector table 2.4 to 3.3 times. With \texttt{halfvec} the index shrinks to 0.48 to 0.65
 times Qdrant's float32 storage, and the whole table to 1.0 to 1.3 times. The ``twice as large'' statement is therefore a
 property of the 32-bit layout (one graph element per 8\,KiB page, Section~\ref{sec:build}), not of
@@ -1687,49 +1686,69 @@ engines ran on different nodes. We did not vary the number of cores, and we did 
 \section{Discussion}
 %% =============================================================
 
+\subsection{What the Measurements Say About the Choice}
+
 When the working set fits in memory, Qdrant's single-client latency is 3--4$\times$ lower
 than pgvector's at equal recall, from 100K to 1M vectors and for every HNSW configuration
-and dimension we tested. Much of this comes from searching segments in parallel. Its CPU
+and dimension we tested. Much of this comes from searching segments in parallel: its CPU
 time per query is lower by a smaller factor, about 1.4$\times$ with the default four
-segments and about equal with eight (Section~\ref{sec:cpu}). For an
-application, however, the client matters about as much as the engine. Through Qdrant's
-official REST client, pgvector was the faster system at Recall@10 = 0.90 at every scale we
+segments and about equal with eight (Section~\ref{sec:cpu}). The decomposition of
+Section~\ref{sec:causal} locates the remaining CPU gap. pgvector does not compute more distances; it reads fewer
+vectors per query than Qdrant, but each read costs it about 2.3 times the cycles, and about half of its cycles
+are spent outside distance computation and element loading, in the buffer manager and in visited-set and heap bookkeeping, for which Qdrant's profile shows little. For an application, however, the client matters about as much as the engine. Through
+Qdrant's official REST client, pgvector was the faster system at Recall@10 = 0.90 at every scale we
 measured. A team choosing between the two should therefore consider which client and
 protocol it will use, and not only which engine is faster.
 
-Under load, both systems are limited by CPU and not by locking. They differ in how they
-handle overload. Qdrant's fixed thread pool keeps latency predictable when there are more
-clients than cores. pgvector's process-per-connection model loses some throughput and
-develops a long latency tail in that situation. With Poisson arrivals instead of a closed loop the difference
-already shows at 80\,\% of each system's capacity, where pgvector's p99 latency is about twice Qdrant's, and at 95\,\% pgvector did not
-settle within the 90\,s window (Section~\ref{sec:openloop}). A deployment with more clients than cores
-can put a connection pooler with a pool of that size in front of it. The measurement shows what this buys
-(Section~\ref{sec:pooling}): p99 latency falls to about half of that with direct connections, but throughput
-does not rise, and below saturation the pooler costs a few per cent. Build time depends on how each system is
-loaded. Against Qdrant's single-stream upload, pgvector with its build parallelism
-configured built faster, but with parallel streams and deferred indexing Qdrant is
+Under load, both systems are limited by CPU and not by locking, and they differ in how they handle overload. With a
+fixed number of clients, Qdrant's thread pool keeps latency predictable when there are more clients than cores, while
+pgvector's process-per-connection model loses some throughput and develops a long latency tail. With Poisson arrivals the
+difference shows already at 80\,\% of each system's capacity, where pgvector's p99 latency is about twice Qdrant's, and at
+95\,\% pgvector did not settle within the 90\,s window (Section~\ref{sec:openloop}). A connection pooler with a pool equal to
+the cores brings pgvector's p99 under overload to about half, but throughput does not rise and below saturation
+the pooler costs a few per cent (Section~\ref{sec:pooling}); it also requires that the index settings travel with every
+transaction. Build time depends on how each system is loaded. Against Qdrant's single-stream upload, pgvector with its build
+parallelism configured built faster, but with parallel streams and deferred indexing Qdrant is
 1.4$\times$ faster at 1M, and pgvector's own load is limited by write-ahead logging on this
 disk (Section~\ref{sec:ingest}). Build times also varied considerably between nodes, so
 single build measurements on a shared cluster should be treated with care.
 
-Memory configuration matters as much as the choice of system. With PostgreSQL's
+Memory and precision matter as much as the choice of system. With PostgreSQL's
 default buffer pool, pgvector reads most index pages from the operating system's page
 cache, and this alone made it 2.7$\times$ slower in our runs, with no disk access at all.
 Anyone deploying pgvector, or benchmarking it, should size \texttt{shared\_buffers} to
 hold the HNSW index. When the index does not fit in memory at all, pgvector is at a
-disadvantage at 1024 dimensions, because its 32-bit page layout roughly doubles the size of the
-data it has to read and cache (a \texttt{halfvec} index is a third of it, Section~\ref{sec:quant}). On our spinning disks a cold query took 0.6 to 1.5
+disadvantage at 1024 dimensions in its 32-bit layout, which needs 1.5 to 1.9 times the bytes of Qdrant's storage for the index alone; storing the vectors in half precision
+(\texttt{halfvec}) shrinks the index to a third without a detectable loss of speed or recall, and its index is then 0.5 to 0.65 times Qdrant's 32-bit storage
+(Section~\ref{sec:quant}). Qdrant's \texttt{int8} quantization is a speed feature, not a space one: it made a query 1.6 times faster at the same recall, but the original vectors stay on disk
+and the storage grew. On our spinning disks a cold query took 0.6 to 1.5
 seconds, so neither system is usable out of core on such hardware. Once the data had been
 read, Qdrant stayed at its in-memory latency down to a limit of 8\,GB, where pgvector needed
 hundreds of milliseconds per query. At 4\,GB, just below the size of Qdrant's data, Qdrant
 returned to its in-memory latency in two of three repetitions, and pgvector did not finish.
+Finally, a recall of 0.95 is a good proxy for ranking quality in our corpus: on the judged queries that the corpus can answer,
+approximate search at that recall keeps 98\,\% of the nDCG@10 of exact search for both engines (Section~\ref{sec:ranking}); the analysis is a sensitivity analysis and says nothing about absolute effectiveness.
 
-On methodology, the confounders in Table~\ref{tab:confounders} reversed all three main
-results of our first measurements. The planner fallback is worth noting separately,
-because pgvector can stop using the HNSW index for TOASTed vectors without any warning.
-The query still returns correct results, only much more slowly. Benchmarks, and also
-applications in production, should check the query plan rather than assume the index is
-used.
+\subsection{How Vector Search Benchmarks Go Wrong}
+
+The confounders in Table~\ref{tab:confounders} reversed all three main
+results of our first measurements, and Table~\ref{tab:checklist} turns them into a checklist. The later experiments added lessons of the same kind, each of which we met by
+getting it wrong first:
+\begin{itemize}
+  \item \emph{A setting that does not reach the query.} pgvector ignores an \texttt{ef\_search} above 1000 with a warning and keeps its default of 40, and
+    a session-level \texttt{SET} does not survive a transaction pooler. A benchmark should read the setting back inside the connection that runs the query.
+  \item \emph{The plan, not only the result.} pgvector can stop using the HNSW index for TOASTed vectors without any warning, and the query still returns correct results, only much more slowly.
+    Benchmarks, and applications in production, should check the query plan rather than assume the index is used.
+  \item \emph{A closed loop hides the queue.} Fixed numbers of clients bound the queue; arrivals at a fixed rate do not, and the first seconds of a window can show a start-up backlog of fresh connections
+    that a longer-lived deployment would not see. We had to lengthen the window and add a ramp, and to say after seeing the data that the first criterion for a steady level was too weak.
+  \item \emph{An ID is not an ID.} Document numbers of two versions of the same collection are byte offsets in different files. Comparing them found no relevant document in the corpus, which looked like a coverage of zero.
+    Matching by URL showed that the corpus holds 0.7\,\% of the judged-relevant documents.
+  \item \emph{A metric needs a corpus that can answer it.} Absolute nDCG on a prefix of a collection says little about retrieval effectiveness. We fixed the rule for what could be reported before measuring the coverage.
+  \item \emph{Sizes need the same accounting.} The size of Qdrant's storage varied by about a third between builds of the same configuration for a reason we did not find, and a quantized copy adds to it. A ratio of sizes needs the data to be stable
+    before it is reported.
+  \item \emph{A measurement can disappear with its process.} The CPU time of a PostgreSQL backend that has exited is no longer visible; a harness that reads CPU after its clients have left reports almost nothing for pgvector.
+\end{itemize}
+Each of these was found by a check that the harness or the analysis now performs, and the checks are in the repository with their tests.
 
 \subsection{Threats to Validity}
 \label{sec:threats}
@@ -1769,43 +1788,79 @@ only a rough stand-in for models that natively produce lower-dimensional embeddi
 the dimensionality results describe index behavior on truncated vectors and do not carry
 over to native 384- or 768-dimensional models.
 
+\textbf{Storage.} The compute nodes have a single rotational disk and no NVMe device (Section~\ref{sec:env}); every result that depends on storage is a worst case, and we could not repeat it on faster storage.
+
+\textbf{Different nodes for the two systems.} Within an experiment the two systems usually ran on different nodes (Table~\ref{tab:sources}), and the closed-loop and open-loop comparisons between them compare ratios of means over three builds, not paired runs. Within one system, comparisons of arms (precision, connection mode) are paired on one node.
+
+\textbf{Ranking quality.} The nDCG analysis covers 63 queries that have a relevant document in a corpus holding 0.7\,\% of the judged-relevant documents, grades are copied from documents to their segments, and the numbers are ratios to exact search, not effectiveness. The 2023 judgments were linked to documents through passage identifiers of the earlier collection version.
+
+\textbf{Open-loop load.} The first run of the open-loop experiment (60\,s windows) showed a start-up backlog for pgvector; the second (90\,s windows with a 30\,s ramp) changed the rule for a settled level after its data were seen. Both runs are in the repository, and the rule and its history are in the design note. We did not test connections that had been warmed for minutes.
+
+\textbf{Reduced precision.} One embedding model, one dimension, one quantization setting per engine (\texttt{halfvec}; \texttt{int8} with rescoring and Qdrant's default oversampling). Qdrant's storage size varied between builds, so we report ranges and no size ratio for \texttt{int8}.
+
+\textbf{Provenance.} The first experiments (E1--E5) were archived before the provenance system existed and have no commit or seed in their files. The numbers in the prose of the sections that are not written from analysis files were copied from the analysis summaries by hand; the analysis files are regenerated and checked, the copying was audited once (Section~\ref{sec:provenance}).
+
 \textbf{Engine-side timing.} The two systems measure engine time at different points
 (statement execution in PostgreSQL, request handling in Qdrant), so we use it to break
 down latency only at $C=1$.
+
+\subsection{Future Work}
+
+The study is limited to unfiltered nearest-neighbor search with one embedding model and one node. The following are left out and would change the picture:
+\begin{itemize}
+  \item filtered and hybrid search, where the engines differ most in how they combine predicates with the graph;
+  \item workloads that mix reads with inserts, updates and deletes, and the freshness of the index;
+  \item more than eight server cores, and several nodes (we pinned the server to eight cores of one socket);
+  \item other PostgreSQL extensions for vector search that use disk-resident indexes or quantization, such as pgvectorscale and VectorChord, which we only describe (Section~\ref{sec:outside});
+  \item a second embedding model, in particular models that natively produce 384 or 768 dimensions, which would replace our prefix truncation of one model;
+  \item a larger corpus, at 10M vectors, where graph size and the buffer pool interact differently;
+  \item storage with NVMe devices, which the cluster does not have, for the build and the out-of-core measurements;
+  \item open-loop load on connections that have been warmed for minutes, and with a pooler in the open loop;
+  \item other quantizations (binary, product) and other settings of Qdrant's \texttt{int8} oversampling and rescoring, and a pgvector run at 4\,GB of memory that finishes.
+\end{itemize}
 
 %% =============================================================
 \section{Conclusion}
 %% =============================================================
 
-We compared pgvector and Qdrant, two systems built on the same HNSW index, under
-conditions designed to remove the usual sources of bias: dedicated nodes, real queries,
-comparison at matched recall, separate engine and client times, and builds measured to
-completion. With the data in memory, Qdrant's single-client latency is 3--4$\times$ lower at
-equal recall across scales, HNSW settings and dimensions, but its CPU time per query is
-lower by only about 1.4$\times$ with four segments and about equal with eight, so most
-of the latency gap is intra-query parallelism. It also keeps tail latency under control
-when overloaded. The advantage an application actually sees, however, depends on
-the client path. Through the official REST client it disappears at moderate recall.
-Which system builds faster depends on how each is loaded, and pgvector's performance
-depends strongly on the buffer pool. With the default setting it is
-2.7$\times$ slower even when nothing is read from disk. Under memory limits, pgvector's
-one-page-per-vector 32-bit layout doubles the data it has to read; \texttt{halfvec} removes most of that (Section~\ref{sec:quant}). With the full query set, Qdrant keeps
-its in-memory latency down to 8\,GB, where pgvector needs hundreds of milliseconds per query,
-and Qdrant's behavior at 4\,GB, just below its data size, is unstable.
+We compared pgvector and Qdrant, two systems built on the same HNSW index, to show how a benchmark of vector stores goes wrong and what controls it takes to
+avoid it: dedicated nodes, real queries, comparison at matched recall, engine and client times kept apart, builds measured to completion, CPU per query next to latency, and every table bound to a
+manifest and regenerated from the raw results. With the data in memory, Qdrant's single-client latency is 3--4$\times$ lower at equal recall across scales, HNSW settings and dimensions, but its CPU time per
+query is lower by only about 1.4$\times$ with four segments and about equal with eight, so most of the latency gap is intra-query parallelism. The rest of the CPU gap is a cost per vector read, not a
+number of distances: pgvector reads fewer vectors per query and spends about 2.3 times the cycles on each, half of its cycles outside distance computation and element loading.
 
-Several of these results reverse what a simpler benchmark of the same two systems
-showed, and some of the reasons are easy to miss: an indexing threshold that leaves
-data unindexed while the collection reports ready, a planner cost model that abandons
-the index without a warning, and client libraries that cost more time than the search
-itself. We hope the list of confounders and the open harness make future comparisons of
-vector stores easier to trust. Natural next steps are filtered (hybrid) search,
-workloads that mix reads and writes, SSD-backed out-of-core runs, and clients in compiled
-languages.
+The advantage an application sees depends on the client path (through the official REST client it disappears at moderate recall), on how each system is loaded and configured, and on memory.
+With PostgreSQL's default buffer pool, pgvector is 2.7$\times$ slower even when nothing is read from disk. Half-precision storage cuts its index to a third without a detectable loss, and
+\texttt{int8} makes Qdrant faster per query but not smaller. Under overload a connection pooler halves pgvector's p99 latency and adds no throughput, and with Poisson arrivals pgvector's tail is wider than Qdrant's already at 80\,\% of capacity.
+Under memory limits Qdrant keeps its in-memory latency down to 8\,GB, where pgvector needs hundreds of milliseconds per query. At recall 0.95 approximate search keeps 98\,\% of the exact search's nDCG@10 on the judged queries that
+our corpus can answer, which is a statement about the cost of approximation and not about effectiveness.
 
-\begin{acks}
+Several of these results reverse what a simpler benchmark of the same two systems showed, and some of the reasons are easy to miss: an indexing threshold that leaves data unindexed while the collection reports ready, a planner cost model that abandons
+the index without a warning, a setting that does not survive a pooler, an identifier that is not the same identifier in two versions of a collection, and client libraries that cost more time than the search itself. We hope the list of
+confounders, the open harness and the checks that regenerate the tables from the raw results make future comparisons of vector stores easier to trust.
+
+\section*{Acknowledgements}
 The numerical calculations reported in this paper were fully performed at TÜBİTAK
 ULAKBİM, High Performance and Grid Computing Center (TRUBA resources).
-\end{acks}
+
+\section*{Data and code availability}
+The benchmarking harness, job scripts, analysis tools, the manifests of every experiment and the tracked analysis results are available at
+\url{https://github.com/palahb/pgvector-vs-qdrant} (tags \texttt{harness-v1} and \texttt{analysis-v1}). The raw per-query results (about 3\,GB) are not in the
+repository; the checksums in the manifests identify them, and the authors will provide them on request.
+% AUTHORS: confirm the last sentence, or name the archive in which the raw results will be deposited.
+
+\section*{Funding}
+% AUTHORS: state the funding, or keep the following sentence if it is true.
+This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+
+\section*{Declaration of competing interest}
+% AUTHORS: confirm.
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+% AUTHORS: the last sentence is an attestation; see paper/ai_use_statement.md for what has to be true before it is used.
+During the preparation of this work the authors used Claude (Anthropic) and GPT/Codex (OpenAI) in order to write and test benchmark and analysis code, to automate experiment submission and result validation on a Slurm cluster, to draft and edit parts of the manuscript text, and to organize the response to the review comments. The authors designed the study, chose the experiments and the claims, ran the experiments, and checked the results. After using these tools the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+
 
 \begin{thebibliography}{00}
 

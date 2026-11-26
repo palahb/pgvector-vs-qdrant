@@ -1,0 +1,167 @@
+{
+ "note": "Headline numbers of the abstract, discussion and conclusion; each is recomputed from the tracked analysis files by analysis/check_claims.py. Claims about E1-E5 (baseline) are not here: the REST client comparison and the 2.7x buffer-pool effect come from the archived baseline and are covered by paper_source_index and the figure reproduction.",
+ "claims": [
+  {
+   "id": "abs_latency_ratio",
+   "where": "abstract",
+   "tex": "3.1--3.4$\\times$ lower than pgvector's with its default four segments",
+   "check": "round(e6ratio(500000,'4','auto',0.95,'mean_ms'),1)==3.1 and round(e6ratio(1000000,'4','auto',0.95,'mean_ms'),1)==3.4"
+  },
+  {
+   "id": "abs_cpu_ratio",
+   "where": "abstract",
+   "tex": "its CPU time per query is only about 1.4$\\times$ lower",
+   "check": "round(e6ratio(500000,'4','auto',0.95,'server_cpu_ms_per_query'),1)==1.4 and round(e6ratio(1000000,'4','auto',0.95,'server_cpu_ms_per_query'),1)==1.4"
+  },
+  {
+   "id": "abs_cpu_eight_segments",
+   "where": "abstract",
+   "tex": "and about equal with eight segments",
+   "check": "0.85<=e6ratio(500000,'8','auto',0.95,'server_cpu_ms_per_query')<=1.05 and 0.95<=e6ratio(1000000,'8','auto',0.95,'server_cpu_ms_per_query')<=1.05"
+  },
+  {
+   "id": "abs_fewer_reads",
+   "where": "abstract",
+   "tex": "reads fewer vectors per query than Qdrant",
+   "check": "e19('pg','pg','vector_reads_proxy')<e19('qdrant','seg1','vector_reads_proxy') and e19('pg','pg','vector_reads_proxy')<e19('qdrant','auto','vector_reads_proxy')"
+  },
+  {
+   "id": "abs_cycles_per_read",
+   "where": "abstract",
+   "tex": "about 2.3$\\times$ the cycles per vector read",
+   "check": "abs(e19cmp('seg1','cycles_per_vector_read')-2.3)<=0.1 and abs(e19cmp('auto','cycles_per_vector_read')-2.3)<=0.1"
+  },
+  {
+   "id": "abs_half_outside",
+   "where": "abstract",
+   "tex": "half of its cycles outside distance computation and element loading",
+   "check": "abs(1-(e19('pg','pg','cycles_distance')+e19('pg','pg','cycles_graph_and_element_access'))/e19('pg','pg','cycles')-0.5)<=0.05"
+  },
+  {
+   "id": "abs_halfvec_third",
+   "where": "abstract",
+   "tex": "index a third of the size",
+   "check": "abs(e20c('pg','halfvec','index_bytes')-1/3)<0.01"
+  },
+  {
+   "id": "abs_halfvec_no_loss",
+   "where": "abstract",
+   "tex": "no detectable loss of speed or recall",
+   "check": "e20c('pg','halfvec','mean_ms@0.95','lo')<1<e20c('pg','halfvec','mean_ms@0.95','hi') and e20c('pg','halfvec','recall_ceiling','lo')<0<e20c('pg','halfvec','recall_ceiling','hi')"
+  },
+  {
+   "id": "abs_int8_faster",
+   "where": "abstract",
+   "tex": "makes Qdrant 1.6$\\times$ faster per query",
+   "check": "round(1/e20c('qdrant','int8','mean_ms@0.95'),1)==1.6"
+  },
+  {
+   "id": "abs_pooler_p99",
+   "where": "abstract",
+   "tex": "halves pgvector's p99 latency when clients outnumber cores",
+   "check": "0.4<=e21('direct','pooled','matched',32,'p99_ms')<=0.55 and 0.35<=e21('direct','pooled','matched',48,'p99_ms')<=0.55"
+  },
+  {
+   "id": "abs_pooler_throughput",
+   "where": "abstract",
+   "tex": "but adds no throughput",
+   "check": "e21('direct','pooled','matched',32,'throughput_qps')<=1.1 and e21('direct','pooled','matched',48,'throughput_qps')<=1.1"
+  },
+  {
+   "id": "abs_ndcg",
+   "where": "abstract",
+   "tex": "keeps 98\\,\\% of the nDCG@10",
+   "check": "round(e23('pg','ndcg_ratio'),2)==0.98 and round(e23('qdrant','ndcg_ratio'),2)==0.98"
+  },
+  {
+   "id": "dis_qd_p99_twice",
+   "where": "discussion",
+   "tex": "where pgvector's p99 latency is about twice Qdrant's",
+   "check": "1.9<=e22('pg',0.8,'p99_ms')/e22('qdrant',0.8,'p99_ms')<=2.3"
+  },
+  {
+   "id": "dis_pg_not_settled_95",
+   "where": "discussion",
+   "tex": "pgvector did not settle within the 90\\,s window",
+   "check": "e22('pg',0.95,'p99_ms')>1000 and e22('qdrant',0.95,'p99_ms')<100"
+  },
+  {
+   "id": "dis_build_1_4",
+   "where": "discussion",
+   "tex": "Qdrant is 1.4$\\times$ faster at 1M",
+   "check": "round(e9(1000000,'pg_logged','total_s')/e9(1000000,'q_tuned','total_s'),1)==1.4"
+  },
+  {
+   "id": "dis_index_vs_qdrant",
+   "where": "discussion",
+   "tex": "which needs 1.5 to 1.9 times the bytes of Qdrant's storage for the index alone",
+   "check": "abs(e20a('pg','vector','index_bytes')/2**30/max(e20builds('qdrant','f32','storage_bytes'))-1.5)<=0.06 and abs(e20a('pg','vector','index_bytes')/2**30/min(e20builds('qdrant','f32','storage_bytes'))-1.9)<=0.06"
+  },
+  {
+   "id": "dis_halfvec_vs_qdrant",
+   "where": "discussion",
+   "tex": "its index is then 0.5 to 0.65 times Qdrant's 32-bit storage",
+   "check": "abs(e20a('pg','halfvec','index_bytes')/2**30/max(e20builds('qdrant','f32','storage_bytes'))-0.5)<=0.02 and abs(e20a('pg','halfvec','index_bytes')/2**30/min(e20builds('qdrant','f32','storage_bytes'))-0.65)<=0.02"
+  },
+  {
+   "id": "dis_int8_storage_grew",
+   "where": "discussion",
+   "tex": "the original vectors stay on disk and the storage grew",
+   "check": "e20a('qdrant','int8','storage_bytes')>e20a('qdrant','f32','storage_bytes')"
+  },
+  {
+   "id": "dis_storage_varies_third",
+   "where": "discussion",
+   "tex": "varied by about a third between builds of the same configuration",
+   "check": "abs((max(e20builds('qdrant','f32','storage_bytes'))-min(e20builds('qdrant','f32','storage_bytes')))/min(e20builds('qdrant','f32','storage_bytes'))-0.33)<=0.05"
+  },
+  {
+   "id": "dis_coverage",
+   "where": "discussion",
+   "tex": "holds 0.7\\,\\% of the judged-relevant documents",
+   "check": "round(100*gate('coverage'),1)==0.7"
+  },
+  {
+   "id": "dis_ndcg",
+   "where": "discussion",
+   "tex": "approximate search at that recall keeps 98\\,\\% of the nDCG@10 of exact search",
+   "check": "round(e23('pg','ndcg_ratio'),2)==0.98 and round(e23('qdrant','ndcg_ratio'),2)==0.98"
+  },
+  {
+   "id": "con_cpu_1_4",
+   "where": "conclusion",
+   "tex": "lower by only about 1.4$\\times$ with four segments",
+   "check": "round(e6ratio(500000,'4','auto',0.95,'server_cpu_ms_per_query'),1)==1.4 and round(e6ratio(1000000,'4','auto',0.95,'server_cpu_ms_per_query'),1)==1.4"
+  },
+  {
+   "id": "con_cycles_2_3",
+   "where": "conclusion",
+   "tex": "spends about 2.3 times the cycles on each",
+   "check": "abs(e19cmp('seg1','cycles_per_vector_read')-2.3)<=0.1"
+  },
+  {
+   "id": "con_pooler",
+   "where": "conclusion",
+   "tex": "a connection pooler halves pgvector's p99 latency and adds no throughput",
+   "check": "0.4<=e21('direct','pooled','matched',32,'p99_ms')<=0.55 and e21('direct','pooled','matched',32,'throughput_qps')<=1.1"
+  },
+  {
+   "id": "con_tail_80",
+   "where": "conclusion",
+   "tex": "pgvector's tail is wider than Qdrant's already at 80\\,\\% of capacity",
+   "check": "e22('pg',0.8,'p99_ms')>e22('qdrant',0.8,'p99_ms')"
+  },
+  {
+   "id": "con_ndcg",
+   "where": "conclusion",
+   "tex": "98\\,\\% of the exact search's nDCG@10",
+   "check": "round(e23('pg','ndcg_ratio'),2)==0.98"
+  },
+  {
+   "id": "con_int8_faster_not_smaller",
+   "where": "conclusion",
+   "tex": "makes Qdrant faster per query but not smaller",
+   "check": "e20c('qdrant','int8','mean_ms@0.95')<1 and e20a('qdrant','int8','storage_bytes')>e20a('qdrant','f32','storage_bytes')"
+  }
+ ]
+}

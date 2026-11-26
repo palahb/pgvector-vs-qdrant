@@ -22,13 +22,13 @@ recorded here. The paper text may change after the tag (G9 rewrites it), because
 
 ## What `make verify-paper` checks, and what it does not
 
-Checks: the 18 tracked analysis files are regenerated from the raw results and equal the tracked ones (floats to a relative 1e-9, ignoring timestamp and root path); the
+Checks: (from `analysis-v2`) the 27 headline numbers of the abstract, discussion and conclusion are recomputed from the analysis files (`docs/PAPER_CLAIMS.json`) and the cells of the nine hand-typed result tables (`analysis/check_tables.py`: E1, E5, E4, E6, E8, E9, E10, E18, E20) equal the values recomputed from the analysis files (E1, E4 and E5 from the archived baseline through `bench/paper_numbers.py`); the 18 tracked analysis files are regenerated from the raw results and equal the tracked ones (floats to a relative 1e-9, ignoring timestamp and root path); the
 six sections and tables written by generators (`scripts/*_section.py`, `scripts/commits_table.py`) are in `paper/main.tex` verbatim; environments, labels and references of the
 paper are consistent and there is no open `\todo`; every table and figure of the paper is bound to an experiment, a manifest and an analysis file that exist
 (`docs/PAPER_VERIFY.json`), and each manifest's commit is an ancestor of the checkout; the unit tests pass.
 
-Not checked: the numbers typed into the prose of the sections that have no generator (E6, E8-E10, E17, E18, E20 and the earlier sections). They were copied from the analysis
-summaries by hand, and the analysis files they come from are checked, not the copying. E1-E5 (archived before the provenance system) are bound through
+Not checked: the numbers typed into the prose of the sections that have no generator and are not among the headline claims (the discussion of E6, E8-E10, E17, E18, E20 and the earlier sections), and the cells of `tab:laptop`, of the 4 GB row of `tab:caps` and the descriptive tables. They were copied from the analysis
+summaries by hand, and the analysis files they come from are checked, not the copying. The first run of the table check found three values that had been copied from a rounded display instead of the stored number (2.01 for 2.00, 571 for 570, 3.94 for 3.93) and a ratio computed from rounded cells (2.4 for 2.3); they were corrected, which is what this check is for. E1-E5 (archived before the provenance system) are bound through
 `data-manifests/baseline_2026-11-14.json`, `results/derived/paper_source_index.json` and the figure reproduction, which check files and figures, not provenance of seeds and commits.
 The E22 run-1 analysis is regenerated with the analysis tools of commit `936736e`, the ones that produced it, because the later tool implements the second protocol.
 

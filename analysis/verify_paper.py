@@ -6,6 +6,8 @@ For a given checkout (normally a tag) it:
      file (ignoring the timestamp and the root path; floats with a relative tolerance);
   2. regenerates every section that is written from analysis files (scripts/*_section.py) and checks that the text is in paper/main.tex verbatim;
   3. checks the structure of paper/main.tex (balanced environments, no undefined reference, no unused label, no open todo);
+  3b. recomputes the headline numbers of the abstract, discussion and conclusion (docs/PAPER_CLAIMS.json) and the cells of the hand-typed result tables
+     (analysis/check_tables.py) from the analysis files;
   4. checks that every table and figure of the paper is bound to a source (docs/PAPER_VERIFY.json: experiment, manifest, analysis file), that the
      files exist, and that the commit that produced each manifest is an ancestor of the checkout;
   5. runs the unit tests (unless --skip-tests).
@@ -155,6 +157,21 @@ def step_section(entry: dict[str, Any], tex: str, artifacts: Path) -> dict[str, 
             "characters": len(text)}
 
 
+def step_module(step_id: str, kind: str, module: str, artifacts: Path) -> dict[str, Any]:
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp) / "out.json"
+        proc = run([sys.executable, "-P", "-m", module, "--artifacts", str(artifacts), "--output", str(out)], env={"PYTHONPATH": str(REPO)})
+        detail = json.loads(out.read_text()) if out.exists() else None
+    bad = []
+    if isinstance(detail, dict):
+        bad = [r["id"] for r in detail.get("results", []) if r.get("status") != "ok"]
+    elif isinstance(detail, list):
+        bad = [r["id"] for r in detail if r.get("status") != "ok"]
+    return {"id": step_id, "kind": kind, "status": "ok" if proc.returncode == 0 and detail is not None else "fail",
+            "checked": len(detail.get("results", [])) if isinstance(detail, dict) else len(detail or []), "failed": bad,
+            "stderr": proc.stderr[-300:] if proc.returncode else ""}
+
+
 def step_manifests(head: str) -> dict[str, Any]:
     problems, checked = [], 0
     for path in sorted((REPO / "data-manifests").glob("*.json")):
@@ -219,7 +236,9 @@ def main() -> int:
         steps.append({"id": "paper_structure", "kind": "structure", "status": "fail" if bad else "ok", **structure})
         steps.append(step_manifests(head))
         steps.append(step_table_sources(tex, registry))
-        for s in steps[-3:]:
+        steps.append(step_module("headline_claims", "claims", "analysis.check_claims", args.artifacts))
+        steps.append(step_module("table_cells", "table cells", "analysis.check_tables", args.artifacts))
+        for s in steps[-5:]:
             print(f"  {s['status']:4s} {s['id']}", flush=True)
         if not args.skip_tests:
             proc = run([sys.executable, "-m", "unittest", "discover", "-s", "tests"])
