@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-15T15:53:39.982069+00:00",
+  "generated_at": "2026-11-26T20:37:10.004733+00:00",
   "root": "/tmp/e6full",
   "verdict": "valid",
   "result_count": 54,
@@ -8633,6 +8633,54 @@
     }
   ],
   "observations": [
+    {
+      "experiment_id": "E6_pg_reference-full-9050d65f-5c85906b-t0000-a1-r00-pg",
+      "observation": "pg_rows_above_ef_search_limit_excluded",
+      "ef": [
+        1024
+      ],
+      "rows": 3
+    },
+    {
+      "experiment_id": "E6_pg_reference-full-9050d65f-5c85906b-t0001-a1-r00-pg",
+      "observation": "pg_rows_above_ef_search_limit_excluded",
+      "ef": [
+        1024
+      ],
+      "rows": 3
+    },
+    {
+      "experiment_id": "E6_pg_reference-full-9050d65f-5c85906b-t0002-a1-r00-pg",
+      "observation": "pg_rows_above_ef_search_limit_excluded",
+      "ef": [
+        1024
+      ],
+      "rows": 3
+    },
+    {
+      "experiment_id": "E6_pg_reference-full-9050d65f-5c85906b-t0003-a1-r00-pg",
+      "observation": "pg_rows_above_ef_search_limit_excluded",
+      "ef": [
+        1024
+      ],
+      "rows": 3
+    },
+    {
+      "experiment_id": "E6_pg_reference-full-9050d65f-5c85906b-t0004-a1-r00-pg",
+      "observation": "pg_rows_above_ef_search_limit_excluded",
+      "ef": [
+        1024
+      ],
+      "rows": 3
+    },
+    {
+      "experiment_id": "E6_pg_reference-full-9050d65f-5c85906b-t0005-a1-r00-pg",
+      "observation": "pg_rows_above_ef_search_limit_excluded",
+      "ef": [
+        1024
+      ],
+      "rows": 3
+    },
     {
       "experiment_id": "E6_qdrant_segment_threads-full-9050d65f-bbf40d5c-t0000-a1-r00-qdrant",
       "observation": "actual_segment_count_differs_from_optimizer_target",

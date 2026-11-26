@@ -16,7 +16,7 @@ cgroup part stays. This note compares E10 (`data-manifests/e10_full_0b0b905.json
 
 * **pgvector at 4 GB** (both buffer settings): the arms did not finish within the 3 h job limit (tasks 10 and 11 were killed at the limit, the other four were
   cancelled before they started). The paper reports them as "did not finish" and does not extrapolate. The cold start at 8 GB already takes about 2,000 s and the steady state about
-  0.6 to 1.2 s per query, so a 4 GB arm needs several hours per repetition.
+  0.6 to 1.2 s per query, so a 4 GB arm needs more than the 3 h limit that killed tasks 10 and 11 (an estimate; it was not run).
 * Default (recorded now, as the plan says): **the cells stay reported as not completed.** Running them is a single command
   (`manage.py` resubmit with a longer limit), roughly 3 repetitions x 2 arms x more than 3 h on a queue that currently waits many hours; it would only add a pgvector
   number below the size of its index, where it is already known to be unusable. The decision to run them anyway is the author's.

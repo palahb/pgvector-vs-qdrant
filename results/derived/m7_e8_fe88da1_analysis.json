@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-26T20:31:01.013101+00:00",
+  "generated_at": "2026-11-26T20:36:48.597976+00:00",
   "root": "../artifacts/truba-experiments/E8/fe88da1/full",
   "target": 0.95,
   "model": "qps(target) = qps(matched ef) * cpu(matched ef) / cpu(target)",
@@ -20,6 +20,7 @@
       "qps_at_target": 1546.2131417826565,
       "correction_percent": 0.16279988227352327,
       "validation_ef": 64,
+      "validation_cores_busy": 7.538,
       "validation_predicted_qps": 5314.672647989678,
       "validation_measured_qps": 5179.99,
       "validation_error_percent": 2.60005613890526
@@ -39,6 +40,7 @@
       "qps_at_target": 1466.6838786761314,
       "correction_percent": 0.16279988227354547,
       "validation_ef": 64,
+      "validation_cores_busy": 7.923,
       "validation_predicted_qps": 5041.313181609954,
       "validation_measured_qps": 5086.32,
       "validation_error_percent": -0.884860142304178
@@ -58,6 +60,7 @@
       "qps_at_target": 1957.4536384903356,
       "correction_percent": 8.079135042229746,
       "validation_ef": 64,
+      "validation_cores_busy": 7.011,
       "validation_predicted_qps": 5629.188269232562,
       "validation_measured_qps": 4833.92,
       "validation_error_percent": 16.45182934828382
@@ -77,6 +80,7 @@
       "qps_at_target": 1963.8627311983398,
       "correction_percent": 8.079135042229746,
       "validation_ef": 64,
+      "validation_cores_busy": 7.905,
       "validation_predicted_qps": 5647.6193517261145,
       "validation_measured_qps": 5887.02,
       "validation_error_percent": -4.066584592440414
@@ -96,6 +100,7 @@
       "qps_at_target": 1537.6915106788008,
       "correction_percent": 15.390327981299778,
       "validation_ef": 64,
+      "validation_cores_busy": 7.533,
       "validation_predicted_qps": 5403.014541734566,
       "validation_measured_qps": 5263.42,
       "validation_error_percent": 2.6521642151788205
@@ -115,6 +120,7 @@
       "qps_at_target": 1462.1800800478384,
       "correction_percent": 15.390327981299778,
       "validation_ef": 64,
+      "validation_cores_busy": 7.92,
       "validation_predicted_qps": 5137.688658790614,
       "validation_measured_qps": 5172.96,
       "validation_error_percent": -0.6818405943480377
@@ -134,6 +140,7 @@
       "qps_at_target": 2101.2202728199895,
       "correction_percent": 6.407062987795076,
       "validation_ef": 64,
+      "validation_cores_busy": 7.012,
       "validation_predicted_qps": 5601.397953154621,
       "validation_measured_qps": 4881.39,
       "validation_error_percent": 14.750059986082253
@@ -153,6 +160,7 @@
       "qps_at_target": 2108.1686540330925,
       "correction_percent": 6.407062987795076,
       "validation_ef": 64,
+      "validation_cores_busy": 7.904,
       "validation_predicted_qps": 5619.920831887644,
       "validation_measured_qps": 5944.92,
       "validation_error_percent": -5.466838378184324
@@ -172,6 +180,7 @@
       "qps_at_target": 1505.2028148231145,
       "correction_percent": 13.096612429417265,
       "validation_ef": 64,
+      "validation_cores_busy": 7.536,
       "validation_predicted_qps": 5381.7166313691205,
       "validation_measured_qps": 5227.99,
       "validation_error_percent": 2.940453814355437
@@ -191,6 +200,7 @@
       "qps_at_target": 1425.9560184938218,
       "correction_percent": 13.096612429417288,
       "validation_ef": 64,
+      "validation_cores_busy": 7.924,
       "validation_predicted_qps": 5098.376873040144,
       "validation_measured_qps": 5146.66,
       "validation_error_percent": -0.9381448737599829
@@ -210,6 +220,7 @@
       "qps_at_target": 1940.5980769200069,
       "correction_percent": 7.09702411258315,
       "validation_ef": 64,
+      "validation_cores_busy": 7.027,
       "validation_predicted_qps": 5571.423933413348,
       "validation_measured_qps": 4840.66,
       "validation_error_percent": 15.096369780429697
@@ -229,6 +240,7 @@
       "qps_at_target": 1946.8097043185367,
       "correction_percent": 7.097024112583172,
       "validation_ef": 64,
+      "validation_cores_busy": 7.906,
       "validation_predicted_qps": 5589.257409579904,
       "validation_measured_qps": 5874.55,
       "validation_error_percent": -4.856416073062563
@@ -248,6 +260,7 @@
       "qps_at_target": 2280.0146950380204,
       "correction_percent": 2.4619789881504595,
       "validation_ef": 64,
+      "validation_cores_busy": 7.554,
       "validation_predicted_qps": 5135.145908500311,
       "validation_measured_qps": 5011.26,
       "validation_error_percent": 2.472150886210467
@@ -267,6 +280,7 @@
       "qps_at_target": 2195.995872267737,
       "correction_percent": 2.4619789881504595,
       "validation_ef": 64,
+      "validation_cores_busy": 7.924,
       "validation_predicted_qps": 4945.915148310566,
       "validation_measured_qps": 4968.66,
       "validation_error_percent": -0.4577663130387988
@@ -286,6 +300,7 @@
       "qps_at_target": 3204.029102709287,
       "correction_percent": 3.1830291450535064,
       "validation_ef": 64,
+      "validation_cores_busy": 7.733,
       "validation_predicted_qps": 4545.938046598076,
       "validation_measured_qps": 4505.96,
       "validation_error_percent": 0.8872259540270155
@@ -305,6 +320,7 @@
       "qps_at_target": 3243.0322877261174,
       "correction_percent": 3.1830291450535286,
       "validation_ef": 64,
+      "validation_cores_busy": 7.927,
       "validation_predicted_qps": 4601.276514827527,
       "validation_measured_qps": 4676.96,
       "validation_error_percent": -1.6182196378090374
@@ -324,6 +340,7 @@
       "qps_at_target": 2437.8104069400692,
       "correction_percent": 1.08852389905576,
       "validation_ef": 64,
+      "validation_cores_busy": 7.559,
       "validation_predicted_qps": 4988.387499853409,
       "validation_measured_qps": 5016.18,
       "validation_error_percent": -0.5540570742395778
@@ -343,6 +360,7 @@
       "qps_at_target": 2334.295758467436,
       "correction_percent": 1.08852389905576,
       "validation_ef": 64,
+      "validation_cores_busy": 7.924,
       "validation_predicted_qps": 4776.569888023311,
       "validation_measured_qps": 4942.79,
       "validation_error_percent": -3.362880316110717
@@ -362,6 +380,7 @@
       "qps_at_target": 3380.945768578244,
       "correction_percent": 8.536539570349033,
       "validation_ef": 64,
+      "validation_cores_busy": 7.731,
       "validation_predicted_qps": 4553.914222933036,
       "validation_measured_qps": 4518.89,
       "validation_error_percent": 0.7750625249350218
@@ -381,6 +400,7 @@
       "qps_at_target": 3421.5384343775545,
       "correction_percent": 8.536539570349056,
       "validation_ef": 64,
+      "validation_cores_busy": 7.926,
       "validation_predicted_qps": 4608.589905651243,
       "validation_measured_qps": 4692.52,
       "validation_error_percent": -1.7885932153460793
@@ -400,6 +420,7 @@
       "qps_at_target": 2300.8512261644787,
       "correction_percent": 4.345574716193368,
       "validation_ef": 64,
+      "validation_cores_busy": 7.551,
       "validation_predicted_qps": 5044.887806714904,
       "validation_measured_qps": 5016.19,
       "validation_error_percent": 0.5721036626384679
@@ -419,6 +440,7 @@
       "qps_at_target": 2215.9139283454974,
       "correction_percent": 4.345574716193368,
       "validation_ef": 64,
+      "validation_cores_busy": 7.926,
       "validation_predicted_qps": 4858.652758907576,
       "validation_measured_qps": 4941.99,
       "validation_error_percent": -1.6863093833136888
@@ -438,6 +460,7 @@
       "qps_at_target": 3205.122269556293,
       "correction_percent": 2.84925760610375,
       "validation_ef": 64,
+      "validation_cores_busy": 7.729,
       "validation_predicted_qps": 4539.416646722857,
       "validation_measured_qps": 4519.19,
       "validation_error_percent": 0.4475723906907536
@@ -457,6 +480,7 @@
       "qps_at_target": 3244.575244773994,
       "correction_percent": 2.84925760610375,
       "validation_ef": 64,
+      "validation_cores_busy": 7.925,
       "validation_predicted_qps": 4595.293919851278,
       "validation_measured_qps": 4691.22,
       "validation_error_percent": -2.0448002896628736
@@ -476,6 +500,7 @@
       "qps_at_target": 3037.4402276169844,
       "correction_percent": 10.393762861062283,
       "validation_ef": 64,
+      "validation_cores_busy": 7.589,
       "validation_predicted_qps": 4694.500181630286,
       "validation_measured_qps": 4612.25,
       "validation_error_percent": 1.78329842550351
@@ -495,6 +520,7 @@
       "qps_at_target": 2932.5330347701165,
       "correction_percent": 10.393762861062283,
       "validation_ef": 64,
+      "validation_cores_busy": 7.928,
       "validation_predicted_qps": 4532.361407212221,
       "validation_measured_qps": 4510.62,
       "validation_error_percent": 0.48200485104532564
@@ -544,6 +570,7 @@
       "qps_at_target": 3000.89342594904,
       "correction_percent": 10.413833896854152,
       "validation_ef": 64,
+      "validation_cores_busy": 7.59,
       "validation_predicted_qps": 4633.727422180764,
       "validation_measured_qps": 4567.19,
       "validation_error_percent": 1.4568568897016299
@@ -563,6 +590,7 @@
       "qps_at_target": 2888.6025568759396,
       "correction_percent": 10.413833896854152,
       "validation_ef": 64,
+      "validation_cores_busy": 7.929,
       "validation_predicted_qps": 4460.337299497556,
       "validation_measured_qps": 4470.46,
       "validation_error_percent": -0.22643532214680073
@@ -582,6 +610,7 @@
       "qps_at_target": 3846.8926532184187,
       "correction_percent": 15.315910658953303,
       "validation_ef": 64,
+      "validation_cores_busy": 7.817,
       "validation_predicted_qps": 3890.2112926360232,
       "validation_measured_qps": 3886.12,
       "validation_error_percent": 0.10527962687778558
@@ -601,6 +630,7 @@
       "qps_at_target": 3901.8983426027394,
       "correction_percent": 15.315910658953303,
       "validation_ef": 64,
+      "validation_cores_busy": 7.932,
       "validation_predicted_qps": 3945.836383661916,
       "validation_measured_qps": 3969.62,
       "validation_error_percent": -0.5991408834619905
@@ -620,6 +650,7 @@
       "qps_at_target": 3011.1057362199654,
       "correction_percent": 9.992319299667063,
       "validation_ef": 64,
+      "validation_cores_busy": 7.59,
       "validation_predicted_qps": 4684.500318425105,
       "validation_measured_qps": 4587.95,
       "validation_error_percent": 2.1044326643731015
@@ -639,6 +670,7 @@
       "qps_at_target": 2904.7761611529772,
       "correction_percent": 9.992319299667063,
       "validation_ef": 64,
+      "validation_cores_busy": 7.925,
       "validation_predicted_qps": 4519.079050660323,
       "validation_measured_qps": 4486.39,
       "validation_error_percent": 0.7286270400104211
@@ -688,6 +720,7 @@
       "qps_at_target": 1469.94638351587,
       "correction_percent": 0.2760340757125279,
       "validation_ef": 64,
+      "validation_cores_busy": 7.694,
       "validation_predicted_qps": 3346.802902572594,
       "validation_measured_qps": 3272.99,
       "validation_error_percent": 2.255213201769468
@@ -707,6 +740,7 @@
       "qps_at_target": 1397.0457067428267,
       "correction_percent": 0.2760340757125057,
       "validation_ef": 64,
+      "validation_cores_busy": 7.939,
       "validation_predicted_qps": 3180.8212046279677,
       "validation_measured_qps": 3182.23,
       "validation_error_percent": -0.0442706960852024
@@ -726,6 +760,7 @@
       "qps_at_target": 1829.9593555423337,
       "correction_percent": 6.383089685978849,
       "validation_ef": 64,
+      "validation_cores_busy": 7.114,
       "validation_predicted_qps": 5292.23627800233,
       "validation_measured_qps": 4621.92,
       "validation_error_percent": 14.502983132601388
@@ -745,6 +780,7 @@
       "qps_at_target": 1835.108297083135,
       "correction_percent": 6.383089685978849,
       "validation_ef": 64,
+      "validation_cores_busy": 7.916,
       "validation_predicted_qps": 5307.126999554704,
       "validation_measured_qps": 5495.02,
       "validation_error_percent": -3.4193324218164234
@@ -764,6 +800,7 @@
       "qps_at_target": 1462.2684362069133,
       "correction_percent": 0.3340494172439312,
       "validation_ef": 64,
+      "validation_cores_busy": 7.694,
       "validation_predicted_qps": 3306.0309640379655,
       "validation_measured_qps": 3270.03,
       "validation_error_percent": 1.1009368121382757
@@ -783,6 +820,7 @@
       "qps_at_target": 1379.6533799167544,
       "correction_percent": 0.3340494172439312,
       "validation_ef": 64,
+      "validation_cores_busy": 7.935,
       "validation_predicted_qps": 3119.247246747663,
       "validation_measured_qps": 3166.29,
       "validation_error_percent": -1.4857373535695273
@@ -802,6 +840,7 @@
       "qps_at_target": 2030.155967120496,
       "correction_percent": 0.2912653078406935,
       "validation_ef": 64,
+      "validation_cores_busy": 7.106,
       "validation_predicted_qps": 5239.762722501028,
       "validation_measured_qps": 4583.76,
       "validation_error_percent": 14.311454406448586
@@ -821,6 +860,7 @@
       "qps_at_target": 2039.5532586798408,
       "correction_percent": 0.2912653078406935,
       "validation_ef": 64,
+      "validation_cores_busy": 7.919,
       "validation_predicted_qps": 5264.01680878927,
       "validation_measured_qps": 5448.55,
       "validation_error_percent": -3.3868311974879606
@@ -840,6 +880,7 @@
       "qps_at_target": 1445.784708351624,
       "correction_percent": 4.078430985697801,
       "validation_ef": 64,
+      "validation_cores_busy": 7.695,
       "validation_predicted_qps": 3327.3923975906296,
       "validation_measured_qps": 3285.52,
       "validation_error_percent": 1.274452676916571
@@ -859,6 +900,7 @@
       "qps_at_target": 1372.482269408397,
       "correction_percent": 4.078430985697801,
       "validation_ef": 64,
+      "validation_cores_busy": 7.937,
       "validation_predicted_qps": 3158.6909466376533,
       "validation_measured_qps": 3190.66,
       "validation_error_percent": -1.0019573806781867
@@ -878,6 +920,7 @@
       "qps_at_target": 1961.8356255843364,
       "correction_percent": 5.348728437643913,
       "validation_ef": 64,
+      "validation_cores_busy": 7.085,
       "validation_predicted_qps": 5284.705604151708,
       "validation_measured_qps": 4629.12,
       "validation_error_percent": 14.162208025536337
@@ -897,6 +940,7 @@
       "qps_at_target": 1967.9458518337199,
       "correction_percent": 5.348728437643935,
       "validation_ef": 64,
+      "validation_cores_busy": 7.913,
       "validation_predicted_qps": 5301.165060021326,
       "validation_measured_qps": 5528.05,
       "validation_error_percent": -4.10424905669583
@@ -916,6 +960,7 @@
       "qps_at_target": 2015.6252797359737,
       "correction_percent": 3.2896532151280633,
       "validation_ef": 64,
+      "validation_cores_busy": 7.695,
       "validation_predicted_qps": 3340.014627288305,
       "validation_measured_qps": 3267.73,
       "validation_error_percent": 2.2120746600332586
@@ -935,6 +980,7 @@
       "qps_at_target": 1933.5100054299471,
       "correction_percent": 3.2896532151280855,
       "validation_ef": 64,
+      "validation_cores_busy": 7.938,
       "validation_predicted_qps": 3203.9445848735527,
       "validation_measured_qps": 3164.36,
       "validation_error_percent": 1.2509507411784027
@@ -954,6 +1000,7 @@
       "qps_at_target": 3180.0580800825496,
       "correction_percent": 3.1495082674620978,
       "validation_ef": 64,
+      "validation_cores_busy": 7.795,
       "validation_predicted_qps": 4068.967128774122,
       "validation_measured_qps": 4034.16,
       "validation_error_percent": 0.8628098234606973
@@ -973,6 +1020,7 @@
       "qps_at_target": 3218.563791518793,
       "correction_percent": 3.1495082674620978,
       "validation_ef": 64,
+      "validation_cores_busy": 7.93,
       "validation_predicted_qps": 4118.236189325391,
       "validation_measured_qps": 4138.16,
       "validation_error_percent": -0.4814654502148019
@@ -992,6 +1040,7 @@
       "qps_at_target": 2044.1255194334299,
       "correction_percent": 4.79470518986107,
       "validation_ef": 64,
+      "validation_cores_busy": 7.699,
       "validation_predicted_qps": 3210.2897121455144,
       "validation_measured_qps": 3233.83,
       "validation_error_percent": -0.7279383224994995
@@ -1011,6 +1060,7 @@
       "qps_at_target": 1965.843874656604,
       "correction_percent": 4.79470518986107,
       "validation_ef": 64,
+      "validation_cores_busy": 7.945,
       "validation_predicted_qps": 3087.348749622563,
       "validation_measured_qps": 3142.49,
       "validation_error_percent": -1.754699310974317
@@ -1030,6 +1080,7 @@
       "qps_at_target": 3146.582197577942,
       "correction_percent": 2.294942362554564,
       "validation_ef": 64,
+      "validation_cores_busy": 7.797,
       "validation_predicted_qps": 4054.1010896968764,
       "validation_measured_qps": 4032.12,
       "validation_error_percent": 0.5451496904079312
@@ -1049,6 +1100,7 @@
       "qps_at_target": 3182.6309352665066,
       "correction_percent": 2.294942362554564,
       "validation_ef": 64,
+      "validation_cores_busy": 7.931,
       "validation_predicted_qps": 4100.546794137047,
       "validation_measured_qps": 4132.76,
       "validation_error_percent": -0.7794598733764646
@@ -1068,6 +1120,7 @@
       "qps_at_target": 2083.9974443219876,
       "correction_percent": 7.256687818939156,
       "validation_ef": 64,
+      "validation_cores_busy": 7.7,
       "validation_predicted_qps": 3324.061831119582,
       "validation_measured_qps": 3236.69,
       "validation_error_percent": 2.6994191942874446
@@ -1087,6 +1140,7 @@
       "qps_at_target": 1995.6501105655275,
       "correction_percent": 7.256687818939134,
       "validation_ef": 64,
+      "validation_cores_busy": 7.945,
       "validation_predicted_qps": 3183.1441918867877,
       "validation_measured_qps": 3131.76,
       "validation_error_percent": 1.6407448810505043
@@ -1106,6 +1160,7 @@
       "qps_at_target": 3231.767805777155,
       "correction_percent": 5.019930061097755,
       "validation_ef": 64,
+      "validation_cores_busy": 7.796,
       "validation_predicted_qps": 4056.1232162264905,
       "validation_measured_qps": 4030.72,
       "validation_error_percent": 0.6302401612240605
@@ -1125,6 +1180,7 @@
       "qps_at_target": 3271.4653393402505,
       "correction_percent": 5.019930061097755,
       "validation_ef": 64,
+      "validation_cores_busy": 7.93,
       "validation_predicted_qps": 4105.946748481611,
       "validation_measured_qps": 4133.29,
       "validation_error_percent": -0.6615372141414833
@@ -1144,6 +1200,7 @@
       "qps_at_target": 2590.5979084989494,
       "correction_percent": 1.557823969130001,
       "validation_ef": 64,
+      "validation_cores_busy": 7.718,
       "validation_predicted_qps": 2970.464033747576,
       "validation_measured_qps": 2981.09,
       "validation_error_percent": -0.3564456709600816
@@ -1163,6 +1220,7 @@
       "qps_at_target": 2481.5552729032943,
       "correction_percent": 1.557823969130001,
       "validation_ef": 64,
+      "validation_cores_busy": 7.937,
       "validation_predicted_qps": 2845.4321922104173,
       "validation_measured_qps": 2888.53,
       "validation_error_percent": -1.4920325490676234
@@ -1212,6 +1270,7 @@
       "qps_at_target": 2660.896339526545,
       "correction_percent": 1.6350216962191855,
       "validation_ef": 64,
+      "validation_cores_busy": 7.713,
       "validation_predicted_qps": 3102.592860691687,
       "validation_measured_qps": 3069.09,
       "validation_error_percent": 1.0916219691076812
@@ -1231,6 +1290,7 @@
       "qps_at_target": 2567.188849522631,
       "correction_percent": 1.6350216962191855,
       "validation_ef": 64,
+      "validation_cores_busy": 7.939,
       "validation_predicted_qps": 2993.3303594958634,
       "validation_measured_qps": 2970.23,
       "validation_error_percent": 0.7777296537932576
@@ -1280,6 +1340,7 @@
       "qps_at_target": 2453.0607721441397,
       "correction_percent": 6.86110457335638,
       "validation_ef": 64,
+      "validation_cores_busy": 7.716,
       "validation_predicted_qps": 3056.9105206558875,
       "validation_measured_qps": 3050.46,
       "validation_error_percent": 0.21146058810432855
@@ -1299,6 +1360,7 @@
       "qps_at_target": 2353.0815227053076,
       "correction_percent": 6.86110457335638,
       "validation_ef": 64,
+      "validation_cores_busy": 7.942,
       "validation_predicted_qps": 2932.320203560031,
       "validation_measured_qps": 2930.26,
       "validation_error_percent": 0.07030787575268427
@@ -1348,6 +1410,7 @@
       "qps_at_target": 1654.4664302982465,
       "correction_percent": 0.7592223080539862,
       "validation_ef": 64,
+      "validation_cores_busy": 7.812,
       "validation_predicted_qps": 1929.1737541212005,
       "validation_measured_qps": 1915.46,
       "validation_error_percent": 0.7159509528364305
@@ -1367,6 +1430,7 @@
       "qps_at_target": 1581.6477403362157,
       "correction_percent": 0.7592223080539862,
       "validation_ef": 64,
+      "validation_cores_busy": 7.954,
       "validation_predicted_qps": 1844.264261301262,
       "validation_measured_qps": 1839.83,
       "validation_error_percent": 0.24101472969035864
@@ -1386,6 +1450,7 @@
       "qps_at_target": 2957.4358614555736,
       "correction_percent": 10.097791349665265,
       "validation_ef": 64,
+      "validation_cores_busy": 7.807,
       "validation_predicted_qps": 3939.745524010206,
       "validation_measured_qps": 3912.42,
       "validation_error_percent": 0.6984302301441536
@@ -1405,6 +1470,7 @@
       "qps_at_target": 2982.031708043089,
       "correction_percent": 10.097791349665286,
       "validation_ef": 64,
+      "validation_cores_busy": 7.931,
       "validation_predicted_qps": 3972.5108589293254,
       "validation_measured_qps": 4003.49,
       "validation_error_percent": -0.7738033833149194
@@ -1424,6 +1490,7 @@
       "qps_at_target": 1834.8378758049384,
       "correction_percent": 8.989478812292152,
       "validation_ef": 64,
+      "validation_cores_busy": 7.805,
       "validation_predicted_qps": 1963.9325638717596,
       "validation_measured_qps": 1976.46,
       "validation_error_percent": -0.6338320091598293
@@ -1443,6 +1510,7 @@
       "qps_at_target": 1760.5397480985987,
       "correction_percent": 8.989478812292152,
       "validation_ef": 64,
+      "validation_cores_busy": 7.955,
       "validation_predicted_qps": 1884.40700231599,
       "validation_measured_qps": 1896.26,
       "validation_error_percent": -0.6250723890189103
@@ -1462,6 +1530,7 @@
       "qps_at_target": 2935.3395924968004,
       "correction_percent": 9.578297141095149,
       "validation_ef": 64,
+      "validation_cores_busy": 7.805,
       "validation_predicted_qps": 3916.1996487659603,
       "validation_measured_qps": 3902.12,
       "validation_error_percent": 0.36082049670334015
@@ -1481,6 +1550,7 @@
       "qps_at_target": 2960.0275828426884,
       "correction_percent": 9.578297141095128,
       "validation_ef": 64,
+      "validation_cores_busy": 7.93,
       "validation_predicted_qps": 3949.137268443235,
       "validation_measured_qps": 3991.52,
       "validation_error_percent": -1.061819345932502
@@ -1500,6 +1570,7 @@
       "qps_at_target": 1811.364496960733,
       "correction_percent": 9.140697309131562,
       "validation_ef": 64,
+      "validation_cores_busy": 7.808,
       "validation_predicted_qps": 1996.0416480945282,
       "validation_measured_qps": 1941.73,
       "validation_error_percent": 2.797075190398668
@@ -1519,6 +1590,7 @@
       "qps_at_target": 1729.1488096777641,
       "correction_percent": 9.140697309131562,
       "validation_ef": 64,
+      "validation_cores_busy": 7.953,
       "validation_predicted_qps": 1905.4436838422348,
       "validation_measured_qps": 1857.56,
       "validation_error_percent": 2.5777731993709363
@@ -1538,6 +1610,7 @@
       "qps_at_target": 2960.599409060093,
       "correction_percent": 10.293575174816926,
       "validation_ef": 64,
+      "validation_cores_busy": 7.808,
       "validation_predicted_qps": 3930.8728772172135,
       "validation_measured_qps": 3914.19,
       "validation_error_percent": 0.4262153144638736
@@ -1557,6 +1630,7 @@
       "qps_at_target": 2985.856637775126,
       "correction_percent": 10.293575174816905,
       "validation_ef": 64,
+      "validation_cores_busy": 7.931,
       "validation_predicted_qps": 3964.4076252840296,
       "validation_measured_qps": 4003.79,
       "validation_error_percent": -0.9836273809558094

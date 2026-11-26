@@ -1,0 +1,398 @@
+{
+ "analyses": [
+  {
+   "id": "e6_full",
+   "derived": "results/derived/e6_full_9050d65_analysis.json",
+   "module": "analysis.analyze_e6",
+   "roots": [
+    "{artifacts}/truba-experiments/E6/9050d65/pg-full-5c85906b",
+    "{artifacts}/truba-experiments/E6/9050d65/qdrant-full-bbf40d5c"
+   ]
+  },
+  {
+   "id": "e6_pilot",
+   "derived": "results/derived/e6_pilot_9050d65_analysis.json",
+   "module": "analysis.analyze_e6",
+   "roots": [
+    "{artifacts}/truba-experiments/E6/9050d65/pg-pilot",
+    "{artifacts}/truba-experiments/E6/9050d65/qdrant-pilot"
+   ]
+  },
+  {
+   "id": "e8_full",
+   "derived": "results/derived/e8_full_fe88da1_analysis.json",
+   "module": "analysis.analyze_e8",
+   "roots": [
+    "{artifacts}/truba-experiments/E8/fe88da1/full"
+   ]
+  },
+  {
+   "id": "e9_full",
+   "derived": "results/derived/e9_full_31de7f4_analysis.json",
+   "module": "analysis.analyze_e9",
+   "roots": [
+    "{artifacts}/truba-experiments/E9/31de7f4/full"
+   ]
+  },
+  {
+   "id": "e10_full",
+   "derived": "results/derived/e10_full_0b0b905_analysis.json",
+   "module": "analysis.analyze_e10",
+   "roots": [
+    "{artifacts}/truba-experiments/E10/0b0b905/full"
+   ]
+  },
+  {
+   "id": "e17_full",
+   "derived": "results/derived/e17_full_a5bb141_analysis.json",
+   "module": "analysis.analyze_e17",
+   "roots": [
+    "{artifacts}/truba-experiments/E17/a5bb141/full"
+   ]
+  },
+  {
+   "id": "e18_full",
+   "derived": "results/derived/e18_full_7d1b1c4_analysis.json",
+   "module": "analysis.analyze_e18",
+   "roots": [
+    "{artifacts}/truba-experiments/E18/7d1b1c4/full"
+   ]
+  },
+  {
+   "id": "e19_full",
+   "derived": "results/derived/e19_full_518a444_analysis.json",
+   "module": "analysis.analyze_e19",
+   "roots": [
+    "{artifacts}/truba-experiments/E19/518a444/full"
+   ]
+  },
+  {
+   "id": "e20_full",
+   "derived": "results/derived/e20_full_77f7567_analysis.json",
+   "module": "analysis.analyze_e20",
+   "roots": [
+    "{artifacts}/truba-experiments/E20/77f7567/full"
+   ]
+  },
+  {
+   "id": "e21_full",
+   "derived": "results/derived/e21_full_2516ade_analysis.json",
+   "module": "analysis.analyze_e21",
+   "roots": [
+    "{artifacts}/truba-experiments/E21/2516ade/full"
+   ]
+  },
+  {
+   "id": "e22_full",
+   "derived": "results/derived/e22_full_6e94ecd_analysis.json",
+   "module": "analysis.analyze_e22",
+   "roots": [
+    "{artifacts}/truba-experiments/E22/6e94ecd/full"
+   ]
+  },
+  {
+   "id": "e22_run1",
+   "derived": "results/derived/e22_run1_6e94ecd_analysis.json",
+   "module": "analysis.analyze_e22",
+   "roots": [
+    "{artifacts}/truba-experiments/E22/6e94ecd-run1/full"
+   ],
+   "tool_commit": "936736e"
+  },
+  {
+   "id": "e23_full",
+   "derived": "results/derived/e23_full_5276f14_analysis.json",
+   "module": "analysis.analyze_e23",
+   "roots": [
+    "{artifacts}/truba-experiments/E23/5276f14/full"
+   ],
+   "args": [
+    "--judgments",
+    "{repo}/results/derived/e23_judgments_prefix.json",
+    "--gt",
+    "{artifacts}/truba-experiments/E23/5276f14/inputs/gt_msmarco_n1000000_d1024_q1677_k10.npy"
+   ]
+  },
+  {
+   "id": "m7_e20",
+   "derived": "results/derived/m7_e20_77f7567_analysis.json",
+   "module": "analysis.analyze_m7",
+   "roots": [
+    "{artifacts}/truba-experiments/E20/77f7567/full"
+   ]
+  },
+  {
+   "id": "m7_e8",
+   "derived": "results/derived/m7_e8_fe88da1_analysis.json",
+   "module": "analysis.analyze_m7",
+   "roots": [
+    "{artifacts}/truba-experiments/E8/fe88da1/full"
+   ]
+  },
+  {
+   "id": "m6_reconciliation",
+   "derived": "results/derived/m6_throughput_reconciliation.json",
+   "module": "analysis.reconcile_m6",
+   "roots": [
+    "{artifacts}/remote-archives/2026-11-14_baseline/extracted/results"
+   ]
+  },
+  {
+   "id": "paper_source_index",
+   "derived": "results/derived/paper_source_index.json",
+   "module": "analysis.build_paper_source_index",
+   "roots": [
+    "{artifacts}/remote-archives/2026-11-14_baseline/extracted/results"
+   ]
+  },
+  {
+   "id": "baseline_figures",
+   "derived": "results/derived/baseline_figure_reproduction.json",
+   "module": "analysis.verify_figure_reproduction",
+   "roots": [
+    "{artifacts}/remote-archives/2026-11-14_baseline/extracted/results"
+   ],
+   "args": [
+    "{repo}/paper/figures"
+   ],
+   "ignore_keys": [
+    "generated_pdf_sha256",
+    "pdf_bytes_equal",
+    "pdf_render_equal",
+    "tracked_pdf_sha256"
+   ]
+  }
+ ],
+ "sections": [
+  {
+   "id": "causal_decomposition",
+   "script": "scripts/e19_section.py",
+   "args": [
+    "results/derived/e19_full_518a444_analysis.json"
+   ]
+  },
+  {
+   "id": "connection_pooling",
+   "script": "scripts/e21_section.py",
+   "args": [
+    "results/derived/e21_full_2516ade_analysis.json"
+   ]
+  },
+  {
+   "id": "open_loop_load",
+   "script": "scripts/e22_section.py",
+   "args": [
+    "results/derived/e22_full_6e94ecd_analysis.json"
+   ]
+  },
+  {
+   "id": "ranking_quality",
+   "script": "scripts/e23_section.py",
+   "args": [
+    "results/derived/e23_gate.json",
+    "results/derived/e23_full_5276f14_analysis.json"
+   ]
+  },
+  {
+   "id": "throughput_at_matched_recall",
+   "script": "scripts/m7_section.py",
+   "args": [
+    "results/derived/m7_e20_77f7567_analysis.json",
+    "results/derived/m7_e8_fe88da1_analysis.json"
+   ]
+  }
+ ],
+ "table_sources": {
+  "tab:matched": {
+   "experiment": "E1",
+   "note": "pre-provenance run; one build per engine and scale; no commit or seed in the files",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "fig:recall": {
+   "experiment": "E1",
+   "note": "pre-provenance run",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "fig:throughput": {
+   "experiment": "E1",
+   "note": "pre-provenance run; the M6 reconciliation is results/derived/m6_throughput_reconciliation.json",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "tab:build": {
+   "experiment": "E5",
+   "note": "pre-provenance run; three builds per engine and scale on one node",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "fig:build": {
+   "experiment": "E5",
+   "note": "pre-provenance run",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "fig:dims": {
+   "experiment": "E3",
+   "note": "pre-provenance run; one build per dimension",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "tab:sb": {
+   "experiment": "E4",
+   "note": "pre-provenance run; one build per row",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "tab:laptop": {
+   "experiment": "E0-E5",
+   "note": "archived course results against the controlled harness",
+   "manifests": [
+    "data-manifests/baseline_2026-11-14.json"
+   ],
+   "analysis": [
+    "results/derived/paper_source_index.json",
+    "results/derived/baseline_figure_reproduction.json"
+   ]
+  },
+  "tab:hnsw": {
+   "experiment": "E8",
+   "manifests": [
+    "data-manifests/e8_full_fe88da1.json"
+   ],
+   "analysis": [
+    "results/derived/e8_full_fe88da1_analysis.json"
+   ]
+  },
+  "tab:cpu": {
+   "experiment": "E6",
+   "manifests": [
+    "data-manifests/e6_full_9050d65.json"
+   ],
+   "analysis": [
+    "results/derived/e6_full_9050d65_analysis.json"
+   ]
+  },
+  "tab:ingest": {
+   "experiment": "E9",
+   "manifests": [
+    "data-manifests/e9_full_31de7f4.json"
+   ],
+   "analysis": [
+    "results/derived/e9_full_31de7f4_analysis.json"
+   ]
+  },
+  "tab:caps": {
+   "experiment": "E10",
+   "manifests": [
+    "data-manifests/e10_full_0b0b905.json"
+   ],
+   "analysis": [
+    "results/derived/e10_full_0b0b905_analysis.json"
+   ]
+  },
+  "tab:perquery": {
+   "experiment": "E18",
+   "manifests": [
+    "data-manifests/e18_full_7d1b1c4.json"
+   ],
+   "analysis": [
+    "results/derived/e18_full_7d1b1c4_analysis.json"
+   ]
+  },
+  "tab:causal": {
+   "experiment": "E19",
+   "manifests": [
+    "data-manifests/e19_full_518a444.json"
+   ],
+   "analysis": [
+    "results/derived/e19_full_518a444_analysis.json"
+   ],
+   "generator": "scripts/e19_section.py"
+  },
+  "tab:quant": {
+   "experiment": "E20",
+   "manifests": [
+    "data-manifests/e20_full_77f7567.json"
+   ],
+   "analysis": [
+    "results/derived/e20_full_77f7567_analysis.json"
+   ]
+  },
+  "tab:pooling": {
+   "experiment": "E21",
+   "manifests": [
+    "data-manifests/e21_full_2516ade.json"
+   ],
+   "analysis": [
+    "results/derived/e21_full_2516ade_analysis.json"
+   ],
+   "generator": "scripts/e21_section.py"
+  },
+  "tab:openloop": {
+   "experiment": "E22",
+   "manifests": [
+    "data-manifests/e22_full_6e94ecd.json"
+   ],
+   "analysis": [
+    "results/derived/e22_full_6e94ecd_analysis.json"
+   ],
+   "generator": "scripts/e22_section.py"
+  },
+  "tab:ranking": {
+   "experiment": "E23",
+   "manifests": [
+    "data-manifests/e23_full_5276f14.json"
+   ],
+   "analysis": [
+    "results/derived/e23_full_5276f14_analysis.json",
+    "results/derived/e23_gate.json"
+   ],
+   "generator": "scripts/e23_section.py"
+  }
+ },
+ "exempt_labels": [
+  "tab:checklist",
+  "tab:confounders",
+  "tab:dataset",
+  "tab:expmap",
+  "tab:sources"
+ ],
+ "exempt_reason": "tab:checklist and tab:confounders list protocol items, tab:dataset describes the corpus, tab:expmap and tab:sources are indices of the other tables"
+}
