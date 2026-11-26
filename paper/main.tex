@@ -446,9 +446,13 @@ the heap holds only the TOAST pointers. In addition, \texttt{jit} is off,
 \texttt{track\_io\_timing} is on and \texttt{pg\_stat\_statements} is loaded. pgvector's
 \texttt{hnsw.iterative\_scan} is off (its default), with \texttt{hnsw.max\_scan\_tuples} at
 20{,}000 and \texttt{hnsw.scan\_mem\_multiplier} at 1; the benchmark query has no filter, so
-iterative scans would not change its result. The CPU supports AVX2 and AVX-512 (Section~\ref{sec:cpu}
-reports instruction counts), but we did not record the compile flags of either engine's binaries
-or which instruction sets they use. Qdrant runs with its defaults: vectors in memory, the default optimizer (indexing threshold 20\,MB)
+iterative scans would not change its result. The CPU (Xeon Gold 6258R) supports AVX2 and AVX-512 (Section~\ref{sec:cpu}
+reports instruction counts). We read the build records from the images (\texttt{docs/BUILD\_INFO.md}). The pgvector
+library is compiled for baseline x86-64 with GCC 12.2 at \texttt{-O2} and has FMA clones of its distance functions that are
+selected at run time, but no AVX-512 clone; the profiles of Section~\ref{sec:causal} show the FMA clone (\texttt{VectorInnerProduct.fma})
+for 32-bit vectors. The Qdrant binary (rustc 1.98, clang 14) tests for AVX, FMA and AVX-512 at run time; the profile of the 32-bit path shows
+its AVX kernel. Both engines therefore compute 32-bit distances with AVX/FMA code, and a difference between them is not one of AVX-512 against AVX2.
+Qdrant runs with its defaults: vectors in memory, the default optimizer (indexing threshold 20\,MB)
 and an automatically chosen number of segments.
 
 \subsection{Measurement Protocol}
@@ -1123,6 +1127,20 @@ a single client, Qdrant keeps 1.5--2.3 cores busy because it searches its four s
 in parallel. This lowers single-query latency, but it does not raise throughput once all
 cores are busy.
 
+\paragraph{Throughput at exactly the matched recall.} The windows above run at the smallest swept $ef$ that reaches the target, so
+their recall overshoots it. In the 1M builds of the quantization experiment (Section~\ref{sec:quant}) the overshoot is 0.005 for pgvector and
+0.003 for Qdrant at Recall@10 of 0.95, and a higher recall is a slower query. With at least as many clients as cores both engines are CPU bound,
+so throughput is inversely proportional to the CPU time of a query. We therefore corrected each build's measured plateau to a recall of exactly 0.95
+with its own CPU-per-query curve, interpolated in recall as in Section~\ref{sec:hnsw}:
+$\mathrm{qps}(0.95)=\mathrm{qps}(ef_{\mathrm{matched}})\,\mathrm{cpu}(ef_{\mathrm{matched}})/\mathrm{cpu}(0.95)$.
+We checked the proportionality against the second $ef$ that each window was run at ($ef=64$): at 32 clients the formula predicts the measured throughput
+within 2.7\,\% for pgvector and 3.7\,\% for Qdrant (the largest error over three builds), while for Qdrant at 8 clients the error is up to 15\,\%: at $ef=64$ eight clients keep only 7.1 of the 8 cores busy (7.9 with 32 clients), so that window is not
+saturated and the proportionality does not apply. We correct the 32-client plateau only. At 1M the plateau at exactly 0.95 is 13.9\,\% higher for pgvector (1037 instead of 910 queries per
+second) and 10.6\,\% higher for Qdrant (1650 instead of 1492), so Qdrant's advantage at the plateau is 1.59 times instead of 1.64 times. At 500K (the 24 builds of
+Section~\ref{sec:hnsw}, 24 windows of each engine) the corrections are 6.2\,\% and 6.7\,\%, with prediction errors of $-$0.3\,\% and $-$2.3\,\% on average. The throughput figures above
+come from a single build per scale at an overshoot of about 0.006, which is not corrected here because that run did not record CPU per query; by the same
+estimate they are about 10 to 14\,\% low. The ratio between the engines moves by about 3\,\%, so no conclusion of this section depends on the correction.
+
 Engine-side times cannot be compared directly between the systems under load. Qdrant's
 request time includes the wait for a free search thread, while a PostgreSQL backend
 waits in the operating system's run queue before its statement starts, which the
@@ -1145,6 +1163,7 @@ plateau above. These counters come from a single build per scale, so we use them
 support the direction and rough size of the differences and not exact ratios.
 
 \subsection{HNSW Parameters}
+\label{sec:hnsw}
 
 Table~\ref{tab:hnsw} repeats the 500K comparison with eight construction settings. We
 built each configuration three times and interpolated every build's curves to

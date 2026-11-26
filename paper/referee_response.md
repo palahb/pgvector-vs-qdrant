@@ -106,7 +106,7 @@ is subject to the author's and the referee's agreement.
 - The non-monotonic pgvector latency over graph density is not build-to-build noise
   (3.6 and 4.9 standard errors of the difference); it is systematic and its cause is open.
 
-### M7 — Matched recall: mostly addressed
+### M7 — Matched recall: addressed
 
 - Evidence: E6 and E8 (per-build linear interpolation of latency and CPU in recall) and E18
   (`data-manifests/e18_full_7d1b1c4.json`, per-query recall).
@@ -116,13 +116,12 @@ is subject to the author's and the referee's agreement.
   about 2% find at most five neighbors, and the worst query finds none. The two engines have
   almost the same tails at each dimension, so matching on the mean does not hide a
   difference in the worst queries.
-- Not done: interpolation of throughput (concurrency still runs at the first swept ef reaching
-  the target).
+- Throughput at exactly the matched recall: done (`scripts/m7_section.py`, `analysis/analyze_m7.py`). The plateau of each build is corrected to a recall of exactly 0.95 with its own CPU-per-query curve (qps x cpu(matched ef) / cpu(0.95)); the formula is checked against the second ef that each window ran at (within 4% at 32 clients; it does not apply at 8 clients for Qdrant, where the window is not saturated). At 1M (E20, 3 builds) the corrections are +13.9% for pgvector and +10.6% for Qdrant, so the plateau ratio is 1.59 instead of 1.64; at 500K (E8, 24 builds) +6.2% and +6.7%. The single-build E1 figures were not recomputed because that run recorded no CPU per query.
 
 ### M8 — Closed loop and eight cores: partly addressed (open loop done, E22)
 
-- No new evidence yet. Supervisor decision (17 November): a minimal open-loop experiment (E22) is
-  in scope and is the first item cut if time runs short; 16+ cores is future work.
+- Open loop: done (E22, `data-manifests/e22_full_6e94ecd.json`; paper section Open-Loop Load). Poisson arrivals at 50, 80, 95 and 110% of each build's closed-loop capacity, three builds per engine at 1M. Where both engines settle, pgvector's p99 is 2.1 times Qdrant's (80% load); pgvector did not settle at 95% (a start-up backlog drained throughout the 90 s window), Qdrant did. The first protocol (60 s windows) and the criterion added after seeing the second run are disclosed in `docs/E22_DESIGN.md` and the paper.
+- Core scaling beyond 8 cores stays future work (supervisor decision of 17 November).
 
 ### M9 — RAG workload scope: open, scope reduction proposed
 
