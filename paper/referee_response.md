@@ -12,10 +12,11 @@ efficiency, the uncontrolled segment parallelism, the asymmetric ingestion tunin
 memory-study design. The revision is reorganized around quantified benchmark confounders
 (Section 4, with a detection and avoidance checklist) instead of a "which system is faster"
 ranking. The headline "Qdrant's engine is 3-4x faster" has been replaced by separate
-latency and CPU-per-query results. Filtered, mixed read/write, hybrid, open-loop, quantization,
-10M-scale and second-model work (M8, M9, M10 and the freshness items) is not part of this
-revision; the proposed scope reduction (title and framing limited to unfiltered ANN search)
-is subject to the author's and the referee's agreement.
+latency and CPU-per-query results. Following the supervisor's answer of 17 November, the title and framing are limited to unfiltered ANN search
+and the manuscript now also contains a profile and counter decomposition (E19), a test of half-precision and int8 storage (E20), of a connection pooler (E21), of
+Poisson open-loop load (E22) and a sensitivity analysis of ranking quality (E23). Filtered and hybrid search, mixed read/write load, more than eight cores, other PostgreSQL
+extensions, a second embedding model and the 10M scale (parts of M8, M9, M10 and the freshness items) are listed as future work. The manuscript is regenerated from the raw results with
+`make verify-paper` (tags `harness-v1` and `analysis-v2`, `docs/TAG_POLICY.md`).
 
 ## Major comments
 
@@ -56,8 +57,7 @@ is subject to the author's and the referee's agreement.
   Ingestion and index-wait are reported separately.
 - The build claim is withdrawn and rewritten: logged pgvector is 1.2x faster than Qdrant's
   baseline upload at 1M, but Qdrant with tuned ingestion is 1.4x faster than logged pgvector.
-- Not done: pgvector search-side levers named by the referee (huge pages, halfvec storage,
-  a connection pooler) were not measured.
+- Search-side levers named by the referee: halfvec storage (E20) and a connection pooler (E21) are now measured (see the section of new commitments). Huge pages were not measured.
 
 ### M4 — Rotational disk and WAL: partly addressed
 
@@ -66,7 +66,7 @@ is subject to the author's and the referee's agreement.
   WAL and the final checkpoint writes 13.9 GB in 80 s (about 175 MB/s, matching the measured
   167 MB/s of the disk). With an unlogged table the load takes 22 s instead of 93 s and
   scales linearly. The 1M load is therefore limited by logging to the spinning disk.
-- Not done: builds on NVMe or tmpfs. Build times are labelled as specific to this disk.
+- Not possible: builds on NVMe. The compute nodes have no NVMe device (`docs/STORAGE_CHECK.md`); the only other storage is a 93 GB `tmpfs` in memory, which would remove the disk rather than test a faster one. Build times are labelled as specific to this disk (a worst case), and the paper says so.
 
 ### M5 — Memory working set: addressed, with one incomplete cell group
 
@@ -84,7 +84,7 @@ is subject to the author's and the referee's agreement.
   settled to 1.2-1.4 ms in two of three repetitions and was still at 35 ms in the third.
 - The "Qdrant tolerates tighter limits" claim is replaced by these results in the Memory
   section, Discussion, Threats and Conclusion.
-- Not done: NVMe. pgvector's 4 GB arms did not finish within the 3 h job limit (tasks 10
+- Not possible: NVMe (see M4). The decision against the supervisor's criterion is `docs/E10_MEMORY_DECISION.md`. pgvector's 4 GB arms did not finish within the 3 h job limit (tasks 10
   and 11 killed; the other four 4 GB pgvector tasks were cancelled before they started), so
   that comparison is incomplete and is reported as such.
 
@@ -123,7 +123,7 @@ is subject to the author's and the referee's agreement.
 - Open loop: done (E22, `data-manifests/e22_full_6e94ecd.json`; paper section Open-Loop Load). Poisson arrivals at 50, 80, 95 and 110% of each build's closed-loop capacity, three builds per engine at 1M. Where both engines settle, pgvector's p99 is 2.1 times Qdrant's (80% load); pgvector did not settle at 95% (a start-up backlog drained throughout the 90 s window), Qdrant did. The first protocol (60 s windows) and the criterion added after seeing the second run are disclosed in `docs/E22_DESIGN.md` and the paper.
 - Core scaling beyond 8 cores stays future work (supervisor decision of 17 November).
 
-### M9 — RAG workload scope: open, scope reduction proposed
+### M9 — RAG workload scope: addressed by scope reduction (title and framing, approved 17 November), nDCG as a sensitivity analysis
 
 - No new evidence. The supervisor approved removing "RAG" from the title: unfiltered ANN search.
   Filtered and hybrid search and mixed read-write stay future work.
