@@ -84,7 +84,7 @@ extensions, a second embedding model and the 10M scale (parts of M8, M9, M10 and
   settled to 1.2-1.4 ms in two of three repetitions and was still at 35 ms in the third.
 - The "Qdrant tolerates tighter limits" claim is replaced by these results in the Memory
   section, Discussion, Threats and Conclusion.
-- Not possible: NVMe (see M4). The decision against the supervisor's criterion is `docs/E10_MEMORY_DECISION.md`. pgvector's 4 GB arms did not finish within the 3 h job limit (tasks 10
+- NVMe: not done. The `hamsi` nodes we used have none; the `orfoz` partition has (`docs/STORAGE_CHECK.md`), but no experiment was repeated there (see M4). The decision against the supervisor's criterion is `docs/E10_MEMORY_DECISION.md`. pgvector's 4 GB arms did not finish within the 3 h job limit (tasks 10
   and 11 killed; the other four 4 GB pgvector tasks were cancelled before they started), so
   that comparison is incomplete and is reported as such.
 
