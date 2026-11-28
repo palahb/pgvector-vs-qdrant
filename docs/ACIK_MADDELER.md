@@ -21,7 +21,7 @@
 * E22'nin ilk koşusu kayıt olarak duruyor; analizi, onu üreten commit'in araçlarıyla yeniden üretiliyor (`936736e`).
 * Qdrant'ın depolama boyutu aynı yapılandırmanın build'leri arasında yaklaşık üçte bir oynuyor, nedeni bulunamadı; `int8` için depolama oranı verilmedi.
 * Mesafe sayısı ölçülemedi (sayaç yok, root yok, eBPF yok); önbellek-ıskalama vekili pgvector'ün blok sayacıyla 1% içinde doğrulandı (`E19`).
-* Kümede NVMe yok: depolamaya bağlı her sonuç "HDD, en kötü durum".
+* Kullandığımız `hamsi` düğümlerinde NVMe yok (bir düğümde doğrulandı); **diğer bölümler (orfoz, barbun, smp) bakılmadı**. Hoca "TRUBA'da NVMe kullanabilirsin" demişti; bu doğrulanana kadar depolamaya bağlı her sonuç "HDD, en kötü durum".
 * nDCG: 63 sorgu, korpus yargılı ilgili belgelerin %0,7'sini taşıyor; oranlar kesin aramaya göre, mutlak etkinlik değil.
 * Şekil: yeni deneyler (E19–E23) için şekil üretilmedi, yalnızca tablolar var. İsterseniz E22 (yüke karşı p99) ve E19 (kategori başına döngü) için iki şekil eklenebilir.
 

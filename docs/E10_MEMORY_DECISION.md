@@ -10,7 +10,7 @@ cgroup part stays. This note compares E10 (`data-manifests/e10_full_0b0b905.json
 | Independent cold start | Each limit restarts the server with its files evicted from the page cache (`evict_page_cache`), recorded as `resident_before_evict` and `resident_after_evict`. Pass 0 is the cold start (no warm-up); the later passes are the steady state; both are reported separately. A repetition is a new job on a new build. | yes |
 | cgroup | The limit is a Slurm step cgroup (`srun --mem`, cgroup v2). `memory.current` of the server's cgroup is read after the passes and stored in every result (30 of 30 results; Qdrant at 4 GB reads 4.00 GiB, i.e. at the limit). | yes |
 | Equal memory accounting | pgvector is run with two buffer settings (1 GB, and a quarter of the limit); Qdrant is memory-mapped. The page cache is inside the cgroup for both. | yes |
-| NVMe | The cluster has none (`docs/STORAGE_CHECK.md`). Every result is labelled HDD, worst case. | not possible |
+| NVMe | The `hamsi` nodes we used have none (checked on one node, `docs/STORAGE_CHECK.md`); other partitions were not checked. Every result is labelled HDD, worst case. | not done |
 
 ## What is missing, and the default
 

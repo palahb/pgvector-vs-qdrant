@@ -66,7 +66,7 @@ extensions, a second embedding model and the 10M scale (parts of M8, M9, M10 and
   WAL and the final checkpoint writes 13.9 GB in 80 s (about 175 MB/s, matching the measured
   167 MB/s of the disk). With an unlogged table the load takes 22 s instead of 93 s and
   scales linearly. The 1M load is therefore limited by logging to the spinning disk.
-- Not possible: builds on NVMe. The compute nodes have no NVMe device (`docs/STORAGE_CHECK.md`); the only other storage is a 93 GB `tmpfs` in memory, which would remove the disk rather than test a faster one. Build times are labelled as specific to this disk (a worst case), and the paper says so.
+- Not possible: builds on NVMe. The nodes of the partition we used (hamsi) have no NVMe device (checked on one node, `docs/STORAGE_CHECK.md`; other partitions not checked); the only other storage is a 93 GB `tmpfs` in memory, which would remove the disk rather than test a faster one. Build times are labelled as specific to this disk (a worst case), and the paper says so.
 
 ### M5 — Memory working set: addressed, with one incomplete cell group
 

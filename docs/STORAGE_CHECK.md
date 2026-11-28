@@ -7,13 +7,21 @@ The raw output is below, unedited.
 
 * The node has **one block device**, `sda` (1.1 TB, a MegaRAID MR9361-8i volume), with `rotational = 1`: spinning disks behind a RAID controller. `/` is
   `ext4` on `/dev/sda2`, and so is `/tmp` (`TMPDIR=/tmp`). The databases of every experiment lived there.
-* **There is no NVMe device** (`/dev/nvme*` does not exist, `nvme list` is not installed, no `nvme` entry in `/sys/block`).
+* **There is no NVMe device on this node** (`/dev/nvme*` does not exist, `nvme list` is not installed, no `nvme` entry in `/sys/block`).
 * `/dev/shm` is a 93.5 GB `tmpfs` (RAM). It can hold the 1M x 1024 data (about 14 GB for pgvector with its TOAST data) but is memory,
   so it removes the disk from the question; it cannot stand in for an out-of-core test.
 * `/arf/scratch` is Lustre (12.6 PB), shared and over the network; the code, images and results live there, the databases do not.
 
 This is consistent with the disk probe of September (about 167 MB/s sequential, about 5 ms random read) and with the cold-start times of E10 (a pgvector cold
 query of about one second at 1M).
+
+## What this check does not cover (added 28 November)
+
+It is **one node of one partition**. The cluster has other CPU partitions that were not looked at: `orfoz` (156 nodes, 112 cores, 256 GB), `barbun` (120 nodes, 40 cores, 384 GB), the
+single large-memory node of `smp` (224 cores, 4 TB) and two GPU partitions. All CPU partitions carry the Slurm feature `weka` (a Weka file system), whose mount we did not find on the login
+node. `TmpDisk` is 0 for every node, so Slurm does not describe node-local disks. The login node does have an NVMe device (`/dev/nvme0n1`), which is not where jobs run. The supervisor wrote that NVMe
+could be used on TRUBA and in `/tmp`; **this check neither confirms nor refutes that for the other partitions.** The other `hamsi` nodes were not checked either, but the 8 nodes of E10 and the
+September disk probe all behaved like a rotational disk (cold queries of 0.6 to 1.5 s).
 
 ## Consequence for the paper
 
