@@ -1,6 +1,6 @@
 """Write the configs of the E10 NVMe set on the orfoz partition (G14): the full E10 matrix with the same job definitions, seeds and commit (0b0b905) as the hamsi set.
 
-Only the resources change: partition orfoz, a whole 112-core node (the queue refuses fewer), 240 GB of its 256 GB, no hamsi exclude list.
+Only the resources change: partition orfoz, a whole 112-core node (the queue refuses fewer), 230 GB of its 256 GB (the queue caps memory at 2170 MB per CPU, 237 GB for 112 CPUs; 240 GB was refused), no hamsi exclude list.
 Two files, because the time limit is per config: a pilot (canary for the 2 x 56 core layout) and the full matrix.
 Usage: python scripts/make_e10_orfoz_config.py
 """
@@ -14,7 +14,7 @@ SRC = ROOT / "configs/examples/e10_memory_limits.json"
 def build(time):
     cfg = json.loads(SRC.read_text())
     res = {k: v for k, v in cfg["resources"].items() if k != "exclude"}
-    res.update(partition="orfoz", cpus=112, memory="240G", time=time)
+    res.update(partition="orfoz", cpus=112, memory="230G", time=time)
     cfg["resources"] = res
     return cfg
 
