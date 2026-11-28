@@ -25,3 +25,13 @@ cgroup part stays. This note compares E10 (`data-manifests/e10_full_0b0b905.json
 
 The memory experiment meets the supervisor's criterion for 1 December on every point the cluster allows. The two things it does not have, NVMe and pgvector at 4 GB, are
 stated in the paper where the results are (Section Memory Pressure, Threats to Validity).
+
+## Decision of 28 November (supersedes the default above)
+
+The default above (leave the 4 GB cells as "did not finish") rested on two assumptions that did not survive checking: the 3 h limit is ours (the partition allows 3 days), and the cluster has no NVMe (`orfoz` has;
+`docs/STORAGE_CHECK.md`). The decision, with the cost in `docs/E10_NVME_PLAN.md`:
+
+1. **Set 1, `hamsi`:** run the six pgvector 4 GB tasks again with a 48 h limit, same commit and configs. If they do not finish in 48 h, the paper says so.
+2. **Set 2, `orfoz`:** a separate set with the whole E10 matrix on NVMe, reported in its own table as another platform. Cut line: cells that do not finish by 9 December are dropped, and what is left stays labelled "HDD, worst case".
+3. Submission of either set waits for the author's `/goal` for G13 and G14.
+
