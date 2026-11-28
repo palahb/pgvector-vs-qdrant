@@ -30,7 +30,7 @@ Tüm tablolar bir manifeste bağlı ve `make verify-paper` ham sonuçlardan anal
 3. *Beyanlar:* sorumlu yazar, yazar katkıları (CRediT), rakip çıkar, fonlama, ham sonuçların (yaklaşık 3 GB) nerede saklanacağı.
 4. *pgvector planlayıcı bulgusu:* upstream'e issue açmak için taslak hazır; tekrar üretici betiği henüz çalıştırmadım. Onayınızla önce çalıştırıp sonra göndermeyi öneriyorum.
 
-**Eksikler ve sınırlar.** Makaleyi derleyemedim (bu makinede TeX yok), Overleaf'te derleyip biçimi kontrol edeceğim. Koştuğumuz `hamsi` düğümlerinde NVMe yok (bir düğümde doğruladım; diğer bölümlere bakmadım), depolamaya bağlı sonuçlar "HDD, en kötü durum" diye işaretli. pgvector'ün 4 GB bellek sınırındaki kolları 3 saatlik limitte bitmedi, "tamamlanmadı" diye raporlanıyor. Qdrant'ın depolama boyutu aynı yapılandırmanın build'leri arasında yaklaşık üçte bir oynuyor, nedenini bulamadım.
+**Eksikler ve sınırlar.** Makaleyi derleyemedim (bu makinede TeX yok), Overleaf'te derleyip biçimi kontrol edeceğim. Koştuğumuz düğümlerde NVMe yok (hamsi, barbun, smp: dönen disk; yalnızca orfoz'da var, işlemcisi farklı), depolamaya bağlı sonuçlar "HDD, en kötü durum" diye işaretli. pgvector'ün 4 GB bellek sınırındaki kolları 3 saatlik limitte bitmedi, "tamamlanmadı" diye raporlanıyor. Qdrant'ın depolama boyutu aynı yapılandırmanın build'leri arasında yaklaşık üçte bir oynuyor, nedenini bulamadım.
 
 Takvim: 22 Aralık'a kadar yorumlarınızı bekliyorum, 8 Ocak'ta göndermeyi hedefliyorum.
 

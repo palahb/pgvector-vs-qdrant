@@ -440,7 +440,7 @@ Linux 9.2 (kernel 5.14) with the \texttt{performance} frequency governor. Jobs a
 scheduled by Slurm 23.02 with cgroup-v2 confinement. Database files are placed on the
 node-local disk, a rotational drive behind a RAID controller. Measured with
 \texttt{O\_DIRECT}, it writes 167\,MB/s sequentially and serves a random 8\,KiB read in
-4.8\,ms (median), about 200 reads per second at queue depth one. The nodes of the partition we used have no NVMe device (checked with \texttt{lsblk} on one of them, \texttt{docs/STORAGE\_CHECK.md}; the other partitions of the cluster were not checked); the only other storage on that node is a 93\,GB \texttt{tmpfs} in memory, so every result that depends on storage is for this disk, a worst case, and we did not repeat it on faster storage. Both engines run from Apptainer 1.3 images pinned by digest:
+4.8\,ms (median), about 200 reads per second at queue depth one. The nodes we used have no NVMe device: \texttt{lsblk} on two \texttt{hamsi} nodes, one \texttt{barbun} node and the \texttt{smp} node shows a single rotational disk behind a RAID controller, and \texttt{/tmp} is on it (\texttt{docs/STORAGE\_CHECK.md}). The only other storage on a \texttt{hamsi} node is a 93\,GB \texttt{tmpfs} in memory. The cluster's documentation states that \texttt{/tmp} is NVMe on all servers; this holds on the one \texttt{orfoz} node we checked (a 894\,GB NVMe device) but not on the nodes above. Every result that depends on storage is therefore for a rotational disk, a worst case, and we did not repeat it on the \texttt{orfoz} partition, whose processors differ. Both engines run from Apptainer 1.3 images pinned by digest:
 PostgreSQL 17.11 with pgvector 0.8.6 (\texttt{pgvector/pgvector:0.8.6-pg17}) and Qdrant
 1.19.1 (\texttt{qdrant/qdrant:v1.19.1}).
 
@@ -1788,7 +1788,7 @@ only a rough stand-in for models that natively produce lower-dimensional embeddi
 the dimensionality results describe index behavior on truncated vectors and do not carry
 over to native 384- or 768-dimensional models.
 
-\textbf{Storage.} The nodes we used have a single rotational disk and no NVMe device (checked on one node, Section~\ref{sec:env}; other partitions were not checked); every result that depends on storage is a worst case, and we did not repeat it on faster storage.
+\textbf{Storage.} The nodes we used have a single rotational disk and no NVMe device (checked on four nodes of three partitions, Section~\ref{sec:env}); every result that depends on storage is a worst case. The \texttt{orfoz} partition has NVMe (one node checked) but a different processor, so a repetition there would be a separate platform and is not part of this paper's results.
 
 \textbf{Different nodes for the two systems.} Within an experiment the two systems usually ran on different nodes (Table~\ref{tab:sources}), and the closed-loop and open-loop comparisons between them compare ratios of means over three builds, not paired runs. Within one system, comparisons of arms (precision, connection mode) are paired on one node.
 
@@ -1814,7 +1814,7 @@ The study is limited to unfiltered nearest-neighbor search with one embedding mo
   \item other PostgreSQL extensions for vector search that use disk-resident indexes or quantization, such as pgvectorscale and VectorChord, which we only describe (Section~\ref{sec:outside});
   \item a second embedding model, in particular models that natively produce 384 or 768 dimensions, which would replace our prefix truncation of one model;
   \item a larger corpus, at 10M vectors, where graph size and the buffer pool interact differently;
-  \item storage with NVMe devices, which the nodes we used do not have, for the build and the out-of-core measurements;
+  \item storage with NVMe devices, which the \texttt{orfoz} partition has but the nodes we used do not, for the build and the out-of-core measurements, as a separate platform;
   \item open-loop load on connections that have been warmed for minutes, and with a pooler in the open loop;
   \item other quantizations (binary, product) and other settings of Qdrant's \texttt{int8} oversampling and rescoring, and a pgvector run at 4\,GB of memory that finishes.
 \end{itemize}

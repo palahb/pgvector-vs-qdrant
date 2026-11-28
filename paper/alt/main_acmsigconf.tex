@@ -455,7 +455,7 @@ Linux 9.2 (kernel 5.14) with the \texttt{performance} frequency governor. Jobs a
 scheduled by Slurm 23.02 with cgroup-v2 confinement. Database files are placed on the
 node-local disk, a rotational drive behind a RAID controller. Measured with
 \texttt{O\_DIRECT}, it writes 167\,MB/s sequentially and serves a random 8\,KiB read in
-4.8\,ms (median), about 200 reads per second at queue depth one. The compute nodes have no NVMe device (checked with \texttt{lsblk} on a node, \texttt{docs/STORAGE\_CHECK.md}); the only other storage is a 93\,GB \texttt{tmpfs} in memory, so every result that depends on storage is for this disk, a worst case, and we could not repeat it on faster storage. Both engines run from Apptainer 1.3 images pinned by digest:
+4.8\,ms (median), about 200 reads per second at queue depth one. The nodes we used have no NVMe device (\texttt{lsblk} on two \texttt{hamsi} nodes, one \texttt{barbun} node and the \texttt{smp} node, \texttt{docs/STORAGE\_CHECK.md}); the \texttt{orfoz} partition has one, but with a different processor. Every result that depends on storage is for a rotational disk, a worst case, and we did not repeat it on faster storage. Both engines run from Apptainer 1.3 images pinned by digest:
 PostgreSQL 17.11 with pgvector 0.8.6 (\texttt{pgvector/pgvector:0.8.6-pg17}) and Qdrant
 1.19.1 (\texttt{qdrant/qdrant:v1.19.1}).
 

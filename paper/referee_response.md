@@ -66,7 +66,7 @@ extensions, a second embedding model and the 10M scale (parts of M8, M9, M10 and
   WAL and the final checkpoint writes 13.9 GB in 80 s (about 175 MB/s, matching the measured
   167 MB/s of the disk). With an unlogged table the load takes 22 s instead of 93 s and
   scales linearly. The 1M load is therefore limited by logging to the spinning disk.
-- Not possible: builds on NVMe. The nodes of the partition we used (hamsi) have no NVMe device (checked on one node, `docs/STORAGE_CHECK.md`; other partitions not checked); the only other storage is a 93 GB `tmpfs` in memory, which would remove the disk rather than test a faster one. Build times are labelled as specific to this disk (a worst case), and the paper says so.
+- Not done: builds on NVMe. The nodes we used (two `hamsi` nodes, one `barbun` node, `smp`) have a single rotational disk and no NVMe device (`docs/STORAGE_CHECK.md`); the only other storage on a `hamsi` node is a 93 GB `tmpfs` in memory, which would remove the disk rather than test a faster one. The `orfoz` partition has NVMe (one node checked) with a different processor, so a repetition there is a separate platform. Build times are labelled as specific to this disk (a worst case), and the paper says so.
 
 ### M5 — Memory working set: addressed, with one incomplete cell group
 
@@ -84,7 +84,7 @@ extensions, a second embedding model and the 10M scale (parts of M8, M9, M10 and
   settled to 1.2-1.4 ms in two of three repetitions and was still at 35 ms in the third.
 - The "Qdrant tolerates tighter limits" claim is replaced by these results in the Memory
   section, Discussion, Threats and Conclusion.
-- NVMe: not done. The `hamsi` nodes we used have none; the `orfoz` partition has (`docs/STORAGE_CHECK.md`), but no experiment was repeated there (see M4). The decision against the supervisor's criterion is `docs/E10_MEMORY_DECISION.md`. pgvector's 4 GB arms did not finish within the 3 h job limit (tasks 10
+- NVMe: not done. The nodes we used have none; the `orfoz` partition has (`docs/STORAGE_CHECK.md`), but no experiment was repeated there (see M4). The decision against the supervisor's criterion is `docs/E10_MEMORY_DECISION.md`. pgvector's 4 GB arms did not finish within the 3 h job limit (tasks 10
   and 11 killed; the other four 4 GB pgvector tasks were cancelled before they started), so
   that comparison is incomplete and is reported as such.
 
