@@ -14,7 +14,7 @@ Bu belge hocaya gidecek özetin gerekçesidir. Her satırın kanıtı depoda: ma
 |---|---|---|
 | M1/M2 gecikme ve CPU, segment sayısı | Yapıldı | E6, E8. Gecikme oranı 3,1–3,4× (4 segment), CPU oranı yaklaşık 1,4×; 8 segmentte yaklaşık eşit |
 | **Nedensel analiz** (hocanın 17 Kasım isteği) | Yapıldı, sınırlı | **E19**: pgvector daha az vektör okuyor (5,2 bin, Qdrant 6,9–8,9 bin) ama okuma başına 2,3× döngü harcıyor; döngülerinin %49'u mesafe ve eleman yükleme dışında (buffer manager %25, adsız `postgres` adresleri %16). Mesafe sayısı ölçülemedi (sayaç yok, root yok): vekil ve üst sınırlar, `perf` yalnızca kullanıcı alanı |
-| M3/M4 build | Kısmen | E9: sonuç yükleme biçimine bağlı; NVMe baktığımız 3 düğümde (hamsi ×2, smp) yok; TRUBA dokümanı "tüm sunucularda /tmp NVMe" diyor, çelişki `docs/STORAGE_CHECK.md`'de, barbun/orfoz bekliyor |
+| M3/M4 build | Kısmen | E9: sonuç yükleme biçimine bağlı; NVMe hamsi (2 düğüm) ve smp'de yok, **orfoz'da var** (orfoz183, Micron 7450); TRUBA dokümanı "tüm sunucularda /tmp NVMe" diyor, ayrıntı `docs/STORAGE_CHECK.md`'de, barbun bekliyor |
 | M5 bellek | Yapıldı (4G pgvector hariç) | E10, ölçüt karşılaştırması `docs/E10_MEMORY_DECISION.md` |
 | M6 tutarsızlıklar | Yapıldı | `tab:sources` (her tablo için `ef`, node, build), `tab:commits` |
 | M7 eşleşmiş recall | Yapıldı | Verim tam 0,95'e CPU eğrisiyle düzeltildi: 1M'de pgvector +%13,9, Qdrant +%10,6, oran 1,64→1,59 |

@@ -30,14 +30,17 @@ September disk probe all behaved like a rotational disk (cold queries of 0.6 to 
 | hamsi120 | hamsi | 7073390 | `/dev/sda2`, ext4, rotational | none |
 | hamsi124 | hamsi | 7084368 | `/dev/sda2`, ext4, rotational | none |
 | orkinos1 | smp | 7084367 | `/dev/sda2`, ext4, rotational | none |
-| barbun, orfoz | | 7084400, 7084401 | pending at the time of writing | not yet checked |
+| orfoz183 | orfoz | 7084401 | `/dev/nvme0n1p3`, ext4 (root; `/tmp` is not a separate mount), Micron 7450, 894 GB, ROTA=0 | **yes** |
+| akya7 | akya-cuda | 7084740 | `/dev/sdb2`, ext4, Intel SATA SSD 224 GB, ROTA=0 | none (SATA SSD) |
+| barbun | barbun | 7084400 | pending at the time of writing | not yet checked |
 
 Script: `bench/slurm/storage_check_part.sbatch`. On orkinos1 `/arf` is Lustre and no `weka` mount exists, so the `weka` feature in `sinfo` is not a node-local disk.
 
 The queue page of the TRUBA user documentation
 (https://docs.truba.gov.tr/1-kaynaklar/arf/arf_kuyruk_bilgisi.html, last updated 24 Dec 2025) says:
 "Tüm sunucularda /tmp dizini NVMe disk olarak yapılandırılmıştır. Yüksek I/O gerektiren işlerinizde bu alanı kullanmanız önerilir. Özellikle akya-cuda sunucularında 1.4TB NVMe disk /tmp altında sunulmaktadır."
-This is very likely the source of the supervisor's remark. **It contradicts what we measured on three nodes.** The same page lists hamsi as Xeon Gold 6338, while our hamsi nodes reported Xeon Gold 6258R, so the page may be out of date. The only concrete NVMe it names is on `akya-cuda`, a GPU partition that accepts GPU jobs only. We do not claim the documentation is wrong in general, only that on the nodes listed above `/tmp` is a rotational disk.
+This is very likely the source of the supervisor's remark. **It contradicts what we measured on three nodes.** The same page lists hamsi as Xeon Gold 6338, while our hamsi nodes reported Xeon Gold 6258R, so the page may be out of date. The only concrete NVMe it names is on `akya-cuda`, a GPU partition that accepts GPU jobs only. The documentation is therefore right for `orfoz` and wrong for `hamsi` and `smp` as measured. On `akya7` the disks are SATA SSDs, not the 1.4 TB NVMe the page names. The `akya-cuda` check requested one GPU and used none; it was sent with the author's approval.
+So the supervisor's remark holds for `orfoz` (112 cores per node, Xeon Platinum 8480+ per the documentation), which is a different CPU platform from `hamsi`. A pilot there is possible but would not be comparable with the `hamsi` results and would have to be reported as a separate platform.
 
 ## Consequence for the paper
 
